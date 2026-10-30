@@ -18,7 +18,7 @@ theo `docs/DATASET-SPEC.md`. Commit init phải được khai là prepared mater
 | `docs/01, 03–07, 09-*.md` | repo | Spec: problem brief, architecture, data model, contracts, policy rules, AI integration, eval plan. 04/05/06 là bắt buộc theo |
 | `docs/pitch/fact-check.md` | repo | Số liệu pitch cần kiểm lại |
 | `docs/team-plan/` | repo | README (lịch 7 phase, ownership, contract), **P1–P4 (prompt từng phase)**, SUBMISSION, bản gốc AGENTS/PLANS |
-| `docs/DATASET-SPEC.md` | repo | **Đặc tả dataset**, không phải dataset. Fixture và data được Codex sinh hoặc capture **trong ngày** theo prompt P4-0c, P4-1c, P4-2b, P4-3, P2-1/2/4. Expected answers do người viết trước khi chạy |
+| `docs/DATASET-SPEC.md` | repo | **Đặc tả dataset**, không phải dataset. Fixture và data được Codex sinh hoặc capture **trong ngày** theo prompt P4-0c, P4-1c, P4-2b, P4-3, P2-1/2/4. Codex soạn expected answers kèm lý do trước lần chạy đầu; một người duyệt theo lô, phần chưa duyệt giữ DRAFT |
 | `_outside-repo/skills/` | Giữ nguyên trong repo; có thể cài vào **`~/.agents/skills/`** trên từng máy | Đủ 6 skill và demo kit, được commit như công cụ setup chuẩn bị trước. Tên thư mục phân biệt với code ứng dụng; khai đúng trong declaration |
 
 ## Repo đã chuẩn bị — không lặp lại bước tạo repo/copy pack
@@ -63,7 +63,7 @@ Gõ `/skills` trong Codex, phải thấy đủ: `phase-kickoff`, `self-review`, 
 
 ## Trước khi dùng pack (P4 kiểm)
 - [ ] Đã đọc `docs/DATASET-SPEC.md` và mở thử các URL thật ở §3 (CeraVe Hydrating/Foaming/Blemish, La Roche-Posay Effaclar). Ghi lại URL nào còn sống. Pack không chứa dataset; mọi fixture được tạo trong ngày.
-- [ ] Đã chỉ định 2 người soát gold **trong ngày** (gold chỉ được viết trong ngày).
+- [ ] Đã chỉ định một người duyệt gold **trong ngày**; Codex soạn nháp, người duyệt/sửa theo lô. Người thứ hai tùy chọn cho ca khó.
 - [ ] `docs/pitch/fact-check.md` đã điền. Đã trả lời các câu hỏi mở OQ-1…10 trong `docs/PROPOSAL.md` §16.
 - [ ] Mở `AGENTS.md`, đọc lại 5 phút. Đây là luật Codex sẽ tuân theo cả ngày.
 - [ ] Declaration (`docs/team-plan/SUBMISSION.md`) liệt kê đúng những gì có trong pack.

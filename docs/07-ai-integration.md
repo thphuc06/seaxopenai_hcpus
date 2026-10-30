@@ -16,9 +16,10 @@ pip freeze | grep -Ei "openai|agents|fastapi|pydantic" > PINNED.txt   # record i
 ```
 OPENAI_API_KEY=sk-...
 MODEL_EXTRACT=gpt-6.1-sol
-MODEL_MANAGER=gpt-6.1-sol
+MODEL_AGENT=gpt-6.1-sol
 MODEL_CHEAP=gpt-6-luna         # only if a step actually uses it
-LLM_REASONING_EFFORT=low       # gpt-6.1-sol: low|medium|high|xhigh|max (no none/minimal)
+LLM_EFFORT_EXTRACT=low        # validate supported values on the day
+LLM_EFFORT_AGENT=medium       # canonical names: team-plan README §7.5
 LLM_MODE=record                # replay | record | live | fallback — see §4
 OPENAI_AGENTS_DISABLE_TRACING=0
 ```
@@ -63,7 +64,7 @@ result: ClaimExtraction = resp.output_parsed
 usage = resp.usage   # input_tokens, output_tokens -> trace
 ```
 
-Then **code validates** every claim (passage id exists, quote is substring) and re-normalises.
+Then **code validates** every claim with docs/05 §3 (passage id exists; contiguous quote after NFC + whitespace collapse, case-sensitive; no stitched fragments) and re-normalises.
 
 Strict schema rules: every field required; nullable = `X | None`; no `additionalProperties`; avoid `dict[str, Any]` in models sent to the API.
 
@@ -82,9 +83,13 @@ input = [
 resp = client.responses.parse(model=settings.MODEL_EXTRACT, input=input, text_format=ClaimExtraction)
 ```
 
-`detail`: `low | high | original | auto`. Small or non-Latin text may be misread → keep `UNREADABLE` path. For the image passage, `quote` is checked against a human-written transcript stored with the fixture (locator = `image:full`). No bounding boxes in D.
+`detail`: `low | high | original | auto`. Small or non-Latin text may be misread → keep `UNREADABLE` path. For the image passage, `quote` is checked against a source-grounded transcript stored with the fixture (Codex may draft it; unreadable text stays empty) (locator = `image:full`). No bounding boxes in D.
 
 ## 3. Manager + retrieval specialist — Agents SDK (D9)
+
+These extended Manager examples are illustrative. The contest Phase 3 Must is P2's single typed scope call with
+anchor verification; Manager/specialist is Could. Use the current interfaces in team-plan README §7 and P2's prompt
+when implementing; do not copy illustrative context, budget or tool names over the shared contracts.
 
 ```python
 from dataclasses import dataclass, field
@@ -116,7 +121,7 @@ def search_brand_corpus(ctx: RunContextWrapper[CaseContext], query: str, field_k
 retrieval_specialist = Agent[CaseContext](
     name="RetrievalSpecialist",
     instructions=RETRIEVAL_PROMPT,           # find SUPPORTING and CONTRADICTING passages; report gaps; stop when no new info
-    model=settings.MODEL_MANAGER,
+    model=settings.MODEL_AGENT,
     tools=[search_brand_corpus, read_source_region],
     output_type=EvidenceBundle,
 )
@@ -124,7 +129,7 @@ retrieval_specialist = Agent[CaseContext](
 manager = Agent[CaseContext](
     name="Manager",
     instructions=MANAGER_PROMPT,             # choose ONE next action for the unresolved field; never decide the verdict
-    model=settings.MODEL_MANAGER,
+    model=settings.MODEL_AGENT,
     tools=[
         get_case_context, compare_exact_fields, get_field_policy,
         propose_evidence_request, propose_review_case,

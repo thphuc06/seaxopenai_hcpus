@@ -3,7 +3,7 @@
 This file is an **idea-level design**, not a dataset. On 31 Oct the team creates every fixture inside the contest repo:
 - Codex generates the synthetic cases from this spec.
 - Real cases are captured on the day from public pages.
-- Humans write the expected answers before the pipeline runs on them.
+- Codex drafts expected answers from source evidence and the policy; a human reviews and adjusts them.
 
 Nothing here is copied from an earlier build. Generate fresh wording. The design only fixes what each case must plant
 and what it must prove.
@@ -16,7 +16,10 @@ Owner: **P4** (`fixtures/**`, `scripts/{capture_page,make_label_images,check_fix
   - `REAL` — captured on the day from a public URL, with `uri`, `captured_at`, and sha256 computed by the loader;
   - `SYNTHETIC` — invented. Synthetic products use a fictional brand (suggested "Lumivy Lab (fictional)"), ids
     prefixed `DEMO-`, `BLIND-`, and notification numbers shaped `DEMO-CBMP-xxxxx`. They never use a real brand name.
-- **Expected answers come first.** A human writes them in `fixtures/gold/**` before the first pipeline run on that case.
+- **Expected answers come first.** Codex drafts them in `fixtures/gold/**` from the fixtures and policy, with a short
+  evidence locator and rationale, before the first pipeline run on that case. One human may review a batch and approve
+  or adjust it; a second reviewer is optional. Only human approval changes DRAFT to REVIEWED. Diagnostic eval may run
+  DRAFT labels, with draft and reviewed results reported separately. Never derive or tune labels from candidate output.
   App code never reads `fixtures/gold/` (AGENTS rule 11).
 - **No tuning to fixtures.** If a case fails, fix a mechanism, or add a new blind case. Never special-case the text.
 - **Real page text** is third-party content. Keep it for evaluation, with URL and capture time. Never edit it. Quote
@@ -49,8 +52,10 @@ arrive through events):
  "passages": [{"id": "…", "locator": "title | highlights#2 | description#p1 | specs#volume | ingredients | image:full | page1#company", "section": "…", "text": "…"}]}
 ```
 - `scope` may be omitted for real pages. The pipeline infers it (policy R3).
-- A `PACKAGING_IMAGE` has a sibling image with the same stem (`.png`). Its passage text is the human transcript, or
-  empty for an unreadable photo.
+- A `PACKAGING_IMAGE` has a sibling image with the same stem (`.png`). Its passage text is the transcript, or
+  empty for an intentionally unreadable photo. Empty text is valid only for that unreadable image case with an actual
+  image present and a fixture note explaining why; all other passages require non-empty text. Phase 0 may stage a
+  readable transcript before its PNG is generated in Phase 1; this does not permit an empty image-less placeholder.
 
 **Event:** the envelope from `docs/05-contracts.md` §1, plus `"expect": "<one sentence>"`. The operator UI shows
 `expect` as the stage caption. The file name is the fixture name: `NN-<slug>.json` in `fixtures/events/`.
@@ -66,7 +71,10 @@ arrive through events):
 - `fixtures/gold/dev/real.json` — per real product.
 - `fixtures/gold/blind/expected-setN.json` — per product: fields, claims, probes.
 
-Each file has `labelled_by` (names), `labelled_at`, and `status` (DRAFT or REVIEWED).
+Each file has `labelled_by` (e.g. `draft:codex`), `labelled_at`, and `status` (DRAFT or REVIEWED). Include a short
+evidence/rationale per expected row; record the human's name and review date when approved. A file is REVIEWED only
+when all its labels are approved; split approved and pending batches if partial review is useful. Report Codex-assisted,
+human-reviewed gold honestly, without calling it independently human-authored.
 
 ## 3. Real products — capture on the day
 Candidates were checked on **29 Oct 2026** with public pages only. The pages change: capture them on the day and
@@ -76,7 +84,7 @@ listing under check. We do not scrape Shopee.
 | ID | Product | Listing to capture (REAL) | References | Behaviour it shows (observed 29/10) |
 |---|---|---|---|---|
 | R1 | CeraVe Hydrating Facial Cleanser 236 ml | `https://www.pharmacity.vn/cerave-srm-giup-sach-sau-cho-da-thuong-va-da-kho-chai-236ml.html`; second retailer `https://nhathuoclongchau.com.vn/duoc-my-pham/sua-rua-mat-lam-sach-sau-danh-cho-da-thuong-va-da-kho-cerave-hydrating-cleanser-mb094520-236ml-36479.html` (both HTTP 200 on 29/10) | Official page `https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-thuong-va-da-kho` (Web Scout also finds it) | **Conflict in source.** The official title says "Sữa rửa mặt dành cho da khô" / "THÍCH HỢP CHO DA KHÔ…", but the description says "dành cho da thường, da dầu" and "tạo bọt". Niacinamide is named in the copy but absent from the page's INCI. The page lists no size. The seller is not blamed |
-| R2 | CeraVe Foaming Facial Cleanser 236 ml | `https://www.pharmacity.vn/cerave-sua-rua-mat-giup-sach-sau-cho-da-dau-chai-236ml.html` | Official page `https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-dau`; a second retailer (Long Châu / Hasaki / Guardian) | **Harmless wording.** The listing title says "da dầu" while its usage section says "Da thường, da dầu, da hỗn hợp" (compatible under the range rule of §6: "da thường đến da dầu" covers normal, combination and oily — no conflict). Seen 29/10: a gift offer "Tặng 1 sữa rửa mặt … 30ml" (a volume trap), and the same `169170/22/CBMP-QLD` also appears on the R1 page (two products, one number: report it, do not guess). The full INCI contains real noise: commas inside names ("PEG-150 PENTAERYTHRITYL, TETRASTEARATE", "SODIUM METHYL COCOYL, TAURATE"). The page states the notification number `169170/22/CBMP-QLD` and the company "L'Oréal Việt Nam" (real identifier fields; without a notification document or registry record they stay **Not verified**, which is honest) |
+| R2 | CeraVe Foaming Facial Cleanser 236 ml | `https://www.pharmacity.vn/cerave-sua-rua-mat-giup-sach-sau-cho-da-dau-chai-236ml.html` | Official page `https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-dau`; a second retailer (Long Châu / Hasaki / Guardian) | **Harmless wording.** The listing title says "da dầu" while its usage section says "Da thường, da dầu, da hỗn hợp" (explicitly NORMAL+OILY+COMBINATION; the narrower oily claim is compatible under docs/06). If captured wording includes "da thường đến da dầu", use the explicit demo seed convention in §6, not a general range inference. Seen 29/10: a gift offer "Tặng 1 sữa rửa mặt … 30ml" (a volume trap), and the same `169170/22/CBMP-QLD` also appears on the R1 page (two products, one number: report it, do not guess). The full INCI contains real noise: commas inside names ("PEG-150 PENTAERYTHRITYL, TETRASTEARATE", "SODIUM METHYL COCOYL, TAURATE"). The page states the notification number `169170/22/CBMP-QLD` and the company "L'Oréal Việt Nam" (real identifier fields; without a notification document or registry record they stay **Not verified**, which is honest) |
 | R3 | CeraVe Blemish Control Cleanser 473 ml | `https://www.pharmacity.vn/sua-rua-mat-dang-gel-tao-bot-cho-da-dau-mun-cerave-blemish-control-cleanser-473ml.html` | Official VN page `https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-giam-mun` (HTTP 200 on 29/10, states "2% Salicylic Acid"); international retailers say the same | **Single source / copies.** The Pharmacity page lists Salicylic Acid (6th in the INCI) with no percentage. If only the brand page states "2%", that is Single source. Retailer pages that copy brand text join its family. The page also states `267602/25/CBMP-QLD` and "Công ty TNHH L'OREAL VIỆT NAM" (legal-form variant vs R2's "L'Oréal Việt Nam" → company normalisation). Seen 29/10: the brand page says both "phù hợp cho da thường và da dầu" and "Phù hợp với da dầu, da hỗn hợp" (a within-source candidate) |
 | R4 | La Roche-Posay Effaclar Purifying Foaming Gel 200 ml | `https://www.pharmacity.vn/la-roche-posay-effaclar-gel-rua-mat-cho-da-dau-nhay-cam-200mltuyp.html` | Official LRP VN page (laroche-posay.vn did not answer on 29/10 — if it still fails, R4 uses retailer pages only); the 400 ml page on the same retailer | **Claims without false alarms + version note.** The listing claims "Không chứa paraben, không xà phòng, không màu, không cồn" and highlights Hexylene Glycol (a glycol, not an alcohol, so no alcohol conflict). It gives no full INCI (needs a reference). It notes "Sản phẩm đã được thay đổi bao bì… cả hai loại bao bì mới và cũ" (version ambiguity). The retailer has several sizes/pages for one product (scope) |
 | R5 | Marketplace for R1 | 4–5 retailer pages of the same product (Long Châu, Picare, Guardian, Hasaki, Watsons) | — | Real **consensus and copy clusters**: retailers copying the brand text count once. Values that differ (another size) go to a reviewer, not to blame. Saved under `fixtures/marketplace/<R1 product_id>/` |
@@ -127,16 +135,20 @@ page where noted).
 Label images: `scripts/make_label_images.py` (Pillow) renders each label transcript to a PNG. A blurred variant comes
 from the same script.
 
-## 5. Blind sets — P4 writes them, the lanes that write rules do not
-Purpose: prove adaptation to products the code was never shaped on. Process:
-1. P4 (a human) writes the case table: product, planted condition, expected verdict per field. Commit it as
-   `fixtures/gold/blind/expected-setN.json` (status DRAFT, then REVIEWED by a second person).
-2. Codex generates fixtures realising each row. Then `check_fixtures.py`.
-3. Run `blind_eval.py` once and report as-is. A miss is a finding, never a reason to edit the case.
+## 5. Blind sets — P4 coordinates, Codex drafts, a human reviews
+Purpose: assess adaptation to cases not used for tuning. Process:
+1. Codex drafts the case table for P4: product, planted condition, expected verdict per field and short rationale.
+   Generate fixtures realising those rows, then run `check_fixtures.py` and check the expected answers against the
+   actual passages. Save `fixtures/gold/blind/expected-setN.json` as DRAFT. Freeze the fixtures and expected answers
+   before the first candidate run; keep them out of the rule-writing lanes until first-run evaluation is recorded.
+2. One human can review the batch against passages and policy, preferably before that run; a second review is optional.
+   If time is short, run diagnostics while it is DRAFT. Approval alone changes its status to REVIEWED.
+3. Record first-run results as-is, separated by gold status. Never revise labels to match output. If review finds a real
+   label error, retain the original run and record the correction and reason; a later run is a rerun, not a fresh blind test.
 
-Probe categories (≥ 12 products per set; mix them):
-(Categories only. P4 picks the concrete examples on the day when writing the expected table, so the people who write
-the rules have not seen them.)
+Probe categories (aim for about 12 products if time permits; a smaller mixed set is valid, report its count and limits):
+(P4 uses Codex to choose concrete examples on the day without candidate outputs. Codex-assisted generation is not
+independent human-authored evaluation; disclose that limitation.)
 - **units:** other units, multi-packs, combos with a free mini;
 - **open vocabulary:** common Vietnamese ingredient names, vitamin names vs INCI names;
 - **legal forms:** company legal-form variants;
@@ -152,7 +164,9 @@ the rules have not seen them.)
 - `backend/app/data/vocab_seed.json` — the **small** seed (open sets are learned at run time):
   - about 6 ingredient entries `{label, surfaces[], inci[]}`: niacinamide, hyaluronic acid/sodium hyaluronate,
     ceramides (NP/AP/EOP), salicylic acid/BHA, glycerin, zinc;
-  - skin phrases VI/EN → SkinType sets ("mọi loại da" → ALL, "da thường đến da dầu" → NORMAL+COMBINATION+OILY, because "X đến Y" spans the ordered scale DRY < NORMAL < COMBINATION < OILY (a seed rule with its source note), "da khô" → DRY…);
+  - skin phrases VI/EN → SkinType sets ("mọi loại da" → ALL, "da thường đến da dầu" / "normal to oily" → NORMAL+COMBINATION+OILY,
+    "da khô" → DRY…). The range phrase is an explicit demo seed convention with a provenance note, not a medical scale
+    or a general rule for every "X đến Y" phrase. Comma-separated phrases map only their explicitly named types;
   - free-from families with INCI patterns (alcohol: Alcohol, Alcohol Denat., Ethanol — fatty alcohols excluded;
     fragrance: Parfum, Fragrance; paraben: *paraben);
   - treatment words ("trị mụn", "đặc trị", "chữa");
@@ -178,8 +192,8 @@ the rules have not seen them.)
 |---|---|---|
 | 0 | P4-0c (P4 thread 2) | S1 (listing v1, label transcript, notification doc, PH page) + events 01, 02, 03, 08 + `check_fixtures.py` |
 | 0–1 | P2-0 / P2-1 | `model_prices.json`, `vocab_seed.json`, `legal_forms.json` |
-| 1 | P4-1c | S1 variants, catalogue, S2, S3, S4, registry, events 04–13, `make_label_images.py` (PNGs incl. blurred), gold `demo-story.json` (human-checked) |
-| 2 | P4-2b | `capture_page.py` + R1–R4 captured, events 14–17, gold `real.json` (human) |
+| 1 | P4-1c | S1 variants, catalogue, S2, S3, S4, registry, events 04–13, `make_label_images.py` (PNGs incl. blurred), gold `demo-story.json` (Codex DRAFT, human batch review) |
+| 2 | P4-2b | `capture_page.py` + R1–R4 captured, events 14–17, gold `real.json` (Codex DRAFT, human batch review) |
 | 2 | P2-2 | `regulatory_limits.json` |
 | 3 | P4-3 | blind set(s) (§5) |
 | 4 | P4-4 / P2-4 | R5 marketplace pages; `web_search.json` |

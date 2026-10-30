@@ -1,7 +1,7 @@
 # AGENTS.md — Product Truth Passport (contest build, 31 Oct 2026)
 
 Codex loads this file into every task. It is short on purpose: the details live in the files it points to, and **you
-read them yourself** — nobody will paste context for you. If a task conflicts with this file, stop and ask the human.
+read them yourself** — nobody will paste context for you. Apply the current task decisions and the shared rules below.
 
 ## Repository preparation status (30 Oct 2026)
 P4 has already imported the complete preparation pack in the initial commit: docs, prompts, plan templates and all
@@ -38,12 +38,18 @@ Then by topic:
 | OpenAI API, Agents SDK, replay, budgets | `docs/07-ai-integration.md`, `docs/team-plan/P2-ai-agents.md` |
 | Architecture, run lifecycle | `docs/03-architecture.md` |
 | Acceptance tests, evaluation | `docs/09-eval-plan.md`, `backend/tests/test_acceptance.py` |
-| Fixtures, datasets, app data files | `docs/DATASET-SPEC.md` (generated or captured on the day; humans write expected answers first) |
+| Fixtures, datasets, app data files | `docs/DATASET-SPEC.md` (generated or captured on the day; Codex drafts expected answers before the first run; a human reviews them) |
 | Known risks and why a rule exists | `docs/team-plan/README.md` §11 and the "Rủi ro dự kiến" list of your phase |
 
-Spec docs win on names and states; `docs/team-plan/README.md` §7 wins on signatures. Notes on known risks are planning
+Spec docs win on names and states; `docs/team-plan/README.md` §7 wins on signatures, env names and phase delivery. Notes on known risks are planning
 estimates, not facts: verify them against the official docs and the tests, explore better options, and record what you
-find in the ExecPlan. Only the product rules (§3) and the contracts are fixed.
+find in the ExecPlan. Keep product rules (§3) and contracts consistent across lanes; update them together when the team explicitly changes a decision.
+
+Prompts and BUILD lists are starting plans. The current lane Must/Should/Could list and the latest agreed scope decide
+what to implement and gate; optional work does not become mandatory merely because it appears in a BUILD list.
+Use the existing ExecPlan/HANDOFF to note changes, not an extra approval process. Follow an explicit user decision
+already made in this task without asking again; update the relevant spec and tests when shared behaviour changes.
+Choose local implementation details freely within those rules. Ask only if a consequential ambiguity remains unresolved.
 
 ## 3. Product rules (non-negotiable)
 1. No authenticity or safety claim about a product in any text a buyer, reviewer or judge can see (UI strings,
@@ -68,7 +74,10 @@ find in the ExecPlan. Only the product rules (§3) and the contracts are fixed.
 9. A run pins its case revision; an old run never overwrites a newer result. A review binds to one
    `(result_id, case_revision)`.
 10. Same idempotency key → no new evidence, job or request.
-11. Nothing under `backend/app/` reads `fixtures/gold/`. Labels belong to humans.
+11. Nothing under `backend/app/` reads `fixtures/gold/`. Codex may draft gold from specs and source evidence before
+    the first pipeline run, with short rationale. A human may approve a batch or edit selected rows; one reviewer is
+    sufficient. Only approved rows become `REVIEWED`; the rest stay `DRAFT`. Diagnostic eval may use DRAFT with separate,
+    preliminary metrics. Never derive expected answers from candidate outputs; preserve the first-run blind labels/results.
 12. Every source is `REAL` or `SYNTHETIC`; replayed output is `REPLAY`, rule-only output `FALLBACK` — in traces and UI.
 13. `OPENAI_API_KEY` lives only in `backend/.env`: never logged, printed, sent to the frontend or committed.
 14. Open-set knowledge (ingredient names, phrasings, domains, claim families) lives in `backend/app/data/*.json` with a
@@ -80,9 +89,10 @@ find in the ExecPlan. Only the product rules (§3) and the contracts are fixed.
 - Never hardcode fixture ids, product or brand names, demo texts, expected verdicts or test inputs in `backend/app/` or
   `frontend/src/` (mocks and tests excepted). Never special-case an input so a test passes.
 - Never weaken, skip, `xfail`, delete or rewrite an assertion, and never edit a fixture, gold label or expected file to
-  make a test pass. If a test or label looks wrong, stop and ask. Only exception — P4, who owns the acceptance suite:
+  make a test pass. If a test or label looks wrong, report the affected case for a decision and continue unaffected work. Only exception — P4, who owns the acceptance suite:
   `skip(reason=…)` while the fixture a test needs does not exist yet, `xfail(strict=False, reason=…)` while a human
-  decides a disputed label; both are listed in the Sync report.
+  decides a disputed label; both are listed in the Sync report. P4 may also defer tests of an explicitly cut optional feature at a Sync,
+  recording the scope and skipped counts before the gate; never disguise a regression in retained functionality.
 - Never change `CONTEST_PHASE`, `backend/tests/PHASE`, `conftest.py`, `pytest.ini` (addopts, deselect), phase/needs
   markers or `test_guards.py` to make a run green — P4 owns them and changes them only at a Sync. App code never detects
   that it runs under test (`PYTEST_CURRENT_TEST`, `"pytest" in sys.modules`, test names); `LLM_MODE` is read only through
@@ -134,8 +144,9 @@ rebase a pushed branch: bring `main` or a tag into your branch with `git merge`.
 
 ## 5. When to ask
 Stop and ask the human (≤ 3 questions, each with your recommended default) only when:
-1. the task conflicts with this file or the specs;
-2. data, a key or a fixture is missing or contains `TODO`;
+1. a conflict with this file or the specs remains unresolved after applying the current explicit task decisions;
+2. a required external input (such as a key or source) is missing and no documented fallback is available; generate
+   planned synthetic fixtures and DRAFT gold when the task calls for them, and continue independent work;
 3. an action spends money or quota beyond what your prompt pre-approves (smoke tests and capped record runs named in
    the prompt are pre-approved), or is destructive;
 4. an ambiguity would change a verdict, a seller attribution or what buyers see.

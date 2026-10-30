@@ -25,7 +25,7 @@
 4. **Trước Sync, "xong" nghĩa là** build pass trên mock và type khớp OpenAPI của `contract-<N>`. Click path trên backend thật được kiểm ở Sync (P4 chạy), không chờ trong phase.
 5. Thread 2 chạy Prompt phụ (E2E, quay video) trên file khác thread 1.
 6. Luôn chạy `npm run build` trước khi push. T−20: `$self-review`.
-7. **Ngay sau S2 và S3 (10 phút, trong lúc Codex của bạn chạy kickoff):** soát chéo expected answers P4 vừa viết (`fixtures/gold/dev/real.json`, `fixtures/gold/blind/expected-set1.json`). Bạn là "người thứ hai" theo AGENTS rule 11.
+7. **Sau S2/S3, nếu P4 cần hỗ trợ:** duyệt gold Codex soạn (`fixtures/gold/dev/real.json`, `fixtures/gold/blind/expected-set1.json`) theo bảng bằng chứng. Một người duyệt theo lô là đủ; P3 soát ca khó khi có thời gian, không phải vòng duyệt thứ hai bắt buộc.
 8. **Lần đầu sau S0:** chạy `powershell -ExecutionPolicy Bypass -File scripts\dev\setup_worktree.ps1` ở checkout Local để có backend venv (Action `backend` cần nó).
 
 **Skill Codex dùng trong lane này** (cài ở `~/.agents/skills`, gõ trong ô chat của Codex):
@@ -266,9 +266,9 @@ BUILD
    seconds vs caps), proposals list with per-passage outcome: "verified by code (anchor: <passage>)" / "needs reviewer" /
    "not accepted (reason)", and an EFFECT box from agent:effect: field, verdict before → after, passages added. If the
    agent changed nothing, say so plainly.
-4. Ask the evidence (reviewer): query box → hits with highlighted text, source chips, and the stage ranks (bm25, dense,
+4. SHOULD — Ask the evidence (reviewer): query box → hits with highlighted text, source chips, and the stage ranks (bm25, dense,
    fused); a line saying "ranking only — no answer generated".
-5. Dependency graph (reviewer): sources → fields (simple SVG/CSS layout, no heavy library), revoked/stale edges red
+5. SHOULD — Dependency graph (reviewer): sources → fields (simple SVG/CSS layout, no heavy library), revoked/stale edges red
    dashed; chain badge (valid/broken + head short hash).
 
 CONSTRAINTS
@@ -317,9 +317,9 @@ BUILD
    and capture time; "N REAL web sources" badge next to the SYNTHETIC listing badge.
 2. Receipt: buy button on the buyer page (testid buy-button) → POST /orders → /orders/:id shows the frozen passport,
    snapshot hash, chain head, and a per-field diff then vs now (testid receipt-diff) with "changed since purchase" alert.
-3. Marketplace: buyer → tally per field by independent listing clusters ("4 independent listings agree on 50 ml; 1
+3. SHOULD — Marketplace: buyer → tally per field by independent listing clusters ("4 independent listings agree on 50 ml; 1
    differs"), no shop names; reviewer → shops, clusters, quotes (marked seller text), outliers with review links.
-4. OCR: on image citations draw the returned boxes over the label image (GET /sources/{sv}/image?as_role=…), scaled to
+4. SHOULD — OCR: on image citations draw the returned boxes over the label image (GET /sources/{sv}/image?as_role=…), scaled to
    the displayed size.
 5. Observe page: live counters from /internal/observability (verdict mix, model calls live/replayed/avoided by step,
    publish gate, agent/gap stop reasons, review queue, learned vocabulary), scorecard from /internal/eval/metrics when

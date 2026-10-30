@@ -33,6 +33,7 @@ review and logs follow while the team starts the next phase. The clock never wai
   exist yet (for example `sync_check.py` at S0) is skipped and named in the report.
 
 ## Gate before any tag
+- Apply the current lane Must/Should/Could scope and documented cuts: P4 may defer optional-feature tests under AGENTS §4, reporting the reason and skipped counts; retained-feature tests and regressions still gate the merge.
 - Run the selected phase's pytest suite with counts and `test_guards.py`, plus the frontend build if frontend code
   changed; run the applicable fixture and sync checks when present. No collection error, guard failure, unexplained
   failure, regression or broken build is acceptable, including a failure already present in the baseline.

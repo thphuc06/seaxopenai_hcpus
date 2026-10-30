@@ -219,16 +219,17 @@ BUILD
      Da phù hợp; Thành phần/Ingredients; Số công bố/Số tiếp nhận phiếu công bố; Tổ chức/Công ty chịu trách nhiệm đưa sản
      phẩm ra thị trường); the passages inside <SOURCE_DATA> with id, locator, section.
    - fallback mode → fallback_extract; model error in record/live → LLMError propagates (P1 decides PARTIAL).
-   - validation in code for every claim: passage id belongs to this source version; quote ⊆ passage text after NFC +
-     casefold + whitespace collapse; a quote joined from several pieces ("…", "—", " / ") is accepted only if every piece
-     (≥ 3 chars) is in the passage; invalid → dropped and counted (INVALID_LOCATOR) in the trace detail.
+   - validation in code for every claim: use docs/05 §3's shared citation rule — passage id belongs to this source
+     version; quote is contiguous in passage text after NFC + whitespace collapse, preserving case and punctuation.
+     Joined fragments are not one quote: use separate claims/citations, or a contiguous source excerpt. Invalid →
+     dropped and counted (INVALID_LOCATOR) in the trace detail. Keep null-quote UNREADABLE as a signal, not evidence.
      Injection: model flag OR an injection pattern from data (vocab_seed or a new data/injection_patterns.json) → set
      ignored_instructions_detected and drop claims whose quote is inside the injected sentence.
    - normalised claims stored in `claims` (with quote, extractor, prompt_version, mapped_by) and returned.
 5. Tests: client (fake OpenAI responses: ok, incomplete, refusal, 429 then ok, replay hit counts budget, key stability:
    same input → same key, different image → different key, record hit reuses an unchanged file, record miss appends,
    live leaves replay files untouched, freeze makes record/live load-or-REPLAY_MISS); extract (invalid passage id, quote not in
-   passage, joined quote, injection, cache hit makes no call); normalize (units incl. "0.2 L", "16 fl oz"; INCI with
+   passage, joined quote rejected, contiguous quote with collapsed whitespace accepted, injection, cache hit makes no call); normalize (units incl. "0.2 L", "16 fl oz"; INCI with
    "Alcohol Denat."; legal forms; Vietnamese without diacritics). No network in tests.
 
 CONSTRAINTS
@@ -261,7 +262,7 @@ each question with your recommended default; otherwise decide, log it in the Exe
 ### Rủi ro dự kiến (phòng hờ)
 - Biến API token ghi đè biến replay key.
 - Recording cũ phải bất biến: chỉ `record` thêm key còn thiếu; `live` không ghi replay; freeze chỉ load hoặc `REPLAY_MISS`.
-- Quote bị nối bằng "—" khiến claim đúng bị loại.
+- Quote bị nối bằng "—": yêu cầu excerpt liên tục hoặc tách claim/citation; không nới validator riêng cho extraction.
 - Parser INCI cắt danh sách ở "Alcohol Denat.".
 
 ---
@@ -303,7 +304,7 @@ CONTEXT
 BUILD
 1. Vision (extract.py): PACKAGING_IMAGE with an image file and LLM_VISION=1 → ImagePart(detail "high"; use "original"
    if the docs list it for this model and small print matters) + the passage ids; the model's quote must match the
-   passage text (human transcript or, from Phase 4, OCR text) — otherwise dropped (a model can invent a
+   passage text (source-grounded fixture transcript, which Codex may draft; or, from Phase 4, OCR text) — otherwise dropped (a model can invent a
    number from a blurred photo). UNREADABLE claims are kept as signals (P1's IMG rule opens "clearer photo" requests).
    Fallback mode reads the transcript and is labelled.
 2. Coverage retry: after model extraction run fallback_extract as a DETECTOR; for (passage, field) pairs it
@@ -523,13 +524,13 @@ BUILD
    brand:<domain> / web:<domain>; uri; captured_at; sha256 → identical content = no new version); write every query,
    result, class, decision and reason to web_searches; trace agent:web_scout, web:search, web:fetch, web:snapshot,
    web:skip, web:stop. Page text is data: injection-flagged passages are dropped by extract.
-4. pipeline/ocr.py — index_image(sv_id) runs RapidOCR on PACKAGING_IMAGE files at ingest (OCR_ENABLED) into ocr_lines;
+4. SHOULD — pipeline/ocr.py (only if retained in scope): index_image(sv_id) runs RapidOCR on PACKAGING_IMAGE files at ingest (OCR_ENABLED) into ocr_lines;
    boxes_for(sv_id, excerpt) returns the box of the line(s) whose normalised text contains the excerpt, union over ≤ 6
    consecutive lines for wrapped text; never model coordinates. From now on an image quote may also be
    checked against OCR text.
 5. Tests (no network, fake provider): domain classification; comparison page skipped; cleaning cuts related products;
    identity false → confirm-only flag; identical page twice → one version; evidence phrase not in snippet → proposal
-   rejected; budget caps searches/pages; injection sentence in a page → flagged and its claims dropped; OCR multi-line box.
+   rejected; budget caps searches/pages; injection sentence in a page → flagged and its claims dropped; OCR multi-line box if OCR is implemented.
 6. Record (your terminal): LLM_MODE=record for event 14 with the cap printed (≤ 25 calls + ≤ 3 searches + ≤ 4 fetches);
    commit recordings (pages are third-party text: keep them for the demo/audit only).
 

@@ -12,7 +12,7 @@ Folder này là kịch bản làm việc của team trong 7 giờ: 3 người co
 | [`P3-frontend.md`](P3-frontend.md) | P3 | Phase 0–6 kèm prompt cho lane UI 3 vai trò và glass box |
 | [`P4-integrator.md`](P4-integrator.md) | P4 | Phase −1…6: skeleton, contract, test nghiệm thu, eval, merge, video, nộp bài |
 | [`SUBMISSION.md`](SUBMISSION.md) | P4 + cả team ở Phase 6 | Template write-up, declaration, README repo, checklist nộp |
-| [`PACK-README.md`](PACK-README.md), [`pack.gitignore`](pack.gitignore) | P4 | Bản gốc của `README-PACK.md` và `.gitignore` trong `open-ai-pack/`. Pack được build bằng script ở P4 Phase −1 |
+| [`PACK-README.md`](PACK-README.md), [`pack.gitignore`](pack.gitignore) | P4 | Bản gốc của `README-PACK.md` và `.gitignore` trong `open-ai-pack/`. Pack đã được import vào root repo trong commit init; không build/copy lại ở ngày thi |
 | `_outside-repo/skills/` (root repo) | Codex | Đủ 6 skill và demo kit đã có trong commit init; có thể cài vào `~/.agents/skills/` trên mỗi máy |
 
 Thứ tự đọc cho mỗi người: README §1–§8 → file lane của mình → `AGENTS.contest.md`. P4 đọc thêm hết các file lane khác.
@@ -26,7 +26,7 @@ Nguồn: [codexhackathon.sea.com](https://codexhackathon.sea.com/) (đọc ngày
 - **Thời gian:** 31/10/2026 tại Shopee Vietnam Office, HCMC. 8:30 check-in. **Hack 10:00–17:00.** Sau 17:00 là chấm vòng 1 (giám khảo đi vòng các bàn) rồi finalist lên sân khấu.
 - **Tiêu chí chấm:** problem framing · quality of build · depth of thinking · **how effectively Codex was leveraged in the build process**.
 - **Luật quan trọng:** *"Pre-built code or existing projects shall not be submitted. Ideas can be prepared in advance, but all building must take place on the day."* Hệ quả:
-  - Repo nộp là **repo mới**. Chỉ chứa đặc tả, prompt, AGENTS mang theo, cộng với code **và dataset** do Codex tạo trong ngày (case thật được fetch và capture trong ngày từ các URL đã ghi trong `docs/DATASET-SPEC.md`). Không dùng code viết trước ngày thi.
+  - Repo nộp là **repo mới**. Chứa pack chuẩn bị đã khai báo bên dưới, cộng với application code **và dataset** do Codex tạo trong ngày (case thật được fetch và capture trong ngày từ các URL đã ghi trong `docs/DATASET-SPEC.md`). Không mang application code từ bản rehearsal vào repo thi.
   - Repo này giữ đủ skills/demo kit trong `_outside-repo/skills` như công cụ setup chuẩn bị trước theo quyết định nhóm.
     Khai rõ trong declaration và commit init; không tính chúng là application code viết trong giờ thi.
 - **Nộp bài** (theo yêu cầu team nhận được): GitHub repo · project write-up (problem, solution, build direction, cách dùng Codex) · demo link · declaration. Template ở [SUBMISSION.md](SUBMISSION.md).
@@ -48,13 +48,19 @@ P4 là người duy nhất merge vào `main`. P4 cũng là người bấm giờ 
 
 Sync = **10 phút cuối** mỗi phase. "Must" phải có ở Sync, "Should" làm nếu kịp, "Could" là stretch. Chi tiết nằm trong file lane.
 
+Ưu tiên Must/Should/Could trong lane và scope đã chốt gần nhất quyết định phần phải làm; các bước BUILD kế thừa
+ưu tiên đó. Bảng dưới là đích chung, không tự nâng Should thành Must. P4 ghi scope cut một lần trong HANDOFF,
+đồng bộ test được chọn và storyboard; tính năng đã hoãn không chặn Sync. Không đổi assertion hoặc che regression của
+phần vẫn giữ. Prompt được tinh chỉnh theo tình hình; chỉ thay đổi contract/verdict dùng chung mới cần cập nhật spec
+và báo lane liên quan. Không cần duyệt lại quyết định người dùng đã chốt.
+
 | Phase | T+ / giờ thật | Kết quả phải có ở Sync | P1 | P2 | P3 | P4 |
 |---|---|---|---|---|---|---|
-| **0 · Nền móng & hợp đồng** | 0:00–0:30 · 10:00–10:30 | **S0:** smoke PASS/FAIL đã rõ · backend boot · seed chạy · pytest collect · frontend boot với mock | `db.py` đủ schema, `seed.py` generic, `store.py`, `trace.py` | kích hoạt key, `smoke.py` 8 bước dùng builder của pipeline, khung `llm/client.py` + `budget.py` | Vite/React/TS, router 5 trang, `types.ts`, mock, api client có role header | repo mới, AGENTS/PLANS, docs (không có dataset), `config.py` đủ switch, `models.py`, `main.py` + stub, conftest, `.env.example` · **dataset đầu tiên S1 + event 01–03/08** (P4-0c) |
+| **0 · Nền móng & hợp đồng** | 0:00–0:30 · 10:00–10:30 | **S0:** smoke PASS/FAIL đã rõ · backend boot · seed chạy · pytest collect · frontend boot với mock | `db.py` đủ schema, `seed.py` generic, `store.py`, `trace.py` | kích hoạt key, `smoke.py` 8 bước dùng builder của pipeline, khung `llm/client.py` + `budget.py` | Vite/React/TS, router 5 trang, `types.ts`, mock, api client có role header | checkout repo đã init, AGENTS/PLANS và docs sẵn có; `config.py` đủ switch, `models.py`, `main.py` + stub, conftest, `.env.example` · **dataset đầu tiên S1 + event 01–03/08** (P4-0c) |
 | **1 · Xương sống** | 0:30–1:45 · →11:45 | **S1 = M1:** Operator "Bootstrap" → Buyer thấy 5 field có citation (fallback) · NOOP/DUPLICATE/REJECTED · GET passport không tạo gì | admission, worker, `run.py`, policy R1–R11 + REQ, publish gate, API core | client đủ 4 mode, replay key hash toàn bộ input, fallback extractor, `extract.py`, `normalize.py`, live extract đầu tiên (record) | Buyer Passport (ngôn ngữ dễ hiểu), evidence drawer, badge, Operator v1 → **chuyển sang API thật** | toàn bộ AC-01…20 viết sẵn có phase marker, `demo_reset`, merge · **case synthetic S1–S4 + ảnh nhãn + gold nháp** (P4-1c) |
-| **2 · Mâu thuẫn nguồn + vòng đời + model thật** | 1:45–3:00 · →13:00 | **S2 = M2:** revoke → STALE → re-assess · Conflict in source · review gắn revision · có 1 run model thật được record | version mới/revoke/stale, gap + evidence request, reviews (override qua gate), PARTIAL · thread 2: scope inference + copy detection | vision, coverage retry an toàn, canon (chỉ học từ claim đã validate), claims auditor, **budget cả run + deadline cứng**, record pass 1 | Reviewer console, stale ripple, claims (buyer chỉ thấy số đếm), control room + stepper | eval B0, chuẩn bị fix-loop, theo dõi CODEX_LOG · **capture sản phẩm thật R1–R4 + expected do người viết** (P4-2b) |
-| **3 · Agentic + RAG + glass box** | 3:00–4:15 · →14:15 | **S3 = M3:** agent đổi được ít nhất 1 verdict **mà code verify được** (anchor) · Why? panel · hybrid search | gap controller + mock registry, explain, observability, gắn hook agent · thread 2: hash chain, graph, search (OTel = Could) | pre-pass + **single typed call + anchor verify** · thread 2: retrieval (BM25 + embed lúc ingest + RRF) · Manager/specialist = Could | Why? (buyer gọn / expert đủ), waterfall, agent panel trước/sau, Ask the evidence, graph | **blind set (người viết đáp án trước)**, B1, harness `blind_eval`, retrieval eval, **storyboard + callout/timing; narration.json={}** |
-| **4 · Khác biệt + nâng cấp** | 4:15–5:15 · →15:15 | **S4 = M4:** web discovery có audit · receipt · marketplace · OCR box | receipts, marketplace, policy-v2 (web), *stretch:* scheduler theo priority | Web Scout (OpenAI web_search → code fetch/clean/identity/snapshot), OCR · thread 2: `record_all.py` · *stretch:* evidence scout, reviewer copilot | receipt, marketplace, web audit, OCR overlay, Observe, time slider, `scripts/e2e.py` (Playwright) | chốt storyboard cho P3, chạy blind set, **marketplace thật R5**, gom số liệu và bằng chứng Codex |
+| **2 · Mâu thuẫn nguồn + vòng đời + model thật** | 1:45–3:00 · →13:00 | **S2 = M2:** revoke → STALE → re-assess · Conflict in source · review gắn revision · có 1 run model thật được record | version mới/revoke/stale, gap + evidence request, reviews (override qua gate), PARTIAL · thread 2: scope inference + copy detection | vision, coverage retry an toàn, canon (chỉ học từ claim đã validate), claims auditor, **budget cả run + deadline cứng**, record pass 1 | Reviewer console, stale ripple, claims (buyer chỉ thấy số đếm), control room + stepper | eval B0, chuẩn bị fix-loop, theo dõi CODEX_LOG · **capture sản phẩm thật R1–R4 + gold Codex soạn, người duyệt** (P4-2b) |
+| **3 · Agentic + RAG + glass box** | 3:00–4:15 · →14:15 | **S3 = M3:** agent đổi được ít nhất 1 verdict **mà code verify được** (anchor) · Why? panel; hybrid search = Should | gap controller + mock registry, explain, observability, gắn hook agent · thread 2: hash chain, graph, search (OTel = Could) | pre-pass + **single typed call + anchor verify** · thread 2: retrieval (BM25 + embed lúc ingest + RRF) · Manager/specialist = Could | Why? (buyer gọn / expert đủ), waterfall, agent panel trước/sau, Ask the evidence, graph | **blind set (Codex soạn đáp án trước lần chạy đầu, người duyệt)**, B1, harness `blind_eval`, retrieval eval, **storyboard + callout/timing; narration.json={}** |
+| **4 · Khác biệt + nâng cấp** | 4:15–5:15 · →15:15 | **S4 = M4:** web discovery có audit · receipt; marketplace UI/OCR = Should; khi thiếu giờ áp §8 | receipts, marketplace, policy-v2 (web), *stretch:* scheduler theo priority | Web Scout (OpenAI web_search → code fetch/clean/identity/snapshot), OCR · thread 2: `record_all.py` · *stretch:* evidence scout, reviewer copilot | receipt, marketplace, web audit, OCR overlay, Observe, time slider, `scripts/e2e.py` (Playwright) | chốt storyboard cho P3, chạy blind set, **marketplace thật R5**, gom số liệu và bằng chứng Codex |
 | **5 · Hardening & freeze** | 5:15–6:00 · →16:00 | **FREEZE 16:00:** tất cả green ở `LLM_MODE=replay` | sửa bug, sync docs 03–06, kiểm `POLICY_VERSION` · thread 2: `metrics.py` + route | **record sau tag sync-4 (~15:15), freeze recordings 15:35 (tag `rec-freeze`)** | polish, rà wording, build tĩnh, E2E green · thread 2: **quay segment video** (`record_demo.py`) sau `rec-freeze` | số eval/metrics cuối, `$sync-gate 5 rec` (15:35) và `$sync-gate 5` (15:50, tag `freeze`), README repo |
 | **6 · Video + nộp** | 6:00–7:00 · →17:00 | **Nộp xong lúc 16:45** (đệm 15 phút) | phần architecture trong write-up + README chạy app | phần AI design + số liệu "how Codex was used" | 6 screenshot, sửa lỗi UI chặn video | `$mvp-demo` → upload → link, write-up, declaration, nộp |
 
@@ -226,7 +232,7 @@ Các con số budget ở trên chỉ là default. **Chốt ở S0** dựa trên 
 | | Web Scout tự viết query, tự chọn trang. Code kiểm identity và snapshot. Retailer chỉ được xác nhận, không được tố cáo (P2 + P1) | CeraVe thật: tự tìm trang hãng + 2 retailer, có audit panel |
 | | Học từ vựng lúc chạy: model đề xuất, code verify, mapping lưu kèm provenance và **chỉ được dùng để xác nhận** (P2) | Sản phẩm có "nghệ" → học được "Curcuma Longa", hiện trên Observe + Why? |
 | | Gặp tình huống bất ngờ: injection bị bỏ qua, ảnh mờ → UNREADABLE thay vì bịa, model lỗi → PARTIAL/fallback có nhãn (P2) | Listing chứa injection; ảnh nhãn mờ |
-| | Thích ứng với sản phẩm chưa từng thấy (P4 eval) | Blind set tạo trong ngày (≥ 12 sản phẩm, đáp án viết trước), first-run accuracy, 0 seller bị đổ lỗi sai, metamorphic tests |
+| | Thích ứng với sản phẩm chưa từng thấy (P4 eval) | Blind set tạo trong ngày (mục tiêu 12 sản phẩm nếu kịp; đáp án Codex soạn trước, người duyệt; ghi rõ số ca thực chạy), first-run accuracy, 0 seller bị đổ lỗi sai, metamorphic tests |
 
 Stretch, chỉ làm khi dư giờ (cả hai đều tăng "Autonomous"): **evidence scout agent** (Manager tự chọn bước tiếp theo giữa registry, search, web và request, có `needs_approval`) và **scheduler theo priority** (kiểm tra trước theo rủi ro, không đợi click).
 
@@ -270,7 +276,7 @@ chọn cách tốt hơn nếu có bằng chứng, và ghi lại trong ExecPlan.
 | INCI có viết tắt (Denat., Ext.); dạng pháp lý công ty; skin type có chiều | P2 Phase 1 · P1 Phase 1 |
 | Time travel phải tính lại freshness; câu kết luận nên bắt đầu bằng giá trị; đồng thuận ≠ tương thích | P1 Phase 2, 1, 4 |
 | Overfit từ vựng/scope; một rule có hai implementation | P2 Phase 1–3, P1 Phase 2, AGENTS rule 14 |
-| Nhãn expected cần người thứ hai soát; giá model phải lấy từ pricing page ngày thi | P4 · P2 Phase 0 |
+| Nhãn expected do Codex soạn cần một người duyệt; người thứ hai tùy chọn; giá model phải lấy từ pricing page ngày thi | P4 · P2 Phase 0 |
 
 ## 12. Setup Codex (mỗi người, xong trước 31/10)
 
@@ -351,8 +357,8 @@ Nguồn: [Codex skills](https://developers.openai.com/codex/skills), [Codex best
 **Trước 31/10 (P4 điều phối):**
 - [ ] Mỗi người đã kích hoạt credits, cài Codex app, sửa config, cài 6 skill, thấy chúng trong `/skills`.
 - [ ] Mỗi người đã đọc README §1–§8 + file lane của mình + `AGENTS.contest.md`.
-- [ ] **Không mang dataset.** Cả đội đọc `docs/DATASET-SPEC.md` (case synthetic sinh ngày thi, case thật capture ngày thi, blind set do P4 viết). Mở thử các URL thật ở §3 và ghi lại URL nào còn sống.
-- [ ] Chỉ định 2 người soát expected answers trong ngày, không phải người viết rule cho case đó (AGENTS rule 11).
+- [ ] **Không mang dataset.** Cả đội đọc `docs/DATASET-SPEC.md` (case synthetic sinh ngày thi, case thật capture ngày thi, blind set Codex soạn và P4 điều phối duyệt). Mở thử các URL thật ở §3 và ghi lại URL nào còn sống.
+- [ ] Chỉ định một người duyệt gold Codex soạn theo lô trong ngày (AGENTS rule 11); người thứ hai hỗ trợ ca khó nếu rảnh. Nhãn chưa duyệt vẫn DRAFT và báo số liệu riêng.
 - [ ] Repo `seaxopenai_hcpus` đã có một commit init gồm toàn bộ pack: docs, prompt, template và 6 skill/demo kit trong `_outside-repo/`; **không có application implementation hay dataset**. Cách dùng: `README-PACK.md` ở root.
 - [ ] Cả nhóm truy cập được `https://github.com/thphuc06/seaxopenai_hcpus.git`; P4 không cần tạo repo/copy pack lại trong ngày thi.
 - [ ] Xem lại số liệu pitch (DEVLOG 26/10: 896 khiếu nại, TMĐT 21,3%, 9,2% thông tin không đầy đủ/không chính xác; quyết định ngày 22/06/2026 (chỉ ghi ngày); **không** trích Luật 122/2025 Điều 17 như "platform phải kiểm duyệt", vì câu đó chưa xác nhận được).

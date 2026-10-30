@@ -14,8 +14,12 @@ SQLite. All IDs are strings (`case_…`, `src_…`, `sv_…`, `psg_…`, `clm_�
 | `responsible_company` | string, normalised (casefold, strip legal suffix) | Synthetic case only |
 
 `SkinType`: `DRY`, `NORMAL`, `OILY`, `COMBINATION`, `SENSITIVE`, `ACNE_PRONE`, `ALL`.
-Mapping examples: "da khô" / "dry skin" → `DRY`; "da thường đến da dầu" / "normal to oily" → `{NORMAL, OILY}`; "mọi loại da" / "all skin types" → `ALL`.
-`ALL` is compatible with any set; `{DRY}` vs `{NORMAL, OILY}` is a conflict.
+Mapping examples: "da khô" / "dry skin" → `DRY`; "da thường đến da dầu" / "normal to oily" → `{NORMAL, COMBINATION, OILY}`; "mọi loại da" / "all skin types" → `ALL`.
+The range phrase is an explicit demo seed convention, recorded with its rationale in `vocab_seed.json`; it is not a
+general medical scale or permission to interpolate arbitrary phrases. Explicit lists map only the named types.
+Comparison is directional (docs/06): a reference saying `ALL` supports any listing set; a listing saying `ALL` needs a
+reference saying `ALL`. Otherwise listing types must be a subset of reference types. Reference-to-reference agreement
+accepts either direction. `{DRY}` vs `{NORMAL, COMBINATION, OILY}` is incompatible.
 
 `IngredientKey` (demo list): `CERAMIDES`, `HYALURONIC_ACID`, `NIACINAMIDE`, `SALICYLIC_ACID`, `GLYCERIN`, `ZINC`. Synonyms table in `normalize.py` (e.g. "Ceramide NP/AP/EOP" → `CERAMIDES`, "BHA" → `SALICYLIC_ACID`).
 
@@ -31,11 +35,11 @@ Mapping examples: "da khô" / "dry skin" → `DRY`; "da thường đến da dầ
 | `ReviewState` | `AUTO_DRAFT`, `NEEDS_REVIEW`, `REVIEWED`, `SUPERSEDED` |
 | `EvidenceLevel` | `LISTING`, `PRODUCT_VERSION`, `BATCH`, `UNIT` (demo: LISTING / PRODUCT_VERSION only) |
 | `DatasetOrigin` | `REAL`, `SYNTHETIC` (+ trace flag `REPLAY`) |
-| `SourceKind` | `LISTING`, `BRAND_PAGE`, `NOTIFICATION_DOC`, `PACKAGING_IMAGE`, `SELLER_UPLOAD`, `REGISTRY_RECORD` (added in Phase 5: a lookup in the MOCK registry becomes a cited source), `WEB_PAGE` (Phase 8: a non-official page found by web search and snapshotted by code; confirms only) |
+| `SourceKind` | `LISTING`, `BRAND_PAGE`, `NOTIFICATION_DOC`, `PACKAGING_IMAGE`, `SELLER_UPLOAD`, `REGISTRY_RECORD` (used in Phase 3: a lookup in the MOCK registry becomes a cited source), `WEB_PAGE` (Phase 4: a non-official page found by web search and snapshotted by code; confirms only). Declare the full enum in Phase 0. |
 | `SourceStatus` | `ACTIVE`, `SUPERSEDED`, `REVOKED`, `UNAVAILABLE` |
 | `RunStatus` | `QUEUED`, `RUNNING`, `COMPLETED`, `PARTIAL`, `WAITING_EVIDENCE`, `WAITING_REVIEW`, `FAILED`, `CANCELLED` |
 | `Role` | `BUYER`, `SELLER`, `REVIEWER`, `OPERATOR`, `SYSTEM` |
-| Passage scope (`passage_scopes.scope_match`) | `MATCH`, `MISMATCH`, `UNKNOWN`, **`AGENT`** — the agent proposed that a passage naming no size applies; usable, but every result citing it is `NEEDS_REVIEW`. `decided_by` = `CODE` (pre-pass) / `LIVE` / `REPLAY` / `FIXED_WORKFLOW` **Contest (PROPOSAL BR-05a):** a placement whose anchor is a code-decided MATCH of the same variant is stored as `MATCH` with `decided_by = AGENT_VERIFIED` and counts like a code decision; without a valid anchor it stays `AGENT` → `NEEDS_REVIEW`. |
+| Passage scope (`passage_scopes.scope_match`) | `MATCH`, `MISMATCH`, `UNKNOWN`, **`AGENT`**. `decided_by` = `CODE`, `AGENT_VERIFIED`, `AGENT`, `FIXED_WORKFLOW`, `REPLAY` (README §7.1). Under docs/06 R3b, YES with a structurally valid code-MATCH anchor → `MATCH`; NO with a valid code-MISMATCH anchor → `MISMATCH`; both use `AGENT_VERIFIED`. Without a valid anchor, YES → `AGENT` (usable, forces review), NO/UNSURE → `UNKNOWN`. Execution mode is traced separately; replay preserves whether an anchor was code-verified. |
 | Vocabulary provenance (`vocab.by`) | `seed` (`app/data/vocab_seed.json`), `model` (learned at run time), `reviewer` — only `seed`/`reviewer` may raise a conflict (AGENTS.md rule 14) |
 
 ## Buyer label mapping (UI only)
@@ -103,7 +107,7 @@ marketplace_findings(product_id, scan_id, seller_source_id, shop, field_key, val
                      citation_json, created_at)                    -- other sellers' listings, outside the case
 orders(id, product_id, case_id, buyer_id, placed_at, case_revision, snapshot_json, snapshot_hash, chain_head)
 web_searches(id, case_id, run_id, query, provider, mode, results_json, credits, created_at)
-                                                                   -- Phase 8: every query, result, domain class and decision
+                                                                   -- Phase 4: every query, result, domain class and decision
 products(+ web_json)                                              -- {enabled, brand_domains} for web discovery
                                                                    -- evidence receipt at purchase
 passages_fts(text, passage_id, source_version_id)                  -- FTS5 virtual table

@@ -70,6 +70,9 @@ products (blind sets): <x/y fields, z sellers wrongly blamed>.>
   | task | what Codex produced | what a human changed | test | commit |
 
 ## Results (measured on <date>, mode <replay/record>, gold labels <reviewed by …/draft>)
+Gold was drafted by Codex from the sources and rules, then <reviewed by … / left DRAFT>.
+Report REVIEWED and DRAFT counts/scores separately; DRAFT numbers are exploratory, and blind first-run results
+stay distinguishable from reruns. One human may review a batch; do not claim independently human-authored gold.
 | | Candidate | B0 rules | B1 single LLM |
 |---|---|---|---|
 | Fields correct (demo story) | | | |

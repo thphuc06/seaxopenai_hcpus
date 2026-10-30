@@ -8,7 +8,7 @@ Paste this file into the first Codex task on contest day. Names here are binding
 {
   "event_id": "evt_0001",
   "idempotency_key": "listing:demo-lst-01:v2",
-  "type": "BOOTSTRAP | LISTING_CHANGED | SOURCE_CHANGED | EVIDENCE_ADDED | SOURCE_REVOKED",
+  "type": "BOOTSTRAP | LISTING_CHANGED | SOURCE_CHANGED | EVIDENCE_ADDED | SOURCE_REVOKED | WEB_SEARCH_REQUESTED",
   "schema_version": "1",
   "producer": "publisher-panel",
   "resource": {"kind": "LISTING | SOURCE | CASE", "id": "demo-lst-01", "version": 2},
@@ -63,7 +63,7 @@ Extended routes (design). Run and event routes live under `/internal` (`/interna
 | GET | `/internal/runs/{run_id}/otel` | OPERATOR, REVIEWER | OTLP/JSON spans, OpenTelemetry GenAI conventions (`invoke_agent`, `execute_tool`, `chat`), content capture off |
 | GET | `/internal/observability` | OPERATOR, REVIEWER | Live counters: verdicts, model calls live/replayed/avoided, by step, publish gate, agent stops, gap stops, learned vocabulary |
 | GET | `/internal/eval/metrics` | OPERATOR, REVIEWER | Latest offline scorecard written by `scripts/metrics.py` |
-| POST | `/cases/{case_id}/web-search` | OPERATOR | Phase 8: admits a `WEB_SEARCH_REQUESTED` event (idempotency key = case + revision); the run searches, snapshots pages, re-assesses |
+| POST | `/cases/{case_id}/web-search` | OPERATOR | Phase 4: admits a `WEB_SEARCH_REQUESTED` event (idempotency key = case + revision); the run searches, snapshots pages, re-assesses |
 | GET | `/cases/{case_id}/web-search` | REVIEWER, OPERATOR | Audit: queries → results (domain, class, score, decision, reason) and stored snapshots (url, sha256, captured_at, passages) |
 
 Reviewer `OVERRIDE` goes through the same publish rules as a run: forbidden wording → 422; a verdict other than
@@ -90,12 +90,12 @@ Role is sent as header `X-Demo-Role: BUYER|SELLER|REVIEWER|OPERATOR` and `X-Demo
       "review_state": "NEEDS_REVIEW",
       "checked_at": "2026-10-24T09:01:12Z",
       "citations": [
-        {"passage_id": "psg_12", "source_kind": "BRAND_PAGE", "source_version": 1, "locator": "title", "excerpt": "...dry skin..."},
-        {"passage_id": "psg_14", "source_kind": "BRAND_PAGE", "source_version": 1, "locator": "description#p2", "excerpt": "...normal to oily..."}
+        {"passage_id": "psg_12", "source_kind": "BRAND_PAGE", "source_version": 1, "locator": "title", "excerpt": "dry skin"},
+        {"passage_id": "psg_14", "source_kind": "BRAND_PAGE", "source_version": 1, "locator": "description#p2", "excerpt": "normal to oily"}
       ]
     }
   ],
-  "disclaimer": "Describes what the checked sources say. Not a certification of authenticity or safety."
+  "disclaimer": "Describes only the sources checked; it does not establish product origin or suitability."
 }
 ```
 
@@ -120,9 +120,19 @@ class ClaimExtraction(BaseModel):
     ignored_instructions_detected: bool   # true if source text tried to instruct the model
 ```
 
-Validation in code after parse: `passage_id` exists in this source version; `quote` is a substring of passage text (after whitespace normalisation) → else drop the claim and log `INVALID_LOCATOR`.
+Shared citation rule for extraction, publish, reviewer overrides and tests: `passage_id` belongs to this source version;
+the quote is one contiguous substring of its stored passage after Unicode NFC and whitespace collapse on both sides.
+Keep case and punctuation; do not casefold or join separate fragments with ellipses, dashes or slashes. Store the
+source wording. If several excerpts are needed, use separate claims/citations. Invalid quotes are dropped with
+`INVALID_LOCATOR`; publish applies the same check. `UNREADABLE` with null value/quote is retained as an unreadability
+signal, not usable evidence for a positive finding. Image quotes use the stored transcript/OCR passage by the same rule.
 
 ## 4. Manager action (Agents SDK `output_type`)
+
+Sections 4–6 describe an optional extended Manager design, not the Phase 3 Must. The contest starts with P2's
+single-call scope proposal (`passage_id`, `applies`, `anchor_passage_id`, `reason`); optional retrieval tools are
+`get_case_context`, `search_case_corpus`, `read_passage`. Follow team-plan README §7 and P2's current phase prompt
+for executable interfaces; enable the extended actions below only if that scope is explicitly retained.
 
 ```python
 class ManagerAction(BaseModel):

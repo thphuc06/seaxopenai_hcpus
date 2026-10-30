@@ -189,7 +189,7 @@ BUILD
    (rule id as in docs/06, outcome, detail) — this is the "Why?" trail. Public texts from the docs/06 templates and
    they lead with the agreed value, e.g. "50 ml — consistent across 2 independent sources checked: …".
 6. pipeline/publish.py — gate(decision, run, case): each citation's passage exists in its source version, excerpt ⊆
-   passage text (whitespace-normalised), source ACTIVE, forbidden wording absent (regex from docs/06, EN+VI), run's
+   passage text (one contiguous excerpt after NFC + whitespace collapse, docs/05 §3; same rule as extraction), source ACTIVE, forbidden wording absent (regex from docs/06, EN+VI), run's
    pinned revision == case.revision (else trace SUPERSEDED_RUN, nothing written), non-INSUFFICIENT needs ≥1 citation.
    Blocked → trace publish:blocked with reason; never publish partially.
 7. api/ — X-Demo-Role / X-Demo-Actor dependency checked on every route (403 when the role may not call it). Routes of
@@ -250,7 +250,7 @@ Các route S1 đã chạy, có `response_model` → báo P3 chuyển sang API th
 ## Phase 2 — Mâu thuẫn nguồn + vòng đời sự kiện (T+1:45–3:00 · 11:45–13:00)
 
 ### Mục tiêu
-Vòng đời "wow": revoke làm **ngay lập tức** (không job, không model) 2 field notification STALE, sau đó re-assess thành INSUFFICIENT kèm evidence request. Seller upload thì field quay lại. Listing đổi volume → CONFLICTING → reviewer duyệt đúng một revision. Có PARTIAL khi hết budget. Thread 2 làm scope inference khi thiếu metadata và copy detection (P1-2c).
+Vòng đời "wow": revoke làm **ngay lập tức** (không job, không model) 2 field notification STALE, sau đó re-assess thành INSUFFICIENT kèm evidence request. Seller upload S1-up: company về CONSISTENT, notification_number mới khác listing → CONFLICTING + NEEDS_REVIEW; các field còn lại theo bằng chứng. Listing đổi volume → CONFLICTING → reviewer duyệt đúng một revision. Có PARTIAL khi hết budget. Thread 2 làm scope inference khi thiếu metadata và copy detection (P1-2c).
 
 ### Must / Should / Could
 - **Must:**
@@ -380,7 +380,7 @@ verdict is recorded and visible.
 
 CONTEXT
 - docs/06 "Gaps" row + REQ with registry (gap controller over a mock registry); the "Why?" decision trail (glass box)
-- docs/05 §2 Phase 5–7 routes (explain, otel, observability, graph, chain, search)
+- docs/05 §2 Phase 3 routes (explain, otel, observability, graph, chain, search)
 - fixtures/synthetic/registry/mock_registry.json (SYNTHETIC, fictional numbers), events 12-bootstrap-sun-fluid,
   09-catalogue-published
 - README §7.1 (scope_resolution.resolve_all, retrieval.search signatures), §7.3 step vocabulary
@@ -493,7 +493,7 @@ BUILD
    web.enabled while public fields are not consistent), then extracts the new sources. GET /cases/{id}/web-search
    (REVIEWER/OPERATOR) returns queries → results (domain, class, decision, reason) → snapshots (url, sha256, captured_at,
    passages) from the web_searches table P2 writes. Buyer reads never search.
-5. Evidence route: include OCR boxes for image citations via ocr.boxes_for(sv_id, excerpt) and serve label images at
+5. SHOULD — Evidence route (if OCR is retained): include OCR boxes for image citations via ocr.boxes_for(sv_id, excerpt) and serve label images at
    GET /sources/{sv}/image?as_role= (role check from the query because <img> cannot send headers; PRIVATE images only
    for REVIEWER/OPERATOR).
 6. Tests: test_orders (receipt diff after revoke; hash verification fails after tampering), test_marketplace (copies

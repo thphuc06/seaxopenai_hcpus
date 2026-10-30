@@ -23,11 +23,12 @@
 1. Đầu phase: `git fetch --tags; git merge sync-<N-1>` trên branch `p4` (Phase 0: làm thẳng trên `main`, tạo `p4` sau S0), rồi `$phase-kickoff P4 <N>`. Phase 0 thì dán thẳng Prompt chính.
 2. Trong phase: thread 1 chạy Prompt chính, thread 2 chạy Prompt phụ (chủ yếu là dataset).
 3. **T+20 (Phase 1–4): mini-sync hợp đồng** bằng `$sync-gate <N> contract`. Merge riêng commit contract của P4 (Phase 1: test nghiệm thu phase 1), P1, P2 và lane nào trễ Sync trước; mỗi commit đều có test trước khi commit merge. Tag `contract-<N>`, báo mọi lane `git merge contract-<N>`.
-4. **Phần chỉ người làm được** (Codex không làm thay), làm trong lúc Codex của bạn đang chạy:
-   - Phase 2: viết `fixtures/gold/dev/real.json` sau khi P4-2b capture xong;
-   - Phase 2: viết bảng blind set `fixtures/gold/blind/expected-set1.json`, cần xong trước **12:40** (trước S2) để P4-3 dùng;
-   - Phase 2–3: duyệt gold nháp `demo-story.json`.
-   P3 soát chéo các file này ngay sau S2 và S3, trong lúc Codex của P3 đang chạy kickoff.
+4. **Gold do Codex soạn, người duyệt theo lô**, làm trong lúc các thread code đang chạy:
+   - Phase 2: Codex soạn `fixtures/gold/dev/real.json` sau P4-2b và bảng blind `fixtures/gold/blind/expected-set1.json`;
+   - Mỗi nhãn kèm locator/bằng chứng và lý do ngắn; P4 hoặc một người được giao đọc, chỉnh và duyệt cả lô;
+   - Phase 2–3: duyệt `demo-story.json`, real và blind; P3 có thể soát chéo nếu còn thời gian, không bắt buộc hai người.
+   Chưa duyệt vẫn chạy diagnostic với nhãn DRAFT, báo số riêng. Blind phải cố định trước lần chạy đầu; không lấy
+   output của pipeline làm đáp án. Duyệt không cần viết tay lại toàn bộ gold.
 5. T−10: `$sync-gate <N>` ở thread Local (N≥1: commit và push `p4` trước; S0 làm trên `main`). Lấy baseline mới trước từng merge; gate đạt thì ghi HANDOFF và commit cùng `PHASE=N`, rồi mới tag/push. Lỗi chưa giải thích chặn tag; WAITING phải có missing lane/commit và chỉ được gọi partial. `/review`, click path và log làm sau tag.
 6. Gọi cắt scope theo README §8 nếu cần. Thông báo "merge sync-N vào branch của bạn".
 
@@ -53,7 +54,7 @@
 
 ### Việc cần làm
 1. **Đọc README §14 checklist** và giao việc cho từng người.
-2. **Dataset:** không mang dataset vào ngày thi. Fixture được Codex sinh ra từ `docs/DATASET-SPEC.md`, case thật được capture ngày thi, expected answers do người viết (P4-0c, P4-1c, P4-2b, P4-3). Trước 31/10 chỉ cần: (a) đọc lại §3–§5 của spec và chốt danh sách case; (b) mở thử các URL thật ở §3, ghi lại URL nào còn sống; (c) chọn 1 người không viết code để soát expected answers ngày thi.
+2. **Dataset:** không mang dataset vào ngày thi. Fixture và gold DRAFT được Codex soạn từ `docs/DATASET-SPEC.md`, case thật capture ngày thi; một người duyệt gold theo lô (P4-0c, P4-1c, P4-2b, P4-3). Trước 31/10 chỉ cần: (a) đọc lại §3–§5 và chọn case; (b) mở thử URL thật, ghi URL còn sống; (c) giao người soát gold, có thể là P4, không cần một vai trò manual riêng.
 3. **Repo public hay private:** case thật lưu text trang bên thứ ba. Nếu thể lệ buộc public, quyết định trước là commit đủ snapshot hay chỉ URL + hash + excerpt (PROPOSAL OQ-8).
 4. **Pack đã import vào root repo:** tài liệu, prompt, AGENTS và đủ 6 skill/demo kit nằm trong `_outside-repo/skills`.
    Skill/demo kit là công cụ setup chuẩn bị trước, không phải application implementation; chưa có dataset hay recordings.
@@ -207,7 +208,8 @@ IF UNSURE
 P4, Phase 0c (thread 2, 10:05–10:28). First write scripts/check_fixtures.py: walk fixtures/{synthetic,real,blind,marketplace} (whatever exists — the
 dataset is generated during the day) and validate every snapshot JSON against the format in docs/DATASET-SPEC.md §2
 (required keys, kind in SourceKind, dataset_origin REAL|SYNTHETIC,
-unique passage ids per file and per product, non-empty text, no uppercase "TODO" anywhere (case-sensitive: keys such
+unique passage ids per file and per product, non-empty text except an intentionally unreadable PACKAGING_IMAGE with
+an actual sibling PNG and explanatory fixture note (DATASET-SPEC §2), no uppercase "TODO" anywhere (case-sensitive: keys such
    as "image_todo" are fine), product.json present with product_id,
 variant, market, case_id), every event in fixtures/events against EventEnvelope (models.py), and every
 payload.snapshot path exists. Print a table (path, problems) and exit 1 on problems. Use utf-8. Add a phase(0) test that
@@ -220,7 +222,7 @@ at Phase 1) + notification_doc.v1.json + brand page for another market; fixtures
 an "expect" sentence. Plant exactly the facts in the S1 row; write fresh, natural Vietnamese wording (one English page
 for the other market); fictional brand only; dataset_origin SYNTHETIC; stable ids from the spec. Then write
 fixtures/gold/dev/demo-story.json with the expected verdicts after 01 as a DRAFT for me to check (status DRAFT,
-labelled_by: "draft:codex") — do not mark it REVIEWED. Run scripts/check_fixtures.py and report. (This thread runs in
+labelled_by: "draft:codex", short evidence locator and rationale) — only human approval marks it REVIEWED. Run scripts/check_fixtures.py and report. (This thread runs in
 a fresh worktree before the setup script exists: once P4-0 has committed models.py and the setup script on main, `git merge main`,
 run scripts/dev/setup_worktree.ps1, then run the check. Until then write files only.)
 DONE WHEN: check_fixtures.py exits 0 on the S1 product and events 01–03/08; its phase(0) test is green. This worktree
@@ -297,8 +299,8 @@ BUILD
              AC-10 wrong market excluded (scope reason recorded, not CONFLICTING), AC-13 buyer GET x5 creates nothing
              (compare counts()), AC-14 buyer cannot POST events (403), AC-16 old run cannot overwrite newer revision
              (SUPERSEDED_RUN in trace), AC-19 forbidden wording absent from every public_text after the whole story,
-             AC-20 every non-INSUFFICIENT field cites a passage whose text contains the excerpt (check via DB, whitespace-
-             normalised), rejected producer → REJECTED.
+             AC-20 every non-INSUFFICIENT field cites one passage containing the contiguous excerpt (check via DB,
+             NFC + whitespace collapse on both sides, case-sensitive, never join fragments), rejected producer → REJECTED.
              AC-01 Foaming (real R2): skip with reason until fixtures/real/ has it (captured at S2 by P4-2b).
    phase(2): AC-02/AC-03 within-source conflict on skin_type and key_ingredients, seller_attributable false,
              NEEDS_REVIEW (use the CeraVe hydrating fixture if present, else the synthetic Hydra product from
@@ -306,8 +308,9 @@ BUILD
              if present; always also: DEMO skin_type SINGLE_SOURCE after bootstrap), AC-06 revoke → only notification
              fields STALE immediately with 0 model calls, then INSUFFICIENT + EvidenceRequest, volume keeps the same
              result_version, AC-09 volume change → CONFLICTING/LISTING_VS_SOURCE/NEEDS_REVIEW, AC-11 injection ignored
-             (ignored_instructions_detected true in trace detail, verdicts unchanged), AC-12 blurred photo → UNREADABLE →
-             INSUFFICIENT + "clearer photo" request, AC-15 review on stale revision → 409 and nothing written, override
+             (ignored_instructions_detected true in trace detail, verdicts unchanged), AC-12 isolated blurred-photo case
+             without other readable support for the tested field → UNREADABLE → INSUFFICIENT + "clearer photo" request;
+             also verify adding 10 to the full story preserves useful existing evidence, AC-15 review on stale revision → 409 and nothing written, override
              without citation → 422, AC-17 budget exhausted (set RUN_MAX_MODEL_CALLS / AGENT_MAX_TOOL_CALLS to 1 via env)
              → run PARTIAL with stop_reason, no fabricated verdict, AC-18 model failure (force a fake LLM error via a
              monkeypatched client) → run FAILED or PARTIAL and buyer label "Could not update" or prior result kept;
@@ -324,14 +327,22 @@ BUILD
              source cited, gap stop_reason GAP_CLOSED; explain endpoint: buyer sees no private sources/model ids/rule codes,
              reviewer sees the full trail; chain endpoint valid after the story and invalid after tampering a hashed
              column directly in the DB.
-   phase(4): order receipt then revoke → receipt diff shows the two changed fields; marketplace scan → copies count once,
+             Exercise agent-dependent checks offline with record mode and a deterministic fake at P2's documented
+             network seam, tmp_path recordings (as for AC-17/18). This proves orchestration/verification, not real model
+             quality; actual recorded agent behaviour is checked separately in replay mode.
+   phase(4): fresh isolated scenario: 01 bootstrap → order receipt → first processing of 05 revoke → receipt diff shows
+             the two changed fields; never reuse the already-processed 05 from the phase-2 story to expect a change.
+             Marketplace scan → copies count once,
              incompatible values routed to review, buyer response has no shop names; web search with a fake provider →
              snapshots are REAL with sha256, retailer disagreement never seller-attributable, buyer GET never searches.
    Assert on behaviour and contract fields only (verdict, locus, review_state, freshness, seller_attributable, outcome,
    status codes, counts) — not on exact public_text wording beyond forbidden words and "leads with the value" checks.
-2. scripts/sync_check.py <phase>: runs in-process (TestClient, temp DB, fallback, inline worker), replays the path of
+2. scripts/sync_check.py <phase> [--mode fallback|replay]: runs in-process (TestClient, temp DB, inline worker), replays the path of
    every phase ≤ <phase> (fires fixture events in order, reads passports as BUYER and REVIEWER) and prints a PASS/FAIL
-   table with the observed verdicts per product/field; exit 1 on FAIL. Implement phase 1 now; P4-2/3/4 extend it. The
+   table with the observed verdicts per product/field; exit 1 on FAIL. Mode = explicit --mode, else LLM_MODE, else fallback
+   when unset; print the resolved mode. Only fallback/replay are supported: reject other modes with an explanation to
+   select one of these, before any work or network access. Neither supported mode calls the network. Existing freeze
+   commands that set LLM_MODE=replay work without an extra flag. Implement phase 1 now; P4-2/3/4 extend it. The
    paths (expectations from DATASET-SPEC §4 and docs/06):
    - phase 1: reset → 01 → S1 passport (volume CONSISTENT, skin_type SINGLE_SOURCE, key_ingredients CONSISTENT,
      notification fields CONSISTENT, other-market page excluded) → 02 NOOP → 03 DUPLICATE → 08 REJECTED → passport x3
@@ -339,11 +350,17 @@ BUILD
    - phase 2: + 05 (two notification fields STALE at once, 0 model calls; after the run INSUFFICIENT + 2 requests) → 06
      (company CONSISTENT, number CONFLICTING, requests FULFILLED) → 04 (volume CONFLICTING/LISTING_VS_SOURCE) → approve
      review (decision listed; a stale revision → 409) → 07 (volume back; injection flagged) → 10 (UNREADABLE → clearer-
-     photo request) → 11 (Conflict in source on skin_type and key_ingredients) → 13 (claim findings; buyer count only).
-   - phase 3: + 09 (sized lines decided by code; the size-less line placed via anchor; skin_type changes; agent:effect)
-     → 12 (registry hop, GAP_CLOSED) → explain as BUYER (no private source / model id / rule code) and as REVIEWER.
+     photo request, prior readable evidence retained) → 11 (Conflict in source on skin_type and key_ingredients) → 13 (claim findings; buyer count only).
+   - phase 3 in fallback: + 09 (sized lines decided by deterministic pre-pass; size-less line remains unresolved,
+     no invented agent effect) → 12 → explain as BUYER (no private source / model id / rule code) and as REVIEWER.
+     Agent-dependent scope/GAP_CLOSED checks run in the separate offline fake-client tests above. In replay mode,
+     require the actual recordings to show size-less placement with a verified anchor, skin_type change and agent:effect,
+     plus the registry hop/GAP_CLOSED when demonstrated; a missing recording is REPLAY_MISS, not fallback or PASS.
    - phase 4: + 14–17 (real cases: R1 Conflict in source; R2 no false alarm; R3 number + company read; R4 claims without
-     a false alarm) → order then 05 → receipt diff on two fields → marketplace scan → web-search audit rows.
+     a false alarm, where the day's captured content supports these expectations; report changed pages and use
+     source-grounded expected answers set before the run, never force historical verdicts) → in a fresh isolated DB:
+     01 bootstrap → order receipt → first 05 → receipt diff on two fields.
+     Marketplace scan and web-search checks use their own scenario state. Reposting processed 05 must still be DUPLICATE.
    A case whose fixtures do not exist (a real page that could not be captured) is printed as SKIP with the reason,
    never as PASS.
 3. scripts/seed.py (reset + seed via app.seed) and scripts/demo_reset.py (POST /api/internal/demo/reset on a running
@@ -376,7 +393,9 @@ skin text copied from the brand page), the mock registry, and events 04–13 wit
 paths relative to fixtures/). Plant exactly the facts in each row; fresh wording; fictional brand only. Write
 scripts/make_label_images.py (Pillow, utf-8 Vietnamese text, readable at 1280×720; --blur for S1-blur) and render every
 PACKAGING_IMAGE PNG next to its JSON. Extend fixtures/gold/dev/demo-story.json with a checkpoint after every event,
-derived from the "Proves" column and docs/06 — DRAFT for my review. Run check_fixtures.py. Do not touch app code.
+derived from the actual passages, "Proves" column and docs/06 — DRAFT with short evidence/rationale for batch review.
+Distinguish the isolated unreadable-only AC-12 from event 10 in the full story: the latter adds an unreadable image,
+not a revocation of previous readable evidence. Run check_fixtures.py. Do not touch app code.
 DONE WHEN: check_fixtures.py exits 0; every event 04–13 exists with its snapshot; every label has a PNG.
 IF UNSURE
 Check the official docs and the installed version first (AGENTS.md §4); ask me only on the AGENTS.md §5 triggers,
@@ -408,7 +427,7 @@ Có baseline để chứng minh "agentic RAG + policy có đáng không": `eval.
   - S2 merge;
   - CODEX_LOG cập nhật.
 - **Should:** chọn và ghi lại một fix loop thật (test đỏ → `$trace-debug` → sửa → xanh), lưu vào "Notable loops".
-- **Người làm (trong lúc Codex chạy):** viết `fixtures/gold/dev/real.json` sau P4-2b; viết bảng blind set `fixtures/gold/blind/expected-set1.json` (≥ 12 dòng, theo DATASET-SPEC §5) trước 13:00.
+- **Gold (trong lúc code chạy):** Codex soạn `real.json` sau capture và bảng blind `expected-set1.json` (đa dạng case, khoảng 12 nếu kịp; ít hơn vẫn dùng được). Một người duyệt theo lô; chưa duyệt giữ DRAFT. Cố định blind trước lần chạy đầu, không chặn build vì chờ duyệt.
 
 ### Prompt chính P4-2 (effort: medium)
 ```text
@@ -432,7 +451,8 @@ BUILD
    and B0 with the expected verdicts. Per checkpoint and in total: correct/total, seller wrongly blamed (CONFLICTING +
    seller_attributable where gold says not), abstentions (INSUFFICIENT/UNCERTAIN where gold expects them), model calls,
    tokens, latency (from run usage). Write docs/results/eval-latest.md (+ .json) with a header that states mode, model,
-   prompt versions, policy version, gold status (DRAFT or reviewed by whom) and date.
+   prompt versions, policy version, gold status (DRAFT or reviewed by whom) and date. Separate DRAFT and REVIEWED
+   counts and scores; never blend them into one reviewed score. DRAFT results are exploratory diagnostics.
 3. A phase(2) test that runs eval in fallback on the first two checkpoints (smoke only, no numbers asserted).
 4. Extend scripts/sync_check.py with the phase-2 path listed in P4-1.
 
@@ -460,9 +480,13 @@ highlights#n, description#pN, usage, specs#…, ingredients); write a REAL snaps
 domain) under fixtures/real/<product-folder>/ and print the passages for review. A page that blocks fetching or returns
 no product text is reported and skipped — never retype a page by hand as REAL. Then capture R1–R4 (listing = the
 retailer page in the table; references = the official brand pages), write each product.json (web.enabled true with
-brand_domains and aliases for R1), events 14–17, and STOP: I write fixtures/gold/dev/real.json myself after reading the
-captured text. Report what each page actually says today for the behaviours listed in §3 (quote the passages).
-DONE WHEN: each reachable R1–R4 page is stored as a REAL snapshot that passes check_fixtures.py; blocked pages listed.
+brand_domains and aliases for R1), events 14–17. Draft fixtures/gold/dev/real.json from the captured text and policy,
+with short evidence locators/rationale, labelled_by draft:codex, status DRAFT; never infer labels from candidate output.
+Prepare a compact review table so one human can approve or adjust the batch. Also draft the blind case table in
+fixtures/gold/blind/expected-set1.json from DATASET-SPEC §5 for Phase 3 (a smaller mixed set is fine if time is short).
+Only human approval marks gold REVIEWED. Report what each page actually says today for the behaviours in §3.
+DONE WHEN: each reachable R1–R4 page is stored as a REAL snapshot that passes check_fixtures.py; blocked pages listed;
+real gold and the blind case table are drafted for batch review. Pending review does not block diagnostic evaluation.
 IF UNSURE
 Check the official docs and the installed version first (AGENTS.md §4); ask me only on the AGENTS.md §5 triggers,
 each question with your recommended default; otherwise decide, log it in the ExecPlan and continue.
@@ -492,21 +516,24 @@ Prove adaptation, not memorisation: run the pipeline on products it was never tu
 answers fixed in advance (fixtures/gold/blind/*.json), and compare with a single-LLM baseline (B1).
 
 CONTEXT
-- docs/DATASET-SPEC.md §5 (blind-set process and probe categories), fixtures/gold/blind/expected-set1.json that I
-  (the human) wrote BEFORE this prompt
+- docs/DATASET-SPEC.md §5 (blind-set process and probe categories), fixtures/gold/blind/expected-set1.json drafted
+  by Codex in Phase 2, if present (retain its actual DRAFT/REVIEWED status)
 - P1 exposes seed.load_product_dir(path) (generic loader) — if it does not exist yet, send a CCR to P1 instead of
   writing your own loader
 - app/llm/client.parse (P2) for B1; docs/09 metrics; AGENTS rule 14 (test on unseen products)
 
 BUILD
-0. Blind set 1 (docs/DATASET-SPEC.md §5): I wrote the case table in fixtures/gold/blind/expected-set1.json before this
-   prompt. Generate fixtures/blind/set1/<product>/ realising each row exactly (≥ 12 products, mixed probe categories,
-   fresh wording, SYNTHETIC). Do not change the expected file; if a row cannot be realised, tell me which and why.
-   Run check_fixtures.py. Only then:
+0. Blind set 1 (docs/DATASET-SPEC.md §5): if the case table is missing, draft it now with expected fields and short
+   rationale from policy, without candidate outputs. Generate fixtures/blind/set1/<product>/ realising each row
+   (aim for 12 mixed cases if time permits; a smaller set is fine, report the count; fresh wording, SYNTHETIC).
+   Check passages against expected answers and run check_fixtures.py; report unrealizable rows. Freeze fixtures and
+   labels before the first run. One human may approve the batch; pending review stays DRAFT and diagnostics can proceed.
 1. scripts/blind_eval.py --set <n|all> [--mode fallback|replay|record] [--max-calls N]: temp DB per set, load each blind
    product via seed.load_product_dir, fire a BOOTSTRAP for its case, read the passport (and claim findings), compare with
    the expected file. Output docs/results/blind-set<n>.md: per product per field expected vs got, misses with the
-   "probes" note, seller wrongly blamed count, abstention count, model calls/tokens. A summary
+   "probes" note, seller wrongly blamed count, abstention count, model calls/tokens, gold status and reviewer if any.
+   Separate DRAFT/REVIEWED counts and scores. Preserve first-run results; append or separately save reruns instead of
+   overwriting that initial result, including when a human corrects a label after the run. A summary
    docs/results/blind-summary.md across sets. Exit code 0 even with misses (it is a report), 1 on crashes.
 2. B1 in backend/app/pipeline/baseline.py: one strict-schema call (via llm.client.parse, step "baseline:b1", its own
    prompt version) that receives all sources' passages and returns per-field verdicts (same enum). Recorded like any
@@ -520,7 +547,9 @@ BUILD
 4. Extend scripts/sync_check.py with the phase-3 path listed in P4-1.
 
 CONSTRAINTS
-- Do not edit blind fixtures or expected files; a wrong-looking label goes to the report for a human.
+- After the first run, do not tune blind fixtures or labels to output. A wrong-looking label goes to the human review
+  list; a justified human correction preserves the original report and records who changed what and why.
+  Disclose Codex-assisted gold.
 - Record mode spends money: cap calls (default 60 for all sets) and print the estimated cost before running; ask me if
   the estimate is above $3.
 - The demo kit is prepared setup tooling tracked under _outside-repo/skills/mvp-demo (declared separately from app code).
@@ -535,7 +564,7 @@ each question with your recommended default; otherwise decide, log it in the Exe
 ```
 
 ### Done-check S3
-`CONTEST_PHASE=3 pytest -q` · `sync_check.py 3`: catalogue → agent đổi verdict, `agent:effect` có before/after; explain lọc đúng theo role · storyboard đã được cả đội xem 2 phút.
+`CONTEST_PHASE=3 pytest -q`: kiểm agent bằng fake client offline · `sync_check.py 3 --mode fallback`: kiểm pre-pass và explain theo role · `sync_check.py 3 --mode replay` (khi có recording): agent đổi verdict, `agent:effect` có before/after; thiếu recording báo chưa xác minh · bỏ `--mode` thì dùng `LLM_MODE`, mặc định fallback nếu chưa đặt · storyboard đã được cả đội xem 2 phút.
 
 ---
 
