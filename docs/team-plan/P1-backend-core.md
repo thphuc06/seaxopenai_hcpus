@@ -23,7 +23,7 @@
 
 1. Đầu phase: `git fetch --tags; git merge sync-<N-1>` trên branch `p1` (mỗi người một branch cho cả ngày).
 2. `$phase-kickoff P1 <N>`. Phase 0 thì dán thẳng Prompt chính cho nhanh.
-3. **Commit hợp đồng trước, push trước T+20:** commit đầu tiên của phase chỉ gồm route và hàm mới ở dạng stub (route có `response_model`, trả 501 hoặc dữ liệu ví dụ; hàm đúng signature README §7.1), message `S<N> P1: contract`. P4 merge riêng commit này ở mini-sync, P3 sinh type từ đó. Sau mini-sync, `git fetch --tags; git merge contract-<N>` (Phase 1: có luôn test nghiệm thu phase 1 của P4).
+3. **Phase 1–4, lượt A: contract → test → tự commit/push `p1` → dừng báo người cầm lane.** Chỉ làm route/hàm mới dạng stub và hỗ trợ tối thiểu theo checkpoint README §4, không làm cả BUILD trước khi push. Không có thay đổi thì báo `CONTRACT_NO_CHANGE`. Chỉ khi người dùng nhắn tiếp tục mới fetch/merge `contract-<N>` và làm lượt B (Phase 1: tag có test nghiệm thu phase 1 của P4).
 4. Thread 2: chạy Prompt phụ, **chỉ viết test hoặc sửa file khác thread 1**. Bug tìm được ghi vào ExecPlan để thread 1 sửa.
 5. T−20: `$self-review` rồi push (trước T−10). Push commit contract chỉ cần pytest và `test_guards.py`.
 
@@ -31,7 +31,7 @@
 
 | Khi nào | Gõ | Kết quả |
 |---|---|---|
-| Đầu mỗi phase | `$phase-kickoff P1 <N>` | Codex đọc section phase, cập nhật ExecPlan, hỏi nếu dính trigger, rồi chạy Prompt chính |
+| Đầu mỗi phase | `$phase-kickoff P1 <N>` | Đọc phase và ExecPlan; Phase 1–4 làm lượt A, push contract rồi dừng; người dùng nhắn tiếp tục để làm lượt B |
 | Test đỏ hoặc verdict sai | `$trace-debug <tên test hoặc field>` | Tìm bước đầu tiên đi sai trong trace, viết test tái hiện, sửa đúng gốc lỗi (file của lane khác thì gửi CCR), ghi "Notable loop" vào CODEX_LOG |
 | Xong sớm, bị kẹt, phải chọn cắt gì | `$brainstorm <options / cut / qa> <bối cảnh>` | Phương án xếp hạng kèm prompt dán được ngay, không viết code |
 | T−20 mỗi phase | `$self-review` | Chạy test và build, quét hardcode, từ cấm, gold, secret, kiểm lane, contract, ExecPlan → `READY TO PUSH` hoặc `BLOCKED` |
@@ -135,6 +135,19 @@ Operator bấm "Bootstrap" thì event được admit, job chạy, claim (fallbac
 ### Prompt chính P1-1 (effort: high)
 ```text
 You are P1 (Backend core), Phase 1 (T+0:30–1:45). Update .agent/plans/P1.md (Phase 1 milestone) first; keep it living.
+
+CONTRACT CHECKPOINT — two turns, main Local thread only (README §4)
+Stage A, before 20 minutes from this phase's start: implement only this phase's new shared route/function stubs and the minimum related support/tests needed
+for imports, collection and OpenAPI; do not implement the rest of BUILD yet. Preserve already implemented interfaces.
+Verify branch p1 and origin, run offline contract pytest/guards at phase 0, stage only checkpoint files/hunks
+(including its ExecPlan note), commit "S1 P1: contract", and push to origin/p1 automatically. Verify remote SHA.
+No empty commit if the contract is unchanged. On failure, report the actual check/push error; never force push.
+STOP THIS TURN after reporting CONTRACT_PUSHED (branch, SHA, files, checks/counts), CONTRACT_NO_CHANGE or
+CONTRACT_BLOCKED. Save checkpoint and remaining work in ExecPlan. Do not run the remaining BUILD or sync-gate.
+Stage B ONLY when I later tell you to continue: read the saved checkpoint, fetch/merge contract-1 into p1,
+then do the remaining BUILD below without repeating Stage A. If the tag is missing or merge conflicts, report it
+and do only independent work using the existing interface. P4 runs the gate separately when explicitly invoked.
+Auxiliary worktree prompts never own or push this lane checkpoint.
 
 GOAL
 The event → run → passport backbone with code-decided, cited, versioned results. After this phase an operator can fire
@@ -267,6 +280,19 @@ Vòng đời "wow": revoke làm **ngay lập tức** (không job, không model) 
 ```text
 You are P1, Phase 2 (T+1:45–3:00). Update .agent/plans/P1.md first.
 
+CONTRACT CHECKPOINT — two turns, main Local thread only (README §4)
+Stage A, before 20 minutes from this phase's start: implement only this phase's new shared route/function stubs and the minimum related support/tests needed
+for imports, collection and OpenAPI; do not implement the rest of BUILD yet. Preserve already implemented interfaces.
+Verify branch p1 and origin, run offline contract pytest/guards at phase 1, stage only checkpoint files/hunks
+(including its ExecPlan note), commit "S2 P1: contract", and push to origin/p1 automatically. Verify remote SHA.
+No empty commit if the contract is unchanged. On failure, report the actual check/push error; never force push.
+STOP THIS TURN after reporting CONTRACT_PUSHED (branch, SHA, files, checks/counts), CONTRACT_NO_CHANGE or
+CONTRACT_BLOCKED. Save checkpoint and remaining work in ExecPlan. Do not run the remaining BUILD or sync-gate.
+Stage B ONLY when I later tell you to continue: read the saved checkpoint, fetch/merge contract-2 into p1,
+then do the remaining BUILD below without repeating Stage A. If the tag is missing or merge conflicts, report it
+and do only independent work using the existing interface. P4 runs the gate separately when explicitly invoked.
+Auxiliary worktree prompts never own or push this lane checkpoint.
+
 GOAL
 Event-driven freshness and the human review loop: a source event stales exactly the dependent fields inside admission
 (no job, no model), the following run re-assesses them, evidence requests open and close by themselves, and a reviewer
@@ -373,6 +399,19 @@ each question with your recommended default; otherwise decide, log it in the Exe
 ```text
 You are P1, Phase 3 (T+3:00–4:15). Update .agent/plans/P1.md first.
 
+CONTRACT CHECKPOINT — two turns, main Local thread only (README §4)
+Stage A, before 20 minutes from this phase's start: implement only this phase's new shared route/function stubs and the minimum related support/tests needed
+for imports, collection and OpenAPI; do not implement the rest of BUILD yet. Preserve already implemented interfaces.
+Verify branch p1 and origin, run offline contract pytest/guards at phase 2, stage only checkpoint files/hunks
+(including its ExecPlan note), commit "S3 P1: contract", and push to origin/p1 automatically. Verify remote SHA.
+No empty commit if the contract is unchanged. On failure, report the actual check/push error; never force push.
+STOP THIS TURN after reporting CONTRACT_PUSHED (branch, SHA, files, checks/counts), CONTRACT_NO_CHANGE or
+CONTRACT_BLOCKED. Save checkpoint and remaining work in ExecPlan. Do not run the remaining BUILD or sync-gate.
+Stage B ONLY when I later tell you to continue: read the saved checkpoint, fetch/merge contract-3 into p1,
+then do the remaining BUILD below without repeating Stage A. If the tag is missing or merge conflicts, report it
+and do only independent work using the existing interface. P4 runs the gate separately when explicitly invoked.
+Auxiliary worktree prompts never own or push this lane checkpoint.
+
 GOAL
 (1) A code-decided multi-hop gap controller with explicit stop reasons; (2) a glass box: every published verdict
 explainable without re-running anything, filtered by role; (3) the agent step wired into the run so its effect on a
@@ -462,6 +501,19 @@ each question with your recommended default; otherwise decide, log it in the Exe
 ### Prompt chính P1-4 (effort: medium)
 ```text
 You are P1, Phase 4 (T+4:15–5:15). Update .agent/plans/P1.md first.
+
+CONTRACT CHECKPOINT — two turns, main Local thread only (README §4)
+Stage A, before 20 minutes from this phase's start: implement only this phase's new shared route/function stubs and the minimum related support/tests needed
+for imports, collection and OpenAPI; do not implement the rest of BUILD yet. Preserve already implemented interfaces.
+Verify branch p1 and origin, run offline contract pytest/guards at phase 3, stage only checkpoint files/hunks
+(including its ExecPlan note), commit "S4 P1: contract", and push to origin/p1 automatically. Verify remote SHA.
+No empty commit if the contract is unchanged. On failure, report the actual check/push error; never force push.
+STOP THIS TURN after reporting CONTRACT_PUSHED (branch, SHA, files, checks/counts), CONTRACT_NO_CHANGE or
+CONTRACT_BLOCKED. Save checkpoint and remaining work in ExecPlan. Do not run the remaining BUILD or sync-gate.
+Stage B ONLY when I later tell you to continue: read the saved checkpoint, fetch/merge contract-4 into p1,
+then do the remaining BUILD below without repeating Stage A. If the tag is missing or merge conflicts, report it
+and do only independent work using the existing interface. P4 runs the gate separately when explicitly invoked.
+Auxiliary worktree prompts never own or push this lane checkpoint.
 
 GOAL
 Buyer evidence receipts with tamper evidence, marketplace consensus over independent seller listings, and policy-v2 so

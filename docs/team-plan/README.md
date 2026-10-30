@@ -80,6 +80,37 @@ Sau 17:00: 2 lượt pitch thử, mỗi người chuẩn bị Q&A cho lane mình
 2. P4 chạy `$sync-gate <N> contract`: merge riêng các commit đó (và lane nào trễ Sync trước), mỗi lần có test trước khi commit merge, rồi tag `contract-<N>` và push.
 3. Mọi lane `git fetch --tags; git merge contract-<N>`. P3 sinh type từ `/openapi.json` và cập nhật mock.
 
+**Checkpoint hai lượt (Prompt chính, thread Local, Phase 1–4).** T+20 ở đây là 20 phút sau khi phase bắt đầu
+(ví dụ Phase 1 bắt đầu 10:30 → đích push trước 10:50), không phải T+0:20 của cả ngày thi.
+- **Lượt A — contract trước:** P1/P2 chỉ làm interface mới và phần hỗ trợ tối thiểu để import/collect/OpenAPI hoạt động,
+  cùng test contract cần thiết; không làm toàn bộ BUILD rồi mới push. P4 Phase 1 ưu tiên acceptance tests phase 1;
+  Phase 2–4 chỉ đưa shared contract đã thống nhất/CCR được xử lý nếu có, không phải đẩy một bộ test mới mỗi phase.
+  Chỉ sửa file mình sở hữu. Nếu không có thay đổi contract, báo `CONTRACT_NO_CHANGE`, không tạo commit rỗng hay thay stub
+  đã có implementation bằng stub mới; mini-sync vẫn do P4 xử lý theo lịch hiện hành.
+- Kiểm branch Local đúng `p<k>` và remote `origin`; chạy pytest/guards theo gate contract hiện hành (phase N−1, với
+  WAITING được giải thích theo `needs`, không sửa PHASE/marker). Chỉ stage file/hunk contract, test và ghi chú checkpoint
+  liên quan; không gom việc chưa liên quan hoặc merge branch phụ. Commit `S<N> P<k>: contract`, tự push lên đúng
+  `origin/p<k>` theo ủy quyền của prompt, rồi kiểm SHA remote khớp checkpoint. Không force push; lỗi test/push phải báo
+  nguyên nhân, không tuyên bố đã đẩy thành công. Không làm rộng BUILD để chữa test phase N chưa được triển khai.
+- **Dừng turn sau checkpoint:** cập nhật ExecPlan rồi báo `CONTRACT_PUSHED` (branch, SHA, file, test counts và trạng thái
+  push), `CONTRACT_NO_CHANGE`, hoặc `CONTRACT_BLOCKED` (lỗi và phần đã làm). Kèm bước tiếp theo. Không tự tiếp tục BUILD,
+  tự chờ đến giờ hay tự chạy `$sync-gate`. Đây là điểm dừng người dùng yêu cầu, không phải xin lại quyền push đã có.
+- **P4 chạy mini-sync riêng:** khi nhận checkpoint các lane, người cầm P4 gọi `$sync-gate <N> contract`; skill tạo tag
+  theo gate hiện có. P4 cũng dừng sau lượt A trước khi được yêu cầu chạy gate hoặc tiếp tục phần việc của P4.
+- **Lượt B — người cầm lane nhắn tiếp tục:** ví dụ `Tiếp tục Phase 2 của P1 sau mini-sync contract-2.` Codex đọc checkpoint
+  trong ExecPlan, fetch và merge `contract-2` vào `p1`, rồi thực hiện phần còn lại của Prompt chính; không tạo lại lượt A.
+  Nếu tag chưa có hoặc có merge conflict, báo đúng trạng thái và làm phần độc lập theo interface cũ; không giả định phần
+  chưa ghép đã sẵn sàng, không tự giải quyết conflict ngoài lane. Lượt B vẫn self-review/push ở Sync cuối như bình thường.
+
+Checkpoint do **Prompt chính** phụ trách. Prompt phụ có thể đụng file/helper liên quan contract, nhưng chỉ làm phạm vi
+được giao trên `p<k>-b<N>` và bàn giao local; không tự push `p<k>` hay chạy mini-sync. Nếu checkpoint cần một file của
+thread phụ thì owner phải bàn giao/commit phần tối thiểu rõ ràng trước; không mặc định kéo toàn bộ task phụ vào lượt A.
+
+Mẫu dùng: `$phase-kickoff P1 2` → Codex làm lượt A và dừng → P4 gọi `$sync-gate 2 contract` → người cầm P1 nhắn
+`Tiếp tục Phase 2 của P1 sau mini-sync contract-2.` Cách này áp dụng cả khi dán riêng Prompt chính; Phase 0/5/6 giữ
+các mốc skeleton/recording/freeze/submission riêng. Sau khi cập nhật pack, các máy đã cài skill cần copy lại bản
+`_outside-repo/skills/phase-kickoff` vào thư mục skill đang dùng để có checkpoint mới.
+
 Trong phase, "xong" của P3 = build pass trên mock và type khớp `contract-<N>`. Click path trên backend thật được kiểm ở Sync.
 
 **Tại mỗi Sync (P4 chạy `$sync-gate N`):**
@@ -324,7 +355,7 @@ chọn cách tốt hơn nếu có bằng chứng, và ghi lại trong ExecPlan.
 
 **Cách dùng prompt trong file lane (mỗi phase):**
 1. `git fetch --tags; git merge sync-<N-1>`. Phase effort high: có thể mở bằng `/plan` trước (xem §10 mục 7).
-2. Mở thread Codex mới ở root repo, gõ `$phase-kickoff P<k> <N>`. Skill đọc section phase trong file lane, cập nhật ExecPlan, hỏi nếu dính trigger, rồi chạy "Prompt chính". Nếu không dùng skill thì **dán nguyên khối "Prompt chính"**.
+2. Mở thread Codex mới ở root repo, gõ `$phase-kickoff P<k> <N>`. Skill đọc section phase và nhịp lane, cập nhật ExecPlan rồi chạy "Prompt chính". Với P1/P2/P4 ở Phase 1–4, lượt đầu chỉ làm checkpoint contract rồi dừng theo §4; người dùng nhắn tiếp tục sau mini-sync để làm phần còn lại. Nếu không dùng skill thì **dán nguyên khối "Prompt chính"**, gồm cả CONTRACT CHECKPOINT.
 3. Trong lúc Codex chạy, đọc diff, trả lời câu hỏi, bấm Action `backend`/`frontend` để chạy app thử. Thread thứ 2 (Worktree, xem §4) dùng cho "Prompt phụ" hoặc test.
 4. T−20: gõ `$self-review` → sửa → commit → push trước T−10 (hạn chót T−8). Push commit contract lúc T+20 chỉ cần pytest và `test_guards.py`.
 
@@ -332,7 +363,7 @@ chọn cách tốt hơn nếu có bằng chứng, và ghi lại trong ExecPlan.
 
 | Skill | Ai dùng | Khi nào |
 |---|---|---|
-| `phase-kickoff` | P1–P4 | Đầu mỗi phase: nạp đúng section, cập nhật ExecPlan, kiểm contract, hỏi người nếu dính trigger, rồi bắt đầu code |
+| `phase-kickoff` | P1–P4 | Nạp phase, cập nhật ExecPlan, kiểm contract; P1/P2/P4 Phase 1–4 push checkpoint rồi dừng, người dùng nhắn tiếp tục để làm phần còn lại |
 | `self-review` | P1–P4 | Trước khi push ở mỗi Sync: test/build, quét hardcode/overfit/từ cấm, kiểm contract, ExecPlan, dòng CODEX_LOG, CCR |
 | `sync-gate` | P4 | T+20 (mini-sync contract) và T−10 mỗi phase: merge theo thứ tự, test của phase, `sync_check`, `/review` với base `review-base`, tag, DEVLOG. Chỉ gọi bằng `$sync-gate` |
 | `trace-debug` | P1–P4 | Verdict sai hoặc test fail: đọc trace/explain, tìm step gây sai, viết test tái hiện, sửa đúng gốc. Đồng thời là "Codex fix loop" để kể trong write-up |

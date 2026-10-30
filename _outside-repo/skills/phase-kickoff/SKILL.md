@@ -1,6 +1,6 @@
 ---
 name: phase-kickoff
-description: Start a contest phase for one lane of the Product Truth Passport build ("$phase-kickoff P2 3"). Loads that lane's phase section from docs/team-plan, checks the contracts and tests it depends on, updates the lane ExecPlan, asks the human only on the AGENTS.md ask-triggers, then executes the phase's main prompt. Use at the start of every phase or when someone says "start phase N", "kick off", "bắt đầu phase".
+description: Start or resume a contest phase for one Product Truth Passport lane ("$phase-kickoff P2 3"). Loads its plan and contracts; in Phases 1–4 the main Local task publishes its contract checkpoint and stops for the user's continuation. Use for phase kickoff or explicit continuation, not auxiliary worktree tasks.
 ---
 
 # Phase kickoff
@@ -31,7 +31,8 @@ Goal: every lane starts each phase from the same facts. Those facts are the curr
      the user clicks **Create branch here** → `p<k>-b<N>`. This thread never starts servers.
 2. **Read in one batch:**
    - `AGENTS.md` (already loaded);
-   - `docs/team-plan/README.md`: §3 (the row for this phase), §7 (contracts), §8 (cut rules);
+   - `docs/team-plan/README.md`: §3 (the row for this phase), §4 (two-turn contract checkpoint), §5 (ownership), §7 (contracts), §8 (cut rules);
+   - the lane file's shared "Nhịp mỗi phase" section;
    - the lane file `docs/team-plan/P<k>-*.md`, section `## Phase <N>`, including Must/Should/Could, both prompts and "Bẫy đã gặp";
    - `.agent/PLANS.md`;
    - `.agent/plans/P<k>.md` (create it from the template if it is missing);
@@ -69,10 +70,31 @@ Goal: every lane starts each phase from the same facts. Those facts are the curr
    If so, ask up to 3 questions, each with your recommended default, and wait. Otherwise state "no ask-triggers" and continue.
    Consuming a stub or another lane's interface is NOT a trigger; a change another lane must make becomes a CCR in the
    report while you continue behind the existing signature.
-   For P1/P2 in Phases 1–4: make the first commit the contract stubs (`S<N> P<k>: contract`) and push it before T+20.
-6. **Execute the task** (the pasted prompt, or the phase's "Prompt chính") as the user's instruction, to working and tested code.
+6. **Choose the main-task stage before executing.** For P1/P2/P4 main Local tasks in Phases 1–4, follow README §4's
+   two-turn checkpoint and the inline CONTRACT CHECKPOINT in the main prompt. This is an explicit user-requested
+   turn boundary, even though the main prompt contains the entire phase BUILD.
+   - On first entry, execute Stage A only: contract stubs and minimum support/tests for P1/P2; phase-1 acceptance
+     tests for P4 Phase 1; needed agreed shared contracts only for P4 Phases 2–4. Do not invent a change or an empty
+     commit. Do not replace implemented interfaces with stubs. Worktree/auxiliary tasks never push the lane branch.
+   - Verify the current branch is exactly `p<k>`, inspect `origin` and stage only checkpoint files/hunks. Run the
+     existing contract checks at phase N−1 (pytest/guards; classify dependency WAITING, never weaken tests). Push the
+     checkpoint to `origin/p<k>` using the prompt's authorization; verify the remote SHA. Failure means report the
+     actual failure without force push or a success claim. Do not commit/push unrelated existing work.
+   - Record stage, phase, branch, commit SHA, checks, push status and remaining BUILD in ExecPlan. End this turn with
+     `CONTRACT_PUSHED`, `CONTRACT_NO_CHANGE` or `CONTRACT_BLOCKED` and the normal AGENTS report. Do not start Stage B,
+     wait on a timer or run sync-gate automatically. P4 runs `$sync-gate N contract` only when explicitly invoked.
+   - On the user's later instruction to continue this phase, read that checkpoint instead of repeating Stage A.
+     Fetch/merge `contract-N` into the lane branch, then execute the remaining main task. If the tag is absent or a
+     merge conflicts, report it, preserve work and continue only independent work behind the existing contract;
+     do not assume missing lane code is ready. A retry after failed push must check the existing commit/remote
+     before creating any new commit. A repeated kickoff without a continuation request reports the saved checkpoint.
+   - T+20 means 20 minutes after this phase's start (Phase 1: 10:50), not contest T+0:20. Missing a target time never
+     bypasses checks. A no-change report does not cancel P4's scheduled mini-sync.
+   P3 and Phases 0/5/6 retain their existing workflow. If the pasted task is auxiliary, follow its own heading and
+   worktree scope rather than inserting a contract checkpoint.
+7. **Execute the selected stage/task** (the pasted prompt, or the phase's "Prompt chính") as the user's instruction.
    - Keep Progress, Surprises and the Decision Log current.
    - Watch the clock with `Get-Date` (T+0:00 = 31 Oct 10:00 ICT): the Sync is the last 10 minutes of the phase
      (README §3). Never guess the time.
    - At T−20, stop adding scope and run `$self-review`.
-7. **End** with the end-of-turn report from AGENTS.md §6.
+8. **End** with the end-of-turn report from AGENTS.md §6. Stage A is a completed checkpoint, not a completed phase.
