@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>__TITLE__</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#fff}
+#cam{position:absolute;left:0;top:0;transform-origin:0 0;transition:transform 1.2s cubic-bezier(.45,0,.2,1)}
+#cam img{display:block}
+#dim{position:absolute;inset:0;background:rgba(12,18,34,.66);transition:clip-path 1.1s ease-in-out}
+#ring{position:absolute;border:6px solid #ffd23f;border-radius:18px;box-shadow:0 0 28px 4px #ffd23f;opacity:0;
+transition:left 1.1s ease-in-out,top 1.1s ease-in-out,width 1.1s ease-in-out,height 1.1s ease-in-out,opacity .5s;animation:pulse 1.4s infinite}
+#tag{position:absolute;background:#ffd23f;color:#1d2433;font:800 18px system-ui,sans-serif;padding:4px 12px;border-radius:999px;opacity:0;white-space:nowrap;
+transition:left 1.1s ease-in-out,top 1.1s ease-in-out,opacity .5s}
+@keyframes pulse{50%{box-shadow:0 0 44px 10px #ffd23f}}
+</style></head>
+<body>
+<div id="cam"><img data-bg id="img" src="__IMG__"><div id="dim" data-bg></div><div id="ring" data-ink></div><div id="tag" data-ink></div></div>
+<script>
+// focus('name') dims everything but one box of the picture, rings and labels it, and zooms to it; focus('all') shows it all.
+const FOCI = __FOCI__;
+const img = document.getElementById('img');
+let W = 0, H = 0;
+function cam(box, all) {
+  const vw = innerWidth, vh = innerHeight - 110;           // keep the bottom free for subtitles
+  let s, tx, ty;
+  if (all) { s = Math.min(vw / W, vh / H); tx = (vw - W * s) / 2; ty = (vh - H * s) / 2; }
+  else {
+    const [x, y, w, h] = box, pad = 1.9;                     // show the box with some context around it
+    s = Math.min(2.4, vw / (w * pad), vh / (h * pad));
+    tx = vw / 2 - s * (x + w / 2); ty = vh / 2 - s * (y + h / 2);
+    tx = Math.min(0, Math.max(vw - W * s, tx)); ty = Math.min(0, Math.max(vh - H * s, ty));
+  }
+  document.getElementById('cam').style.transform = `translate(${tx}px,${ty}px) scale(${s})`;
+}
+function focus(name) {
+  const ring = document.getElementById('ring'), tag = document.getElementById('tag'), dim = document.getElementById('dim');
+  if (name === 'all' || !FOCI[name]) {
+    dim.style.clipPath = `polygon(evenodd,0 0,${W}px 0,${W}px ${H}px,0 ${H}px,0 0,0 0,${W}px 0,${W}px ${H}px,0 ${H}px,0 0)`;
+    ring.style.opacity = 0; tag.style.opacity = 0; cam(null, true); return;
+  }
+  const [x, y, w, h] = FOCI[name].box;
+  dim.style.clipPath = `polygon(evenodd,0 0,${W}px 0,${W}px ${H}px,0 ${H}px,0 0,${x}px ${y}px,${x + w}px ${y}px,${x + w}px ${y + h}px,${x}px ${y + h}px,${x}px ${y}px)`;
+  Object.assign(ring.style, {left: x - 6 + 'px', top: y - 6 + 'px', width: w + 'px', height: h + 'px', opacity: 1});
+  tag.textContent = FOCI[name].label || '';
+  Object.assign(tag.style, {left: x + 'px', top: Math.max(0, y - 36) + 'px', opacity: FOCI[name].label ? 1 : 0});
+  cam([x, y, w, h], false);
+}
+function ready() {
+  W = img.naturalWidth; H = img.naturalHeight;
+  const c = document.getElementById('cam'); c.style.width = W + 'px'; c.style.height = H + 'px';
+  document.getElementById('dim').style.clipPath = `polygon(evenodd,0 0,${W}px 0,${W}px ${H}px,0 ${H}px,0 0,0 0,${W}px 0,${W}px ${H}px,0 ${H}px,0 0)`;
+  document.getElementById('dim').style.background = 'rgba(12,18,34,0)';
+  setTimeout(() => { document.getElementById('dim').style.background = 'rgba(12,18,34,.66)'; }, 50);
+  cam(null, true); window.spotlightReady = true;
+}
+if (img.complete && img.naturalWidth) ready(); else img.addEventListener('load', ready);
+</script>
+</body></html>

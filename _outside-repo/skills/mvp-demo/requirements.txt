@@ -1,0 +1,4 @@
+# Video-only personal tool; do not copy into the contest app's requirements.
+# TTS engines are optional and are not installed for the default silent workflow.
+playwright==1.64.1
+imageio-ffmpeg==0.7.0

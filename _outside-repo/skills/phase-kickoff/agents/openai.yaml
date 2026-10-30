@@ -1,0 +1,6 @@
+interface:
+  display_name: "Phase kickoff"
+  short_description: "Load a lane's phase section, update its ExecPlan, then run the phase prompt"
+  default_prompt: "Use $phase-kickoff <lane> <N> to start phase N for this lane."
+policy:
+  allow_implicit_invocation: false

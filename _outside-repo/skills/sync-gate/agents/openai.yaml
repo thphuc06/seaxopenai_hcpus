@@ -1,0 +1,6 @@
+interface:
+  display_name: "Sync gate (P4)"
+  short_description: "Merge lane branches in order, run phase checks, review, tag sync-N or contract-N"
+  default_prompt: "Use $sync-gate <N> to run the Sync for phase N."
+policy:
+  allow_implicit_invocation: false

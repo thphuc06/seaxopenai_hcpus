@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>slide</title>
+<style>
+:root{--accent:__ACCENT__;--bg1:#151a2b;--bg2:#2a1e2e;--ink:#f4f1ea;--muted:#a9b0c2}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:radial-gradient(1200px 700px at 85% 10%,var(--bg2),transparent 60%),linear-gradient(160deg,var(--bg1),#0f1322);
+color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{from{background-position:0 0}to{background-position:-60px -30px}}
+.wrap{position:absolute;inset:44px 56px 120px}              /* the bottom 120 px stay free for subtitles */
+.kicker{color:var(--accent);font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:18px;opacity:0;animation:up .6s .1s forwards}
+h1{font-size:46px;margin:10px 0 26px;line-height:1.1;opacity:0;animation:up .7s .25s forwards}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:20px 22px;
+opacity:0;transform:translateY(18px) scale(.98);animation:up .65s var(--d) forwards}
+.card.hot{border-color:var(--accent);background:linear-gradient(140deg,rgba(228,87,46,.22),rgba(255,255,255,.04))}
+.big{font-size:54px;font-weight:800;line-height:1}
+.txt{font-size:20px;color:#dfe3ee;margin-top:8px}
+.src{font-size:13px;color:var(--muted);margin-top:8px}
+.note{position:absolute;left:56px;right:56px;bottom:128px;color:var(--muted);font-size:16px;opacity:0;animation:up .6s 2.4s forwards}
+@keyframes up{to{opacity:1;transform:none}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="kicker">__KICKER__</div>
+  <h1>__TITLE__</h1>
+  <div class="cards">__CARDS__</div>
+</div>
+<div class="note">__NOTE__</div>
+<script>
+// numbers count up when their card appears
+document.querySelectorAll('[data-to]').forEach((el) => {
+  const card = el.closest('.card'); const delay = parseFloat(getComputedStyle(card).getPropertyValue('--d')) || 0;
+  const to = +el.dataset.to, suf = el.dataset.suf || '', ms = 900;
+  setTimeout(() => { const t0 = performance.now();
+    const tick = (now) => { const k = Math.min(1, (now - t0) / ms), v = Math.round(to * (1 - Math.pow(1 - k, 3)));
+      el.textContent = v.toLocaleString('en-US') + suf; if (k < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick); }, delay * 1000 + 100);
+});
+</script>
+</body></html>

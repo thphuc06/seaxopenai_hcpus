@@ -1,0 +1,6 @@
+interface:
+  display_name: "MVP demo video"
+  short_description: "Record an app demo; voice is optional and off by default"
+  default_prompt: "Use $mvp-demo to record and assemble a silent 3-minute app demo; add voice only if I request it."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,23 @@
+# secrets and local state — never commit
+backend/.env
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# node / frontend build
+node_modules/
+frontend/dist/
+
+# runtime output
+fixtures/uploads/
+scripts/demo/out/
+scripts/demo/segments/
+*.mp4
+*.webm
