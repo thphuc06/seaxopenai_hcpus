@@ -16,6 +16,7 @@ from app.pipeline.web_sources import discover
 from app.pipeline.web_sources import _snapshot
 from app.pipeline.extract import extract_source_version
 from app.trace import TraceWriter
+from app.api.s4_contracts import WebAuditQuery, WebAuditResult
 
 
 @pytest.fixture
@@ -33,8 +34,8 @@ def context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[RunCont
                  json.dumps({"enabled": True, "brand_domains": ["aurora.example"], "aliases": ["Aurora Meadow Gel"]})))
             connection.execute("INSERT INTO cases(id,product_id,tenant_id,revision) VALUES('case','product','tenant',1)")
             connection.execute("INSERT INTO runs(id,case_id,case_revision,started_at) VALUES('run','case',1,?)", (db.now_iso(),))
-        env.setattr(client, "_call_api", lambda **request: pytest.fail("Unexpected real model boundary"))
-        env.setattr(websearch, "_fetch_http", lambda *args, **kwargs: pytest.fail("Unexpected HTTP boundary"))
+        monkeypatch.setattr(client, "_call_api", lambda **request: pytest.fail("Unexpected real model boundary"))
+        monkeypatch.setattr(websearch, "_fetch_http", lambda *args, **kwargs: pytest.fail("Unexpected HTTP boundary"))
         yield RunContext("run", "case", "tenant", 1, {"id": "product"}, "fallback", Budget(), TraceWriter("run"))
     config.reload_settings()
 
@@ -168,11 +169,12 @@ def test_disabled_and_default_fallback_are_offline(context: RunContext, monkeypa
     assert discover(context).searches == [] and context.budget.tool_calls == 0
 
 
+@pytest.mark.parametrize("mode", ["live", "record"])
 @pytest.mark.parametrize("phrases,url,accepted", [(["Capacity 38 ml."], "https://aurora.example/gel", True),
     (["Capacity ... dry skin"], "https://aurora.example/gel", False),
     ([], "https://aurora.example/gel", False), (["Capacity 38 ml."], "https://aurora.example/invented", False)])
 def test_typed_model_proposal_checked_piecewise(context: RunContext, monkeypatch: pytest.MonkeyPatch,
-                                              phrases: list[str], url: str, accepted: bool) -> None:
+                                              phrases: list[str], url: str, accepted: bool, mode: str) -> None:
     provider(monkeypatch)
     def response(**request: object) -> Response:
         schema = request["text_format"].__name__
@@ -183,10 +185,26 @@ def test_typed_model_proposal_checked_piecewise(context: RunContext, monkeypatch
             "output": [{"type": "message", "id": "msg", "role": "assistant", "status": "completed",
                         "content": [{"type": "output_text", "text": json.dumps(output), "annotations": []}]}]})
     monkeypatch.setattr(client, "_call_api", response)
-    context.mode = "live"
+    context.mode = mode
     result = discover(context)
     assert bool(result.new_sv_ids) == accepted
     assert context.budget.model_calls == 3
+    with db.transaction() as connection:
+        row = dict(connection.execute("SELECT * FROM web_searches WHERE query<>''").fetchone())
+    payload = json.loads(row["results_json"])
+    decisions = [WebAuditResult.model_validate({key: item[key] for key in ("url", "domain", "class", "score", "decision", "reason")})
+                 for item in payload["decisions"]]
+    projected = WebAuditQuery(id=row["id"], run_id=row["run_id"], query=row["query"], provider=row["provider"],
+                             mode=row["mode"], results=decisions, created_at=row["created_at"])
+    assert projected.mode == "LIVE" and projected.results[0].domain == "aurora.example"
+    if mode == "record" and accepted:
+        with db.transaction() as connection:
+            connection.execute("INSERT INTO runs(id,case_id,case_revision,started_at) VALUES('again','case',1,?)", (db.now_iso(),))
+        again = replace(context, run_id="again", trace=TraceWriter("again"), budget=Budget())
+        replayed = discover(again)
+        assert not replayed.new_sv_ids
+        assert replayed.searches[0]["mode"] == replayed.searches[0]["selection_mode"] == "REPLAY"
+        assert replayed.searches[0]["decisions"][0]["mode"] == "REPLAY"
 
 
 @pytest.mark.parametrize("variant", ["empty", "error"])

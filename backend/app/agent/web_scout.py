@@ -40,6 +40,7 @@ class PageSelection(BaseModel):
 class ScoutResult:
     pages: list[PageProposal]
     proposed_by_model: bool
+    mode: str = "FALLBACK"
 
 
 def _input(data: dict[str, JsonValue]) -> list[TextPart]:
@@ -72,4 +73,4 @@ When source metadata is too sparse, return no selection. Never join phrases or g
         input_parts=_input({"product": product, "results": [item.model_dump(mode="json") for item in results],
                            "max_pages": config.settings.web_max_pages}), schema=PageSelection,
         ctx=replace(ctx, budget=ctx.budget.agent().gateway()), prompt_version="web-pages-v1")
-    return ScoutResult(result.parsed.pages, True)
+    return ScoutResult(result.parsed.pages, True, "REPLAY" if result.replayed else "LIVE")

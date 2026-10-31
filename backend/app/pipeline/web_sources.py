@@ -94,11 +94,11 @@ def discover(ctx: RunContext) -> WebOutcome:
         if session.searches >= config.settings.web_max_searches or session.pages >= config.settings.web_max_pages:
             outcome.stop_reason = outcome.stop_reason or ("WEB_PAGE_LIMIT" if session.pages >= config.settings.web_max_pages else "WEB_SEARCH_LIMIT")
             break
-        audit: dict[str, JsonValue] = {"query": query, "mode": ctx.mode.upper(), "results": [], "decisions": []}
+        audit: dict[str, JsonValue] = {"kind": "query", "query": query, "mode": _audit_mode(ctx.mode), "results": [], "decisions": []}
         try:
             _authorized_product(ctx)
             results = session.search(query)
-            audit["mode"] = session.last_mode
+            audit["mode"] = _audit_mode(session.last_mode)
             audit["results"] = [item.model_dump(mode="json") for item in results]
             audit["decisions"] = [_candidate_decision(item, official, retailers) for item in results]
             try:
@@ -109,7 +109,7 @@ def discover(ctx: RunContext) -> WebOutcome:
                 outcome.stop_reason = outcome.stop_reason or "WEB_AGENT_ERROR"
                 audit["selection_error"] = error.code
                 selection = web_scout.select(replace(ctx, mode="fallback"), product, results)
-            audit["selection_mode"] = ctx.mode.upper() if selection.proposed_by_model else "FALLBACK"
+            audit["selection_mode"] = selection.mode
             _process_pages(ctx, product, options, rules, official, retailers, session, results, selection, audit, outcome)
         except (client.LLMError, BudgetExceeded, websearch.WebError, httpx.HTTPError, APIError,
                 OSError, ValidationError) as error:
@@ -152,18 +152,22 @@ def _audit_id(ctx: RunContext, value: str) -> str:
     return "web_" + sha256(json.dumps([ctx.case_id, ctx.run_id, value]).encode()).hexdigest()
 
 
+def _audit_mode(mode: str) -> str:
+    return "LIVE" if mode.lower() in {"live", "record"} else mode.upper()
+
+
 def _audit(ctx: RunContext, query: str, payload: dict[str, JsonValue], *, terminal: bool = False) -> None:
     _authorized_product(ctx)
     with db.transaction() as connection:
         connection.execute("INSERT OR IGNORE INTO web_searches(id,case_id,run_id,query,provider,mode,results_json,credits,created_at) "
             "VALUES(?,?,?,?,?,?,?,?,?)", (_audit_id(ctx, "outcome" if terminal else "query:" + query), ctx.case_id,
-            ctx.run_id, query, config.settings.web_provider, str(payload.get("mode", ctx.mode.upper())), db.dumps(payload), None, db.now_iso()))
+            ctx.run_id, query, config.settings.web_provider, str(payload.get("mode", _audit_mode(ctx.mode))), db.dumps(payload), None, db.now_iso()))
 
 
 def _finish(ctx: RunContext, outcome: WebOutcome) -> WebOutcome:
     receipt = DiscoveryReceipt(new_sv_ids=outcome.new_sv_ids, searches=outcome.searches, stop_reason=outcome.stop_reason)
     _audit(ctx, "", receipt.model_dump(mode="json"), terminal=True)
-    ctx.trace.step("web:stop", detail={"stop_reason": outcome.stop_reason, "mode": ctx.mode.upper(),
+    ctx.trace.step("web:stop", detail={"stop_reason": outcome.stop_reason, "mode": _audit_mode(ctx.mode),
                                     "new_sv_ids": outcome.new_sv_ids, "budget": ctx.budget.usage()})
     return outcome
 
@@ -217,9 +221,11 @@ def _candidate_decision(item: websearch.Result, official: list[str], retailers: 
         url = websearch.normalized_url(item.url)
         category = "OFFICIAL" if websearch.matches_domain(url, official) else (
             "RETAILER" if websearch.matches_domain(url, retailers) else "LEAD")
-        return {"url": item.url, "class": category, "decision": "SKIP", "reason": "NOT_SELECTED"}
+        return {"url": item.url, "domain": urlsplit(url).hostname or "", "class": category, "score": None,
+                "decision": "SKIP", "reason": "NOT_SELECTED"}
     except websearch.WebError:
-        return {"url": item.url, "class": "LEAD", "decision": "SKIP", "reason": "INVALID_URL"}
+        return {"url": item.url, "domain": "", "class": "LEAD", "score": None,
+                "decision": "SKIP", "reason": "INVALID_URL"}
 
 
 def _process_pages(ctx: RunContext, product: dict[str, JsonValue], options: WebOptions, rules: WebRules,
@@ -242,11 +248,13 @@ def _process_pages(ctx: RunContext, product: dict[str, JsonValue], options: WebO
         entry = next((item for item in decisions if isinstance(item, dict) and item["url"] == proposal.url
                       and item["reason"] == "NOT_SELECTED"), None)
         if entry is None:
-            entry = {"url": proposal.url, "class": "LEAD", "decision": "SKIP", "reason": "UNSELECTED"}
+            entry = {"url": proposal.url, "domain": "", "class": "LEAD", "score": None,
+                     "decision": "SKIP", "reason": "UNSELECTED"}
             decisions.append(entry)
         fetching = False
         try:
             url = websearch.normalized_url(proposal.url)
+            entry["domain"] = urlsplit(url).hostname or ""
             item = returned.get(url)
             if item is None:
                 raise websearch.WebError("URL_NOT_RETURNED")
@@ -263,7 +271,7 @@ def _process_pages(ctx: RunContext, product: dict[str, JsonValue], options: WebO
             _authorized_product(ctx)
             fetching = True
             page = session.fetch(url)
-            entry["mode"] = session.last_mode
+            entry["mode"] = _audit_mode(session.last_mode)
             _authorized_product(ctx)
             aliases = options.aliases or [str(product["name"])]
             cleaned, identity = _clean(page, aliases, rules)
