@@ -77,6 +77,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm test
+      - name: Test Sites API proxy without network
+        run: node --test ../scripts/dev/sites/proxy.test.mjs
       - name: Build API frontend
         run: npm run build
         env:

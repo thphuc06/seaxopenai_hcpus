@@ -1,5 +1,8 @@
 # secrets and local state — never commit
 backend/.env
+# Separate Sites-managed publishing repository; source adapter stays in scripts/dev/sites.
+/sites/passport/
+/sites/*.tar.gz
 *.db
 *.db-journal
 *.db-wal
