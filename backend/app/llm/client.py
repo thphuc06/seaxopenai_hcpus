@@ -24,7 +24,7 @@ from openai.types.responses import Response
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, ValidationError
 
 from app import config
-from app.budget import BudgetExceeded
+from app.budget import Budget, BudgetExceeded
 from app.context import RunContext
 from app.llm.messages import ImagePart, InputMessage, TextPart, build_input
 
@@ -104,6 +104,28 @@ def _call_api(**request: object) -> Response:
         except ValidationError:
             # Our boundary reports INVALID_OUTPUT after accounting envelope usage.
             return envelope
+
+
+def _call_token_count(*, model: str, image: ImagePart, timeout: float) -> int:
+    """Replaceable tokenization endpoint; no generation and no SDK retries."""
+    messages = build_input("Count input tokens.", [image])
+    with OpenAI(api_key=config.settings.openai_api_key, timeout=timeout, max_retries=0) as provider:
+        return provider.responses.input_tokens.count(model=model, input=messages).input_tokens
+
+
+def count_image_tokens(*, model: str, image: ImagePart, budget: Budget) -> int:
+    """Exact image-plus-framing count for an authorized recording preflight."""
+    if config.settings.replay_freeze or config.settings.llm_mode not in {"record", "live"}:
+        raise LLMError("API_ERROR", "TOKEN_COUNT_REQUIRES_RECORD_OR_LIVE")
+    budget.take_tool("input_tokens:count")
+    try:
+        count = _call_token_count(model=model, image=image, timeout=budget.remaining_s())
+    except APIError:
+        raise LLMError("API_ERROR", "TOKEN_COUNT_FAILED") from None
+    budget.check_active()
+    if type(count) is not int or count <= 0:
+        raise LLMError("API_ERROR", "INVALID_TOKEN_COUNT")
+    return count
 
 
 def _active(ctx: RunContext) -> None:
