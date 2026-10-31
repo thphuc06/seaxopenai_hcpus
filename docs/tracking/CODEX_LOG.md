@@ -2,6 +2,10 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+| 11:44–11:51 ICT | P4 | sync-gate 2 contract + three read-only reviews | P4 plan, tracking, P1/P2 scoped merges | accepted | explicit early mini-sync; Stage B separate | final phase1 679 passed/44 skipped/+2 subtests; 0 failed/errors/deselected; guards 4; fixtures 37; sync1 17; no regression |
+| 11:40 ICT | P4 | Stage A saved kickoff receipts | .agent/plans/P4.md | accepted | no shared contract change; prior concurrent notes preserved | initial 638 pass/2 Node failures/44 skip/+2 subtests, exact 2 rerun pass on Node24; guards 4; S2 diagnostic 22 pass/17 fail/18 skip |
+| 11:43 ICT | P1 | S2 contract c1d7a5a | cases/contracts/dependencies, contract tests, docs05, P1 plan | accepted | Stage A only | lane report 122 focused pass; phase1 679 pass/44 skip/+2 subtests; integrated gate independently agrees |
+| 11:42 ICT | P2 | S2 contract 15bcca4 | P2 plan | accepted | documentation-only contract checkpoint | lane report backend 626 pass/44 skip/+2 subtests; guards 4 |
 | 11:08 ICT | P4 | Phase 1 B + CI/Render merge + self-review (3 read-only agents) | P4 support/tests/scripts/specs/plan; merge d21488c | edited | preserve both ExecPlans; separate human review waived | phase1 270 passed/12 WAITING failures/44 skipped +2 subtests; phase0 269 passed/57 skipped; helpers+guards 41 passed; fixture validator 9/9 |
 | 10:48–10:50 ICT | P4 | mini-sync contract-1 | scoped P4/P1/P2 merges; P4 plan; tracking/HANDOFF | accepted | user requested mini-sync; Stage B remains separate | phase0 220 passed/14 skipped +2 subtests; guards 4; fixtures 9/9; S1 diagnostic 1 passed/12 pending failures/1 fixture skip |
 | 10:29–10:33 ICT | P4 | sync-gate 0 + self-review (3 read-only agents) | lane merges; P4 plan; shared docs; tracking | accepted | confirmed P4/Local | Python 141 + 2 subtests; guards 4; Node 23; API/mock builds; fixtures 9/9; all final 0 failed/skipped/deselected |

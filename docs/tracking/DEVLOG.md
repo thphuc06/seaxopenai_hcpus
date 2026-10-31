@@ -1,5 +1,40 @@
 # Development log — 31 Oct 2026
 
+## contract-2 — published 11:49:48 ICT (T+1:49)
+
+Explicit early mini-sync; main and contract-2 remote SHA verified as 2811f3b.
+PHASE remains 1. All contract lanes included; no WAITING failure, regression,
+omitted lane or cut. S2 remains unfinished. Tagged HANDOFF contains the receipt.
+
+- P4: Done — saved prior Stage-A plans, pushed f8808e3, ran ordered gates and
+  published handoff. Blocked — none for this checkpoint. Surprise — Windows
+  switch briefly failed to unlink P4.md; verified the file exactly matched
+  committed contract-2, restored only that file to p4 HEAD and retried the
+  fast-forward successfully. No work discarded. Decision — retain PHASE=1 and
+  DRAFT gold. Next — B0/eval and S2 sync path on separate continuation.
+- P1: Done — c1d7a5a adds four typed S2 route stubs, role gates and 39 contract
+  cases; docs05 carries payloads. No S1 gate failure. Next — Stage B lifecycle,
+  reviews/evidence and carried budget/reset CCRs.
+- P2: Done — 15bcca4 records unchanged shared contracts; no application delta.
+  Decision — preserve Budget/parse/extract/audit signatures. Next — Stage B
+  vision/retry/claims and P1 reset identity coordination.
+- P3: existing S1 work retained; no contract merge or frontend change required.
+  Next — consume generated S2 DTOs from contract-2.
+
+Checks: phase1 P4 baseline/post 640/640; P1 640/679; P2 679/679 passed.
+Every run: 44 skipped, 2 passing subtests, 0 failed/errors/deselected. Per-node
+JUnit comparison shows no lost/regressed pass. Final guards 4, fixtures 37,
+sync path 17 all passed. Skips: 43 future-phase nodes plus AC-01 real R2 pending
+P4-2b. No new build required. Final cleanup warnings: 23, Windows WinError 145.
+
+Three read-only reviewers found no introduced rules/contracts/overfitting blocker.
+Preserved prior user waiver of separate /review; review-base points to sync-1
+locally. UI remains human-run via Actions. CCR P4→P1: reconcile stored
+evidence_requests CLOSED with history DTO OPEN/FULFILLED before implementing
+history; do not blindly serialize closed rows. This is a Stage-B integration
+note, not a failing behavior of intentional 501 stubs.
+NOT VERIFIED: S2 completion, browser path, full-story replay, human gold approval.
+
 ## sync-1 — 11:33:58 ICT (T+1:33), complete for S1 scope
 
 Published main and sync-1 at be91b3bd0051568d4795801b438409326ac51dc3;

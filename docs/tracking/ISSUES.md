@@ -2,6 +2,7 @@
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
+| S2 evidence-request history status | P1 | Stage B integration CCR, contract-2 review | Existing publish.py stores CLOSED; new EvidenceRequestResponse allows OPEN/FULFILLED. Reconcile explicitly in history implementation and test a closed request; 501 stubs have no current serialization failure. |
 | Storage/seed integration | P1 | S0 complete | Actual S1 startup 1 product/1 case/4 sources/4 versions/14 passages |
 | Model IDs, prices and budget tuning | P2 | S0 report integrated | Keep measured recommendation/current caps; production client at S1 |
 | Initial source dataset and validator | P4-0c | Completed, checks pass | P1 checks seed integration at S0 |

@@ -1,5 +1,14 @@
 # Contest decisions
 
+## D010 — S2 contract checkpoint (11:49 ICT)
+Publish contract-2 early on explicit invocation, without advancing PHASE=1 or
+claiming S2 completion. P1's four typed S2 routes remain side-effect-free 501
+stubs with role/schema validation; docs05 describes the text/image JSON upload.
+P4/P2 shared application contracts are unchanged. No scope cut or gold edit.
+Retain the prior separate /review waiver and run three automatic read-only
+reviews. Record the OPEN/FULFILLED API versus CLOSED storage integration note
+for P1 Stage B in ISSUES; gate-time code or test changes are unnecessary.
+
 ## D001 — Start authorization
 At 09:49 ICT the user confirmed organizers permit implementation now. Start P4-0;
 retain the published milestone schedule until the team changes it.
