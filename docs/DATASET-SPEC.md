@@ -273,3 +273,20 @@ preserved. The 12-row blind DRAFT table is planned only, with no materialized
 blind fixtures or run. Phase 3 owns creating and freezing that dataset.
 Human batch review, capture failures, reproduction checks and CCRs are recorded
 in [the P4-2b review table](results/p4-2b-review.md).
+
+### P4 Phase 3 independent blind delivery
+
+Eleven planned cases are materialized under `fixtures/blind/set1/`, as SYNTHETIC
+source text and readable packaging transcripts. The original expected-set1.json
+remains unchanged. A separate materialized-set1.json records actual evidence,
+the original DRAFT expectations and preconditions. Case10 remains deferred:
+its planned omission of scope metadata conflicts with the current synthetic
+snapshot validator; no REAL origin or scope evidence was fabricated to pass it.
+The regulatory-dependent concentration target remains unscored while limit data
+is provisional. Vitamin alias mapping is an explicit planned precondition, not
+a fabricated source fact or a mapping inserted into application data.
+
+The first candidate ran only after `docs/results/blind-freeze-set1.json` recorded
+the 47 input hashes and the fixture validator passed 98 files. Preserve first-run
+`blind-set1.json`/`.md` and the original labels; subsequent runs have separate names.
+All 11 cases and 55 public-field targets remain DRAFT until a human reviews them.

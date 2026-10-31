@@ -2,6 +2,10 @@
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
+| S3 validated anchor evidence in stored trace | P1/P2 | CCR P4→P1/P2, contract-3 continuation | passage_scopes has no anchor column. P4 adapter reads current-run code scope:validate detail with serialized PassageScope keys passage_id, sv_id, scope_match, decided_by=AGENT_VERIFIED, anchor_passage_id; anchor must exist in the same source version. Need owner to persist this verified outcome or provide its agreed equivalent; missing/ambiguous/proposal-only evidence cannot pass replay. No P1/P2 file changed. |
+| S3 independent P4 harness awaits owner integration | P1/P2 | contract-3 merged; WAITING S3 implementation | Catalogue admission is REJECTED; pre-pass/anchor/gap/retrieval remain stubs. Glass-box routes now exist but return501 under contract-3. P4 phase3 path has26 S1/S2 checks passing then catalogue failure; this Stage-B task does not run an integration gate. |
+| Blind first-run diagnostics | P4 human; P1/P2 for later general mechanisms | DRAFT preserved | 11 products/55 fields: candidate54/55, B08/55, false blame0/52. Vitamin alias target misses its planned mapping precondition; plausible concentration remains UNCERTAIN vs DRAFT SINGLE_SOURCE. Keep original labels/results; no case-specific app/data changes. |
+| Blind case10 metadata omission | P4 | Deferred materialization | Planned synthetic snapshot omits scope, while current validator requires it. No validator relaxation or fabricated origin/scope; original case table stays intact. |
 | S2 integration regressions and claims passage scope | P1/P2, user-authorized P4 correction | Closed S2 | Source-noted family normalization, preserved gift exclusion trace, version-bound claims scope; focused99 and full phase2 1059 pass. |
 | Fresh readable image upload grounding | P1/P2 | Open limitation | Add a code-validated stored transcript path; prepared-transcript vision tests do not establish fresh upload support. |
 | Buyer pending-claim count metadata | P1/P3 | Should follow-up | Wire backend pending_claims to the buyer count; no raw claim details for buyers. |

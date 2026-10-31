@@ -1,0 +1,33 @@
+{
+  "source_id": "BLIND-SET1-11-BRAND",
+  "kind": "BRAND_PAGE",
+  "product_id": "BLIND-PROD-SET1-11",
+  "version": 1,
+  "uri": "synthetic://blind/set1/11/brand",
+  "captured_at": "2026-10-31T06:22:00Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "brand:aster-vale",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "BLIND-PROD-SET1-11",
+    "variant": "90ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "BLIND-SET1-11-BRAND-P1",
+      "locator": "title",
+      "section": "overview",
+      "text": "아스터 베일 클렌저 Aster Vale Bilingual Gel — BLIND-PROD-SET1-11 — VN"
+    },
+    {
+      "id": "BLIND-SET1-11-BRAND-P2",
+      "locator": "specs#volume",
+      "section": "specs",
+      "text": "용량 90 ml."
+    }
+  ],
+  "note": "SYNTHETIC — fictional source text drafted from the pre-run case table. Readable label transcript only."
+}

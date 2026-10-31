@@ -1,0 +1,51 @@
+{
+  "source_id": "BLIND-SET1-07-LABEL",
+  "kind": "PACKAGING_IMAGE",
+  "product_id": "BLIND-PROD-SET1-07",
+  "version": 1,
+  "uri": "synthetic://blind/set1/7/label",
+  "captured_at": "2026-10-31T06:22:00Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "packaging:aster-vale",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "BLIND-PROD-SET1-07",
+    "variant": "80ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "BLIND-SET1-07-LABEL-P1",
+      "locator": "specs#volume",
+      "section": "specs",
+      "text": "Dung tích trên nhãn: 80 ml."
+    },
+    {
+      "id": "BLIND-SET1-07-LABEL-P2",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Loại da trên nhãn: da khô."
+    },
+    {
+      "id": "BLIND-SET1-07-LABEL-P3",
+      "locator": "ingredients",
+      "section": "overview",
+      "text": "Ingredients: Aqua, Glycerin."
+    },
+    {
+      "id": "BLIND-SET1-07-LABEL-P4",
+      "locator": "specs#notification_number",
+      "section": "specs",
+      "text": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+    },
+    {
+      "id": "BLIND-SET1-07-LABEL-P5",
+      "locator": "specs#responsible_company",
+      "section": "specs",
+      "text": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+    }
+  ],
+  "note": "SYNTHETIC — fictional source text drafted from the pre-run case table. Readable label transcript only."
+}

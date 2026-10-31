@@ -1,0 +1,11 @@
+{
+  "product_id": "BLIND-PROD-SET1-12",
+  "name": "Aster Vale Sparse Lotion",
+  "brand": "Aster Vale Lab (fictional)",
+  "variant": "80ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "BLIND-SET1-12-CASE",
+  "tenant_id": "blind-eval",
+  "listing_id": "BLIND-SET1-12-LISTING"
+}

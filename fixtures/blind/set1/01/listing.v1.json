@@ -1,0 +1,63 @@
+{
+  "source_id": "BLIND-SET1-01-LISTING",
+  "kind": "LISTING",
+  "product_id": "BLIND-PROD-SET1-01",
+  "version": 1,
+  "uri": "synthetic://blind/set1/1/listing",
+  "captured_at": "2026-10-31T06:22:00Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "seller:blind-shop",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "BLIND-PROD-SET1-01",
+    "variant": "88.72ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "BLIND-SET1-01-LISTING-P1",
+      "locator": "title",
+      "section": "overview",
+      "text": "Aster Vale Measure Rinse — 3 fl oz"
+    },
+    {
+      "id": "BLIND-SET1-01-LISTING-P2",
+      "locator": "specs#volume",
+      "section": "specs",
+      "text": "Dung tích chai chính: 88.7 ml."
+    },
+    {
+      "id": "BLIND-SET1-01-LISTING-P3",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Dành cho da thường."
+    },
+    {
+      "id": "BLIND-SET1-01-LISTING-P4",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Thành phần nổi bật: Glycerin."
+    },
+    {
+      "id": "BLIND-SET1-01-LISTING-P5",
+      "locator": "specs#notification_number",
+      "section": "specs",
+      "text": "Số công bố: DEMO-CBMP-00410."
+    },
+    {
+      "id": "BLIND-SET1-01-LISTING-P6",
+      "locator": "specs#responsible_company",
+      "section": "specs",
+      "text": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+    },
+    {
+      "id": "BLIND-SET1-01-LISTING-P7",
+      "locator": "promotion#gift",
+      "section": "promotion",
+      "text": "Quà tặng riêng: tặng thêm chai mini 10 ml."
+    }
+  ],
+  "note": "SYNTHETIC — fictional source text drafted from the pre-run case table. Readable label transcript only."
+}

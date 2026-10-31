@@ -1,4 +1,4 @@
-"""Offline B0/candidate diagnostic over immutable gold, using an isolated database."""
+"""Offline B0/candidate diagnostic, with optional capped B1 and immutable archives."""
 from __future__ import annotations
 
 import argparse
@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 from app.models import AdmitResult, EventOutcome, PUBLIC_FIELDS, PassportResponse, Readability, SourceKind, Verdict
 from app.pipeline.baseline import BASELINE_VERSION, BaselineClaim, BaselineFinding, compare_claims
 from scripts.sync_check import HEADERS, isolated_settings
+from scripts.baseline_eval import B1Report, B1Session
 
 GoldStatus = Literal["DRAFT", "REVIEWED"]
 Mode = Literal["fallback", "replay"]
@@ -103,6 +104,8 @@ class FieldComparison(BaseModel):
     b0_seller_attributable: bool
     candidate_seller_attributable: bool | None
     expected_seller_attributable: bool | None
+    b1: Verdict | None = None
+    b1_seller_attributable: bool | None = None
 
 
 class CheckpointReport(BaseModel):
@@ -120,6 +123,7 @@ class CheckpointReport(BaseModel):
     run_ids: list[str]
     run_statuses: list[str]
     stop_reasons: list[str]
+    b1: B1Report = Field(default_factory=B1Report)
 
 
 class EvaluationReport(BaseModel):
@@ -220,11 +224,12 @@ def expected_attribution(checkpoint: GoldCheckpoint, field: str) -> bool | None:
     return False if checkpoint.expected[field] != Verdict.CONFLICTING else None
 
 
-def score_fields(fields: list[FieldComparison], system: Literal["B0", "candidate"]) -> Score:
+def score_fields(fields: list[FieldComparison], system: Literal["B0", "B1", "candidate"]) -> Score:
     score = Score(total=len(fields))
     for field in fields:
-        actual = field.b0 if system == "B0" else field.candidate
-        blamed = field.b0_seller_attributable if system == "B0" else field.candidate_seller_attributable
+        actual = field.b0 if system == "B0" else field.b1 if system == "B1" else field.candidate
+        blamed = (field.b0_seller_attributable if system == "B0" else field.b1_seller_attributable
+                  if system == "B1" else field.candidate_seller_attributable)
         score.correct += actual == field.expected
         abstained = actual in {Verdict.INSUFFICIENT, Verdict.UNCERTAIN}
         expected_abstain = field.expected in {Verdict.INSUFFICIENT, Verdict.UNCERTAIN}
@@ -279,7 +284,8 @@ def evaluate_checkpoint(client: TestClient, database: Path, checkpoint: GoldChec
         stop_reasons=[run.stop_reason for run in runs if run.stop_reason]), runs
 
 
-def run_evaluation(gold: GoldFile, gold_hash: str, mode: Mode, limit: int | None = None) -> EvaluationReport:
+def run_evaluation(gold: GoldFile, gold_hash: str, mode: Mode, limit: int | None = None,
+                   b1_session: B1Session | None = None) -> EvaluationReport:
     from app.main import create_app
     checkpoints: list[CheckpointReport] = []
     all_runs: list[StoredRun] = []
@@ -294,11 +300,18 @@ def run_evaluation(gold: GoldFile, gold_hash: str, mode: Mode, limit: int | None
     with TemporaryDirectory(prefix="passport-eval-") as directory:
         database = Path(directory) / "eval.db"
         # A process-level replay freeze must not disguise a labelled fallback retry.
-        with isolated_settings(mode, database, replay_freeze=False), \
-                patch("app.llm.client._call_api", deny_network):
+        with isolated_settings(mode, database, replay_freeze=False):
             with TestClient(create_app()) as client:
                 for checkpoint in gold.checkpoints[:limit]:
-                    result, runs = evaluate_checkpoint(client, database, checkpoint, gold, seen)
+                    with patch("app.llm.client._call_api", deny_network):
+                        result, runs = evaluate_checkpoint(client, database, checkpoint, gold, seen)
+                    if b1_session is not None:
+                        result.b1 = b1_session.evaluate(database, checkpoint.case_id)
+                        if result.b1.prediction is not None:
+                            for field in result.fields:
+                                prediction = getattr(result.b1.prediction, field.field_key)
+                                field.b1, field.b1_seller_attributable = Verdict(prediction.verdict), prediction.seller_attributable
+                            result.scores["B1"] = score_fields(result.fields, "B1")
                     checkpoints.append(result)
                     all_runs.extend(runs)
                     if mode == "replay" and "REPLAY_MISS" in result.stop_reasons:
@@ -307,7 +320,7 @@ def run_evaluation(gold: GoldFile, gold_hash: str, mode: Mode, limit: int | None
                     database, "SELECT detail FROM trace_steps WHERE detail IS NOT NULL AND detail != ''")]
     if attempted_network:
         raise RuntimeError("Offline evaluator attempted a provider call; report not scored")
-    totals = {status: {system: Score() for system in ("B0", "candidate")} for status in ("DRAFT", "REVIEWED")}
+    totals = {status: {system: Score() for system in ("B0", "B1", "candidate")} for status in ("DRAFT", "REVIEWED")}
     usage = Usage()
     for checkpoint in checkpoints:
         usage.add(checkpoint.usage)
@@ -325,11 +338,12 @@ def run_evaluation(gold: GoldFile, gold_hash: str, mode: Mode, limit: int | None
             "Literal expected labels are scored; preconditions and alternative gold scenarios are not inferred from candidate output.",
             "Only five public fields are scored; expert claim findings and isolated image scenarios have separate acceptance tests.",
             "False-blame attribution is unscored for expected conflicts without an explicit attribution invariant.",
+            "B1 is an unpublished single-call diagnostic over source passages, with separate usage. NOT_RUN/errors/caps are unscored, never zero-accuracy claims.",
         ])
 
 
 def markdown(report: EvaluationReport) -> str:
-    lines = ["# B0 / candidate evaluation", "", f"Generated: {report.generated_at}",
+    lines = ["# B0 / B1 / candidate evaluation", "", f"Generated: {report.generated_at}",
              f"Mode: {report.mode}; requested: {report.requested_mode}; gold: {report.gold_status}; labelled by: {report.labelled_by}",
              f"Models: {', '.join(report.models) or 'none'}; prompts: {', '.join(report.prompt_versions) or 'none'}; policies: {', '.join(report.policy_versions) or 'none'}",
              f"Baseline: {report.baseline_version}; gold SHA256: {report.gold_sha256}", ""]
@@ -340,16 +354,22 @@ def markdown(report: EvaluationReport) -> str:
     for status, systems in report.totals.items():
         for system, score in systems.items():
             lines.append(f"| {status} | {system} | {score.correct}/{score.total} | {score.false_blame}/{score.false_blame_eligible} | {score.abstentions} | {score.correct_abstentions}/{score.expected_abstentions} |")
-    lines += ["", "## Checkpoints", "", "| Event | Gold | B0 | Candidate | Calls | Tokens in/out | Latency ms | Outcome / stops |",
-              "|---|---|---:|---:|---:|---:|---:|---|"]
+    lines += ["", "## Checkpoints", "", "| Event | Gold | B0 | B1 | Candidate | Calls | Tokens in/out | Latency ms | Outcome / stops |",
+              "|---|---|---:|---|---:|---:|---:|---:|---|"]
     for point in report.checkpoints:
         b0, candidate = point.scores["B0"], point.scores["candidate"]
-        lines.append(f"| {point.event} | {point.status} | {b0.correct}/{b0.total} | {candidate.correct}/{candidate.total} | {point.usage.model_calls} | {point.usage.tokens_in}/{point.usage.tokens_out} | {point.usage.latency_ms:.2f} | {point.error or point.outcome}; {', '.join(point.stop_reasons)} |")
+        b1 = point.scores.get("B1")
+        b1_text = f"{b1.correct}/{b1.total} ({point.b1.status})" if b1 else point.b1.status
+        lines.append(f"| {point.event} | {point.status} | {b0.correct}/{b0.total} | {b1_text} | {candidate.correct}/{candidate.total} | {point.usage.model_calls} | {point.usage.tokens_in}/{point.usage.tokens_out} | {point.usage.latency_ms:.2f} | {point.error or point.outcome}; {', '.join(point.stop_reasons)} |")
+    lines += ["", "## B1 usage", ""]
+    for point in report.checkpoints:
+        if point.b1.mode != "off":
+            lines.append(f"- {point.event}: model={point.b1.model}; {point.b1.calls} calls; {point.b1.tokens_in}/{point.b1.tokens_out} tokens; {point.b1.status}.")
     lines += ["", "## Disagreements and preconditions", ""]
     for point in report.checkpoints:
         for field in point.fields:
-            if field.b0 != field.expected or field.candidate != field.expected:
-                lines.append(f"- {point.event} / {field.field_key}: expected {field.expected}; B0 {field.b0}; candidate {field.candidate or 'MISSING'}.")
+            if field.b0 != field.expected or field.candidate != field.expected or (field.b1 is not None and field.b1 != field.expected):
+                lines.append(f"- {point.event} / {field.field_key}: expected {field.expected}; B0 {field.b0}; B1 {field.b1 or 'NOT_RUN'}; candidate {field.candidate or 'MISSING'}.")
         for condition in point.preconditions:
             lines.append(f"- {point.event} precondition: {condition}")
         if point.reviewed_by:
@@ -377,18 +397,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--output-dir", type=Path, default=ROOT / "docs/results")
     parser.add_argument("--limit-checkpoints", type=int)
     parser.add_argument("--mode", choices=("fallback", "replay"))
+    parser.add_argument("--b1-mode", choices=("off", "replay", "record"), default="off")
+    parser.add_argument("--max-calls", type=int, default=1, help="Total B1 call cap; candidate stays offline")
     args = parser.parse_args(argv)
     mode = args.mode or os.getenv("LLM_MODE", "replay")
     if mode not in {"fallback", "replay"}:
         parser.error("offline evaluation supports only fallback or replay")
     if args.limit_checkpoints is not None and args.limit_checkpoints < 1:
         parser.error("--limit-checkpoints must be positive")
+    if args.max_calls < 0:
+        parser.error("--max-calls must be nonnegative")
     raw = args.gold.read_bytes()
     gold = GoldFile.model_validate_json(raw)
-    report = run_evaluation(gold, hashlib.sha256(raw).hexdigest(), mode, args.limit_checkpoints)
+    b1_session = B1Session(args.b1_mode, args.max_calls)
+    report = run_evaluation(gold, hashlib.sha256(raw).hexdigest(), mode, args.limit_checkpoints, b1_session)
     if mode == "replay" and any("REPLAY_MISS" in point.stop_reasons for point in report.checkpoints):
         attempt = report
-        report = run_evaluation(gold, attempt.gold_sha256, "fallback", args.limit_checkpoints)
+        report = run_evaluation(gold, attempt.gold_sha256, "fallback", args.limit_checkpoints, b1_session)
         report.requested_mode = "replay"
         report.fallback_reason = "REPLAY_MISS: matching recordings unavailable"
         report.previous_attempt = attempt
@@ -396,7 +421,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if isinstance(sys.stdout, TextIOWrapper):
         sys.stdout.reconfigure(encoding="utf-8")
     print(markdown(report))
-    return int(any(point.error or point.stop_reasons or any(status not in {
+    return int(any(point.error or point.stop_reasons or point.b1.status not in {
+        "NOT_RUN", "CALL_CAP", "REPLAY", "RECORDED"} or any(status not in {
         "COMPLETED", "WAITING_REVIEW", "WAITING_EVIDENCE"} for status in point.run_statuses)
         for point in report.checkpoints))
 

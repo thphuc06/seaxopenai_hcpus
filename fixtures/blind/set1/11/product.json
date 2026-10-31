@@ -1,0 +1,11 @@
+{
+  "product_id": "BLIND-PROD-SET1-11",
+  "name": "Aster Vale Bilingual Gel",
+  "brand": "Aster Vale Lab (fictional)",
+  "variant": "90ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "BLIND-SET1-11-CASE",
+  "tenant_id": "blind-eval",
+  "listing_id": "BLIND-SET1-11-LISTING"
+}

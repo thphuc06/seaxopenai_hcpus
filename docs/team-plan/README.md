@@ -198,6 +198,8 @@ P4 owns `backend/tests/test_fixtures.py` for the dataset validator and source/go
 P4 owns `backend/tests/test_operations.py` for its seed/reset/sync CLI boundaries.
 P4 owns `backend/tests/test_evaluation.py` and `test_sync_phase_two.py` for B0,
 offline reports and S2 operational harness boundaries.
+P4 also owns scripts/baseline_eval.py and tests/test_baseline_b1.py,
+test_blind_evaluation.py and test_sync_phase_three.py for the S3 diagnostic harnesses.
 Admission configuration is `config.PRODUCER_EVENT_TYPES` and `config.NON_MATERIAL_FIELDS`
 (immutable server-side constants, docs05 §1); P1 retains role/type authorization.
 Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
@@ -251,8 +253,11 @@ upload preserving prior support, source conflict and expert-claim filtering.
 Its API implementation dependencies must be merged before the real path passes;
 HTTP 501 or a wrong outcome is FAIL. Missing required fixtures are SKIP/incomplete.
 The isolated unreadable-only clearer-photo case remains in acceptance tests; the
-full story's blurred upload must not erase earlier readable evidence. Phases 3–4
-remain unsupported until implemented. `scripts/eval.py` is documented in docs09;
+full story's blurred upload must not erase earlier readable evidence. Phase 3 now
+extends the path with catalogue pre-pass, registry scenario and role-filtered
+explain reads; replay also requires a recorded anchor/effect and registry closure.
+Missing owner behavior fails the check; it does not create a passing Sync. Phase 4
+remains unsupported. `scripts/eval.py` is documented in docs09;
 its labelled replay-to-fallback diagnostic behavior does not apply to sync_check,
 which requires the requested mode throughout and never converts a replay miss to PASS.
 
