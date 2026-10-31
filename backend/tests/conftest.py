@@ -7,9 +7,12 @@ from importlib import import_module
 from importlib.util import find_spec
 import os
 from pathlib import Path
+import re
 import sqlite3
+import subprocess
 
 import pytest
+from _pytest.terminal import TerminalReporter
 from fastapi.testclient import TestClient
 from httpx import Response
 
@@ -35,6 +38,39 @@ def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
         marker = item.get_closest_marker("phase")
         if marker and int(marker.args[0]) > phase:
             item.add_marker(pytest.mark.skip(reason=f"Requires phase {marker.args[0]}; current phase {phase}"))
+
+
+def pytest_terminal_summary(terminalreporter: TerminalReporter) -> None:
+    """Annotate cross-lane failures without changing any test outcome or gate."""
+    lane = os.getenv("CONTEST_LANE", "").upper()
+    if not lane:
+        branch = subprocess.run(
+            ["git", "branch", "--show-current"], cwd=Path(__file__).resolve().parents[2],
+            check=True, capture_output=True, text=True, encoding="utf-8",
+        ).stdout.strip()
+        match = re.fullmatch(r"p([1-4])(?:-b\d+)?", branch)
+        lane = f"P{match.group(1)}" if match else ""
+    if lane not in {"P1", "P2", "P3", "P4"}:
+        return
+    session = terminalreporter._session
+    if session is None:
+        return
+    items = {item.nodeid: item for item in session.items}
+    reported: set[str] = set()
+    for category in ("failed", "error"):
+        for report in terminalreporter.stats.get(category, []):
+            item = items.get(report.nodeid)
+            if item is None or report.nodeid in reported:
+                continue
+            dependencies = sorted({
+                str(owner) for marker in item.iter_markers("needs") for owner in marker.args
+                if str(owner) != lane
+            })
+            if dependencies:
+                terminalreporter.write_line(
+                    f"WAITING on {', '.join(dependencies)}: {report.nodeid} (still {category})"
+                )
+                reported.add(report.nodeid)
 
 
 @pytest.fixture
