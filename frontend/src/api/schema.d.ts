@@ -174,6 +174,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/review/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Review Queue */
+        get: operations["review_queue_api_review_queue_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit Review */
+        post: operations["submit_review_api_cases__case_id__reviews_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Case History */
+        get: operations["case_history_api_cases__case_id__history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/evidence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload Evidence */
+        post: operations["upload_evidence_api_cases__case_id__evidence_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/internal/metrics": {
         parameters: {
             query?: never;
@@ -223,6 +291,21 @@ export interface components {
             job_id: string | null;
             /** Stale Fields */
             stale_fields: string[];
+        };
+        /** CaseHistoryResponse */
+        CaseHistoryResponse: {
+            /** Case Id */
+            case_id: string;
+            /** Case Revision */
+            case_revision: number;
+            /** Results */
+            results: components["schemas"]["ResultVersionResponse"][];
+            /** Events */
+            events: components["schemas"]["EventLogItem"][];
+            /** Reviews */
+            reviews: components["schemas"]["ReviewResponse"][];
+            /** Requests */
+            requests: components["schemas"]["EvidenceRequestResponse"][];
         };
         /** Citation */
         Citation: {
@@ -357,12 +440,46 @@ export interface components {
              */
             visibility: "PUBLIC" | "PRIVATE";
         };
+        /** EvidenceRequestResponse */
+        EvidenceRequestResponse: {
+            /** Id */
+            id: string;
+            /** Case Id */
+            case_id: string;
+            /** Field Key */
+            field_key: string;
+            /** Gap Id */
+            gap_id: string;
+            /** Reason */
+            reason: string;
+            /**
+             * Requested From
+             * @enum {string}
+             */
+            requested_from: "SELLER" | "BRAND";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "OPEN" | "FULFILLED";
+            /** Created At */
+            created_at: string;
+        };
         /** EvidenceResponse */
         EvidenceResponse: {
             /** Citations */
             citations: components["schemas"]["EvidencePassage"][];
             /** Hidden Citations */
             hidden_citations: number;
+        };
+        /** EvidenceUploadRequest */
+        EvidenceUploadRequest: {
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Field Keys */
+            field_keys: string[];
+            /** Content */
+            content: components["schemas"]["TextEvidence"] | components["schemas"]["ImageEvidence"];
         };
         /**
          * Freshness
@@ -388,6 +505,21 @@ export interface components {
             phase: number;
             /** Demo Run Delay S */
             demo_run_delay_s: number;
+        };
+        /** ImageEvidence */
+        ImageEvidence: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "IMAGE";
+            /**
+             * Media Type
+             * @enum {string}
+             */
+            media_type: "image/png" | "image/jpeg";
+            /** Data Base64 */
+            data_base64: string;
         };
         JsonValue: unknown;
         /** MetricsResponse */
@@ -487,6 +619,98 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** ResultVersionResponse */
+        ResultVersionResponse: {
+            /** Field Key */
+            field_key: string;
+            /** Label */
+            label: string;
+            /** Public Text */
+            public_text: string;
+            verdict: components["schemas"]["Verdict"];
+            conflict_locus: components["schemas"]["ConflictLocus"] | null;
+            freshness: components["schemas"]["Freshness"];
+            review_state: components["schemas"]["ReviewState"];
+            /** Checked At */
+            checked_at: string | null;
+            /** Citations */
+            citations: components["schemas"]["Citation"][];
+            /** Id */
+            id: string;
+            /** Case Id */
+            case_id: string;
+            /** Result Version */
+            result_version: number;
+            /** Case Revision */
+            case_revision: number;
+            /** Created At */
+            created_at: string;
+            /** Superseded By */
+            superseded_by: string | null;
+        };
+        /** ReviewOverride */
+        ReviewOverride: {
+            verdict: components["schemas"]["Verdict"];
+            /** Citations */
+            citations: components["schemas"]["Citation"][];
+            /** Public Text */
+            public_text: string;
+        };
+        /** ReviewQueueItem */
+        ReviewQueueItem: {
+            /** Id */
+            id: string;
+            /** Case Id */
+            case_id: string;
+            /** Field Key */
+            field_key: string;
+            /** Result Id */
+            result_id: string;
+            /** Case Revision */
+            case_revision: number;
+            /** Reason Code */
+            reason_code: string;
+            verdict: components["schemas"]["Verdict"];
+        };
+        /** ReviewRequest */
+        ReviewRequest: {
+            /** Result Id */
+            result_id: string;
+            /** Case Revision */
+            case_revision: number;
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "APPROVE" | "OVERRIDE" | "REJECT";
+            /** Reason */
+            reason: string;
+            override?: components["schemas"]["ReviewOverride"] | null;
+        };
+        /** ReviewResponse */
+        ReviewResponse: {
+            /** Id */
+            id: string;
+            /** Case Id */
+            case_id: string;
+            /** Result Id */
+            result_id: string;
+            /** Case Revision */
+            case_revision: number;
+            /** Reviewer Id */
+            reviewer_id: string;
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "APPROVE" | "OVERRIDE" | "REJECT";
+            /** Reason */
+            reason: string;
+            override: components["schemas"]["ReviewOverride"] | null;
+            /** Created At */
+            created_at: string;
+            review_state: components["schemas"]["ReviewState"];
+        };
         /**
          * ReviewState
          * @enum {string}
@@ -541,6 +765,16 @@ export interface components {
          * @enum {string}
          */
         SourceKind: "LISTING" | "BRAND_PAGE" | "NOTIFICATION_DOC" | "PACKAGING_IMAGE" | "SELLER_UPLOAD" | "REGISTRY_RECORD" | "WEB_PAGE";
+        /** TextEvidence */
+        TextEvidence: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "TEXT";
+            /** Text */
+            text: string;
+        };
         /** TraceStepResponse */
         TraceStepResponse: {
             /** Id */
@@ -924,6 +1158,148 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RunDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    review_queue_api_review_queue_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewQueueItem"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_review_api_cases__case_id__reviews_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    case_history_api_cases__case_id__history_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CaseHistoryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_evidence_api_cases__case_id__evidence_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvidenceUploadRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdmitResult"];
                 };
             };
             /** @description Validation Error */

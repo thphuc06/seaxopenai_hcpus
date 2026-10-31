@@ -44,7 +44,7 @@ export function createScenarioTransport({ scenarios = rawScenarios as PreviewSce
       if (outcome === 'ADMITTED') {
         runId = `preview-run-${runs.length + 1}`;
         result.job_id = `preview-job-${runs.length + 1}`;
-        const steps = ['pin_revision', 'extract', 'policy:volume', 'publish'];
+        const steps = [...(scenario.stale_fields.length ? ['stale:mark'] : []), 'pin_revision', 'extract', 'policy:volume', 'publish'];
         runs.unshift({
           run: { id: runId, case_id: 'preview-case', case_revision: runs.length + 1, trigger_event_id: result.event_id, status: 'COMPLETED', stop_reason: null, llm_mode: 'FALLBACK', started_at: time, finished_at: time, usage: { model_calls: 0, tokens_in: 0, tokens_out: 0 } },
           steps: steps.map((step, index) => ({ id: `${runId}:step:${index + 1}`, run_id: runId!, seq: index + 1, step, actor: 'code', input_refs: [], output_refs: [], latency_ms: 0, tokens_in: 0, tokens_out: 0, error: null, detail: { preview: true, mode: 'FALLBACK' }, created_at: time, t_ms: index })),

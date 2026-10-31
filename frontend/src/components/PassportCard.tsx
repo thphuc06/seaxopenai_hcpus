@@ -1,4 +1,5 @@
-import { FIELD_KEYS, FIELD_TITLES } from '../labels.ts';
+import { useEffect, useState } from 'react';
+import { buyerLabel, FIELD_KEYS, FIELD_TITLES } from '../labels.ts';
 import type { FieldKey, PassportView, PassportViewField, RunStatus } from '../types.ts';
 import { StatusBadge } from './StatusBadge.tsx';
 
@@ -12,11 +13,22 @@ export function formatTime(value: string | null): string {
 export function FieldRow({ fieldKey, field, runStatus, index, onEvidence }: {
   fieldKey: FieldKey; field: PassportViewField; runStatus: RunStatus | null; index: number; onEvidence?: (key: FieldKey) => void;
 }) {
+  const label = buyerLabel(field, runStatus);
+  const [previousLabel, setPreviousLabel] = useState(label.text);
+  const [pulse, setPulse] = useState({ count: 0, tone: '' });
+  useEffect(() => {
+    if (previousLabel !== label.text) {
+      setPreviousLabel(label.text);
+      setPulse((previous) => ({ count: previous.count + 1, tone: label.tone === 'stale' ? 'stale' : 'change' }));
+    }
+  }, [label.text, label.tone, previousLabel]);
   return <article className="field-row" data-testid={`field-row-${fieldKey}`}>
+    {pulse.count > 0 && <span key={pulse.count} className={`field-ripple ripple-${pulse.tone}`} aria-hidden="true" />}
     <span className="field-index" aria-hidden="true">0{index + 1}</span>
     <div className="field-content">
       <div className="field-heading"><h3>{FIELD_TITLES[fieldKey]}</h3><StatusBadge field={field} runStatus={runStatus} /></div>
       <p className="field-description">{field.public_text}</p>
+      {fieldKey === 'key_ingredients' && (field.claims_under_review ?? 0) > 0 && <p className="claim-count">{field.claims_under_review} claims under review</p>}
       <div className="field-footer">
         <span className="field-time">{formatTime(field.checked_at)}</span>
         <div className="field-actions">

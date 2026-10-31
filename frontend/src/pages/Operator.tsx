@@ -1,12 +1,18 @@
 import { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { ApiClient } from '../api/client.ts';
-import type { AdmitResult, DemoRole, Metrics, RunDetail } from '../types.ts';
+import type { AdmitResult, DemoRole, Metrics, Product, RunDetail } from '../types.ts';
 import { usePoll } from '../usePoll.ts';
 import { EmptyPanel, ErrorNotice, LoadingNotice } from '../components/Feedback.tsx';
 import { Dialog } from '../components/Dialog.tsx';
 import { formatTime } from '../components/PassportCard.tsx';
 import { traceLane } from '../trace.ts';
+import { markedStaleWithoutModel, scenarioEvents } from '../lifecycle.ts';
+import { SCENARIO_ORDER } from '../scenarioConfig.ts';
+import { PassportCard } from '../components/PassportCard.tsx';
+import { EvidenceDrawer } from '../components/EvidenceDrawer.tsx';
+import type { FieldKey } from '../types.ts';
+import { withPassportMetadata } from '../passportView.ts';
 
 const OUTCOMES = ['ADMITTED', 'NOOP', 'DUPLICATE', 'REJECTED'] as const;
 
@@ -26,6 +32,7 @@ export function TraceTable({ detail }: { detail: RunDetail }) {
   return <>
     <div className="run-summary"><span className="plain-badge" data-testid="run-status">{detail.run.status}</span><span className="plain-badge" data-testid="badge-mode">{detail.run.llm_mode}</span><span>Revision {detail.run.case_revision}</span><span>{detail.run.usage.model_calls} model calls</span>
       {detail.run.stop_reason && <p className="stop-reason">Stopped: {detail.run.stop_reason}</p>}
+      {markedStaleWithoutModel(detail) && <span className="stale-notice">marked stale — no model call</span>}
     </div>
     <div className="trace-legend" aria-label="Trace lanes">{(['code', 'model', 'agent', 'gap', 'web', 'other'] as const).map((lane) => <span className={`lane-chip lane-${lane}`} key={lane}>{lane}</span>)}</div>
     <div className="table-scroll" tabIndex={0} role="region" aria-label="Run trace">
@@ -43,7 +50,18 @@ function RunInspector({ api, runId }: { api: ApiClient; runId: string }) {
   return <section className="run-inspector" aria-label="Selected run">{error && <ErrorNotice error={error} technical />}{loading && <LoadingNotice />}{data && <TraceTable detail={data} />}</section>;
 }
 
-function OperatorDashboard({ api }: { api: ApiClient }) {
+function LivePassport({ api, productId, product }: { api: ApiClient; productId: string; product?: Product }) {
+  const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
+  const passport = usePoll(load, 2_000);
+  const [evidenceKey, setEvidenceKey] = useState<FieldKey | null>(null);
+  return <section className="scenario-passport" aria-label="Live buyer passport">
+    {passport.error && <ErrorNotice error={passport.error} technical />}{passport.loading && <LoadingNotice />}
+    {passport.data && <PassportCard passport={withPassportMetadata(passport.data, product?.presentation?.passport_metadata)} onEvidence={setEvidenceKey} />}
+    {evidenceKey && <EvidenceDrawer key={evidenceKey} api={api} productId={productId} fieldKey={evidenceKey} withinSource={passport.data?.fields.find((field) => field.field_key === evidenceKey)?.conflict_locus === 'WITHIN_SOURCE'} onClose={() => setEvidenceKey(null)} />}
+  </section>;
+}
+
+function OperatorDashboard({ api, productId, product }: { api: ApiClient; productId: string; product?: Product }) {
   const [refresh, setRefresh] = useState(0);
   const [selectedRun, setSelectedRun] = useState<string | null>(null);
   const [pending, setPending] = useState<string | null>(null);
@@ -52,6 +70,7 @@ function OperatorDashboard({ api }: { api: ApiClient }) {
   const [actionError, setActionError] = useState<Error | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetMessage, setResetMessage] = useState(false);
+  const [scenarioIndex, setScenarioIndex] = useState(0);
   const loadCatalog = useCallback((signal: AbortSignal) => api.getEventCatalog(signal), [api]);
   const loadMetrics = useCallback((signal: AbortSignal) => api.getMetrics(signal), [api, refresh]);
   const loadRuns = useCallback((signal: AbortSignal) => api.getRuns(signal), [api, refresh]);
@@ -59,16 +78,19 @@ function OperatorDashboard({ api }: { api: ApiClient }) {
   const metrics = usePoll(loadMetrics, 2_000);
   const runs = usePoll(loadRuns, 2_000);
   const activeRun = runs.data?.find((run) => run.id === selectedRun)?.id ?? runs.data?.[0]?.id;
+  const scenario = scenarioEvents(catalog.data ?? [], productId, SCENARIO_ORDER);
+  const nextEvent = scenario[scenarioIndex];
 
   async function act(name: string, reset = false) {
-    if (lock.current) return;
+    if (lock.current) return false;
     lock.current = true; setPending(name); setActionError(null); setOutcome(null); setResetMessage(false);
     try {
       if (reset) {
-        await api.resetDemo(); setOutcome(null); setSelectedRun(null); setConfirmReset(false); setResetMessage(true);
+        await api.resetDemo(); setOutcome(null); setSelectedRun(null); setConfirmReset(false); setResetMessage(true); setScenarioIndex(0);
       } else setOutcome(await api.fireEvent(name));
       setRefresh((value) => value + 1);
-    } catch (error) { setActionError(error instanceof Error ? error : new Error('The action could not be completed.')); }
+      return true;
+    } catch (error) { setActionError(error instanceof Error ? error : new Error('The action could not be completed.')); return false; }
     finally { lock.current = false; setPending(null); }
   }
   return <div className="operator-dashboard">
@@ -78,6 +100,12 @@ function OperatorDashboard({ api }: { api: ApiClient }) {
     {actionError && <ErrorNotice error={actionError} technical />}
     {outcome && <section className={`event-toast outcome-${outcome.outcome.toLowerCase()}`} role="status" aria-live="polite"><strong>{outcome.outcome}</strong><p>{outcome.reason}</p><p>Stale fields: {outcome.stale_fields.length ? outcome.stale_fields.join(', ') : 'None'}</p></section>}
     {resetMessage && <p className="event-toast" role="status">Demo data reset.</p>}
+    <div className="scenario-layout"><section className="scenario-stepper" aria-label="Scenario stepper">
+      <p className="eyebrow">Demo driver · {Math.min(scenarioIndex + 1, scenario.length)} / {scenario.length}</p><h2>{nextEvent?.title ?? (scenario.length ? 'Scenario complete' : 'No scenario available')}</h2>
+      <p className="scenario-caption" aria-live="polite">{nextEvent?.expect ?? (scenario.length ? 'All catalog steps have been sent. Read the stored results alongside the run trace.' : 'Select a product with catalog events.')}</p>
+      <button type="button" className="primary-button" data-testid="scenario-next" disabled={!nextEvent || pending !== null} onClick={() => { if (nextEvent) void act(nextEvent.name).then((sent) => { if (sent) setScenarioIndex((value) => value + 1); }); }}>{pending === nextEvent?.name ? 'Sending…' : 'Next'}</button>
+      <ol>{scenario.map((event, index) => <li key={event.name} aria-current={index === scenarioIndex ? 'step' : undefined}>{index < scenarioIndex ? '✓ ' : ''}{event.title}</li>)}</ol>
+    </section>{productId && <LivePassport key={productId} api={api} productId={productId} product={product} />}</div>
     <div className="section-heading"><div><p className="eyebrow">Event catalog</p><h2>Trigger a change</h2></div><button type="button" onClick={() => { setActionError(null); setConfirmReset(true); }} disabled={pending !== null}>Reset demo</button></div>
     {catalog.error && <ErrorNotice error={catalog.error} technical />}
     {catalog.loading && <LoadingNotice />}
@@ -100,9 +128,9 @@ function OperatorDashboard({ api }: { api: ApiClient }) {
   </div>;
 }
 
-export function Operator({ api, role, buyerPath }: { api: ApiClient; role: DemoRole; buyerPath: string | null }) {
+export function Operator({ api, role, buyerPath, productId = '', product }: { api: ApiClient; role: DemoRole; buyerPath: string | null; productId?: string; product?: Product }) {
   return <div className="operator-page">
     <EmptyPanel eyebrow="Operator workspace" title="See how a source becomes a finding."><p>Follow a listing change through comparison and into the buyer’s Passport.</p>{buyerPath && <Link className="primary-link" to={buyerPath}>Open buyer Passport <span aria-hidden="true">↗</span></Link>}</EmptyPanel>
-    {role === 'OPERATOR' ? <OperatorDashboard key={role} api={api} /> : <div className="role-notice">Select the Operator role to view the event catalog. Buyer views only read stored information.</div>}
+    {role === 'OPERATOR' ? <OperatorDashboard key={`${role}:${productId}`} api={api} productId={productId} product={product} /> : <div className="role-notice">Select the Operator role to view the event catalog. Buyer views only read stored information.</div>}
   </div>;
 }
