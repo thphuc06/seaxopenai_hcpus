@@ -27,6 +27,7 @@ COPY backend/app ./app
 COPY backend/tests/PHASE ./tests/PHASE
 COPY fixtures /app/fixtures
 COPY scripts/dev/render /app/scripts/dev/render
+COPY scripts/capture_page.py /app/scripts/capture_page.py
 COPY --from=frontend /build/frontend/dist /app/frontend/dist
 RUN useradd --create-home --uid 10001 passport
 USER passport

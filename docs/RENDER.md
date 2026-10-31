@@ -31,6 +31,13 @@ frontend build with SPA fallback. API paths, missing assets, hidden paths and pa
 outside the build directory do not receive index.html. One Uvicorn worker binds
 0.0.0.0 and the PORT Render supplies (10000 fallback).
 
+Since S4, web_sources imports the shared scripts.capture_page HTML cleaner at startup.
+The runtime image must include scripts/capture_page.py as well as scripts/dev/render;
+missing it prevents startup even with WEB_SEARCH=off. The deployment packaging test
+imports the app from only Docker-declared runtime Python files in an isolated
+subprocess and checks health with web off/on. This catches repository-only imports;
+the CI Docker image check remains the actual Linux-image verification.
+
 The image excludes local env files, SQLite databases, offline expected labels and
 blind evaluation fixtures. Its default mode is FALLBACK; it starts without a model key.
 The API and role headers still have the contest's simulated auth. This is a demo
