@@ -19,7 +19,7 @@ export function WhyDialog({ api, productId, fieldKey, role, onClose }: { api: Ap
   const { data, error, loading } = usePoll(load, 30_000);
   const expert = role === 'REVIEWER' || role === 'OPERATOR';
   return <Dialog title={`Why? · ${FIELD_TITLES[fieldKey]}`} onClose={onClose} wide={expert}>
-    {loading && <LoadingNotice />}{error && <ErrorNotice error={error} technical={expert} />}
+    {loading && <LoadingNotice />}{error && <ErrorNotice error={error} technical={expert} plain={!expert} />}
     {data && <ExplanationView data={data} expert={expert} />}
   </Dialog>;
 }
