@@ -224,21 +224,24 @@ def infer_scope(source: Record, product: Record, *, market_rules: MarketRules | 
         scope = json.loads(raw) if isinstance(raw, str) else {}
     if not isinstance(scope, dict):
         raise ValueError("Source scope must be an object")
+    multi_variant = str(scope.get("variant") or "").casefold() == "multi"
     product_id = product.get("id", product.get("product_id"))
     if source.get("product_id") and product_id and source["product_id"] != product_id:
         return decision(ScopeMatch.MISMATCH, "Source belongs to another product")
     for key in ("product", "variant", "market", "version"):
+        if key == "variant" and multi_variant:
+            continue  # Dataset contract: MULTI requests passage-level placement, not a variant identity.
         expected = product_id if key == "product" else product.get(key)
         actual = scope.get(key)
         if actual and expected and str(actual).casefold() != str(expected).casefold():
             return decision(ScopeMatch.MISMATCH, f"Explicit {key} scope differs from case")
-    if all(scope.get(key) for key in ("product", "variant", "market")):
+    if not multi_variant and all(scope.get(key) for key in ("product", "variant", "market")):
         return decision(ScopeMatch.MATCH, "Explicit source scope matches case")
     if source.get("kind") in {SourceKind.LISTING, SourceKind.PACKAGING_IMAGE,
                               SourceKind.NOTIFICATION_DOC, SourceKind.SELLER_UPLOAD,
-                              SourceKind.REGISTRY_RECORD}:
+                              SourceKind.REGISTRY_RECORD} and not multi_variant:
         return decision(ScopeMatch.MATCH, "Product-owned evidence is in scope")
-    if source.get("kind") not in {SourceKind.BRAND_PAGE, SourceKind.WEB_PAGE}:
+    if source.get("kind") not in {SourceKind.BRAND_PAGE, SourceKind.WEB_PAGE} and not multi_variant:
         return decision(ScopeMatch.UNKNOWN, "Source kind does not support scope inference", True)
     if not scope.get("market"):
         rules = market_rules
@@ -254,7 +257,7 @@ def infer_scope(source: Record, product: Record, *, market_rules: MarketRules | 
             return decision(ScopeMatch.UNKNOWN, "Case market is absent", True)
         if market and expected_market and market != expected_market:
             return decision(ScopeMatch.MISMATCH, "Country-code domain differs from case market")
-    if scope.get("variant"):
+    if scope.get("variant") and not multi_variant:
         return decision(ScopeMatch.MATCH, "Explicit variant scope matches case")
     texts = [str(item.get("text") or "") for item in passages]
     if isinstance(source.get("text"), str):
@@ -268,7 +271,7 @@ def infer_scope(source: Record, product: Record, *, market_rules: MarketRules | 
     if scoped_sizes and all(role == ScopeMatch.MISMATCH for _,_,role in scoped_sizes):
         return decision(ScopeMatch.UNKNOWN, "Only gift quantities are stated; main size needs confirmation", True)
     sizes = _sizes([raw for raw,_,role in scoped_sizes if role == ScopeMatch.MATCH])
-    if len(sizes) > 1:
+    if len(sizes) > 1 or multi_variant:
         by_id = {item.passage_id: item for item in placements}
         unresolved = not passages or any(
             str(item.get("id", item.get("passage_id", ""))) not in by_id or

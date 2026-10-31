@@ -124,6 +124,35 @@ def test_multiple_sizes_require_passage_resolution_without_losing_placements() -
     assert replace(result, scope_match=ScopeMatch.MISMATCH).for_passage("large").scope_match == ScopeMatch.MISMATCH
 
 
+@pytest.mark.parametrize("variant,other", [("137 ml", "212 ml"), ("72 g", "19 g")])
+@pytest.mark.parametrize("marker", ["MULTI", "multi"])
+def test_explicit_multi_variant_requires_passage_scope(variant: str, other: str, marker: str) -> None:
+    target = product(variant)
+    source = page()
+    source["scope"] = {"product": target["id"], "variant": marker, "market": "VN"}
+    source["passages"] = [{"id": "heading", "text": variant}, {"id": "description", "text": "Dry skin"},
+                          {"id": "other-heading", "text": other}]
+    result = infer_scope(source, target)
+    assert result.scope_match == ScopeMatch.UNKNOWN and result.needs_scope_resolution
+    source["passage_scopes"] = [{"source_version_id": "scope-version", "passage_id": pid,
+        "scope_match": match, "decided_by": "CODE", "reason": "Stored placement"}
+        for pid, match in (("heading", "MATCH"), ("description", "UNKNOWN"), ("other-heading", "MISMATCH"))]
+    placed = infer_scope(source, target)
+    assert placed.for_passage("heading").scope_match == ScopeMatch.MATCH
+    assert placed.for_passage("other-heading").scope_match == ScopeMatch.MISMATCH
+    assert placed.for_passage("description").scope_match == ScopeMatch.UNKNOWN
+    source["scope"]["market"] = "FR"
+    assert infer_scope(source, target).scope_match == ScopeMatch.MISMATCH
+
+
+@pytest.mark.parametrize("text", ["No size given", "137 ml only"])
+def test_multi_metadata_does_not_imply_single_variant_support(text: str) -> None:
+    source = page(text)
+    source["scope"] = {"variant": "MULTI", "market": "VN"}
+    result = infer_scope(source, product("137 ml"))
+    assert result.scope_match == ScopeMatch.UNKNOWN and result.needs_scope_resolution
+
+
 def test_stored_placements_do_not_cross_source_versions_or_passage_identity() -> None:
     source = page("Sizes: 120 ml and 240 ml.")
     source["passage_scopes"] = [

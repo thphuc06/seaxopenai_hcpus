@@ -415,9 +415,19 @@ def phase_three_probe(database: Path, case_id: str) -> PhaseThreeProbe:
                             anchor_passage_id=checked_scope_anchor(connection, row, validations))
                   for row in connection.execute(
                       "SELECT source_version_id,passage_id,scope_match,decided_by FROM passage_scopes WHERE run_id=?", (run["id"],))]
-        private = [str(row[0]) for row in connection.execute("SELECT p.text FROM passages p JOIN source_versions sv "
-            "ON sv.id=p.source_version_id JOIN sources s ON s.id=sv.source_id WHERE s.case_id=? AND s.visibility='PRIVATE'",
-            (case_id,)) if row[0]]
+        source_passages = list(connection.execute(
+            "SELECT p.text,p.id AS passage_id,sv.id AS version_id,s.id AS source_id,s.visibility "
+            "FROM passages p JOIN source_versions sv ON sv.id=p.source_version_id "
+            "JOIN sources s ON s.id=sv.source_id WHERE s.case_id=?", (case_id,)))
+        public_texts = [str(row["text"]) for row in source_passages if row["visibility"] == "PUBLIC" and row["text"]]
+        private: list[str] = []
+        for row in source_passages:
+            if row["visibility"] != "PRIVATE":
+                continue
+            private.extend(str(row[key]) for key in ("passage_id", "version_id", "source_id"))
+            text = str(row["text"] or "")
+            if text and not any(text in public for public in public_texts):
+                private.append(text)
         for row in connection.execute("SELECT explain_json FROM field_results WHERE case_id=? AND superseded_by IS NULL", (case_id,)):
             private.extend(str(step["rule"]) for step in json.loads(row[0] or "[]") if step.get("rule"))
         private.extend(str(value) for value in (run["model"],) if value and value not in {"FALLBACK", "REPLAY"})
@@ -438,13 +448,19 @@ def run_phase_three(client: httpx.Client, state: Callable[[str], CaseState], cou
         require(result.outcome == "ADMITTED", "catalogue must be admitted")
         current = probe(case_id)
         require(current.mode == expected_mode.upper(), "catalogue run mode differs")
-        require(current.stop_reason is None and current.status == "COMPLETED", f"{current.status}: {current.stop_reason}")
+        require(current.stop_reason is None and current.status in {"COMPLETED", "WAITING_REVIEW"},
+                f"{current.status}: {current.stop_reason}")
         require(any(row.decided_by == "CODE" and row.scope_match == "MATCH" for row in current.scopes), "no code MATCH")
         require(any(row.decided_by == "CODE" and row.scope_match == "MISMATCH" for row in current.scopes), "no code MISMATCH")
         if expected_mode == "fallback":
             require(any(row.scope_match == "UNKNOWN" for row in current.scopes), "size-less scope should remain unresolved")
             require(not any(row.decided_by == "AGENT_VERIFIED" for row in current.scopes), "fallback invented an agent placement")
-            require(not any(effect.get("before") != effect.get("after") for effect in current.effects), "fallback invented an agent effect")
+            for effect in current.effects:
+                if effect.get("before") != effect.get("after"):
+                    provenance = effect.get("decided_by")
+                    require(effect.get("before") is not None and effect.get("after") is not None
+                            and isinstance(provenance, list) and bool(provenance)
+                            and all(owner == "CODE" for owner in provenance), "fallback invented an agent effect")
         else:
             require(any(row.decided_by == "AGENT_VERIFIED" and row.scope_match == "MATCH" and row.anchor_passage_id
                         for row in current.scopes), "recorded code-checked anchor absent")

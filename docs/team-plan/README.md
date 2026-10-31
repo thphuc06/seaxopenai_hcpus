@@ -217,11 +217,21 @@ Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
 |---|---|---|
 | code | `pin_revision`, `scope_check`, `policy:<field>`, `publish`, `publish:blocked`, `stale:mark`, `run:stop` | code |
 | model | `extract`, `extract:retry`, `canon:learn`, `claims:audit` | llm (khi chạy fallback thì là code) |
-| agent | `scope:code_prepass`, `agent:start`, `agent:tool:<name>`, `agent:proposal`, `scope:validate`, `agent:effect`, `agent:stop` | llm (tool chạy bằng code) |
+| agent | `scope:code_prepass`, `agent:start`, `agent:scope_single`, `agent:tool:<name>`, `agent:proposal`, `scope:validate`, `agent:effect`, `agent:stop` | llm (tool và scope validation chạy bằng code) |
+| retrieval | `embed:ingest`, `embed:query`, `retrieval:index`, `retrieval:search` | llm cho embedding; code cho index/search |
 | gap | `gap:hop<n>:<name>`, `gap:stop` | code |
 | web | `agent:web_scout`, `web:search`, `web:fetch`, `web:snapshot`, `web:skip`, `web:stop` | llm/code |
 
 `detail` luôn là JSON. Các khóa chuẩn: `replayed`, `model`, `prompt_version`, `stop_reason`, `budget` (`{used, cap}` cho model_calls, tool_calls, seconds), `before`/`after` (cho `agent:effect`).
+
+S3 scope validation stores the target in `input_refs`, the anchor in `output_refs`,
+and `accepted`, `reason`, `scope_match` in detail. Only a current-run code
+validation with accepted=true establishes a verified placement; raw proposals do
+not. `agent:effect` remains P1's before/after code-policy result.
+P2's additive `app.agent.retrieval.reindex_sources(ctx, source_version_ids)` and
+`search_case_corpus(ctx, query, *, k=8)` bind server-owned context through
+`app.retrieval.search.run_context(ctx)`. P1 has not enabled paid indexing in its
+run. Ordinary expert GET search is unbound, read-only BM25; no embedding call.
 
 ### 7.4 `data-testid` (P3 → P4 E2E/video), giữ ổn định từ S1
 

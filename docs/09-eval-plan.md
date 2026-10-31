@@ -189,6 +189,15 @@ instead of REGISTRY_ERROR, without importing unrelated demo records. Reports
 disclose that registry-discovery coverage is outside this isolated corpus.
 Original frozen inputs, first-run reports and labels remain unchanged.
 
+The S3 catalogue check accepts COMPLETED or WAITING_REVIEW with no stop reason:
+run status summarizes all findings, so reviewable findings can remain after the
+target scope step finishes. Evidence/anchor/effect requirements remain mandatory;
+WAITING_EVIDENCE and incomplete/error states do not pass this catalogue scenario.
+Fallback may emit P1's `agent:effect` trace after code pre-pass changes a policy
+result. Such a change passes only with nonempty all-CODE placement provenance;
+unlabelled or model/agent-attributed changes still fail, and no AGENT_VERIFIED
+placement is allowed in fallback.
+
 latency (median/max), model calls, input/output tokens, estimated cost, stop_reason, number of manager turns/hops, number of review tasks created.
 
 ## FR coverage (cross-check)

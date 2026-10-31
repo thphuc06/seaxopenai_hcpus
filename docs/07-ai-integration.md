@@ -587,3 +587,75 @@ repaired Hydrating, injection and EVIDENCE_ADDED acceptance gate: 255 passed,
 provenance corrections was 982 passed/7 failed/14 skipped/+2 subtests; those two
 P2 failures subsequently passed. Five P1 acceptance nodes remain WAITING, listed
 with concrete CCRs in the P2 ExecPlan. No complete S2 gate is claimed.
+
+### Phase 3 scope and retrieval (P2 Stage B)
+
+The two resolve_all(ctx, observations, fields) signatures are unchanged. Scope
+pre-pass loads grounded, active case/tenant source versions in stored reading
+order and applies normalize.volumes_in / compare.same_volume. Every explicit-size
+passage is decided in code. Only size-less passages with grounded claims for
+waiting fields are pending. Empty sections cannot establish a structural group;
+instruction-bearing passages cannot establish anchors. Other source-level scope
+exclusions remain authoritative.
+
+scope_resolution uses one strict ScopeProposals response through llm.client.parse
+at agent:scope_single / scope-single-v1. The input includes variant, all passages
+shown, source-version IDs, locator/section/order, explicit sizes, code labels and
+selected pending IDs, escaped inside SOURCE_DATA. Gateway identity includes this
+whole input, instructions, model, schema, effort, token cap and the empty tool
+schema list. No retrieval tool is invoked by the single-call path. Manager loops
+remain unimplemented Could work. Beyond AGENT_SINGLE_CALL_MAX, remaining passages
+stay UNKNOWN with SCOPE_PENDING_LIMIT rather than an invented placement.
+
+Code accepts YES/NO only against the nearest preceding size-naming passage in
+the same version and contiguous nonempty section, with the corresponding code MATCH/MISMATCH
+label. Invalid YES becomes AGENT, invalid NO/UNSURE remains UNKNOWN. Duplicate or
+unrequested target IDs are discarded. Model reason text is not copied into
+publication or stored placement reasons. Code decisions survive gateway failures.
+Persist rechecks case revision and source validity before writing passage_scopes.
+Successful proposals use extraction_cache under scope-single-v1 and a separate
+SCOPE:<content identity> extractor key; no extraction/replay record is overwritten.
+Cached proposals are structurally revalidated; changed variant/source/model/schema
+invalidates the cache. Failed calls are not cached. Deferred placements stay
+unresolved on cache hits without another call for the same source context.
+
+Budget.agent().gateway() is a P2-local compatible view for the existing gateway:
+each retry and replay consumes the same child and root counters; usage is recorded
+at root and the earliest deadline controls provider waiting. Neither RunContext
+nor parse signatures change. Traces include scope:code_prepass, agent:start,
+agent:scope_single, agent:proposal, scope:validate and agent:stop. P1 still owns
+applying returned placements, re-running policy and tracing agent:effect before
+publication; current S2 run.py lacks this S3 hook. No verdict rule changes here.
+
+P2-3c 69221ea is merged. Retrieval retains index_source_version(sv_id) and
+search(case_id,query,*,k=8,mode='auto',allowed_sv_ids=None). Hits include stored
+passage/version/locator/section/text/header/scope/score/neighbours plus source_kind
+and dataset_origin. Stages include bm25/dense/fused/errors/metadata. The additive
+run_context(ctx) manager binds server-owned context; missing context gives labelled
+BM25 only. Ordinary reviewer reads stay unbound/model-free; P1's route must enforce
+REVIEWER/OPERATOR access and deny BUYER before search. Dense/hybrid provider quality
+is NOT VERIFIED. Embedding cache hashes exact contextual wire input/model/schema;
+recordings remain append-only and errors keep source evidence usable.
+
+Main-lane app.agent.retrieval provides reindex_sources(ctx, source_version_ids)
+after committed ingest and search_case_corpus(ctx, query, *, k=8) for an authorized
+agent caller. Both derive case/tenant/revision and source allowlists from stored
+server context. Reindex binds the root run; agent search binds the shared child
+gateway and charges the tool before retrieval. These helpers do not activate
+indexing or search inside the single-call scope path. P1 must invoke the reindex
+helper after ingest or bind run_context(ctx) around its post-commit store hook;
+before a run exists, ingestion remains BM25 only. Additive diagnostics from the
+auxiliary code are embed:ingest, embed:query, retrieval:index and retrieval:search; the wrapper traces
+agent:tool:search_case_corpus. SearchResult.stages carries read-only search details.
+README trace-list reconciliation is a CCR to P4, not an unauthorized shared edit.
+
+Accepted auxiliary DRAFT report: ten source-derived VI/EN expectations frozen
+before ranking, manifest SHA256
+f48a3109ff2b7dea1f8231ca6fc70d2aa5dc1202171153b8dcb2970e2efdd17d.
+BM25 Recall@3/MRR: VI 1.0000/1.0000 (5 queries), EN 0.6000/0.4667 (5),
+all 0.8000/0.7333 (10). Hybrid replay has REPLAY_MISS/NOT_INDEXED and no quality
+metric. Provider calls were not made. Exact handed-off report and immutable
+manifest remain in the auxiliary worktree backend/.venv/p2b3-retrieval-eval.md
+and p2b3-expected.json; P4 owns copying the report to docs/results. Fresh uploaded
+image transcription remains the open S2 limitation and is unrelated to this scope
+implementation. No provider record pass or completed S3 integration is claimed.

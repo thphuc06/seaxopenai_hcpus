@@ -162,3 +162,75 @@ def test_probe_accepts_only_grounded_current_producer_refs(tmp_path: Path, fault
     probe = phase_three_probe(path, "case-other")
     assert probe.scopes[0].anchor_passage_id == ("heading-units" if fault is None else None)
     assert path.read_bytes() == before
+
+
+@pytest.mark.parametrize("mode", ["fallback", "replay"])
+@pytest.mark.parametrize("code_effect", [False, True])
+@pytest.mark.parametrize("status,stop,passes", [
+    ("COMPLETED", None, True), ("WAITING_REVIEW", None, True),
+    ("WAITING_REVIEW", "RUN_DEADLINE", False), ("COMPLETED", "REPLAY_MISS", False),
+    ("PARTIAL", None, False), ("FAILED", None, False), ("RUNNING", None, False),
+    ("QUEUED", None, False), ("CANCELLED", None, False), ("WAITING_EVIDENCE", None, False),
+])
+def test_catalogue_status_preserves_review_work_without_accepting_failed_runs(
+        mode: str, code_effect: bool, status: str, stop: str | None, passes: bool) -> None:
+    catalogue = False
+
+    def state(case: str) -> CaseState:
+        fields = {key: field(key) for key in PUBLIC_FIELDS}
+        if case == "target-case" and not catalogue:
+            fields["skin_type"] = field("skin_type", "SINGLE_SOURCE")
+        return CaseState(1, fields, True, True, True)
+
+    def probe(case: str) -> PhaseThreeProbe:
+        scopes = [ScopeProbe(scope_match=match, decided_by="CODE", anchor_passage_id=None)
+                  for match in ("MATCH", "MISMATCH", "UNKNOWN")]
+        if mode == "replay":
+            scopes.append(ScopeProbe(scope_match="MATCH", decided_by="AGENT_VERIFIED", anchor_passage_id="size-heading"))
+        return PhaseThreeProbe(mode=mode.upper(), status=status if case == "target-case" else "COMPLETED",
+            stop_reason=stop if case == "target-case" else None, scopes=scopes,
+            effects=[{"before": "SINGLE_SOURCE", "after": "CONSISTENT", "decided_by": ["CODE"]}]
+                if mode == "replay" or code_effect else [],
+            registry_closed=True, private_fragments=[])
+
+    def transport(request: httpx.Request) -> httpx.Response:
+        nonlocal catalogue
+        if request.method == "POST":
+            catalogue = True
+            return httpx.Response(200, json={"event_id": "other-event", "outcome": "ADMITTED", "reason": "accepted",
+                "job_id": "other-job", "stale_fields": []})
+        return httpx.Response(200, json={"summary": "Stored source comparison"})
+
+    with httpx.Client(transport=httpx.MockTransport(transport), base_url="http://test") as client:
+        checks = run_phase_three(client, state, lambda: {}, probe,
+            "target-product", "target-case", "registry-product", "registry-case", expected_mode=mode)
+    assert all(check.status == "PASS" for check in checks) is passes
+
+
+@pytest.mark.parametrize("public_text", ["Shared company statement", "Heading: Shared company statement", "Other public text"])
+def test_probe_distinguishes_shared_public_text_from_private_source_identity(tmp_path: Path, public_text: str) -> None:
+    path = tmp_path / "privacy.db"
+    with closing(sqlite3.connect(path)) as connection:
+        connection.executescript("""
+            CREATE TABLE runs(id,case_id,case_revision,created_at,llm_mode,status,stop_reason,model);
+            CREATE TABLE passage_scopes(source_version_id,passage_id,scope_match,decided_by,run_id);
+            CREATE TABLE trace_steps(run_id,step,actor,error,detail);
+            CREATE TABLE passages(id,source_version_id,text);
+            CREATE TABLE source_versions(id,source_id);
+            CREATE TABLE sources(id,case_id,visibility);
+            CREATE TABLE field_results(case_id,superseded_by,explain_json);
+            INSERT INTO runs VALUES('latest','privacy-case',1,'2026-10-31','FALLBACK','COMPLETED',NULL,'FALLBACK');
+            INSERT INTO sources VALUES('private-document','privacy-case','PRIVATE');
+            INSERT INTO sources VALUES('public-label','privacy-case','PUBLIC');
+            INSERT INTO source_versions VALUES('private-version','private-document');
+            INSERT INTO source_versions VALUES('public-version','public-label');
+            INSERT INTO passages VALUES('private-passage','private-version','Shared company statement');
+        """)
+        connection.execute("INSERT INTO passages VALUES('public-passage','public-version',?)", (public_text,))
+        connection.commit()
+    before = path.read_bytes()
+    probe = phase_three_probe(path, "privacy-case")
+    assert ("Shared company statement" in probe.private_fragments) is ("Shared company statement" not in public_text)
+    assert {"private-document", "private-version", "private-passage"} <= set(probe.private_fragments)
+    assert not {"public-label", "public-version", "public-passage"} & set(probe.private_fragments)
+    assert path.read_bytes() == before

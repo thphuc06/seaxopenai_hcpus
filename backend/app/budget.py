@@ -127,6 +127,10 @@ class AgentBudget:
         own_remaining = self.deadline_s - (self.parent._clock() - self._started_at)
         return max(0.0, min(own_remaining, self.parent.remaining_s()))
 
+    def gateway(self) -> Budget:
+        """Budget-compatible view for the existing synchronous model gateway."""
+        return _AgentGatewayBudget(self)
+
     def _check(self, used: int, cap: int, reason: str) -> None:
         if self.parent.stop_reason:
             raise BudgetExceeded(self.parent.stop_reason)
@@ -155,3 +159,41 @@ class AgentBudget:
             "tool_calls": {"used": self.tool_calls, "cap": self.max_tool_calls},
             "seconds": {"used": self.parent._clock() - self._started_at, "cap": self.deadline_s},
         }
+
+
+class _AgentGatewayBudget(Budget):
+    """Delegate accounting to one child/root pair, including gateway retries."""
+
+    def __init__(self, child: AgentBudget) -> None:
+        self.child = child
+
+    @property
+    def stop_reason(self) -> str | None:
+        return self.child.stop_reason
+
+    def remaining_s(self) -> float:
+        return self.child.remaining_s()
+
+    def check_active(self) -> None:
+        self.child.parent.check_active()
+        if self.remaining_s() <= 0:
+            self.expire()
+
+    def expire(self) -> NoReturn:
+        parent = self.child.parent
+        parent._stop_reason = parent.stop_reason or (
+            "RUN_DEADLINE" if parent.remaining_s() <= 0 else "AGENT_DEADLINE")
+        raise BudgetExceeded(parent.stop_reason)
+
+    def take_model_call(self, step: str) -> None:
+        self.child.take_model_call(step)
+
+    def take_tool(self, name: str) -> None:
+        self.child.take_tool(name)
+
+    def record_usage(self, *, input_tokens: int, output_tokens: int, reasoning_tokens: int) -> None:
+        self.child.parent.record_usage(input_tokens=input_tokens, output_tokens=output_tokens,
+                                       reasoning_tokens=reasoning_tokens)
+
+    def usage(self) -> dict[str, dict[str, int | float]]:
+        return self.child.usage()

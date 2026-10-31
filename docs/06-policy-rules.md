@@ -86,6 +86,17 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+### S3 integration policy-v1.8
+
+The dataset contract's `scope.variant=MULTI` declares a source spanning variants;
+it is not a literal variant mismatch. Explicit product/market/version mismatches
+still exclude the source. MULTI sources require version-bound passage placement,
+even if extracted text currently contains zero or one size. Code places explicit
+sizes; size-less passages remain unresolved until the existing anchor-validation
+path establishes their scope. This fixes the integration boundary without changing
+fixtures or expected labels. P4 applied the repair under the user's sync conflict
+resolution instruction; generic volume/mass and metadata-precedence tests cover it.
+
 ### S3 policy-v1.7
 
 REQ accepts an ACTIVE REGISTRY_RECORD alongside NOTIFICATION_DOC, in both usable

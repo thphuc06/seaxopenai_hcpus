@@ -13,7 +13,7 @@ from app.models import (
 from app.pipeline import compare
 from app.pipeline.scope import listing_copies_reference
 
-POLICY_VERSION = "policy-v1.7"
+POLICY_VERSION = "policy-v1.8"
 
 
 def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str, JsonValue] | None) -> FieldDecision:

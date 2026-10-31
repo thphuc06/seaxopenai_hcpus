@@ -1,5 +1,28 @@
 # Contest decisions
 
+## D013 — S3 integration contracts and diagnostic isolation (14:28 ICT)
+
+Record P1's policy-v1.7 REQ rule and code-led registry closure, plus transaction-bound
+result chaining, as described in docs03/06. No new env switch or signature change.
+P2 delivers the single typed scope call with structural anchor checks; Manager and
+OTel remain optional/unimplemented. Ordinary expert search is BM25-only; provider
+hybrid quality and paid indexing integration remain unverified. README section7
+now records actual scope/embed/retrieval trace names and context helper boundaries.
+
+P4 consumes accepted target/anchor trace refs rather than assuming serialized
+placement fields in detail. Blind evaluation supplies a runtime-only empty synthetic
+registry and discloses that isolated corpus boundary. Preserve original source/gold
+freezes and first-run reports. Both repairs have independent adverse variants and
+do not change published policy or fixtures. Pre-S3 stored result history requires a
+separately authorized reset or migration; the gate never resets the user's DB.
+
+Integration repair: policy-v1.8 recognizes the documented MULTI variant marker
+as a request for passage scope, preserving product/market/version exclusions.
+Previously the generic literal comparison discarded the entire catalogue before
+P2 could see it. Six unrelated volume/mass/metadata variants failed first; the
+208-test focused scope/policy/agent/acceptance/guard gate then passed. P4 applied
+this narrow P1 repair under the user's instruction to resolve integration conflicts.
+
 ## D012 — S3 interface checkpoint, Stage B isolated (13:42 ICT)
 
 Publish contract-3 at phase2 with P1's six typed role/query-checked501 GET stubs
