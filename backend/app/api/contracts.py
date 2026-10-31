@@ -1,11 +1,11 @@
 """P1 S1 transport contracts; shared findings stay in app.models."""
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import JsonValue
+from pydantic import Field, JsonValue
 
 from app.models import (
     AdmitResult, Citation, ContractModel, DatasetOrigin, EventResource,
-    EventType, RunStatus,
+    EventType, RunStatus, Verdict, ReviewState, PassportField,
 )
 
 
@@ -125,3 +125,89 @@ class MetricsResponse(ContractModel):
 
 class ResetResponse(ContractModel):
     status: str
+
+
+ReviewDecision = Literal["APPROVE", "OVERRIDE", "REJECT"]
+
+
+class ReviewOverride(ContractModel):
+    verdict: Verdict
+    citations: list[Citation]
+    public_text: str = Field(min_length=1)
+
+
+class ReviewRequest(ContractModel):
+    result_id: str = Field(min_length=1)
+    case_revision: int = Field(ge=0, strict=True)
+    decision: ReviewDecision
+    reason: str = Field(min_length=1)
+    override: ReviewOverride | None = None
+
+
+class ReviewResponse(ContractModel):
+    id: str
+    case_id: str
+    result_id: str
+    case_revision: int
+    reviewer_id: str
+    decision: ReviewDecision
+    reason: str
+    override: ReviewOverride | None
+    created_at: str
+    review_state: ReviewState
+
+
+class ReviewQueueItem(ContractModel):
+    id: str
+    case_id: str
+    field_key: str
+    result_id: str
+    case_revision: int
+    reason_code: str
+    verdict: Verdict
+
+
+class ResultVersionResponse(PassportField):
+    id: str
+    case_id: str
+    result_version: int
+    case_revision: int
+    created_at: str
+    superseded_by: str | None
+
+
+class EvidenceRequestResponse(ContractModel):
+    id: str
+    case_id: str
+    field_key: str
+    gap_id: str
+    reason: str
+    requested_from: Literal["SELLER", "BRAND"]
+    status: Literal["OPEN", "FULFILLED"]
+    created_at: str
+
+
+class CaseHistoryResponse(ContractModel):
+    case_id: str
+    case_revision: int
+    results: list[ResultVersionResponse]
+    events: list[EventLogItem]
+    reviews: list[ReviewResponse]
+    requests: list[EvidenceRequestResponse]
+
+
+class TextEvidence(ContractModel):
+    kind: Literal["TEXT"]
+    text: str = Field(min_length=1)
+
+
+class ImageEvidence(ContractModel):
+    kind: Literal["IMAGE"]
+    media_type: Literal["image/png", "image/jpeg"]
+    data_base64: str = Field(min_length=1)
+
+
+class EvidenceUploadRequest(ContractModel):
+    idempotency_key: str = Field(min_length=1)
+    field_keys: list[str] = Field(min_length=1)
+    content: Annotated[TextEvidence | ImageEvidence, Field(discriminator="kind")]
