@@ -62,6 +62,8 @@ def load_product_dir(path: str | Path, *, case_id_override: str | None = None,
 def reset(*, db_path: db.DBPath | None = None, fixtures_dir: str | Path | None = None) -> None:
     """Explicit demo reset, preserving the database file and its WAL ownership."""
     db.init_db(db_path)
+    from app.trace import duplicate_events
+    duplicate_events(reset=True, db_path=db_path)
     fixtures_dir = config.settings.fixtures_dir if fixtures_dir is None else fixtures_dir
     added: list[store.SourceVersionRef] = []
     with db.transaction(db_path) as connection:

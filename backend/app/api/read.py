@@ -44,7 +44,7 @@ def evidence(citations_json: str, role: Role) -> tuple[list[EvidencePassage], in
         if passage["visibility"] == "PRIVATE" and role not in {Role.OPERATOR, Role.REVIEWER, Role.SYSTEM}:
             hidden += 1
             continue
-        visible.append(EvidencePassage(**citation.model_dump(),text=passage["text"],source_label=passage["kind"],
+        visible.append(EvidencePassage(**citation.model_dump(),text=passage["text"],source_label="MOCK registry (SYNTHETIC)" if passage["kind"] == "REGISTRY_RECORD" else passage["kind"],
                                       visibility=passage["visibility"],captured_at=passage["captured_at"] or ""))
     return visible, hidden
 

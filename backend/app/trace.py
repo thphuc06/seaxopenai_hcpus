@@ -5,7 +5,22 @@ from time import perf_counter
 import sys
 from typing import Iterator
 from uuid import uuid4
-from . import db
+from threading import Lock
+from . import config, db
+
+_counter_lock = Lock()
+_duplicates: dict[str, int] = {}
+
+
+def duplicate_events(*, increment: bool = False, reset: bool = False, db_path: db.DBPath | None = None) -> int:
+    """Process-local metric; duplicate admission never adds durable rows."""
+    key = str(db_path or config.settings.db_path)
+    with _counter_lock:
+        if reset:
+            _duplicates[key] = 0
+        if increment:
+            _duplicates[key] = _duplicates.get(key, 0) + 1
+        return _duplicates.get(key, 0)
 
 
 class TraceWriter:

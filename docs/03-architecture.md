@@ -96,6 +96,23 @@ cannot verify. The design answers them with one budget per run, a hard deadline 
 
 ## As built (contest)
 
+### S3 P1 orchestration
+
+After public policy pass 1, unresolved fields invoke P2's scope resolver; P1 reloads
+version-bound stored placements, retains quantity exclusions, reruns policy and
+records agent:effect only when the code-decided verdict changes. P2's no-op stub
+does not establish agent completion. Registry gaps use at most two MOCK lookups
+under the same run Budget. Verified records retained before a later stop are
+included in the final policy pass and PARTIAL publication. Connector errors are
+traced REGISTRY_ERROR, preserving existing decisions. Usage is saved at run end.
+
+All new result rows, including reviewer publications, call chain.append in the
+publication writer transaction. Unchanged confirmations preserve their link.
+Upgrade boundary: existing pre-S3 result rows have no chain metadata and cannot
+accept a new link. Use an explicitly authorized demo reset for a fresh chain, or
+design a separate migration; neither reads nor publication silently backfill or
+repair history. No application database was reset during implementation checks.
+
 S2 integrated extraction may retain validated claims after an optional retry exhausts its
 Budget. After accepting those observations, P1 consumes the shared Budget.stop_reason through
 the normal PARTIAL path, stops further extraction/audit, and publishes only assessed fields.

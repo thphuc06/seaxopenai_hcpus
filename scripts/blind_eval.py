@@ -313,6 +313,11 @@ def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, roo
         database = Path(directory) / "blind.db"
         empty = Path(directory) / "empty-fixtures"
         empty.mkdir()
+        registry = empty / "synthetic/registry/mock_registry.json"
+        registry.parent.mkdir(parents=True)
+        registry.write_text(json.dumps({"dataset_origin": "SYNTHETIC",
+            "_about": "Isolated blind evaluation has no registry records; never import the demo corpus.",
+            "records": {}}), encoding="utf-8")
         with isolated_settings(mode, database, replay_freeze=False), patch.dict(os.environ, {"FIXTURES_DIR": str(empty)}), \
                 (patch("app.llm.client._call_api", deny_network) if mode != "record" else nullcontext()), \
                 (network_guard(record_budget.reserve) if record_budget is not None else nullcontext()):
@@ -338,7 +343,8 @@ def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, roo
             totals[result.status][system].add(score)
     return BlindReport(set_number=dataset.set_number, run_id=uuid4().hex,
         generated_at=datetime.now(timezone.utc).isoformat(), mode=mode.upper(), attempt="UNASSIGNED",
-        freeze=frozen, results=results, totals=totals, usage=usage, limitations=dataset.limitations,
+        freeze=frozen, results=results, totals=totals, usage=usage,
+        limitations=[*dataset.limitations, "Registry corpus is intentionally empty; this blind run evaluates supplied evidence, not registry-discovery coverage."],
         accounting_complete=accounting_complete)
 
 

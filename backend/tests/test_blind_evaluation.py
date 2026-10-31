@@ -174,3 +174,28 @@ def test_record_crash_stops_shared_session_and_preserves_error_report(tmp_path: 
         assert later.results[0].error
         assert (tmp_path / "reports/blind-set7.json").read_bytes() == retained
     config.reload_settings()
+
+
+@pytest.mark.parametrize("number", ["712345/26/CBMP-HN", "835791/26/CBMP-HCM"])
+def test_blind_registry_is_empty_and_does_not_import_demo_records(tmp_path: Path, number: str) -> None:
+    manifest, dataset = sample_set(tmp_path)
+    listing = tmp_path / "fixtures/blind/sample/listing.v1.json"
+    snapshot = json.loads(listing.read_text(encoding="utf-8"))
+    snapshot["passages"].append(dict(id="identifier-line", locator="notification", section="notification_number",
+        text="Số công bố: " + number))
+    listing.write_text(json.dumps(snapshot), encoding="utf-8")
+    registry = tmp_path / "fixtures/synthetic/registry/mock_registry.json"
+    registry.parent.mkdir(parents=True)
+    registry.write_text(json.dumps({"records": {number: {
+        "product_name": "Different sample lotion", "holder": "Unrelated Demo Company",
+        "status": "ACTIVE", "issued": "2026-10-31"}}}), encoding="utf-8")
+    frozen = blind.freeze_inputs(tmp_path, manifest, dataset, tmp_path / "freeze.json")
+    before = {name: (tmp_path / name).read_bytes() for name in frozen.hashes}
+    report = blind.run_set(dataset, frozen, "fallback", 0, root=tmp_path)
+    result = report.results[0]
+    assert result.error is None
+    assert "REGISTRY_ERROR" not in result.stops
+    identifier = next(field for field in result.fields if field.field_key == "notification_number")
+    assert identifier.candidate == "INSUFFICIENT"
+    assert any("registry" in note.lower() and "empty" in note.lower() for note in report.limitations)
+    assert {name: (tmp_path / name).read_bytes() for name in frozen.hashes} == before

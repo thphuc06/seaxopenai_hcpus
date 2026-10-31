@@ -4,7 +4,7 @@ import sqlite3
 import unicodedata
 from uuid import uuid4
 from pydantic import JsonValue
-from app import db
+from app import chain, db
 from app.models import FieldDecision, Verdict, DependsOn
 from app.pipeline import policy
 from app.trace import TraceWriter
@@ -161,6 +161,7 @@ def _record_result(connection: sqlite3.Connection, decision: FieldDecision, run_
     placeholders = ",".join("?" for _ in record)
     # All column names are the closed set constructed above, never caller input.
     connection.execute(f"INSERT INTO field_results({columns}) VALUES({placeholders})", tuple(record.values()))
+    chain.append(connection, result_id)
     if previous:
         connection.execute("UPDATE field_results SET superseded_by=? WHERE id=?", (result_id,previous["id"]))
     return result_id, False
