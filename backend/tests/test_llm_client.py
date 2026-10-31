@@ -218,6 +218,30 @@ def test_expired_deadline_blocks_api_and_recording(context: RunContext, monkeypa
     assert context.budget.usage()["tokens"]["output_tokens"] == 10
 
 
+@pytest.mark.parametrize("mode,deadline", [("live", 0.5), ("record", 7.0)])
+def test_late_response_usage_is_traced_without_recording(
+    context: RunContext, monkeypatch: pytest.MonkeyPatch, mode: str, deadline: float,
+) -> None:
+    now = [0.0]
+    context.mode = mode
+    context.budget = Budget(deadline_s=deadline, _clock=lambda: now[0])
+
+    def provider(**request: object) -> Response:
+        now[0] = deadline + 1.0
+        return response(text='{"text":"different response"}')
+
+    monkeypatch.setattr(client, "_call_api", provider)
+    with pytest.raises(BudgetExceeded, match="RUN_DEADLINE"):
+        call(context, step="agent:variant", prompt_version="deadline-variant")
+    assert context.budget.model_calls == 1
+    assert context.budget.usage()["tokens"] == {
+        "input_tokens": 20, "output_tokens": 10, "reasoning_tokens": 3,
+    }
+    assert context.trace.rows[-1]["tokens_out"] == 10
+    assert context.trace.rows[-1]["error"] == "RUN_DEADLINE"
+    assert not list(config.settings.replay_dir.rglob("*.json"))
+
+
 def test_connection_error_sanitized(context: RunContext, monkeypatch: pytest.MonkeyPatch) -> None:
     def provider(**request: object) -> Response:
         raise APIConnectionError(message="private data", request=httpx.Request("POST", "https://example.invalid"))
