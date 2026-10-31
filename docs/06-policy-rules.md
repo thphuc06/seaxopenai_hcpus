@@ -83,3 +83,25 @@ gate. CL is implemented by P1 and consumed by P2 in Phase 2; the Phase 1 audit h
 | STALE | "A source this relied on changed on {date}. Re-checking." |
 
 Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verified product|chính hãng|hàng giả|an toàn`.
+
+## As built (contest)
+
+S1 P1 implements `policy-v1.1`: normalized comparison, ordered R1–R11, active notification requirement,
+family independence, value-led templates, citation dependencies and rule trails. `SourceObs` carries stored
+source/version/passage identity, kind/family/status/visibility/scope, normalized field value, quote and mapping
+provenance; optional case/tenant/access fields permit explicit access filtering. Only policy chooses verdict,
+review state and freshness. P2 remains the sole normalization/extraction implementation.
+
+Reference/reference disagreement uses ACROSS_SOURCES; listing/reference disagreement uses LISTING_VS_SOURCE.
+Self-conflict takes precedence once access, validity and scope have been checked. UNKNOWN scope caps the result
+at UNCERTAIN. Positive highlight passages combine within a source; a partial highlight list is not a negation.
+Empty normalized sets do not support a finding. A model mapping cannot create a conflict. Notification documents
+enter only their dependent identifier fields; unrelated fields do not acquire those dependencies.
+
+Publication validates every citation and dependency against stored evidence and case identity, checks contiguous
+NFC/whitespace-normalized quotes, rejects inactive/superseded evidence and forbidden public text, and compares
+the stored pinned revision with the current case revision atomically. Blocked decisions create no result or gap.
+Identical decisions may be confirmed without a new result version. REQ accepts NOTIFICATION_DOC in S1;
+registry, copy inference, claim-family and web rules remain in their scheduled later phases.
+
+CCR P1→P4: record this version and the explicit reference/reference locus in tracking/DECISIONS.md.

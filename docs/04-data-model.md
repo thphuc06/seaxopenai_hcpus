@@ -150,3 +150,12 @@ After integrating P4 skeleton cd4ae69, omitted DB and fixture paths resolve from
 signatures; optional explicit path overrides remain available. Type aliases use Python 3.11
 syntax. `SourceVersionRef` remains the frozen dataclass in store (id, source_id, version);
 P4 models.py currently defines no competing reference model. No policy/route/enum changed.
+
+S1 P1 adds `jobs(id, case_id, target_revision, trigger_event_id, status, run_id, created_at, finished_at)`.
+A partial unique index permits at most one QUEUED row per case; execution transitions through RUNNING
+to FINISHED. Jobs bind persisted events and runs. Seed reset deletes children before their referenced rows.
+Published results contain the complete decision trail and dependency pairs. Identical decisions update
+`confirmed_run_id`, `confirmed_at` and policy freshness instead of appending another result version.
+Gap and local evidence-request records use OPEN/CLOSED; a repeated unresolved field does not duplicate a request.
+The strict shared PassportResponse remains unchanged. Hidden citation counts and execution mode are projected
+through the existing P1 product presentation metadata and evidence response.
