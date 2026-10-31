@@ -249,3 +249,27 @@ backend/.venv/Scripts/python scripts/check_fixtures.py
 The renderer requires a Unicode TrueType font (Windows Arial or Linux DejaVu Sans;
 override with `--font`). It refuses real sources, readable transcripts in blur mode,
 and text that would overflow the canvas. Readable JSON transcripts are never changed.
+
+### P4-2b delivery (31 Oct, auxiliary branch)
+
+`fixtures/real/r1-hydrating-cleanser`, `r2-foaming-cleanser`, `r3-blemish-cleanser`
+and `r4-effaclar-gel` contain four REAL products and eight HTTP-captured sources:
+four Pharmacity listings, three CeraVe brand pages and the retailer's Effaclar 400ml
+reference. The 400ml page is a WEB_PAGE in the same seller family, not independent
+support for 200ml. Sources omit scope metadata for the documented code inference.
+Events 14–17 are present. Long Châu R1/R2 returned 403; both LRP VN host variants
+failed DNS resolution. No blocked source was transcribed or replaced with a search snippet.
+
+`scripts/capture_page.py` requires a matching REAL `product.json` first, with name
+or aliases matching the fetched h1. It follows redirects, records requested/final
+URL and response/text hashes, uses a 20-second HTTP timeout and an 8MB response
+limit, rejects missing product text, and refuses to overwrite an existing version.
+Use `--version N` for a later capture. `clean_html()` is the single proposed helper
+for P2 reuse; the CCR and observed limitations are in `docs/results/p4-2b-review.md`.
+
+Real gold has 20 DRAFT field labels with exact stored locators and rationale.
+R3's concentration-vs-ingredient-field target needs review; existing AC-04 is
+preserved. The 12-row blind DRAFT table is planned only, with no materialized
+blind fixtures or run. Phase 3 owns creating and freezing that dataset.
+Human batch review, capture failures, reproduction checks and CCRs are recorded
+in [the P4-2b review table](results/p4-2b-review.md).

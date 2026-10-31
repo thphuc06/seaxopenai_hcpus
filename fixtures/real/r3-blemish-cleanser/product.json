@@ -1,0 +1,23 @@
+{
+  "product_id": "REAL-PROD-R3",
+  "name": "CeraVe Blemish Control Cleanser",
+  "brand": "CeraVe",
+  "variant": "473ml",
+  "market": "VN",
+  "dataset_origin": "REAL",
+  "case_id": "REAL-CASE-R3",
+  "tenant_id": "demo-tenant",
+  "listing_id": "REAL-LISTING-R3",
+  "web": {
+    "enabled": true,
+    "brand_domains": [
+      "cerave.com.vn"
+    ],
+    "aliases": [
+      "Blemish",
+      "sữa rửa mặt giảm mụn",
+      "sữa rửa mặt hỗ trợ giảm mụn"
+    ]
+  },
+  "note": "Captured public product pages; expected answers require human review."
+}
