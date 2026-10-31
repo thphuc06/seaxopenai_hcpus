@@ -2,7 +2,7 @@
 
 | Milestone | Planned | Actual | Status |
 |---|---|---|---|
-| S0 | 10:30 | — | Pending integration |
+| S0 | 10:30 | 10:32 ICT | Complete; sync-0 62f759a pushed; all lanes, no WAITING |
 | S1 / M1 | 11:45 | — | Pending |
 | S2 / M2 | 13:00 | — | Pending |
 | S3 / M3 | 14:15 | — | Pending |

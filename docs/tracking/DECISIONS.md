@@ -21,3 +21,17 @@ These decisions make previously unspecified wire details explicit for consumers.
 ## D004 — Phase boundary
 P4-0 publishes skeleton then tooling on main. It does not merge other lanes or tag
 sync-0. P4-0c and the S0 gate remain separate tasks.
+
+## D005 — S0 vocabulary and operating configuration (10:32 ICT)
+Retain tested budget codes MODEL_CALL_LIMIT / TOOL_CALL_LIMIT / RUN_DEADLINE and
+AGENT_MODEL_CALLS / AGENT_TOOL_CALLS / AGENT_DEADLINE. README §7 and P2 prompt now
+agree; no runtime behavior or assertion changed. This closes P2's root-code CCR.
+Keep existing run/agent caps and WEB_SEARCH=off; use P2's measured model/effort
+recommendation in docs07 when configuring live work. No local .env change at this gate.
+
+## D006 — Frontend environment and S1 metadata (10:32 ICT)
+VITE_USE_MOCK=1|0 is browser-only, now in shared README §7.5. Frontend tests require
+Node >=24; this host's bundled 24.22.1 passes, system 22.15.1 fails TypeScript loading.
+Use a process-local PATH selection; no global upgrade or dependency pin change.
+S1 collection DTOs and live mode/hidden-count metadata remain P1/P4's CCR from P3.
+No scope cut at S0; retain all current tests and DRAFT gold awaiting human review.
