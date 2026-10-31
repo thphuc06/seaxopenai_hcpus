@@ -1,6 +1,6 @@
 """Pinned-revision orchestration. Extraction is a replaceable P2 seam."""
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import cast, Literal
 from uuid import uuid4
 import sqlite3
@@ -11,8 +11,9 @@ from app.budget import Budget, BudgetExceeded
 from app.context import RunContext
 from app.llm.client import LLMError
 from app.models import PUBLIC_FIELDS, FieldDecision, Readability, ReviewState, ScopeMatch, SourceKind, SourceStatus
-from app.pipeline import claims_audit, compare, extract, normalize, policy, publish
-from app.pipeline.scope import infer_scope, volume_claim_scope
+from app.pipeline import claims_audit, compare, extract, gaps, normalize, policy, publish
+from app.agent import scope_resolution
+from app.pipeline.scope import ScopeDecision, infer_scope, volume_claim_scope
 from app.trace import TraceWriter
 
 Extractor = Callable[[str, RunContext], extract.Extraction]
@@ -29,6 +30,8 @@ class Job:
 def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], ctx: RunContext,
                   extractor: Extractor) -> list[policy.SourceObs]:
     sv_id = str(source["source_version_id"])
+    if source["kind"] == "REGISTRY_RECORD":
+        return gaps.registry_observations(source, ctx)
     source = dict(source)
     source["passages"] = store.passages(sv_id)
     with db.transaction() as connection:
@@ -153,6 +156,57 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                 decision = policy.decide(field, observations, product, [], [])
                 decisions.append(decision)
                 trace.step("policy:" + field, detail={"rules": [r.model_dump(mode="json") for r in decision.explain]})
+            if not stop_reason:
+                try:
+                    fields = [d.field_key for d in decisions if d.needs_scope_resolution]
+                    if fields:
+                        outcome = scope_resolution.resolve_all(ctx, observations, fields)
+                        if outcome.stop_reason:
+                            stop_reason = outcome.stop_reason
+                        placements: dict[str, ScopeDecision] = {}
+                        for source in store.current_sources(ctx.case_id):
+                            source["passages"] = store.passages(str(source["source_version_id"]))
+                            with db.transaction() as connection:
+                                source["passage_scopes"] = [dict(row) for row in connection.execute("SELECT * FROM passage_scopes WHERE source_version_id=?", (source["source_version_id"],))]
+                            placements[str(source["source_version_id"])] = infer_scope(source, product)
+                        updated: list[policy.SourceObs] = []
+                        for observation in observations:
+                            if observation.field_key not in fields or observation.scope_match == ScopeMatch.MISMATCH:
+                                updated.append(observation)
+                                continue
+                            placed = placements[observation.source_version_id].for_passage(observation.passage_id).scope_match
+                            if observation.field_key == "volume":
+                                passage_text = str(product["passage_texts"].get(observation.passage_id, ""))
+                                quantity_scope, _ = volume_claim_scope(passage_text, observation.normalized)
+                                if quantity_scope != ScopeMatch.MATCH and placed != ScopeMatch.MISMATCH:
+                                    placed = quantity_scope
+                            updated.append(replace(observation, scope_match=placed))
+                        observations = updated
+                        after = [policy.decide(d.field_key, observations, product, [], []) if d.field_key in fields else d for d in decisions]
+                        for before, current in zip(decisions, after):
+                            if before.verdict != current.verdict:
+                                ctx.trace.step("agent:effect", detail={"field":current.field_key,"before":before.verdict.value,"after":current.verdict.value,
+                                    "passages":[p.passage_id for p in outcome.decisions],"decided_by":[p.decided_by for p in outcome.decisions]})
+                        decisions = after
+                    if not stop_reason:
+                        closed = gaps.close_gaps(ctx, decisions, observations)
+                        if closed.new_sv_ids:
+                            for source in store.current_sources(ctx.case_id):
+                                if source["source_version_id"] in closed.new_sv_ids:
+                                    observations.extend(gaps.registry_observations(source, ctx))
+                            decisions = [policy.decide(d.field_key, observations, product, [], []) if d.field_key in {"notification_number","responsible_company"} else d for d in decisions]
+                            identifiers = [d for d in decisions if d.field_key in {"notification_number","responsible_company"}]
+                            if all(d.gap is None for d in identifiers):
+                                ctx.trace.step("gap:stop", detail={"stop_reason":"GAP_CLOSED","registry":"MOCK","origin":"SYNTHETIC"})
+                        if budget.stop_reason:
+                            stop_reason = budget.stop_reason
+                        elif "REGISTRY_ERROR" in closed.stops:
+                            stop_reason = "REGISTRY_ERROR"
+                except BudgetExceeded as failure:
+                    stop_reason = failure.reason
+                    ctx.trace.step("run:stop", detail={"stop_reason":stop_reason})
+                except LLMError as failure:
+                    stop_reason, error = failure.code, type(failure).__name__
             if not stop_reason:
                 try:
                     decisions.extend(claims_audit.audit(ctx,[o for o in observations if o.source_kind == SourceKind.LISTING],observations))

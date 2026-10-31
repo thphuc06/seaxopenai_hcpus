@@ -86,6 +86,17 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+### S3 policy-v1.7
+
+REQ accepts an ACTIVE REGISTRY_RECORD alongside NOTIFICATION_DOC, in both usable
+and final cited support. Registry values come from stored, labelled MOCK passages;
+metadata cannot override those values or the source visibility/scope. Registry
+evidence is SYNTHETIC and public text labels it MOCK. Revoked records remain
+excluded from support and are described as the mock registry's revocation.
+Code compares normalized holder/company and number observations through the same
+policy and publish gate; a lookup never directly sets a verdict. Missing lookup
+attempts are remembered per case, normalized key and registry content revision.
+
 S2 integration correction: policy-v1.6 records version-bound passage scope in the
 claims auditor and the sourced broad hyaluronate ingredient-family mapping. The
 auditor calls the existing scope helper for each passage; MISMATCH is excluded,

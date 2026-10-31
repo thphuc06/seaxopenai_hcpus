@@ -6,6 +6,7 @@ from uuid import uuid4
 from app import config, db, seed, store
 from app.models import AdmitResult, EventEnvelope, EventOutcome, EventType, Role
 from app.pipeline.policy import stale_freshness
+from app.trace import duplicate_events
 
 
 @dataclass(frozen=True)
@@ -25,7 +26,7 @@ def _case(connection: sqlite3.Connection, event: EventEnvelope) -> sqlite3.Row |
         row = connection.execute("SELECT c.* FROM cases c JOIN products p ON p.id=c.product_id WHERE p.listing_id=?", (event.resource.id,)).fetchone()
     else:
         row = connection.execute("SELECT c.* FROM cases c JOIN sources s ON s.case_id=c.id WHERE s.id=?", (event.resource.id,)).fetchone()
-        if row is None and event.type == EventType.EVIDENCE_ADDED:
+        if row is None and (event.type == EventType.EVIDENCE_ADDED or event.type == EventType.SOURCE_CHANGED and event.payload.get("snapshot")):
             row = connection.execute("SELECT * FROM cases WHERE id=?", (event.payload.get("case_id"),)).fetchone()
     if row and (event.payload.get("case_id", row["id"]) != row["id"]
                 or event.payload.get("product_id", row["product_id"]) != row["product_id"]):
@@ -40,6 +41,7 @@ def admit(event: EventEnvelope, *, role: Role, actor_id: str, rules: AdmissionRu
         accepted = bool(actor_id.strip()) and allowed and event.type in rules.producers.get(event.producer, frozenset())
         existing = connection.execute("SELECT id FROM events WHERE idempotency_key=?", (event.idempotency_key,)).fetchone()
         if accepted and existing:
+            duplicate_events(increment=True)
             return AdmitResult(event_id=event.event_id, outcome=EventOutcome.DUPLICATE,
                                reason="Idempotency key already recorded", job_id=None, stale_fields=[])
         case = _case(connection, event) if accepted else None

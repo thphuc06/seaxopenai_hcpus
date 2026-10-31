@@ -13,7 +13,7 @@ from app.models import (
 from app.pipeline import compare
 from app.pipeline.scope import listing_copies_reference
 
-POLICY_VERSION = "policy-v1.6"
+POLICY_VERSION = "policy-v1.7"
 
 
 def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str, JsonValue] | None) -> FieldDecision:
@@ -159,7 +159,7 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                      source_version=o.source_version, locator=o.locator, excerpt=o.quote) for o in selected}
         dependency_obs = list(selected)
         if verdict == Verdict.INSUFFICIENT:
-            required = {SourceKind.NOTIFICATION_DOC} if field_key in {"notification_number", "responsible_company"} else {
+            required = {SourceKind.NOTIFICATION_DOC, SourceKind.REGISTRY_RECORD} if field_key in {"notification_number", "responsible_company"} else {
                 SourceKind.LISTING, SourceKind.BRAND_PAGE, SourceKind.PACKAGING_IMAGE}
             dependency_obs.extend(o for o in visible if o.source_kind in required)
         dependencies = sorted({(o.source_id, o.source_version_id) for o in dependency_obs})
@@ -180,6 +180,10 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                     else "Sources disagree on this field. Under review.")
         else:
             text = "Not verified: " + reason
+        if any(o.source_kind == SourceKind.REGISTRY_RECORD for o in selected):
+            text += " Includes MOCK registry evidence (SYNTHETIC)."
+        if field_key in {"notification_number", "responsible_company"} and any(o.source_kind == SourceKind.REGISTRY_RECORD and o.status == SourceStatus.REVOKED for o in visible):
+            text += " The MOCK registry (SYNTHETIC) lists this notification number as revoked."
         return FieldDecision(field_key=field_key, verdict=verdict, conflict_locus=locus, scope_match=scope,
             review_state=review, evidence_level=EvidenceLevel.PRODUCT_VERSION, seller_attributable=False,
             citations=[citations[k] for k in sorted(citations)],
@@ -259,7 +263,7 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                       known_ids=[],reason="The label information is unreadable; provide a clearer photo of the label")
         return finish(Verdict.INSUFFICIENT, [], reason=gap.reason, gap=gap)
     if field_key in {"notification_number", "responsible_company"} and not any(
-        o.source_kind == SourceKind.NOTIFICATION_DOC for o in usable
+        o.source_kind in {SourceKind.NOTIFICATION_DOC, SourceKind.REGISTRY_RECORD} for o in usable
     ):
         step("REQ", "MISSING", "No active notification document on file")
         gap = Gap(field_key=field_key, missing_kind="NOTIFICATION_DOC", needed_doc="Active notification document",
@@ -297,7 +301,7 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
         selected = [o for o in usable if o.source_kind == SourceKind.LISTING or all(
             compare.compatible(field_key, claim.normalized, o.normalized) for claim in listing_obs)]
     if field_key in {"notification_number", "responsible_company"} and not any(
-        o.source_kind == SourceKind.NOTIFICATION_DOC for o in selected
+        o.source_kind in {SourceKind.NOTIFICATION_DOC, SourceKind.REGISTRY_RECORD} for o in selected
     ):
         step("REQ", "MISSING", "No active notification document supports the selected claim")
         gap = Gap(field_key=field_key,missing_kind="NOTIFICATION_DOC",needed_doc="Matching active notification document",

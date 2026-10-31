@@ -223,6 +223,26 @@ number before coding.
 
 ## As built (contest)
 
+### S3 P1 implementation and auxiliary reconciliation
+
+contract-3 remains authoritative: graph returns nodes {id,kind,label,status} and
+edges {source,target,relation}, with lowercase depends_on/cites. Node IDs are
+source-version/result identities; source labels include origin and registry MOCK
+labeling. Chain broken_at is a one-based integer position, adapted from the
+internal verifier's broken result ID. The auxiliary schema assertions were
+explicitly migrated to this contract under the user's Stage-B instruction;
+coverage of statuses, origin, dependencies, ACL and case isolation remains.
+
+Explain and observability are now stored-data reads. Only REVIEWER/OPERATOR get
+expert explanations; other authenticated roles receive the public projection.
+Expert extraction provenance includes available cache mapping provenance and
+supporting INCI claims. Missing mapping metadata is null, never invented.
+Observability counts actual model-attempt traces, stored run usage, NOOP/cache
+avoidance and process-local duplicate admission counts (reset with demo state).
+Duplicate counts do not persist across process restarts and add no durable rows.
+Search delegates to P2 with ACTIVE/current/case-bound version IDs; an empty stub
+is not proof of retrieval. OTel remains a 501 Could endpoint.
+
 S2 P1 Stage B implements the four typed routes in the existing cases router. Reviewer
 queue/history read stored state; reviews bind to the current revision under the publication
 writer transaction. Evidence uploads are private and use idempotent admission. Missing
