@@ -1,0 +1,12 @@
+{
+  "audit": {
+    "case_id": "preview-case",
+    "searches": [{"query": "Illustrative source search", "results": [
+      {"rank":1,"title":"Brand listing · preview","domain":"brand.example","url":"https://brand.example/item","classification":"OFFICIAL","decision":"fetched","reason":"Product identity matched in this UI sample"},
+      {"rank":2,"title":"Retail listing · preview","domain":"retailer.example","url":"https://retailer.example/item","classification":"RETAILER","decision":"lead only","reason":"Confirmation evidence only"},
+      {"rank":3,"title":"Search lead · preview","domain":"lead.example","url":"https://lead.example/item","classification":"LEAD","decision":"skipped","reason":"Page budget reached"}
+    ]}],
+    "snapshots":[{"url":"https://brand.example/item","captured_at":"2026-10-31T07:00:00Z","sha256":"preview-source-reference","passages_count":2,"identity_verified":true,"confirm_only":false}]
+  },
+  "observability":{"verdicts":{},"model_calls":{"live":0,"replayed":0,"avoided":0},"calls_by_step":{},"publish_passed":0,"publish_blocked":0,"agent_stops":{},"gap_stops":{},"vocabulary":{},"review_queue_size":0,"oldest_review_age_s":null}
+}

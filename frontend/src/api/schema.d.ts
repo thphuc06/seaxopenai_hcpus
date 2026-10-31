@@ -283,8 +283,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Chain */
-        get: operations["chain_api_cases__case_id__chain_get"];
+        /** Case Chain */
+        get: operations["case_chain_api_cases__case_id__chain_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -300,8 +300,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Graph */
-        get: operations["graph_api_cases__case_id__graph_get"];
+        /** Case Graph */
+        get: operations["case_graph_api_cases__case_id__graph_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -317,8 +317,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Search */
-        get: operations["search_api_cases__case_id__search_get"];
+        /** Case Search */
+        get: operations["case_search_api_cases__case_id__search_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1668,7 +1668,7 @@ export interface operations {
             };
         };
     };
-    chain_api_cases__case_id__chain_get: {
+    case_chain_api_cases__case_id__chain_get: {
         parameters: {
             query?: never;
             header?: {
@@ -1702,7 +1702,7 @@ export interface operations {
             };
         };
     };
-    graph_api_cases__case_id__graph_get: {
+    case_graph_api_cases__case_id__graph_get: {
         parameters: {
             query?: never;
             header?: {
@@ -1736,7 +1736,7 @@ export interface operations {
             };
         };
     };
-    search_api_cases__case_id__search_get: {
+    case_search_api_cases__case_id__search_get: {
         parameters: {
             query: {
                 q: string;

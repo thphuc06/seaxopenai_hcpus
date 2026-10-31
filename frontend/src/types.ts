@@ -13,10 +13,12 @@ export type OtelResponse = Schema['OtelResponse'];
 export type Citation = Schema['Citation'];
 export type PassportField = Schema['PassportField'];
 export type PassportResponse = Schema['PassportResponse'];
-export type PassportMetadata = Schema['PassportMetadata'];
+// Optional S4 display metadata proposal; absent values never imply source provenance.
+export interface WebSourceMetadata { source_version_id: string; url: string; captured_at: string; origin: DatasetOrigin; visibility: 'PUBLIC' | 'PRIVATE' }
+export type PassportMetadata = Schema['PassportMetadata'] & { web_sources?: WebSourceMetadata[] };
 export type Product = Schema['ProductResponse'];
-export type EvidencePassage = Schema['EvidencePassage'];
-export type EvidenceResponse = Schema['EvidenceResponse'];
+export type EvidencePassage = Schema['EvidencePassage'] & { source_url?: string };
+export type EvidenceResponse = Omit<Schema['EvidenceResponse'], 'citations'> & { citations: EvidencePassage[] };
 export type EventCatalogItem = Schema['EventCatalogItem'];
 export type EventLogItem = Schema['EventLogItem'];
 export type AdmitResult = Schema['AdmitResult'];
@@ -55,6 +57,7 @@ export interface PassportViewField extends Omit<PassportField, 'verdict'> {
 export interface PassportView extends Omit<PassportResponse, 'fields'> {
   fields: PassportViewField[];
   llm_mode?: ExecutionMode;
+  web_sources?: WebSourceMetadata[];
 }
 // Later-phase models are not in S1's OpenAPI; retain their shared S0 mirrors.
 export interface RuleStep { rule: string; outcome: string; detail: string }

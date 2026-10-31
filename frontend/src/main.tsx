@@ -10,7 +10,7 @@ import './styles.css';
 
 const useMock = import.meta.env.VITE_USE_MOCK === '1';
 const transport: Transport | undefined = useMock
-  ? async (path, init) => (await import('./mock/reviewTransport.ts')).reviewTransport(path, init)
+  ? async (path, init) => (await import('./mock/phase4Transport.ts')).phase4Transport(path, init)
   : undefined;
 
 function Root() {

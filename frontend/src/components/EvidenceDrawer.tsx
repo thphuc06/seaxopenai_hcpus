@@ -12,6 +12,12 @@ const SOURCE_TITLES = {
   PACKAGING_IMAGE: 'Packaging image', SELLER_UPLOAD: 'Seller document', REGISTRY_RECORD: 'Registry record', WEB_PAGE: 'Web page',
 };
 
+export function sourceDomain(value?: string): string | null {
+  if (!value) return null;
+  try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.hostname : null; }
+  catch { return null; }
+}
+
 export function EvidenceContent({ evidence, withinSource = false, allowPrivate = false }: { evidence: EvidenceResponse; withinSource?: boolean; allowPrivate?: boolean }) {
   const visible = evidence.citations.filter((citation) => allowPrivate || citation.visibility === 'PUBLIC');
   const hidden = evidence.hidden_citations + evidence.citations.length - visible.length;
@@ -21,7 +27,7 @@ export function EvidenceContent({ evidence, withinSource = false, allowPrivate =
       const first = group[0];
       if (!first) return null;
       return <section className="evidence-group" key={index}>
-        <header><h3>{first.source_label}</h3><p>{SOURCE_TITLES[first.source_kind]} · Version {first.source_version} · Captured {formatTime(first.captured_at)}</p>
+        <header><h3>{first.source_label}</h3><p>{SOURCE_TITLES[first.source_kind]} · Version {first.source_version} · Captured {formatTime(first.captured_at)}{sourceDomain(first.source_url) && <> · {sourceDomain(first.source_url)}</>}</p>
           {withinSource && group.length > 1 && <p className="source-conflict-note">These passages are from the same source snapshot. This is not attributed to the seller.</p>}
         </header>
         <div className={withinSource && group.length > 1 ? 'evidence-pair' : 'evidence-stack'}>

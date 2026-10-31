@@ -15,6 +15,7 @@ import type { FieldKey } from '../types.ts';
 import { withPassportMetadata } from '../passportView.ts';
 import { WhyDialog } from '../components/WhyDialog.tsx';
 import { RunGlassbox } from '../components/RunGlassbox.tsx';
+import { WebAudit } from '../components/WebAudit.tsx';
 
 const OUTCOMES = ['ADMITTED', 'NOOP', 'DUPLICATE', 'REJECTED'] as const;
 
@@ -50,7 +51,7 @@ export function TraceTable({ detail }: { detail: RunDetail }) {
 function RunInspector({ api, runId }: { api: ApiClient; runId: string }) {
   const load = useCallback((signal: AbortSignal) => api.getRun(runId, signal), [api, runId]);
   const { data, error, loading } = usePoll(load, 2_000);
-  return <section className="run-inspector" aria-label="Selected run">{error && <ErrorNotice error={error} technical />}{loading && <LoadingNotice />}{data && <TraceTable detail={data} />}</section>;
+  return <section className="run-inspector" aria-label="Selected run">{error && <ErrorNotice error={error} technical />}{loading && <LoadingNotice />}{data && <><TraceTable detail={data} /><WebAudit key={data.run.case_id} api={api} caseId={data.run.case_id} /></>}</section>;
 }
 
 function LivePassport({ api, productId, product }: { api: ApiClient; productId: string; product?: Product }) {

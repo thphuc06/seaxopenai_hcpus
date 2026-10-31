@@ -35,7 +35,7 @@ export function highlightExcerpt(text: string, excerpt: string): HighlightPart[]
 export function groupEvidence(citations: EvidencePassage[]): EvidencePassage[][] {
   const groups = new Map<string, EvidencePassage[]>();
   for (const citation of citations) {
-    const key = JSON.stringify([citation.source_kind, citation.source_label, citation.source_version, citation.captured_at]);
+    const key = JSON.stringify([citation.source_kind, citation.source_label, citation.source_version, citation.captured_at, citation.source_url ?? null]);
     const group = groups.get(key) ?? [];
     group.push(citation); groups.set(key, group);
   }

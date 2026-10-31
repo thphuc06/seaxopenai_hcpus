@@ -9,6 +9,7 @@ import { EmptyPanel, ErrorNotice, LoadingNotice } from '../components/Feedback.t
 import { formatTime } from '../components/PassportCard.tsx';
 import { reviewFindingTitle } from '../labels.ts';
 import { CaseExplorer } from '../components/CaseExplorer.tsx';
+import { WebAuditDisclosure } from '../components/WebAudit.tsx';
 
 export function DecisionHistory({ history }: { history: CaseHistory }) {
   return <>
@@ -90,6 +91,7 @@ function ReviewCase({ api, task, onReload, onPendingChange }: { api: ApiClient; 
     {history.loading && <LoadingNotice />}
     {history.data && <DecisionHistory history={history.data} />}
     <button type="button" aria-expanded={explore} onClick={() => setExplore((value) => !value)}>{explore ? 'Close evidence explorer' : 'Explore evidence and dependencies'}</button>
+    <WebAuditDisclosure key={task.case_id} api={api} caseId={task.case_id} />
     {explore && <CaseExplorer key={task.case_id} api={api} caseId={task.case_id} />}
   </article>;
 }
