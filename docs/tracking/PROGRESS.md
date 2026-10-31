@@ -3,6 +3,7 @@
 | Milestone | Planned | Actual | Status |
 |---|---|---|---|
 | S0 | 10:30 | 10:32 ICT | Complete; sync-0 62f759a pushed; all lanes, no WAITING |
+| contract-1 | 10:50 | 10:50 ICT | Gate passed; P4/P1/P2 contracts integrated, PHASE=0; S1 implementation pending |
 | S1 / M1 | 11:45 | — | Pending |
 | S2 / M2 | 13:00 | — | Pending |
 | S3 / M3 | 14:15 | — | Pending |

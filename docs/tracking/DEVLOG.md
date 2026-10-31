@@ -1,5 +1,23 @@
 # Development log — 31 Oct 2026
 
+## contract-1 — 10:50 ICT (T+0:50), contract gate passed
+
+- P4: phase-1 acceptance checkpoint and reporting support integrated; direct
+  publish.gate AC-16 test authorized by user. Stage B tests/scripts remain next.
+- P1: typed S1 routes/DTOs, role checks and 79 contract tests integrated through
+  f9ea7a5. Business handlers explicitly return 501. Producer configuration CCR
+  goes to P4 Stage B; keep transport DTOs in api/contracts.py for P3.
+- P2: 1abd79d confirms CONTRACT_NO_CHANGE; shared interfaces exist, production
+  client modes/extraction/normalization remain next.
+- Fresh baseline/post-merge: P4 141→141, P1 141→220, P2 220→220 passed, each +2
+  subtests. After P4, 14 phase-1 skips; zero phase-0 failures/errors/deselections.
+  Per-node comparisons retain all prior passing tests. Guards 4; fixtures 9/9;
+  backend collection 233. No conflicts or omitted contract lane.
+- Diagnostic S1 acceptance: 1 passed, 12 failed at 501, 1 missing-real-fixture
+  skip; no S1 completion claim. Exact pending nodes in tagged HANDOFF contract-1.
+- PHASE stays 0. No Stage B, CI/Render, dataset, frontend, paid smoke or server
+  work in this task. sync_check absent/NOT VERIFIED. No scope cut.
+
 ## sync-0 — 10:32 ICT (T+0:32), complete
 
 - P4: Done — ordered lane merges, handoff/tag 62f759a and p4 published. Blocked — none.

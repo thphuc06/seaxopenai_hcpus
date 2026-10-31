@@ -2,6 +2,7 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+| 10:48–10:50 ICT | P4 | mini-sync contract-1 | scoped P4/P1/P2 merges; P4 plan; tracking/HANDOFF | accepted | user requested mini-sync; Stage B remains separate | phase0 220 passed/14 skipped +2 subtests; guards 4; fixtures 9/9; S1 diagnostic 1 passed/12 pending failures/1 fixture skip |
 | 10:29–10:33 ICT | P4 | sync-gate 0 + self-review (3 read-only agents) | lane merges; P4 plan; shared docs; tracking | accepted | confirmed P4/Local | Python 141 + 2 subtests; guards 4; Node 23; API/mock builds; fixtures 9/9; all final 0 failed/skipped/deselected |
 | 10:16 ICT | P1 | final self-review + S0 handoff | 7 P1 files | edited | commit/push authorized after gate | lane report: 80 passed + 2 subtests; guards 4; fixtures 9/9; seed 1/1/4/4/14 |
 | 10:10–10:18 ICT | P2 | smoke/foundation and web recheck | AI code/tests/data, smoke, docs07, P2 plan | accepted | key corrected; second smoke and recheck authorized in lane | lane report: 97 offline passed; original 7 PASS/1 SKIP, supplemental domain FAIL and alternate PASS; 11 requests total |
