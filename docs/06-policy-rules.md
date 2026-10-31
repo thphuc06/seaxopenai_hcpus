@@ -86,6 +86,25 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+S2 P1 advances POLICY_VERSION to policy-v1.2. Pure scope inference and stored passage
+placements feed SourceObs; R7c joins copied listing passages with their reference family.
+The run supplies stored full passage text for copy comparison, while citations retain the
+validated extracted excerpts. Revoke admission changes only dependent freshness; the next
+run preserves unaffected result versions. The first trace step records stale:mark with zero
+model calls. Budget exhaustion with zero published results is PARTIAL.
+
+Reviewer state decisions remain in policy; publish.py validates and atomically stores the
+revision-bound result, citations, rebuilt dependencies and review record. Unresolved evidence
+requests stay OPEN; only a resolved field fulfills them. Claim rules reject unreadable/empty
+INCI evidence, cap unknown scope, and use seed provenance for adverse family matches. Model
+membership alone cannot accuse. Concentration compares ordered INCI items using P2-owned
+regulatory_limits.json (flat ingredient-to-number mapping or a limits object); absent data
+leaves UNCERTAIN with a note. The <=1% ordering boundary never implies a smaller cap.
+Normalized concentration claims use ingredient plus percent (claimed_percent accepted).
+All non-consistent claim findings require review; buyers receive only a neutral pending count.
+CCR P1→P4: record policy-v1.2 in tracking/DECISIONS.md. CCR P1→P2: align normalized claim keys
+free_from/concentration/treatment and supply the sourced regulatory mapping before S2 gate.
+
 S1 P1 implements `policy-v1.1`: normalized comparison, ordered R1–R11, active notification requirement,
 family independence, value-led templates, citation dependencies and rule trails. `SourceObs` carries stored
 source/version/passage identity, kind/family/status/visibility/scope, normalized field value, quote and mapping
