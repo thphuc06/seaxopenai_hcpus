@@ -343,7 +343,8 @@ def _snapshot(ctx: RunContext, product: dict[str, JsonValue], url: str, fetched_
         "scope": scope, "passages": passages}
     try:
         ctx.budget.agent().gateway().check_active()
-        ref = store.add_source_version(snapshot, case_id=ctx.case_id, origin="REAL")
+        ref = store.add_source_version(snapshot, case_id=ctx.case_id, origin="REAL",
+            expected_context=store.SourceWriteContext(ctx.run_id, ctx.tenant_id, ctx.case_revision))
     except (sqlite3.IntegrityError, ValueError):
         raise websearch.WebError("SOURCE_VERSION_CHANGED") from None
     return ref.id, True

@@ -93,6 +93,32 @@ def test_marketplace_publication_gate_is_atomic(market: CoreDB, change: str) -> 
     assert market.dump() == before
 
 
+@pytest.mark.parametrize("replacement", ["Volume: 211 ml.", "For combination skin; volume: 94 ml."])
+def test_marketplace_gate_rejects_superseded_evidence_atomically(market: CoreDB, replacement: str) -> None:
+    with TestClient(create_app()) as client:
+        assert client.post(f"/api/internal/marketplace/{market.product_id}/scan", headers=headers()).status_code == 200
+        rows = market.rows("SELECT * FROM marketplace_findings WHERE field_key='volume' ORDER BY seller_source_id")
+        snapshot = db.loads((config.settings.fixtures_dir / "marketplace" / market.product_id / "1.json").read_text(encoding="utf-8"))
+        snapshot["version"] = 2
+        snapshot["passages"] = [{"locator": "paragraph:2", "text": replacement}]
+        store.add_source_version(snapshot, case_id=None, origin="SYNTHETIC")
+        with db.transaction() as connection:
+            connection.execute("INSERT INTO runs(id,status,llm_mode,created_at) VALUES('revision-scan','RUNNING','FALLBACK',?)", (db.now_iso(),))
+        findings = [publish.MarketplacePublication(market.product_id, "revision-scan", str(row["seller_source_id"]), str(row["shop"]),
+            "volume", db.loads(str(row["value_json"])), str(row["display"]), str(row["cluster"]), True,
+            Citation.model_validate_json(str(row["citation_json"]))) for row in rows[:2]]
+        before = market.dump()
+        assert not publish.marketplace_gate(findings)
+        assert market.dump() == before
+        # A fixture rescan returns the immutable old version by hash, never restores it as current.
+        response = client.post(f"/api/internal/marketplace/{market.product_id}/scan", headers=headers())
+        assert response.status_code == 200
+        assert response.json()["stop_reason"] == "MARKETPLACE_CITATION_BLOCKED"
+        assert response.json()["findings"] == 0
+        assert client.get(f"/api/products/{market.product_id}/marketplace", headers=headers("BUYER")).json()["fields"] == []
+        assert not market.rows("SELECT * FROM marketplace_findings WHERE scan_id=?", (response.json()["scan_id"],))
+
+
 def test_budget_stop_cannot_publish_tallies_after_citation_gate_failure(market: CoreDB, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("AGENT_MAX_TOOL_CALLS", "1")
     config.reload_settings()

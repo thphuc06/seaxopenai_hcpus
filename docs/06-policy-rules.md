@@ -91,6 +91,23 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+### S5 current version and sync-4 reconciliation
+
+`POLICY_VERSION` is policy-v2.1. The integrated v2.1 scope correction retains an
+identity-matched WEB_PAGE whose sole inferred size differs as UNKNOWN, allowing
+R9w review; explicit product/variant/market mismatches remain excluded.
+Disagreeing retailers still cannot establish seller attribution. The P5 current
+marketplace-version check hardens the citation publication boundary, without
+changing policy decisions or their version. CCR P1→P4: DECISIONS must record both
+policy-v2 (R4w/R7w/R9w and independent marketplace semantics) and policy-v2.1
+(identity-matched retailer size handling); earlier v1.7/v1.8 are already recorded.
+
+P2 discovery is implemented at sync-4, and P4's human-approved checker now accepts
+conservative zero-finding scans of ambiguous REAL evidence. These deliveries
+supersede the historical stub/nonempty-checker blocker statements below. Full
+provider replay and OCR execution remain NOT VERIFIED. Gold and first-run
+evidence remain unchanged. No scope cut is introduced by this hardening task.
+
 ### S4 local policy-v2
 
 R4w removes a retailer version's ambiguous field values before general conflict

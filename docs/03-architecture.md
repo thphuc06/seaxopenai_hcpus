@@ -96,6 +96,34 @@ cannot verify. The design answers them with one budget per run, a hard deadline 
 
 ## As built (contest)
 
+### S5 freeze reconciliation against sync-4
+
+The S4 integration gate is recorded in `tracking/HANDOFF.md` at sync-4
+(`eca731b`, 31 Oct 16:08 ICT); it is an incremental offline gate, not a
+provider replay freeze. P2's bounded `agent/web_scout.py`,
+`connectors/websearch.py` and `pipeline/web_sources.py` now implement discovery,
+fetch/identity checks, immutable transport replay and persisted web audit.
+The earlier stub statements below describe historical checkpoints. The S3
+scope resolver is also implemented; its prepass/anchor results are code-checked.
+Provider whole-story replay and OCR execution remain NOT VERIFIED.
+
+P1 runtime modules include `api/read.py` (shared stored-data and transactional
+passport projection), `api/s4_contracts.py` (strict transport DTOs),
+`api/marketplace_service.py` (outside-case scan orchestration and projections),
+`pipeline/marketplace.py` (pure copy clustering/equality/majority) and
+`pipeline/publish.py` (transactional passport and marketplace publication).
+Marketplace citations must use current ACTIVE source versions; a rejected
+publication suppresses the entire new tally and creates no finding/review task.
+The immutable historical source version remains stored for audit/idempotency.
+
+Static hosting is not mounted by `main.py`; an existing `frontend/dist` requires
+P4 integration. Local Actions remain human-started. The single-process worker
+and pre-S3 chain migration/reset limits below remain in effect. No scheduler,
+reference-store or new scorecard is part of this freeze. The web ingestion
+revision check and source write still use separate transactions; the P1/P2
+atomic expected-context CCR remains open even though result publication itself
+rejects superseded runs.
+
 ### S4 local wiring after contract-4
 
 Orders freeze one BUYER projection, case revision and verified chain head in the

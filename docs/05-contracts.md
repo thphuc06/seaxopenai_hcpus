@@ -228,6 +228,23 @@ number before coding.
 
 ## As built (contest)
 
+### S5 sync-4 contract reconciliation
+
+The following checkpoint sections are historical where they describe stubs.
+At sync-4 the retained S1–S4 JSON routes have response models. Image transport
+declares PNG/JPEG/WebP binary content and remains501 while OCR/image delivery is
+deferred; eval metrics also remains501 (no new scorecard). OpenAPI defines these
+contracts independently of implementation availability. No new route is added
+by P5. Static fallback remains a P4-owned `main.py` integration CCR.
+
+P2 Web Scout is implemented behind the existing discover interface; provider
+whole-story replay remains NOT VERIFIED. Web-audit GET maps stored query-envelope
+result decisions, limits exposed provider metadata and omits internal terminal
+outcome receipts. It never searches. Receipt diff includes checked_at, so a
+timestamp-only recheck is a visible change; the approved S4 checker now permits
+that outcome. Conservative zero-finding REAL marketplace scans are also accepted
+by the sync-4 checker. No fixture/gold/recording change is implied.
+
 ### S3 P1 implementation and auxiliary reconciliation
 
 contract-3 remains authoritative: graph returns nodes {id,kind,label,status} and
@@ -325,9 +342,14 @@ Unreadable files or failed sellers are traced and skipped; ambiguous multi-value
 fields abstain. Empty normalized fields cannot vote. Publication of the entire
 scan is atomic through publish.marketplace_gate: stored quote/locator/version,
 PUBLIC listing, product ownership, ACTIVE status and a standalone RUNNING scan
-are checked before any finding or review task is inserted.
+are checked before any finding or review task is inserted. P5 also requires the
+cited source version to be current in that same transaction. Historical duplicate
+ingestion does not restore a superseded version or authorize its publication.
 
-GET marketplace reads the latest published scan only. BUYER/SELLER/SYSTEM receive
+GET marketplace selects the newest publish trace containing product_id and
+marketplace_fields (created_at/id descending), including an empty tally after
+a blocked publication. It does not select by run status or require findings.
+BUYER/SELLER/SYSTEM receive
 tallies; REVIEWER/OPERATOR additionally receive shops, citations, origins and
 outlier flags. Reads cause no work. Scan runs have case_id=NULL and do not change
 case revision, jobs/events, passport findings, chain or the passport's latest run.
@@ -479,6 +501,14 @@ count recorded outcomes; no duplicate counter is fabricated. `avoided` is zero u
 
 `run(job, *, extractor=None)` and `execute_job(job_id, *, extractor=None)` expose an optional injected
 extraction seam for offline tests; their default remains P2 `extract_source_version(sv_id, ctx)`.
+
+P5 ingestion hardening: `store.add_source_version(..., expected_context=None)` accepts
+`SourceWriteContext(run_id, tenant_id, case_revision)` from server-side callers. Web Scout
+supplies it. The store validates the run/case/revision/tenant and snapshot product inside
+its existing writer transaction before any source mutation. Stale or mismatched context
+raises `PermissionError("ACCESS_DENIED_OR_SUPERSEDED_RUN")`; existing callers without this
+optional keyword retain their behavior. Public REST and verdict-policy rules are unchanged.
+
 Admission uses an injectable frozen `AdmissionRules` adapter whose defaults read P4's shared
 `config.PRODUCER_EVENT_TYPES` and `config.NON_MATERIAL_FIELDS`; no duplicate allowlist is maintained.
 No new environment variable, REST route or trace-step name was introduced in Stage B.
