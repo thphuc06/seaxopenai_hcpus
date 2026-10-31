@@ -253,3 +253,20 @@ request needs a concrete OpenAPI schema now; P1 has not edited P4's shared model
 CCR P1→P4: config producer/type allowlist and non-material event fields · need:
 expose closed-set configuration for Phase 1 admission · why: config.py is P4-owned;
 Stage A adds route contracts only, not an alternative admission policy.
+
+### S1 P1 implementation
+
+The eleven S1 routes now operate on persisted data. Identity and response models from the checkpoint are
+unchanged. `POST /internal/events` and demo fire return admission immediately or after inline execution;
+ordinary requests dispatch the queued job through BackgroundTasks. Fixture names are constrained to the
+configured events directory. Event log rows preserve admission job/stale fields and the resulting run ID.
+PRIVATE citations and full passages are withheld from BUYER/SELLER; reviewer/operator/system views retain them.
+`GET /products` supplies hidden citation counts and the latest LIVE/REPLAY/FALLBACK mode in presentation metadata.
+No source text appears in metrics. DUPLICATE responses are not new event rows, so persisted event counts
+count recorded outcomes; no duplicate counter is fabricated. `avoided` is zero until measured later.
+
+`run(job, *, extractor=None)` and `execute_job(job_id, *, extractor=None)` expose an optional injected
+extraction seam for offline tests; their default remains P2 `extract_source_version(sv_id, ctx)`.
+Admission uses an injectable frozen `AdmissionRules` adapter whose defaults read P4's shared
+`config.PRODUCER_EVENT_TYPES` and `config.NON_MATERIAL_FIELDS`; no duplicate allowlist is maintained.
+No new environment variable, REST route or trace-step name was introduced in Stage B.

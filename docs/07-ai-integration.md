@@ -324,3 +324,77 @@ Official references checked on the day: [model](https://developers.openai.com/ap
 [web search](https://developers.openai.com/api/docs/guides/tools-web-search),
 [Agents SDK](https://openai.github.io/openai-agents-python/agents/),
 [usage](https://openai.github.io/openai-agents-python/usage/).
+
+### Phase 1 — P2 Stage B implementation (31 Oct 2026)
+
+The production gateway now exposes the existing parse/aparse signatures with fallback,
+replay, record and live behavior. Fallback raises API_ERROR with reason FALLBACK_MODE
+without a model debit; extract_source_version explicitly takes the deterministic
+path. Other attempts debit the shared run Budget, including replay hits and the
+single retry on HTTP 429/5xx. Provider retries are disabled. Input/output/reasoning
+usage is accumulated without counting reasoning tokens twice as output. Replay
+bills zero new tokens but consumes a model-call slot. Errors and traces contain
+codes rather than provider payloads.
+
+Replay identity includes the full shared message-builder input, image bytes hash,
+image detail, output schema, model, step, prompt version, effort, output cap and
+empty tool list. No tools are exposed by this extraction gateway. Record reuses
+existing entries; new complete files are atomically linked without replacing a
+concurrent writer. Live does not write files. Freeze forces live/record to load or
+raise REPLAY_MISS. Windows step-directory names replace ':' with '_' while the
+original step remains in the hash and recording metadata. All loaded output and
+metadata is validated. SDK 3.42 parses incomplete text eagerly, so the gateway
+uses the documented raw-response wrapper to inspect the envelope before invoking
+its parse method; malformed partial JSON retains INCOMPLETE and measured usage.
+The async adapter runs in a worker thread with a run deadline and cancellation
+signal; late provider results cannot be recorded or traced after cancellation.
+
+Normalization uses source-noted vocab_seed.json and legal_forms.json. Volume
+returns `{value: number, unit: "ml" | "g", by: "code"}`. Other fields use `value`:
+skin type and highlighted-ingredient values are lists, full INCI values are ordered
+keys (plus original `items`), identifiers/company values are strings. All include
+`by`; highlighted ingredients additionally include `unknown`. Unknown INCI entries
+retain their own keys; mixed unknown highlighted names remain unconfirmed instead
+of disappearing alongside seed matches. Company names preserve diacritics under
+NFC/casefold; only legal forms are removed. Proposed
+model normalizations cannot override code. Learned mappings remain Phase-2 work.
+This documents the existing dict-valued interface for P1 consumers; no signatures,
+shared schema, policy rule, route or configuration key changed.
+
+extract-v1 quotes are checked against the correct source version and locator,
+with NFC and whitespace collapse while preserving case/punctuation. Raw values
+must also occur in their quote. Invalid claims are dropped with INVALID_LOCATOR
+counts; null UNREADABLE claims remain signals. Injection patterns are data;
+injected sentences are excluded even if the model omits its flag. Decimal points,
+common abbreviations and dotted fluid-ounce units do not split instruction spans.
+The schema's model injection flag has no anchored locations, so flagged model
+responses are conservatively withheld with UNLOCATED_INJECTION; a known code
+pattern elsewhere cannot locate the model's warning. Skin/ingredient claims with
+negation in the containing stored sentence are withheld as UNSUPPORTED_POLARITY,
+including cropped model quotes. A separate positive occurrence remains usable.
+Source XML is
+escaped inside SOURCE_DATA, including source-supplied closing tags. Fallback uses
+generic bilingual labels and vocabulary and makes no model call. Source access
+is checked against the server case/tenant before reading cache or invoking the
+gateway. Claims and cache rows are persisted together; mapped_by is carried on
+returned Claim and in normalized.by because the shared table has no mapped_by
+column. Cache identity is source version, extract-v1 and extractor/mode/model,
+preserving FALLBACK/REPLAY provenance. Cache hits consume no model calls.
+
+Installed versions checked: openai 3.42.0, pydantic 2.14.2, pytest 9.2.0. Current
+references: [Python SDK raw responses, retries and timeouts](https://developers.openai.com/api/reference/python),
+[structured output](https://developers.openai.com/api/docs/guides/structured-outputs),
+[Pydantic models](https://docs.pydantic.dev/latest/concepts/models/),
+[async worker threads](https://docs.python.org/3/library/asyncio-task.html#asyncio.to_thread).
+No dependency was added. contract-1 a558fc9 was fetched and merged during Stage B.
+Its P1 business endpoints remain 501 stubs; a full P1 bootstrap is not claimed.
+No paid record pass is claimed here.
+The human-terminal record pass remains a Should follow-up, capped by P2-1.
+
+Independent Phase-1 validation after review: 122 focused tests passed (gateway,
+normalization, extraction, budget and guards), with zero failed/skipped/deselected.
+Cases include truncated SDK JSON, retries and freeze, late async completion,
+immutable recording files, malformed replay, tenant boundaries, Unicode/company
+identity, mixed unknown ingredients, source injection and cropped/negated quotes.
+No paid call or new recording was used in validation. The complete integration
+gate and exact P1 WAITING nodes are recorded in .agent/plans/P2.md.

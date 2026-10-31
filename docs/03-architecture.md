@@ -93,3 +93,19 @@ The diagram is the core design. These modules extend it; build each one if its f
 
 Known risks (planning estimates): a budget that only covers the agent, a soft deadline, and an agent whose output code
 cannot verify. The design answers them with one budget per run, a hard deadline with `PARTIAL`, and anchored placements.
+
+## As built (contest)
+
+S1 P1: admission writes the event, field-specific STALE flags, case revision and queued job in one
+SQLite write transaction. Duplicate keys write nothing; non-material listing events write only their event.
+One QUEUED job per case coalesces to the newest revision. `worker.execute_job` drains persisted jobs,
+inline for tests or via FastAPI BackgroundTasks for the single-process demo; a per-case lock serializes runs.
+This is not a crash-recovery or multi-process queue. No new app-lifespan integration is required.
+
+Runs pin their revision, construct one Budget, filter scope from stored metadata, invoke P2 extraction,
+apply public-field policy and the existing claims-audit hook, and publish through one transactional gate.
+Budget exhaustion preserves already verified observations and records PARTIAL plus the actual stop reason.
+Each publication rereads the current case revision under the writer lock. An outdated run cannot publish.
+Unchanged decisions retain their result version and record confirmation time/run; missing findings create
+deduplicated local evidence requests. Buyer GETs read stored rows; only an in-memory read counter changes.
+Source ingestion for material change events and reviewer workflows remain Phase 2 integration work.

@@ -26,6 +26,7 @@ class Budget:
     _stop_reason: str | None = None
     _clock: Callable[[], float] = field(default=monotonic, repr=False)
     _agent_budget: AgentBudget | None = field(default=None, init=False, repr=False)
+    _tokens: dict[str, int] = field(default_factory=lambda: {"input_tokens": 0, "output_tokens": 0, "reasoning_tokens": 0}, init=False, repr=False)
 
     def __post_init__(self) -> None:
         if self.max_model_calls < 0 or self.max_tool_calls < 0 or not math.isfinite(self.deadline_s) or self.deadline_s < 0:
@@ -43,6 +44,20 @@ class Budget:
 
     def remaining_s(self) -> float:
         return max(0.0, self.deadline_s - (self._clock() - self._started_at))
+
+    def check_active(self) -> None:
+        """Check the deadline without consuming another call."""
+        if self.remaining_s() <= 0 and self._stop_reason is None:
+            self._stop_reason = "RUN_DEADLINE"
+        if self._stop_reason:
+            raise BudgetExceeded(self._stop_reason)
+
+    def record_usage(self, *, input_tokens: int, output_tokens: int, reasoning_tokens: int) -> None:
+        counts = {"input_tokens": input_tokens, "output_tokens": output_tokens, "reasoning_tokens": reasoning_tokens}
+        if any(count < 0 for count in counts.values()):
+            raise ValueError("Token usage must be nonnegative")
+        for name, count in counts.items():
+            self._tokens[name] += count
 
     def _check(self, used: int, cap: int, reason: str) -> None:
         if self._stop_reason:
@@ -67,6 +82,7 @@ class Budget:
             "model_calls": {"used": self.model_calls, "cap": self.max_model_calls},
             "tool_calls": {"used": self.tool_calls, "cap": self.max_tool_calls},
             "seconds": {"used": self._clock() - self._started_at, "cap": self.deadline_s},
+            "tokens": dict(self._tokens),
         }
 
     def agent(self) -> AgentBudget:

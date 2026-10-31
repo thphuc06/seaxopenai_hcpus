@@ -1,0 +1,33 @@
+{
+  "_about": "Small seed created 2026-10-31 from docs/DATASET-SPEC.md section 6 and docs/04-data-model.md. Range phrases below are explicit demo conventions, not a general interpolation rule. Field cues transcribe the Phase-1 prompt with generic shortened notification/responsible-party phrases observed in source snapshots. Negation cues, separators and common sentence abbreviations are conservative extraction conventions reviewed in P2-1, not regulatory assertions.",
+  "ingredients": [
+    {"label": "NIACINAMIDE", "surfaces": ["niacinamide"], "inci": ["Niacinamide"]},
+    {"label": "HYALURONIC_ACID", "surfaces": ["hyaluronic acid", "sodium hyaluronate"], "inci": ["Hyaluronic Acid", "Sodium Hyaluronate"]},
+    {"label": "CERAMIDES", "surfaces": ["ceramides", "ceramide", "ceramide np", "ceramide ap", "ceramide eop"], "inci": ["Ceramide NP", "Ceramide AP", "Ceramide EOP"]},
+    {"label": "SALICYLIC_ACID", "surfaces": ["salicylic acid", "bha"], "inci": ["Salicylic Acid"]},
+    {"label": "GLYCERIN", "surfaces": ["glycerin", "glycerol"], "inci": ["Glycerin"]},
+    {"label": "ZINC", "surfaces": ["zinc", "kẽm"], "inci": ["Zinc", "Zinc PCA", "Zinc Gluconate"]}
+  ],
+  "skin": [
+    {"surfaces": ["da thường đến da dầu", "normal to oily", "normal-to-oily"], "values": ["NORMAL", "COMBINATION", "OILY"]},
+    {"surfaces": ["mọi loại da", "all skin types"], "values": ["ALL"]},
+    {"surfaces": ["da khô", "dry skin"], "values": ["DRY"]},
+    {"surfaces": ["da thường", "normal skin"], "values": ["NORMAL"]},
+    {"surfaces": ["da dầu", "oily skin"], "values": ["OILY"]},
+    {"surfaces": ["da hỗn hợp", "combination skin"], "values": ["COMBINATION"]},
+    {"surfaces": ["da nhạy cảm", "sensitive skin"], "values": ["SENSITIVE"]},
+    {"surfaces": ["da dễ nổi mụn", "da mụn", "acne-prone skin", "acne prone skin"], "values": ["ACNE_PRONE"]}
+  ],
+  "field_labels": {
+    "inci_list": ["full ingredients", "ingredients", "inci", "thành phần đầy đủ", "bảng thành phần", "thành phần"],
+    "key_ingredients": ["thành phần nổi bật", "key ingredients", "highlighted ingredients"],
+    "notification_number": ["số tiếp nhận phiếu công bố", "số tiếp nhận công bố", "số công bố", "notification number", "notification no"],
+    "responsible_company": ["tổ chức chịu trách nhiệm", "công ty chịu trách nhiệm đưa sản phẩm ra thị trường", "chịu trách nhiệm đưa sản phẩm ra thị trường", "công ty chịu trách nhiệm", "đơn vị chịu trách nhiệm", "responsible company", "responsible organisation"]
+  },
+  "injection_patterns": ["ignore previous instructions", "ignore all previous instructions", "bỏ qua hướng dẫn", "bỏ qua mọi hướng dẫn"],
+  "sentence_abbreviations": ["Denat.", "Ext.", "Extr.", "Fil.", "Co.", "Ltd.", "Dr.", "Mr.", "Mrs.", "Ms.", "e.g.", "i.e.", "fl.", "oz."],
+  "negation_phrases": ["not", "no", "without", "free from", "free-from", "không", "không chứa", "không dành cho"],
+  "ingredient_separators": ["and", "và", "&", "+"],
+  "free_from": {"alcohol": ["Alcohol", "Alcohol Denat.", "Ethanol"], "fragrance": ["Parfum", "Fragrance"], "paraben": ["*paraben"]},
+  "treatment_words": ["trị mụn", "đặc trị", "chữa"]
+}
