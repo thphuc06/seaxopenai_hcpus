@@ -16,6 +16,49 @@ class ReviewError(ValueError):
         self.status = status
 
 
+def _stored_decision(connection: sqlite3.Connection, row: sqlite3.Row) -> FieldDecision:
+    value = {name: row[name] for name in ("field_key","verdict","conflict_locus","scope_match","review_state","evidence_level","seller_attributable","public_text")}
+    for name in ("citations","depends_on","notes","explain"):
+        value[name] = db.loads(row[name+"_json"])
+    gap = connection.execute("SELECT * FROM gaps WHERE case_id=? AND field_key=? AND status='OPEN'",(row["case_id"],row["field_key"])).fetchone()
+    value.update(gap={"field_key":row["field_key"],"missing_kind":gap["missing_kind"],"needed_doc":gap["needed_doc"],"known_ids":db.loads(gap["known_ids_json"]),"reason":"Further evidence is required"} if gap else None,needs_scope_resolution=False)
+    return FieldDecision.model_validate(value)
+
+
+def confirm_unchanged(run_id: str, case_id: str, excluded_fields: list[str]) -> list[FieldDecision]:
+    """Validate retained CURRENT findings and bind their review tasks to this revision."""
+    retained: list[FieldDecision] = []
+    confirmed_ids: list[tuple[str,bool]] = []
+    blocked: list[tuple[str,str]] = []
+    with db.transaction() as connection:
+        run = connection.execute("SELECT case_revision FROM runs WHERE id=? AND case_id=?",(run_id,case_id)).fetchone()
+        if not run:
+            return retained
+        for row in connection.execute("SELECT * FROM field_results WHERE case_id=? AND superseded_by IS NULL AND freshness='CURRENT'",(case_id,)).fetchall():
+            if row["field_key"] in excluded_fields:
+                continue
+            previous = _stored_decision(connection,row)
+            finding = policy.reconfirm_decision(previous,row["case_revision"],run["case_revision"])
+            reason = _validate(connection,finding,run_id,case_id)
+            if reason:
+                blocked.append((row["field_key"],reason))
+                continue
+            result_id = row["id"]
+            unchanged = finding == previous
+            if unchanged:
+                connection.execute("UPDATE field_results SET confirmed_run_id=?,confirmed_at=? WHERE id=?",(run_id,db.now_iso(),result_id))
+            else:
+                result_id,_ = _record_result(connection,finding,run_id,case_id,db.now_iso())
+            _record_review_task(connection,finding,case_id,result_id)
+            retained.append(finding)
+            confirmed_ids.append((result_id,unchanged))
+    for identity,unchanged in confirmed_ids:
+        TraceWriter(run_id).step("publish",output_refs=[identity],detail={"confirmed":unchanged,"unchanged":unchanged})
+    for field,reason in blocked:
+        TraceWriter(run_id).step("publish:blocked",detail={"field_key":field,"reason":reason})
+    return retained
+
+
 def review(case_id: str, result_id: str, revision: int, decision: str, reason: str,
            override: dict[str, JsonValue] | None, reviewer_id: str) -> str:
     """One writer transaction binds review and publication to the exact revision."""
@@ -28,13 +71,8 @@ def review(case_id: str, result_id: str, revision: int, decision: str, reason: s
         bound_revision = confirmation[0] if confirmation else old["case_revision"]
         if case["revision"] != revision or bound_revision != revision or old["superseded_by"]:
             raise ReviewError(409, "Review revision is no longer current")
-        value = {name: old[name] for name in ("field_key","verdict","conflict_locus","scope_match","review_state","evidence_level","seller_attributable","public_text")}
-        for name in ("citations","depends_on","notes","explain"):
-            value[name] = db.loads(old[name+"_json"])
-        gap = connection.execute("SELECT * FROM gaps WHERE case_id=? AND field_key=? AND status='OPEN'",(case_id,old["field_key"])).fetchone()
-        value.update(gap={"field_key":old["field_key"],"missing_kind":gap["missing_kind"],"needed_doc":gap["needed_doc"],"known_ids":db.loads(gap["known_ids_json"]),"reason":"Further evidence is required"} if gap else None,needs_scope_resolution=False)
         try:
-            finding = policy.reviewed_decision(FieldDecision.model_validate(value),decision,override)
+            finding = policy.reviewed_decision(_stored_decision(connection,old),decision,override)
         except ValueError as error:
             raise ReviewError(422, str(error)) from error
         now, run_id, review_id = db.now_iso(), "review_run_"+uuid4().hex, "review_"+uuid4().hex
@@ -148,6 +186,13 @@ def _record_gap(connection: sqlite3.Connection, decision: FieldDecision, run_id:
                            ("request_"+uuid4().hex,case_id,decision.field_key,gap_id,gap.reason,now))
 
 
+def _record_review_task(connection: sqlite3.Connection, decision: FieldDecision, case_id: str, result_id: str) -> None:
+    if decision.review_state == "NEEDS_REVIEW" and not connection.execute(
+        "SELECT 1 FROM review_tasks WHERE result_id=? AND status='OPEN'", (result_id,)).fetchone():
+        connection.execute("INSERT INTO review_tasks VALUES(?,?,?,?,?,'OPEN')",
+                           ("task_"+uuid4().hex,case_id,decision.field_key,result_id,"POLICY_REVIEW"))
+
+
 def gate(decision: FieldDecision, run: dict[str, JsonValue], case: dict[str, JsonValue]) -> bool:
     """Validate all evidence and the stored current revision under the writer lock."""
     run_id, case_id = str(run["id"]), str(case["id"])
@@ -159,10 +204,7 @@ def gate(decision: FieldDecision, run: dict[str, JsonValue], case: dict[str, Jso
         if reason is None:
             result_id, confirmed = _record_result(connection,decision,run_id,case_id,now)
             _record_gap(connection,decision,run_id,case_id,now)
-            if decision.review_state == "NEEDS_REVIEW" and not connection.execute(
-                "SELECT 1 FROM review_tasks WHERE result_id=? AND status='OPEN'", (result_id,)).fetchone():
-                connection.execute("INSERT INTO review_tasks VALUES(?,?,?,?,?,'OPEN')",
-                                   ("task_"+uuid4().hex,case_id,decision.field_key,result_id,"POLICY_REVIEW"))
+            _record_review_task(connection,decision,case_id,result_id)
     trace = TraceWriter(run_id)
     if reason:
         trace.step("publish:blocked", detail={"reason": reason, "field_key": decision.field_key})

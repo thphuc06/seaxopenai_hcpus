@@ -86,12 +86,26 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
-S2 P1 advances POLICY_VERSION to policy-v1.2. Pure scope inference and stored passage
+S2 P1 advances POLICY_VERSION to policy-v1.3 (v1.2 plus the approved MODEL_ERROR rule). Pure scope inference and stored passage
 placements feed SourceObs; R7c joins copied listing passages with their reference family.
 The run supplies stored full passage text for copy comparison, while citations retain the
 validated extracted excerpts. Revoke admission changes only dependent freshness; the next
 run preserves unaffected result versions. The first trace step records stale:mark with zero
 model calls. Budget exhaustion with zero published results is PARTIAL.
+
+Human decision at S2: a typed model error before any validated claim returns PARTIAL,
+preserves stop_reason/error, and publishes five INSUFFICIENT findings with MODEL_ERROR
+gaps and no citations. A failure after some sources preserves only code-verified findings;
+it does not invent claims for unassessed fields. The old test_run expectations were explicitly
+approved for this update; unrelated error expectations remain unchanged. The auxiliary
+pre-wiring copy assertion was also approved for SINGLE_SOURCE plus an explicit R7c trail.
+During revoke reassessment, this rule applies only to affected fields. Unaffected CURRENT
+findings are revalidated through publish.py and retain their result IDs, versions and policy
+trails, with current-revision confirmation and replacement review tasks where needed.
+Exception: a prior revision's human approval expires. Policy returns NEEDS_REVIEW and a
+REVIEW/SUPERSEDED trail; publish creates a new result version, retaining the historical
+REVIEWED row and its citations. An unrelated source event cannot carry human approval
+into the new revision without another review.
 
 Reviewer state decisions remain in policy; publish.py validates and atomically stores the
 revision-bound result, citations, rebuilt dependencies and review record. Unresolved evidence
@@ -102,7 +116,7 @@ regulatory_limits.json (flat ingredient-to-number mapping or a limits object); a
 leaves UNCERTAIN with a note. The <=1% ordering boundary never implies a smaller cap.
 Normalized concentration claims use ingredient plus percent (claimed_percent accepted).
 All non-consistent claim findings require review; buyers receive only a neutral pending count.
-CCR P1→P4: record policy-v1.2 in tracking/DECISIONS.md. CCR P1→P2: align normalized claim keys
+CCR P1→P4: record policy-v1.3 in tracking/DECISIONS.md. CCR P1→P2: align normalized claim keys
 free_from/concentration/treatment and supply the sourced regulatory mapping before S2 gate.
 
 S1 P1 implements `policy-v1.1`: normalized comparison, ordered R1–R11, active notification requirement,

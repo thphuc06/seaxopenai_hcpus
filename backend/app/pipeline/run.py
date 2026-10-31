@@ -26,18 +26,6 @@ class Job:
     trigger_event_id: str
 
 
-def source_scope(source: dict[str, JsonValue], product: dict[str, JsonValue]) -> tuple[ScopeMatch, str]:
-    scope = db.loads(str(source.get("scope_json") or "{}"))
-    if not isinstance(scope, dict):
-        return ScopeMatch.UNKNOWN, "Source scope is absent"
-    for source_key, product_key in (("product", "id"), ("variant", "variant"), ("market", "market"), ("version", "version")):
-        if scope.get(source_key) and product.get(product_key) and str(scope[source_key]) != str(product[product_key]):
-            return ScopeMatch.MISMATCH, f"Source {source_key} differs from case"
-    if all(scope.get(key) for key in ("product", "variant", "market")):
-        return ScopeMatch.MATCH, "Stored source scope matches case"
-    return ScopeMatch.UNKNOWN, "Source scope metadata is incomplete"
-
-
 def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], ctx: RunContext,
                   extractor: Extractor) -> list[policy.SourceObs]:
     sv_id = str(source["source_version_id"])
@@ -129,8 +117,13 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                     trace.step("run:stop",detail={"stop_reason": stop_reason},error=error)
                     break
             product["passage_texts"] = {str(p["id"]):str(p["text"]) for version in {o.source_version_id for o in observations} for p in store.passages(version)}
+            no_claims_model_error = error is not None and not any(o.normalized for o in observations)
             for field in PUBLIC_FIELDS:
                 if event and event["type"] == "SOURCE_REVOKED" and field not in stale_fields:
+                    continue
+                if no_claims_model_error:
+                    decisions.append(policy.model_error_decision(field))
+                    trace.step("policy:"+field,detail={"reason":"MODEL_ERROR","verdict":"INSUFFICIENT"})
                     continue
                 if stop_reason and not any(o.normalized and (o.field_key == field or
                     field == "key_ingredients" and o.field_key == "inci_list") for o in observations):
@@ -147,12 +140,13 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                 except LLMError as failure:
                     stop_reason, error = failure.code, type(failure).__name__
             run_ref: dict[str, JsonValue] = {"id": run_id, "case_revision": job.target_revision}
+            retained = publish.confirm_unchanged(run_id,job.case_id,stale_fields+[d.field_key for d in decisions]) if event and event["type"] == "SOURCE_REVOKED" else []
             for decision in decisions:
                 if publish.gate(decision, run_ref, case):
                     published += 1
-            status = "PARTIAL" if stop_reason and error is None else "FAILED" if not published else "PARTIAL" if stop_reason else "WAITING_REVIEW" if any(
-                d.review_state == ReviewState.NEEDS_REVIEW for d in decisions
-            ) else "WAITING_EVIDENCE" if any(d.gap for d in decisions) else "COMPLETED"
+            status = "PARTIAL" if stop_reason and (error is None or no_claims_model_error) else "FAILED" if not published and decisions else "PARTIAL" if stop_reason else "WAITING_REVIEW" if any(
+                d.review_state == ReviewState.NEEDS_REVIEW for d in decisions+retained
+            ) else "WAITING_EVIDENCE" if any(d.gap for d in decisions+retained) else "COMPLETED"
     except (ValueError, RuntimeError, sqlite3.Error) as failure:
         # Record only the exception class; external errors may contain source or key material.
         error = type(failure).__name__

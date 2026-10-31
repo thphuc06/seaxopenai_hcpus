@@ -46,3 +46,29 @@ def test_buyer_gets_only_claim_count_and_creates_no_rows(core_db: CoreDB) -> Non
         assert product["presentation"]["passport_metadata"]["pending_claims"] == 1
         assert key not in product["presentation"]["passport_metadata"]["hidden_citations"]
         assert core_db.dump() == before
+
+
+def test_upload_identity_preserves_actor_key_boundaries(core_db: CoreDB, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("FIXTURES_DIR",str(tmp_path))
+    config.reload_settings()
+    with TestClient(create_app()) as client:
+        for actor,key in (("seller:a","b"),("seller","a:b")):
+            body = {"idempotency_key":key,"field_keys":["volume"],"content":{"kind":"TEXT","text":"Volume: 83 ml."}}
+            response = client.post(f"/api/cases/{core_db.case_id}/evidence",json=body,
+                                   headers={"X-Demo-Role":"SELLER","X-Demo-Actor":actor})
+            assert response.status_code == 200 and response.json()["outcome"] == "ADMITTED"
+        assert len(core_db.rows("SELECT * FROM sources")) == 2
+
+
+@pytest.mark.parametrize("text", [" ","\n\t"])
+def test_blank_upload_rejected_before_artifacts(core_db: CoreDB, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, text: str) -> None:
+    monkeypatch.setenv("FIXTURES_DIR",str(tmp_path))
+    config.reload_settings()
+    with TestClient(create_app()) as client:
+        before = core_db.dump()
+        response = client.post(f"/api/cases/{core_db.case_id}/evidence",
+            json={"idempotency_key":"blank","field_keys":["volume"],"content":{"kind":"TEXT","text":text}},
+            headers={"X-Demo-Role":"SELLER","X-Demo-Actor":"seller"})
+        assert response.status_code == 422
+        assert core_db.dump() == before
+        assert not (tmp_path/"uploads").exists()

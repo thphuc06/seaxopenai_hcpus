@@ -1,4 +1,4 @@
-"""S2 transport checkpoint; persistence and publication follow in Stage B."""
+"""Revision-bound review, history and private evidence transport."""
 import base64
 import binascii
 import hashlib
@@ -75,11 +75,13 @@ def upload_evidence(case_id: str, request: EvidenceUploadRequest, actor: Evidenc
 
 def _upload_evidence(case_id: str, request: EvidenceUploadRequest, actor: EvidenceActor, background_tasks: BackgroundTasks) -> AdmitResult:
     case = read.one("SELECT c.*,p.variant,p.market FROM cases c JOIN products p ON p.id=c.product_id WHERE c.id=?",(case_id,))
-    identity = hashlib.sha256((case_id+":"+actor.actor_id+":"+request.idempotency_key).encode("utf-8")).hexdigest()
+    identity = hashlib.sha256(db.dumps([case_id,actor.actor_id,request.idempotency_key]).encode("utf-8")).hexdigest()
     key = "upload:"+identity
     previous = read.rows("SELECT event_id FROM events WHERE idempotency_key=?",(key,))
     if previous:
         return AdmitResult(event_id=previous[0]["event_id"],outcome="DUPLICATE",reason="Idempotency key already recorded",job_id=None,stale_fields=[])
+    if request.content.kind == "TEXT" and not request.content.text.strip():
+        raise HTTPException(422,"Evidence text must not be blank")
     directory = config.settings.fixtures_dir / "uploads"
     directory.mkdir(parents=True,exist_ok=True)
     path = directory / (identity+".json")

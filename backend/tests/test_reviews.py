@@ -53,6 +53,27 @@ def test_claim_model_mapping_cannot_accuse(core_db: CoreDB, family: str) -> None
     assert any(step.rule == "CL" for step in result.explain)
 
 
+@pytest.mark.parametrize("scope", ["UNKNOWN","AGENT"])
+def test_claim_scope_cap_matches_final_trail(core_db: CoreDB, scope: str) -> None:
+    from dataclasses import replace
+    from app.models import ScopeMatch
+    obs = core_db.source()
+    key = "claim:free_from:fragrance"
+    claim = replace(obs,field_key=key,normalized={"value":"fragrance"})
+    inci = replace(obs,field_key="inci_list",normalized={"value":["Parfum"]},scope_match=ScopeMatch(scope))
+    result = policy.decide(key,[claim,inci],{},[],[])
+    assert result.verdict == Verdict.UNCERTAIN and result.review_state == "NEEDS_REVIEW"
+    assert any(step.rule == "R3" and step.outcome == "UNCERTAIN" for step in result.explain)
+    assert [step.outcome for step in result.explain if step.rule == "CL"] == ["UNCERTAIN"]
+
+
+@pytest.mark.parametrize("key", ["claim:treatment:skin","claim:free_from:fragrance"])
+def test_claim_without_citable_evidence_still_requires_review(key: str) -> None:
+    result = policy.decide(key,[],{},[],[])
+    assert result.verdict == Verdict.INSUFFICIENT and result.review_state == "NEEDS_REVIEW"
+    assert result.citations == []
+
+
 @pytest.mark.parametrize("ingredient", ["Target A","Target B"])
 def test_inci_order_does_not_infer_sub_one_percent_limit(ingredient: str) -> None:
     assert policy.concentration_bound(["Water","Capped",ingredient],ingredient,{"capped":0.3}) == 1.0

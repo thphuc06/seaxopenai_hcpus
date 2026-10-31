@@ -13,7 +13,7 @@ from app.models import (
 from app.pipeline import compare
 from app.pipeline.scope import listing_copies_reference
 
-POLICY_VERSION = "policy-v1.2"
+POLICY_VERSION = "policy-v1.3"
 
 
 def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str, JsonValue] | None) -> FieldDecision:
@@ -40,6 +40,25 @@ def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str
 
 def review_freshness(revision: int, current_revision: int) -> ReviewState:
     return ReviewState.REVIEWED if revision == current_revision else ReviewState.SUPERSEDED
+
+
+def reconfirm_decision(previous: FieldDecision, prior_revision: int, current_revision: int) -> FieldDecision:
+    if previous.review_state != ReviewState.REVIEWED or prior_revision == current_revision:
+        return previous
+    result = previous.model_copy(deep=True)
+    result.review_state = ReviewState.NEEDS_REVIEW
+    result.explain.append(RuleStep(rule="REVIEW",outcome="SUPERSEDED",detail="A new case revision requires a new review"))
+    return result
+
+
+def model_error_decision(field_key: str) -> FieldDecision:
+    """No claims exist: report the required-source failure without invented evidence."""
+    result = decide(field_key,[],{},[],[])
+    result.gap = Gap(field_key=field_key,missing_kind="MODEL_ERROR",needed_doc="Retry extraction or supply readable evidence",
+                     known_ids=[],reason="Required source extraction could not complete")
+    result.public_text = "Not verified: required source extraction could not complete."
+    result.explain.append(RuleStep(rule="MODEL_ERROR",outcome="INSUFFICIENT",detail="No validated claims were available"))
+    return result
 
 
 @dataclass(frozen=True)
@@ -130,7 +149,7 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                reason: str = "", gap: Gap | None = None) -> FieldDecision:
         scope = ScopeMatch.UNKNOWN if any(o.scope_match == ScopeMatch.UNKNOWN for o in selected) else (
             ScopeMatch.AGENT if any(o.scope_match == ScopeMatch.AGENT for o in selected) else ScopeMatch.MATCH)
-        review = ReviewState.NEEDS_REVIEW if verdict == Verdict.CONFLICTING or scope == ScopeMatch.AGENT or (
+        review = ReviewState.NEEDS_REVIEW if (field_key.startswith("claim:") and verdict != Verdict.CONSISTENT) or verdict == Verdict.CONFLICTING or scope == ScopeMatch.AGENT or (
             scope == ScopeMatch.UNKNOWN and field_key in {"notification_number", "responsible_company"}) else ReviewState.AUTO_DRAFT
         citations = {(o.passage_id,o.quote): Citation(passage_id=o.passage_id, source_kind=o.source_kind,
                      source_version=o.source_version, locator=o.locator, excerpt=o.quote) for o in selected}
@@ -200,9 +219,10 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                         verdict = Verdict.CONFLICTING
             if not limits:
                 notes.append("Regulatory reference data is unavailable; concentration needs review.")
-        step("CL", verdict.value, "Claim compared with cited ingredient evidence; unconfirmed mappings require review")
         if any(o.scope_match in {ScopeMatch.UNKNOWN,ScopeMatch.AGENT} for o in selected):
             verdict = Verdict.UNCERTAIN
+            step("R3", "UNCERTAIN", "Claim evidence scope needs confirmation")
+        step("CL", verdict.value, "Claim compared with cited ingredient evidence; unconfirmed mappings require review")
         result = finish(verdict,selected,reason="Claim requires review")
         result.review_state = ReviewState.AUTO_DRAFT if verdict == Verdict.CONSISTENT else ReviewState.NEEDS_REVIEW
         result.public_text = "Claim is consistent with the sources checked." if verdict == Verdict.CONSISTENT else "Claim requires review against the cited sources."

@@ -235,6 +235,10 @@ and optional override `{verdict, citations: Citation[], public_text}`. Its respo
 and state; these cannot be supplied as request fields. Revision/citation/publication checks
 use shared policy and publish validation. Reconfirmed findings bind to the confirmation
 run's revision; their original result revision remains historical.
+On revoke, unaffected CURRENT findings retain their result versions and get a validated
+confirmation at the current revision; pending review tasks remain actionable.
+Expired human approvals become new NEEDS_REVIEW versions; prior review records remain
+bound to their original revision and are reported as SUPERSEDED.
 
 GET `/cases/{case_id}/history` (REVIEWER) returns case_id, case_revision and typed arrays
 `results`, `events`, `reviews`, `requests`. Result rows include stored version IDs plus
@@ -244,6 +248,8 @@ POST `/cases/{case_id}/evidence` (SELLER/REVIEWER) accepts JSON
 `{kind: "TEXT", text}` or `{kind: "IMAGE", media_type: "image/png"|"image/jpeg", data_base64}`.
 This transport adds no multipart dependency. The handler validates/decodes image bytes, stores
 the upload, sets origin/family/private visibility server-side and admits EVIDENCE_ADDED.
+Blank text returns 422 before file or database writes. Idempotency identity hashes a JSON
+array of case, actor and key, preserving component boundaries; retries create no new artifacts.
 Request objects reject extra fields. P3 can generate these DTOs from OpenAPI now.
 PassportMetadata adds defaulted pending_claims (neutral count). Passport field arrays stay
 limited to the five public fields; buyer/seller cannot retrieve claim evidence directly.

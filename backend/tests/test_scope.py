@@ -284,10 +284,10 @@ def test_copy_signal_can_join_family_through_existing_policy_interface() -> None
     listing = observation("unrelated-listing", kind=SourceKind.LISTING, quote=COPY)
     reference = observation("unrelated-reference", kind=SourceKind.BRAND_PAGE, quote=COPY)
     before = decide("volume", [listing, reference], {}, [], [])
-    assert before.verdict == Verdict.CONSISTENT
+    assert before.verdict == Verdict.SINGLE_SOURCE
+    assert any(step.rule == "R7c" for step in before.explain)
     assert listing_copies_reference([listing.quote], [reference.quote])
-    # Thread 1 performs this adaptation and adds its explicit R7c trail when
-    # wiring the helper. The helper alone never changes a policy observation.
+    # Explicit family adaptation remains idempotent after automatic R7c wiring.
     copied = replace(listing, family=reference.family)
     after = decide("volume", [copied, reference], {}, [], [])
     assert after.verdict == Verdict.SINGLE_SOURCE
