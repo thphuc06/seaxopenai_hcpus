@@ -90,6 +90,8 @@ def discover(ctx: RunContext) -> WebOutcome:
         planned = [template.format(**product) for template in rules.query_templates]
     except BudgetExceeded as error:
         return _finish(ctx, WebOutcome([], [], error.reason))
+    if not planned:
+        return _finish(ctx, WebOutcome([], [], "WEB_NO_QUERIES"))
     for query in planned:
         if session.searches >= config.settings.web_max_searches or session.pages >= config.settings.web_max_pages:
             outcome.stop_reason = outcome.stop_reason or ("WEB_PAGE_LIMIT" if session.pages >= config.settings.web_max_pages else "WEB_SEARCH_LIMIT")

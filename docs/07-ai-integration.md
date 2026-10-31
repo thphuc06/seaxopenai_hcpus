@@ -717,8 +717,8 @@ requires P1's revision-aware ingestion interface. HTTP rejects redirects,
 credentials, IP-literal hosts, nonpublic DNS answers, unsupported content types
 and oversized responses, with a hard caller deadline. DNS preflight does not pin
 HTTPX's subsequent resolution; DNS rebinding protection is not claimed. No paid
-provider/real page recording has been run for this implementation. P2-4b must
-support hosted-tool cost reservation in its network guard before any paid pass.
+provider/real page recording has been run for this implementation. The shared
+recording ledger below now reserves hosted-tool and HTTP attempts before execution.
 OCR remains unimplemented Should work; the evaluator15s timeout CCR stays open.
 
 API names checked against installed openai3.42.0, pydantic2.14.2 and httpx0.28.1,
@@ -740,12 +740,12 @@ The final P2 contract tests validate this projection against P1's actual DTO.
 The merged recording CLI retains the Phase2 positional snapshot, --events,
 --output-dir and --replay-only paths. Story mode uses --story (also the default
 when no snapshot/events are supplied), --storyboard, --dry-run, --mode,
---max-calls, --max-usd and --replay-dir. Default mode only prints a plan;
+--max-calls, --max-usd, --replay-dir and --web on|off. Default mode only prints a plan;
 record execution requires --execute and separate human authorization. Explicit
 --mode replay or --mode fallback executes offline unless --dry-run is present.
 The session defaults are finite:30 network requests and USD2 reserved cost.
-Unknown prices, tool-bearing requests and image charges are refused before a
-network request; these limits are not a claim of measured provider cost.
+Unknown prices, unbounded or unsupported tools and image charges are refused
+before a network request; these limits are not measured provider cost.
 
 The plan schedules storyboard action-cell events first, remaining numbered
 events second and materialized blind-set1 products last. Missing inputs and
@@ -764,11 +764,19 @@ unexpected admission rejection or cap exhaustion remain in not_recorded with
 stop reasons. After a record cap/failure, later inputs run labelled FALLBACK.
 The report retains network_calls, reserved_usd, fallback and incomplete coverage.
 
-WEB_DISABLED remains deliberate: pass_settings forces web_search=off and OCR off.
-The current session ledger cannot reserve every Web Scout hosted-search/fetch
-provider charge. Even complete=true covers only enabled recording steps and must
-not be presented as Web Scout recording coverage. A shared reservation seam and
-an explicitly authorized paid pass are still required. Main's provider tests
+Web defaults off (WEB_DISABLED); --web on explicitly enables discovery and adds
+its provider/caps to the frozen plan identity. OCR remains off. One durable
+session ledger reserves every model request, a single bounded hosted search's
+tool fee plus search-context token allowance, and every direct HTTP GET attempt
+(zero model-provider fee). Failed attempts retain their reservations. Replay
+and fallback spend no network reservation; replay still counts against run Budget.
+Unknown tool shapes, nondefault hosted-search pricing and unlimited tool calls
+fail closed. Request identity is web-transport-v2; v1 recordings are not silently
+reused after this request change. A requested, web-enabled BOOTSTRAP without a
+discovery outcome is WEB_NOT_EXECUTED/PARTIAL; discovery stop reasons also make
+coverage incomplete. The CLI does not implement the missing P1 run hook.
+Even complete=true covers only enabled recording steps. An explicitly authorized
+paid pass and integrated P1 lifecycle are still required. Main's provider tests
 and auxiliary replay tests use generated test recordings and fake providers;
 they are not event14 or whole-story provider replay evidence.
 
@@ -779,3 +787,18 @@ Single-call replay stops at prerequisite01 with REPLAY_MISS (1 Budget request,
 0 provider calls); catalogue09 has no replay score. Blind scope10 input is
 deferred, and Manager is not implemented. These measurements establish no agent
 accuracy or speed gain. Full tables, hashes and commands remain in the P2 ExecPlan.
+
+The current fallback scope trace reports FALLBACK_PENDING when the prepass still
+has pending observations and includes unresolved_placements. This corrects the
+old NO_PENDING diagnostic; it does not resolve UNKNOWN placements, dispatch a
+review, alter published policy or constitute a new catalogue measurement.
+
+P4's Phase4 extraction CCRs are addressed in P2: the source-noted notification
+header family now includes Số Giấy công bố; exact comma/semicolon clauses naming
+known adjunct absence subjects no longer negate an independent free-from claim.
+Unknown disclaimer clauses and outer negation remain checked. This changes
+claim extraction only; P1 policy still decides findings. Persisted extraction
+cache identities advance to fallback-v5-notification-header and
+coverage-v4-notification-header so previously cached omissions are reprocessed.
+Model prompt text and its replay identity are unchanged; changed coverage hints
+already participate in the retry request key. Old cache/recording rows are retained.

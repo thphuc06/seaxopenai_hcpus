@@ -230,6 +230,21 @@ def test_unselected_audit_and_agent_error_fallback(context: RunContext, monkeypa
         assert result.searches[0]["selection_mode"] == "FALLBACK"
 
 
+def test_empty_query_plan_persists_terminal_without_search(context: RunContext, monkeypatch: pytest.MonkeyPatch) -> None:
+    queries, fetched = provider(monkeypatch)
+    def response(**request: object) -> Response:
+        return Response.model_validate({"id": "response", "object": "response", "created_at": 0,
+            "model": "unit", "status": "completed", "parallel_tool_calls": False, "tool_choice": "auto", "tools": [],
+            "output": [{"type": "message", "id": "msg", "role": "assistant", "status": "completed",
+                        "content": [{"type": "output_text", "text": '{"queries":[]}', "annotations": []}]}]})
+    monkeypatch.setattr(client, "_call_api", response)
+    context.mode = "live"
+    result = discover(context)
+    assert result.stop_reason == "WEB_NO_QUERIES" and not result.new_sv_ids
+    assert not queries and not fetched and context.budget.model_calls == 1
+    assert discover(context) == result and context.budget.model_calls == 1
+
+
 def test_fetch_failure_has_stop_reason(context: RunContext, monkeypatch: pytest.MonkeyPatch) -> None:
     provider(monkeypatch)
     def fetch(url: str) -> websearch.Page:

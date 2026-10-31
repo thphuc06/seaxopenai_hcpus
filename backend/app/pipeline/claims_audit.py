@@ -51,6 +51,7 @@ class ClaimPatterns(BaseModel):
     concentration: str
     claim_cues: list[str]
     family_subjects: dict[str, list[str]]
+    adjunct_absence_subjects: list[str]
 
 
 def patterns() -> ClaimPatterns:
@@ -59,6 +60,12 @@ def patterns() -> ClaimPatterns:
 
 def _outer_negation(sentence: str, extra: list[str] | None = None) -> bool:
     cues = [phrase for phrases in patterns().free_from.values() for phrase in phrases] + (extra or [])
+    # An exact, independently enumerated substance-absence clause does not
+    # negate another claim. Unknown clauses/disclaimers retain their negation.
+    adjuncts = {folded(prefix + " " + subject) for prefix in patterns().claim_cues
+                if prefix not in {"%", "-free"} for subject in patterns().adjunct_absence_subjects}
+    sentence = ",".join(part for part in re.split(r"[,;]", sentence)
+                        if folded(part.strip().rstrip(".")) not in adjuncts)
     for cue in sorted(cues, key=len, reverse=True):
         for left, right in reversed(phrase_spans(sentence, cue)):
             sentence = sentence[:left] + " " + sentence[right:]
