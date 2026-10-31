@@ -1,5 +1,40 @@
 # Development log — 31 Oct 2026
 
+## sync-2 — published 13:09:49 ICT (T+3:09)
+
+Remote main and sync-2 verified at c7b413d6dc798fb74b76dd19269913f3008fb7bf.
+PHASE=2; tagged HANDOFF contains sync-2. Retained S2 gate complete, no omitted
+lane, WAITING failure or new scope cut. Initial failed trials were aborted;
+the user authorized narrow integration fixes before the passing backend merge.
+
+- P4 Done: B0/eval, REAL/DRAFT fixtures, S2 path and ten new regression variants.
+  Blocked: human gold review remains pending. Surprise: latest heads exposed two
+  regressions plus a passage-scope publication defect absent from the old suite.
+  Decision: fix general mechanisms with unchanged assertions/gold. Next: phase3
+  kickoff separately, preserving the first-run labels/reports.
+- P1 Done: lifecycle/staleness/reviews/private uploads/budget PARTIAL/stable IDs.
+  Blocked: fresh readable upload transcript path remains a cross-lane limitation.
+  Surprise: extraction could remove a quantity before its exclusion was traced.
+  Decision: reuse scope classifier for the missing trace; policy-v1.6. Next: merge
+  sync-2 and continue the existing phase3 plan, not a gate-time scope expansion.
+- P2 Done: vision grounding/retry/audit plus real-source extraction fixes.
+  Blocked: provider record pass1 and canon runtime hook remain Should follow-ups.
+  Surprise: expanded claims inherited another passage's scope. Decision: recompute
+  each placement with the existing helper; source-note the broad ingredient family.
+  Next: merge sync-2's prompt/cache versions; fresh transcript/provider validation.
+- P3 Done: reviewer lifecycle, stale ripple and scenario stepper. Blocked: real
+  browser path remains unverified here. Surprise: none in independent merge gate.
+  Decision: keep claims-count/time travel as existing Should work. Next: merge tag
+  and use the integrated API; user starts Local Actions for the click path.
+
+Checks: phase1 post-fix1029 pass/43 skip/+2 subtests; phase2 1059 pass/14 future
+skip/+2 subtests,0 fail/errors/deselected. Guards4, fixtures53, S2 path26, Node51,
+API build pass. Three automatic reviewers cleared the final corrections; prior
+separate /review waiver remains in effect. No server or paid model call.
+DRAFT first8 eval40/40 vs8/40 exits0; full13 diagnostic61/65 vs16/65 retains its
+phase3 event09 error and event12 precondition, not a passing full-story claim.
+Operational logs follow the tag without moving it; implementation handoff is pinned.
+
 ## Local integration of p4-b2 (12:05 ICT, T+2:05)
 
 User authorized exact local merge e6ef7320f8b0195466e24afd744572cd98e69c92 into p4.

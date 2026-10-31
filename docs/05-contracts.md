@@ -288,6 +288,26 @@ CCR P1→P4: config producer/type allowlist and non-material event fields · nee
 expose closed-set configuration for Phase 1 admission · why: config.py is P4-owned;
 Stage A adds route contracts only, not an alternative admission policy.
 
+### S3 P1 contract checkpoint
+
+The six S3 GET routes in section 2 are registered with typed response models in
+`api/glassbox_contracts.py`. They return 501 after identity/role/query validation
+until their implementation is delivered. Explain accepts all authenticated demo
+roles; the other five routes require REVIEWER or OPERATOR. No stub reads or writes
+application state or calls a model/tool. Existing S1/S2 routes remain implemented.
+
+Explain is a union: BuyerExplanation has audience=BUYER, product_id, field_key,
+public_text, summaries, citations and hidden_citations; ExpertExplanation has
+audience=EXPERT, product_id, field_key, result_id, trigger_event_id, sources, claims,
+rules, publish_checks, chain_head and reviews. Stage B must select the public shape
+for non-experts and filter private evidence server-side; a union alone is not ACL.
+Observability exposes verdicts, model_calls, calls_by_step, publish_passed/blocked,
+agent_stops, gap_stops, vocabulary, review_queue_size and oldest_review_age_s.
+Chain is {valid, rows, head, broken_at}; graph is {nodes, edges}; search preserves
+P2's {hits, stages} JSON records. Search requires nonempty q and mode auto/bm25/hybrid
+(default auto). OTel has resourceSpans. Optional route stubs do not change the
+Must/Should/Could scope. No Python hook signature, policy version or env changed.
+
 ### S1 P1 implementation
 
 The eleven S1 routes now operate on persisted data. Identity and response models from the checkpoint are
