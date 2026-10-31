@@ -223,6 +223,27 @@ number before coding.
 
 ## As built (contest)
 
+S2 P1 Stage A exposes four typed routes in the existing cases router. All authorized,
+schema-valid requests currently return 501 without persistence; business behavior is Stage B.
+GET `/review/queue` (REVIEWER) returns `ReviewQueueItem[]` with task id, case_id,
+field_key, result_id, case_revision, reason_code and verdict. POST `/cases/{case_id}/reviews`
+(REVIEWER) accepts result_id, integer case_revision, APPROVE/OVERRIDE/REJECT, reason,
+and optional override `{verdict, citations: Citation[], public_text}`. Its response is
+`ReviewResponse` with reviewer identity, timestamp and review state. The server owns identity
+and state; these cannot be supplied as request fields. Revision/citation/publication checks
+remain Stage B and will use the shared policy/publish path.
+
+GET `/cases/{case_id}/history` (REVIEWER) returns case_id, case_revision and typed arrays
+`results`, `events`, `reviews`, `requests`. Result rows include stored version IDs plus
+PassportField fields; request rows include gap_id, reason, requested_from and OPEN/FULFILLED status.
+POST `/cases/{case_id}/evidence` (SELLER/REVIEWER) accepts JSON
+`{idempotency_key, field_keys, content}` and returns the existing AdmitResult. Content is
+`{kind: "TEXT", text}` or `{kind: "IMAGE", media_type: "image/png"|"image/jpeg", data_base64}`.
+This transport adds no multipart dependency. Stage B validates/decodes image bytes, stores
+the upload, sets origin/family/private visibility server-side and admits EVIDENCE_ADDED.
+Request objects reject extra fields. P3 can generate these DTOs from OpenAPI now.
+No shared model, policy, trace vocabulary or environment variable changes at this checkpoint.
+
 ### S1 P1 contract checkpoint
 
 The eleven S1 routes in team-plan README §7.2 are declared with response models.
