@@ -1,12 +1,13 @@
 import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import type { ApiClient } from '../api/client.ts';
-import type { PassportResponse, Product } from '../types.ts';
+import type { PassportView, Product } from '../types.ts';
+import { withPassportMetadata } from '../passportView.ts';
 import { usePoll } from '../usePoll.ts';
 import { PassportCard } from '../components/PassportCard.tsx';
 import { ErrorNotice, LoadingNotice } from '../components/Feedback.tsx';
 
-export function BuyerPassportView({ product, passport }: { product: Product | undefined; passport: PassportResponse }) {
+export function BuyerPassportView({ product, passport }: { product: Product | undefined; passport: PassportView }) {
   const presentation = product?.presentation;
   return <>
     <div className="breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">/</span><span>{presentation?.category ?? 'Product information'}</span></div>
@@ -25,7 +26,7 @@ export function BuyerPassportView({ product, passport }: { product: Product | un
           <div className="product-note"><span className="note-line" /><p>A little more context.<br /><strong>A clearer choice.</strong></p><p>Read each detail alongside the sources checked.</p></div>
         </div>
       </aside>
-      <PassportCard passport={passport} />
+      <PassportCard passport={withPassportMetadata(passport, presentation?.passport_metadata)} />
     </div>
   </>;
 }

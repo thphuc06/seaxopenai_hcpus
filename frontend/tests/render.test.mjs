@@ -13,6 +13,7 @@ import { sessionFor } from '../src/api/session.ts';
 import { FIELD_KEYS } from '../src/labels.ts';
 import passport from '../src/mock/passport.json' with { type: 'json' };
 import products from '../src/mock/products.json' with { type: 'json' };
+import { frontendWordingGuard } from './wording.mjs';
 
 const render = (element, path = '/') => renderToStaticMarkup(createElement(MemoryRouter, { initialEntries: [path] }, element));
 
@@ -55,7 +56,7 @@ test('five routes and unknown route render their intended shell with no server o
   }
 });
 test('frontend-authored text follows docs/06 wording guard', () => {
-  const forbidden = /genuine|authentic|fake|counterfeit|safe|certified|verified product|chính hãng|hàng giả|an toàn/iu;
+  const forbidden = frontendWordingGuard();
   function scan(directory) {
     for (const entry of readdirSync(directory, { withFileTypes: true })) {
       const url = new URL(entry.name + (entry.isDirectory() ? '/' : ''), directory);

@@ -1,5 +1,5 @@
 import { FIELD_KEYS, FIELD_TITLES } from '../labels.ts';
-import type { PassportResponse } from '../types.ts';
+import type { PassportView } from '../types.ts';
 import { StatusBadge } from './StatusBadge.tsx';
 
 export function formatTime(value: string | null): string {
@@ -9,7 +9,7 @@ export function formatTime(value: string | null): string {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }).format(date) + ' ICT';
 }
 
-export function PassportCard({ passport }: { passport: PassportResponse }) {
+export function PassportCard({ passport }: { passport: PassportView }) {
   return <section className="passport-card" aria-labelledby="passport-title">
     <header className="passport-heading">
       <div className="passport-heading-top"><span className="eyebrow">A closer look at the listing</span><span className="passport-mark" aria-hidden="true">P<span>↗</span></span></div>

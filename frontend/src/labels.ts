@@ -1,4 +1,4 @@
-import type { FieldKey, PassportField, RunStatus } from './types.ts';
+import type { FieldKey, PassportViewField, RunStatus } from './types.ts';
 
 export const FIELD_TITLES: Record<FieldKey, string> = {
   volume: 'Volume',
@@ -12,7 +12,7 @@ export type LabelTone = 'consistent' | 'single' | 'source-conflict' | 'conflicti
 export interface BuyerLabel { text: string; tone: LabelTone }
 
 /** docs/04 first-match order. The server's label never overrides stored state. */
-export function buyerLabel(field: PassportField | null | undefined, runStatus: RunStatus | null): BuyerLabel {
+export function buyerLabel(field: PassportViewField | null | undefined, runStatus: RunStatus | null): BuyerLabel {
   if (field?.freshness === 'STALE') return { text: 'Stale', tone: 'stale' };
   if (runStatus === 'RUNNING') return { text: 'Updating', tone: 'pending' };
   if (!field?.verdict) return { text: 'Not checked yet', tone: 'pending' };

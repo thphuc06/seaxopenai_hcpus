@@ -1,10 +1,10 @@
-// Documented contract baseline; reconcile optional extensions with P4 at Sync 0.
+// Wire contracts mirror backend/app/models.py at the S0 skeleton checkpoint.
 export type FieldKey = 'volume' | 'skin_type' | 'key_ingredients' | 'notification_number' | 'responsible_company';
 export type Verdict = 'CONSISTENT' | 'CONFLICTING' | 'SINGLE_SOURCE' | 'INSUFFICIENT' | 'UNCERTAIN' | 'NOT_APPLICABLE';
 export type ConflictLocus = 'WITHIN_SOURCE' | 'ACROSS_SOURCES' | 'LISTING_VS_SOURCE';
 export type Freshness = 'CURRENT' | 'STALE' | 'UNKNOWN';
 export type ReviewState = 'AUTO_DRAFT' | 'NEEDS_REVIEW' | 'REVIEWED' | 'SUPERSEDED';
-export type ScopeMatch = 'MATCH' | 'MISMATCH' | 'UNKNOWN';
+export type ScopeMatch = 'MATCH' | 'MISMATCH' | 'UNKNOWN' | 'AGENT';
 export type Readability = 'READABLE' | 'PARTIAL' | 'UNREADABLE';
 export type EvidenceLevel = 'LISTING' | 'PRODUCT_VERSION' | 'BATCH' | 'UNIT';
 export type DatasetOrigin = 'REAL' | 'SYNTHETIC';
@@ -27,17 +27,15 @@ export interface Citation {
 }
 
 export interface PassportField {
-  field_key: FieldKey;
+  field_key: string;
   label: string;
   public_text: string;
-  verdict: Verdict | null;
+  verdict: Verdict;
   conflict_locus: ConflictLocus | null;
   freshness: Freshness;
   review_state: ReviewState;
   checked_at: string | null;
   citations: Citation[];
-  hidden_citations?: number;
-  claims_under_review?: number;
 }
 
 export interface PassportResponse {
@@ -47,17 +45,42 @@ export interface PassportResponse {
   run_status: RunStatus | null;
   fields: PassportField[];
   disclaimer: string;
-  llm_mode?: ExecutionMode;
 }
 
-export interface ClaimFinding {
-  field_key: `claim:${string}:${string}`;
+export interface RuleStep { rule: string; outcome: string; detail: string }
+export interface DependsOn { source_id: string; source_version_id: string }
+export interface Gap { field_key: string; missing_kind: string; needed_doc: string; known_ids: string[]; reason: string }
+export interface FieldDecision {
+  field_key: string;
   verdict: Verdict;
   conflict_locus: ConflictLocus | null;
+  scope_match: ScopeMatch;
   review_state: ReviewState;
+  evidence_level: EvidenceLevel;
   seller_attributable: boolean;
   public_text: string;
   citations: Citation[];
+  depends_on: DependsOn[];
+  notes: string[];
+  explain: RuleStep[];
+  gap: Gap | null;
+  needs_scope_resolution: boolean;
+}
+export type ClaimFinding = FieldDecision;
+
+// Display metadata is separate from the strict wire contract until S1 specifies it.
+export interface PassportMetadata {
+  llm_mode?: ExecutionMode;
+  hidden_citations: Record<string, number>;
+}
+export interface PassportViewField extends Omit<PassportField, 'verdict'> {
+  verdict: Verdict | null;
+  hidden_citations?: number;
+  claims_under_review?: number;
+}
+export interface PassportView extends Omit<PassportResponse, 'fields'> {
+  fields: PassportViewField[];
+  llm_mode?: ExecutionMode;
 }
 
 export type EventType = 'BOOTSTRAP' | 'LISTING_CHANGED' | 'SOURCE_CHANGED' | 'EVIDENCE_ADDED' | 'SOURCE_REVOKED' | 'WEB_SEARCH_REQUESTED';
@@ -65,7 +88,7 @@ export interface EventEnvelope {
   event_id: string;
   idempotency_key: string;
   type: EventType;
-  schema_version: string;
+  schema_version: '1';
   producer: string;
   resource: { kind: 'LISTING' | 'SOURCE' | 'CASE'; id: string; version: number };
   changed_fields: string[];
@@ -78,7 +101,7 @@ export interface AdmitResult {
   outcome: 'ADMITTED' | 'NOOP' | 'DUPLICATE' | 'REJECTED';
   reason: string;
   job_id: string | null;
-  stale_fields: FieldKey[];
+  stale_fields: string[];
 }
 export interface BudgetMeter { used: number; cap: number }
 export interface TraceDetail {
@@ -136,6 +159,7 @@ export interface Product {
     shop: string;
     official_store: boolean;
     category: string;
+    passport_metadata?: PassportMetadata;
   };
 }
 export interface EvidencePassage extends Citation {
