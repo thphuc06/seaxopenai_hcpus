@@ -1,5 +1,21 @@
 # Development log — 31 Oct 2026
 
+## contract-4 — gate passed15:20 ICT (T+5:20)
+
+- P4 Done: authorized deadline race repair and retained checkpoint records;
+  Blocked: initial token-accounting test, now fixed; Surprise: worker completion
+  raced budget timeout calculation; Decision: absolute wait deadline before submit.
+- P1 Done: typed S4 route/schema contract0539dc7; Stage-B handlers remain501.
+- P2 Done: interface audit/receiptf17affe; unchanged web/OCR signatures. Its
+  evaluator timeout did not reproduce locally; existing context/image CCRs remain.
+- P3: already in sync-3; consumes new DTOs next. No late lane or scope cut.
+- Metrics: initial1340 pass/1 fail/5 skip; repair52 pass; P1 contracts225 pass;
+  incremental1367 pass/5 future skips/+2 subtests; fixtures98 and sync29 pass.
+  User explicitly requested reuse, so redundant full baseline stopped. No current
+  WAITING or unresolved failure. Three read-only reviews and repair review clear.
+- Next: merge contract-4, then separately authorized S4 implementation. PHASE3.
+  HANDOFF contract-4 and results/contract-4-gate.md contain detailed evidence.
+
 ## sync-3 — published14:37:41 ICT (T+4:37)
 
 Remote main/tag verified at07160983ca6ef8def8357fc9bbd0dfa40aae5eb1. PHASE3,

@@ -1,5 +1,15 @@
 # Contest decisions
 
+## D014 — S4 contract checkpoint and authorized gate recovery (15:20 ICT)
+
+Retain P1's S4 transport shapes/ACL from docs05, with501 stubs until Stage B;
+P2 web/OCR signatures and PHASE3 remain unchanged. User authorizes P4 to fix the
+P2 deadline race in client.py without changing existing assertions. User then
+explicitly requests reuse of completed checks: combine original passing nodes
+with repaired client/budget/guards and affected/new P1 contracts. Keep initial
+failure and stopped rerun evidence; never claim a single full green invocation.
+No verdict/policy change, scope cut or new env setting. Contract gate only.
+
 ## D013 — S3 integration contracts and diagnostic isolation (14:28 ICT)
 
 Record P1's policy-v1.7 REQ rule and code-led registry closure, plus transaction-bound
