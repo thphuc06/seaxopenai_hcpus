@@ -109,6 +109,8 @@ No sync tag is created by this workstream.
 Local checks at preparation: 153 Python tests + 2 subtests passed, 23 frontend tests
 passed, API frontend build passed, fixture validator 9 files/0 errors, actionlint 1.7.11
 and the official Render Blueprint JSON schema passed. Existing Windows
-pytest cleanup warnings are visible. Docker daemon was unavailable locally; image
-build/startup must be confirmed by GitHub CI. Render account linkage, live URL,
+pytest cleanup warnings are visible. Docker daemon was unavailable locally; GitHub
+[run 41165337846](https://github.com/thphuc06/seaxopenai_hcpus/actions/runs/41165337846)
+passed all three jobs on implementation commit a95ee1d on 31 Oct at 10:41 ICT,
+including the Linux Docker build and offline image startup check. Render account linkage, live URL,
 persistent storage and hosted S1 click path are not verified by local checks.
