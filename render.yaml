@@ -1,0 +1,28 @@
+# Create this Blueprint only after S1 and CI pass. No resources are created by committing it.
+services:
+  - type: web
+    name: product-truth-passport-demo
+    runtime: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: checksPass
+    healthCheckPath: /api/health
+    envVars:
+      - key: LLM_MODE
+        value: fallback
+      - key: WORKER_INLINE
+        value: '1'
+      - key: WEB_SEARCH
+        value: 'off'
+      - key: OCR_ENABLED
+        value: '0'
+      - key: AGENTS_TRACING
+        value: '0'
+      - key: OPENAI_AGENTS_DISABLE_TRACING
+        value: '1'
+      - key: DB_PATH
+        value: /tmp/passport.db
+      - key: REPLAY_FREEZE
+        value: '1'

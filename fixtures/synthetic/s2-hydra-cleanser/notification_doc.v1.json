@@ -1,0 +1,45 @@
+{
+  "source_id": "DEMO-SRC-S2-NOTIFICATION",
+  "kind": "NOTIFICATION_DOC",
+  "product_id": "DEMO-PROD-S2",
+  "version": 1,
+  "uri": "demo://s2/notification",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PRIVATE",
+  "family": "regulator:demo-notification",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S2",
+    "variant": "236ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S2-NOTIFICATION-V1-01",
+      "locator": "page1#product",
+      "section": "record",
+      "text": "Hồ sơ minh họa Hydra Cream Cleanser, chai 236 ml, thị trường VN."
+    },
+    {
+      "id": "DEMO-PSG-S2-NOTIFICATION-V1-02",
+      "locator": "page1#number",
+      "section": "record",
+      "text": "Số tiếp nhận: DEMO-CBMP-00088."
+    },
+    {
+      "id": "DEMO-PSG-S2-NOTIFICATION-V1-03",
+      "locator": "page1#company",
+      "section": "record",
+      "text": "Đơn vị chịu trách nhiệm: CÔNG TY TNHH LUMIVY DEMO."
+    },
+    {
+      "id": "DEMO-PSG-S2-NOTIFICATION-V1-04",
+      "locator": "page1#issued",
+      "section": "record",
+      "text": "Ngày cấp minh họa 2026-10-31; trạng thái ACTIVE; SYNTHETIC."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

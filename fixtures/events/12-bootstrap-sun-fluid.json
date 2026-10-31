@@ -1,0 +1,20 @@
+{
+  "event_id": "DEMO-EVT-12",
+  "idempotency_key": "demo:s3:event:12",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "CASE",
+    "id": "DEMO-CASE-S3",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "DEMO-CASE-S3",
+    "product_id": "DEMO-PROD-S3"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S3",
+  "expect": "Số trên nhãn dẫn tới registry MOCK ACTIVE cùng công ty; bước gap controller bổ sung chứng cứ và kết thúc GAP_CLOSED."
+}

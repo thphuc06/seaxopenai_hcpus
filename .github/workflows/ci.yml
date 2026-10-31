@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [main, p1, p2, p3, p4, 'codex/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LLM_MODE: fallback
+  WORKER_INLINE: '1'
+  OCR_ENABLED: '0'
+  WEB_SEARCH: 'off'
+  AGENTS_TRACING: '0'
+  OPENAI_AGENTS_DISABLE_TRACING: '1'
+  PYTHONUTF8: '1'
+
+jobs:
+  backend:
+    name: Backend and contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: python -m pip install -r backend/requirements.txt
+      - run: python -m pip check
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.22.1'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend dependencies for wire-contract test
+        run: npm ci --prefix frontend
+      - name: Validate source fixtures
+        run: python scripts/check_fixtures.py
+      - name: Test checked-in phase and deployment adapter
+        working-directory: backend
+        run: python -m pytest -q tests ../frontend/tests/test_backend_contract.py ../scripts/dev/render/tests --junitxml=../test-results/backend.xml
+      - name: Save test results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: backend-results
+          path: test-results/backend.xml
+          retention-days: 7
+
+  frontend:
+    name: Frontend tests and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.22.1'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Build API frontend
+        run: npm run build
+        env:
+          VITE_USE_MOCK: '0'
+      - name: Save built frontend
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
+
+  image:
+    name: Render image
+    needs: [backend, frontend]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Build deployment image
+        run: docker build --tag passport-ci .
+      - name: Check image with in-process client and network disabled
+        run: docker run --rm --network none --entrypoint python passport-ci -m scripts.dev.render.check_image

@@ -1,0 +1,27 @@
+{
+  "source_id": "DEMO-SRC-S3-PACKAGING",
+  "kind": "PACKAGING_IMAGE",
+  "product_id": "DEMO-PROD-S3",
+  "version": 1,
+  "uri": "demo://s3/packaging",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "packaging:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S3",
+    "variant": "40ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S3-PACKAGING-V1-01",
+      "locator": "image:full",
+      "section": "label",
+      "text": "LUMIVY LAB — Daily Sun Fluid SPF50\nDung tích: 40 ml.\nIngredients: Aqua, Glycerin.\nSố công bố: DEMO-CBMP-00123.\nChịu trách nhiệm: CÔNG TY TNHH LUMIVY DEMO.\nSYNTHETIC — nhãn minh họa cho sản phẩm hư cấu."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}
