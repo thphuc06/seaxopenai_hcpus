@@ -1,5 +1,61 @@
 # Integration handoff
 
+## sync-3
+
+Retained Phase3 gate passed at14:37 ICT,31 Oct2026 (T+4:37). All four lanes
+included; PHASE=3; no current-phase WAITING, omitted lane or new feature cut.
+Merge `sync-3` into each lane. Phase4 ends15:15 ICT. This handoff is in the tag.
+The user explicitly requested reusing completed checks instead of rerunning them;
+final incremental verification is documented in docs/results/sync-3-gate.md.
+
+### P4 — evaluation, storyboard and gate
+- Integrated origin/p4@2c1a59e via9f550e2: frozen blind set, isolated B1 evaluation,
+  silent storyboard/callouts and S3 operational checker; Sites adapter included.
+- Original blind report/gold remain DRAFT and unchanged. Independent fallback rerun
+  exits0:54/55 fields, false blame0/52, zero model calls; registry intentionally empty.
+- Corrected checker integration for accepted trace refs, terminal review work,
+  code-only prepass effects and public/shared text versus private source identity.
+- Gate: latest full regression1261 passed/62 then-future skips/+2 subtests; all57
+  newly enabled S3 nodes plus guards4 and S3 wire1 passed62/62. Helpers77 pass.
+  Fixtures98/98, fallback sync path29/29, frontend66/66 and API build pass.
+
+### P1 — lifecycle, registry and glass box
+- Integrated origin/p1@624cf46 via295062f: bounded MOCK registry gaps, explanations,
+  observability, transaction-bound result chain and expert graph/search routes.
+- Policy-v1.7 REQ behavior retained; integration correction policy-v1.8 interprets
+  documented MULTI as passage scope rather than discarding the catalogue.
+- Six unrelated marker/size variants failed before correction; focused208 and
+  unchanged catalogue/anchor acceptance passed afterward. No gold/test weakening.
+- Existing pre-S3 persisted results lack chain links: obtain explicit approval for
+  demo reset or design a migration before new publication. This gate reset no user DB.
+
+### P2 — single-call scope and retrieval
+- Integrated origin/p2@8897f4e via66a3fd4: explicit-size prepass, one typed scope call,
+  structural anchor verification, shared root/child budgets and immutable caches.
+- Validations use target input_refs, anchor output_refs, accepted/scope_match detail;
+  P4 adapter CCR closed. Existing Python signatures and env names retained.
+- BM25/ranking and context-bound embedding helpers delivered; ordinary expert GET
+  search stays read-only BM25. Paid indexing is not wired into P1's run.
+- Provider hybrid quality and whole-story replay remain NOT VERIFIED. Manager loop
+  remains Could/unimplemented; no paid call or recording overwrite in this gate.
+
+### P3 — Why, waterfall and evidence exploration
+- Integrated origin/p3@0d696fa: role-specific Why panel, waterfall, scope/effect
+  presentation, graph/search/chain views and stable event-name display.
+- Consumes actual contract-3 schemas and P1/P2 trace shapes; absent question/fields,
+  child-budget or no-change effect values remain visibly unavailable.
+- Final Node24 tests66/66 and API build passed; S3 wire projection test passed
+  against actual Pydantic DTOs. Lockfile unchanged; no dependency install required.
+- Local browser click path and hosted deployment at this new tag remain unverified;
+  human starts backend/frontend Actions. OTel remains optional/501.
+
+### Remaining limits
+No new env value needed. Keep gold DRAFT pending human review; fresh uploaded-image
+transcription, runtime canon/paid indexing and prior R3 projection question remain
+in ISSUES. Full provider replay is separate from the offline record/fake-provider
+acceptance tests. Five unchanged phase4 targets remain future work. No servers or
+provider calls were started. The two existing Router bundler warnings remain.
+
 ## contract-3
 
 Phase-2 contract gate PASSED at 13:42 ICT (T+3:42), 31 Oct 2026. PHASE stays 2;
