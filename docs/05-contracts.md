@@ -308,6 +308,52 @@ CCR P1→P4: config producer/type allowlist and non-material event fields · nee
 expose closed-set configuration for Phase 1 admission · why: config.py is P4-owned;
 Stage A adds route contracts only, not an alternative admission policy.
 
+### S4 P1 contract checkpoint
+
+All nine S4 operations from team README7.2 are registered on existing P1 routers.
+Authorized calls return501 until Stage B; stubs do not read/write application state
+or invoke a provider. JSON routes declare response_model. Schemas live in
+api/s4_contracts.py and reject extra fields; shared models and policy-v1.8 are unchanged.
+
+- POST /orders takes only {product_id: nonblank string}; buyer identity, revision,
+  snapshot and hashes come from server context. Response is ReceiptResponse:
+  {id, product_id, case_id, placed_at, case_revision, snapshot: PassportResponse,
+  snapshot_hash, chain_head: string|null, hash_valid, changed_since_purchase, diff}.
+  GET /orders returns ReceiptResponse[]; GET /orders/{id} returns one receipt.
+  Each diff item is {field_key, then: PassportField|null, now: PassportField|null,
+  changed}. All demo roles can access these routes; Stage B must scope receipts to
+  the authenticated actor and always freeze/filter the public passport.
+- GET /products/{id}/marketplace returns BuyerMarketplaceResponse or
+  ExpertMarketplaceResponse. Both have {audience, product_id, scan_id: string|null,
+  fields}; each field has {field_key, independent_clusters, values, majority}.
+  Values are {value: normalized JSON object, display, independent_clusters}; majority
+  is a normalized object or null (no majority). Only the expert DTO adds findings
+  with {seller_source_id, shop, field_key, value, display, cluster, outlier, citation,
+  dataset_origin}. Stage B selects EXPERT only for REVIEWER/OPERATOR and emits the
+  public tally for other roles; the union is not a substitute for filtering.
+- POST /internal/marketplace/{id}/scan requires OPERATOR and returns
+  {product_id, scan_id, sellers_processed, sellers_skipped, findings: int,
+  llm_mode: LIVE|REPLAY|FALLBACK, stop_reason: string|null}.
+- POST /cases/{id}/web-search requires OPERATOR, no request body, and returns the
+  existing AdmitResult. Idempotency remains case+revision, derived by the server.
+  GET requires REVIEWER/OPERATOR and returns {case_id, queries, snapshots}.
+  Query items: {id, run_id, query, provider, mode, results, created_at}; result items:
+  {url, domain, class, score: number|null, decision, reason}. Snapshot items:
+  {source_version_id, url, sha256, captured_at, dataset_origin, identity_verified,
+  passages: [{id, locator, text}]}. Source passages are presented as source text.
+- GET /sources/{sv}/image requires as_role from the existing Role enum in the query;
+  it does not require custom headers. Missing/invalid as_role returns422. Success
+  is binary PNG/JPEG/WebP, documented in OpenAPI with Response, not a JSON DTO.
+  Stage B must reject PRIVATE images for non-reviewer/non-operator roles before
+  returning any bytes. The stub never returns an image.
+- GET /internal/eval/metrics requires REVIEWER/OPERATOR. Its typed JSON-object
+  response preserves the scorecard file shape (dict[str, JsonValue]); the later
+  implementation returns {available:false} when absent, as P1-5b specifies.
+
+The image route is Should and scorecard implementation remains later work; adding
+their interface does not change phase scope. OCR evidence boxes remain a Stage-B
+coordination item using P2 boxes_for; no existing evidence schema is changed here.
+
 ### S3 P1 contract checkpoint
 
 The six S3 GET routes in section 2 are registered with typed response models in

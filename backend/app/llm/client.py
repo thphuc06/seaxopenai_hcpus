@@ -116,10 +116,11 @@ def _request(ctx: RunContext, **request: object) -> Response:
     if guard is not None:
         guard(request)
     _active(ctx)
+    wait_deadline = perf_counter() + ctx.budget.remaining_s()
     pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="llm-request")
     future = pool.submit(_call_api, **request)
     try:
-        return future.result(timeout=ctx.budget.remaining_s())
+        return future.result(timeout=max(0.0, wait_deadline - perf_counter()))
     except TimeoutError:
         if future.done() and future.exception() is not None:
             raise
