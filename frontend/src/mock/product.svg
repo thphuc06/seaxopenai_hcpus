@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560" fill="none">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="640" y2="560" gradientUnits="userSpaceOnUse"><stop stop-color="#e9eee5"/><stop offset="1" stop-color="#d8e4d9"/></linearGradient>
+    <linearGradient id="bottle" x1="229" y1="280" x2="417" y2="280" gradientUnits="userSpaceOnUse"><stop stop-color="#f1eee3"/><stop offset="0.35" stop-color="#fffcf2"/><stop offset="1" stop-color="#d4dbcc"/></linearGradient>
+    <linearGradient id="cap" x1="248" y1="90" x2="393" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#1b5147"/><stop offset="0.5" stop-color="#326c5c"/><stop offset="1" stop-color="#153d35"/></linearGradient>
+  </defs>
+  <rect width="640" height="560" fill="url(#back)"/>
+  <circle cx="523" cy="114" r="154" fill="#f5f5e9" fill-opacity=".6"/>
+  <path d="M-40 428C135 344 241 404 385 465C476 503 579 470 680 425V560H-40Z" fill="#c3d2c5" fill-opacity=".6"/>
+  <ellipse cx="330" cy="482" rx="129" ry="18" fill="#597264" fill-opacity=".16"/>
+  <g transform="rotate(-7 320 280)">
+    <rect x="247" y="82" width="146" height="69" rx="12" fill="url(#cap)"/>
+    <path d="M264 144H377C399 144 419 171 419 194V437C419 460 406 474 384 474H256C234 474 221 460 221 437V194C221 171 242 144 264 144Z" fill="url(#bottle)" stroke="#a9b8a8"/>
+    <path d="M236 194V421" stroke="white" stroke-opacity=".7" stroke-width="7" stroke-linecap="round"/>
+    <rect x="235" y="228" width="170" height="174" rx="2" fill="#f6f5e9"/>
+    <path d="M235 228H405V246H235Z" fill="#315f4d"/>
+    <text x="320" y="281" font-family="Georgia,serif" font-size="31" text-anchor="middle" fill="#244c3d">lumivy</text>
+    <text x="320" y="301" font-family="Arial,sans-serif" font-size="10" letter-spacing="3" text-anchor="middle" fill="#55715b">DEMO</text>
+    <path d="M299 325H341" stroke="#a2ad8f"/>
+    <text x="320" y="348" font-family="Arial,sans-serif" font-size="12" text-anchor="middle" fill="#36513c">GENTLE NIACINAMIDE</text>
+    <text x="320" y="368" font-family="Arial,sans-serif" font-size="12" letter-spacing="2" text-anchor="middle" fill="#36513c">CLEANSER</text>
+    <text x="320" y="433" font-family="Arial,sans-serif" font-size="13" text-anchor="middle" fill="#49634b">50 ml</text>
+  </g>
+</svg>

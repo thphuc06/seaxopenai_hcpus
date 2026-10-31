@@ -1,0 +1,19 @@
+[
+  {
+    "id": "DEMO-PROD-01",
+    "name": "Gentle Niacinamide Cleanser",
+    "brand": "Lumivy Demo",
+    "variant": "50 ml",
+    "market": "VN",
+    "dataset_origin": "SYNTHETIC",
+    "presentation": {
+      "image": "product.svg",
+      "image_alt": "Illustration of a Lumivy Demo cleanser bottle, 50 ml",
+      "price": 129000,
+      "currency": "VND",
+      "shop": "Lumivy Demo Store",
+      "official_store": false,
+      "category": "Beauty & personal care / Cleansers"
+    }
+  }
+]
