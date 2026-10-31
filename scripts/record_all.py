@@ -25,16 +25,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "backend"))
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, JsonValue, PositiveInt
 
 from app import config, db, seed, store, worker
 from app.budget import Budget, BudgetExceeded
 from app.context import RunContext
-from app.llm.client import LLMError, network_guard
+from app.llm.client import LLMError, count_image_tokens, network_guard
 from app.llm.messages import build_input
 from app.models import ClaimExtraction, EventEnvelope, Role
 from app.events.admit import admit
-from app.pipeline.extract import CACHE_VERSION, INSTRUCTIONS, PROMPT_VERSION, RETRY_VERSION, Extraction, extract_source_version, extraction_input
+from app.pipeline.extract import CACHE_VERSION, INSTRUCTIONS, PROMPT_VERSION, RETRY_VERSION, Extraction, extract_source_version, extraction_input, label_image
 from app.pipeline.fallback_extract import FALLBACK_VERSION, Passage
 from app.trace import TraceWriter
 from scripts.smoke import LedgerState, PriceBook, SmokeFailure, TokenUsage, request_bound
@@ -42,6 +42,11 @@ from scripts.smoke import LedgerState, PriceBook, SmokeFailure, TokenUsage, requ
 
 class CheckpointError(RuntimeError):
     """A diagnostic code, never a provider payload."""
+
+
+def image_count_key(model: str, part: Mapping[str, object]) -> str:
+    identity = {"model": model, "detail": part.get("detail", "auto"), "image_url": part.get("image_url")}
+    return hashlib.sha256(json.dumps(identity, sort_keys=True).encode("utf-8")).hexdigest()
 
 
 class Stage(BaseModel):
@@ -188,6 +193,7 @@ class PassLedger:
         self.path, self.prices = path, prices
         self.max_calls, self.max_usd = max_calls, max_usd
         self.state = LedgerState()
+        self.image_counts: dict[str, int] = {}
         self._lock = Lock()
         if path.exists():
             lines = path.read_text(encoding="utf-8").splitlines()
@@ -215,13 +221,7 @@ class PassLedger:
             # Direct HTTP GET has no model/provider fee, but consumes an attempt.
             self._commit_reservation(0.0)
             return
-        # Encoded PNG byte length is not a bound on vision token use. Fail
-        # closed until this model's image accounting is independently verified.
-        messages = request.get("input", [])
-        if isinstance(messages, list) and any(isinstance(message, dict) and any(
-            isinstance(part, dict) and part.get("type") == "input_image" for part in message.get("content", [])
-        ) for message in messages):
-            raise BudgetExceeded("VISION_TOKEN_COST_NOT_VERIFIED")
+        request, image_tokens = self._image_bound(request)
         tools = request.get("tools")
         searches = 0
         if tools:
@@ -233,12 +233,41 @@ class PassLedger:
                     or request.get("service_tier") != "default"):
                 raise BudgetExceeded("REQUEST_COST_NOT_VERIFIED")
             searches = 1
-        bound = request_bound(request, web_tokens=self.prices.tools.search_context_token_limit if searches else 0)
+        bound = request_bound(request, web_tokens=self.prices.tools.search_context_token_limit if searches else 0) + image_tokens
         if bound > 272_000:
             raise BudgetExceeded("REQUEST_COST_NOT_VERIFIED")
         estimate = self.prices.cost(str(request["model"]), TokenUsage(
             input_tokens=bound, output_tokens=int(str(request["max_output_tokens"]))), searches=searches)
         self._commit_reservation(estimate)
+
+    def _image_bound(self, request: Mapping[str, object]) -> tuple[Mapping[str, object], int]:
+        """Replace image bytes only for estimation, never in the model request."""
+        messages = request.get("input", [])
+        if not isinstance(messages, list):
+            return request, 0
+        copied: list[object] = []
+        tokens = 0
+        for message in messages:
+            if not isinstance(message, dict) or not isinstance(message.get("content"), list):
+                copied.append(message)
+                continue
+            parts: list[object] = []
+            for part in message["content"]:
+                if not isinstance(part, dict) or part.get("type") != "input_image":
+                    parts.append(part)
+                    continue
+                key = image_count_key(str(request.get("model", "")), part)
+                if key not in self.image_counts:
+                    raise BudgetExceeded("VISION_TOKEN_COST_NOT_VERIFIED")
+                tokens += self.image_counts[key]
+                parts.append({**part, "image_url": ""})
+            copied.append({**message, "content": parts})
+        return {**request, "input": copied}, tokens
+
+    def reserve_token_count(self) -> None:
+        """Tokenization is not generation; count its network attempt durably."""
+        with self._lock:
+            self._commit_reservation(0.0)
 
     def _commit_reservation(self, estimate: float) -> None:
         if self.state.calls >= self.max_calls or self.state.committed_usd + estimate > self.max_usd:
@@ -599,8 +628,61 @@ def _story_fields() -> list[str]:
             "FROM field_results WHERE superseded_by IS NULL ORDER BY case_id,field_key")]
 
 
+class ImageCounts(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    model: str
+    endpoint: Literal["responses.input_tokens.count"] = "responses.input_tokens.count"
+    source: Literal["https://developers.openai.com/api/docs/guides/token-counting"] = "https://developers.openai.com/api/docs/guides/token-counting"
+    counts: dict[str, PositiveInt]
+    budget: dict[str, JsonValue]
+
+
+def prepare_image_counts(plan: StoryPlan, output_dir: Path, ledger: PassLedger,
+                         existing: Path | None = None) -> None:
+    """Count canonical source images before any generation; never read gold."""
+    if not config.settings.llm_vision:
+        return
+    budget = Budget(max_model_calls=0, max_tool_calls=plan.max_calls,
+                    deadline_s=config.settings.run_deadline_s)
+    model = config.settings.model_extract
+    if existing is not None and existing.is_file():
+        prior = ImageCounts.model_validate_json(existing.read_text(encoding="utf-8"))
+        if prior.model == model:
+            ledger.image_counts.update(prior.counts)
+    for relative in sorted(plan.input_hashes):
+        if Path(relative).suffix.lower() not in {".png", ".jpg"}:
+            continue
+        part = label_image(plan.fixtures_dir / relative)
+        content = build_input("Count input tokens.", [part])[1]["content"][0]
+        key = image_count_key(model, content)
+        if key in ledger.image_counts:
+            continue
+        budget.check_active()
+        ledger.reserve_token_count()
+        ledger.image_counts[key] = count_image_tokens(model=model, image=part, budget=budget)
+        (output_dir / "image-counts.json").write_text(ImageCounts(
+            model=model, counts=ledger.image_counts, budget=budget.usage()).model_dump_json(indent=2), encoding="utf-8")
+    if ledger.image_counts:
+        (output_dir / "image-counts.json").write_text(ImageCounts(
+            model=model, counts=ledger.image_counts, budget=budget.usage()).model_dump_json(indent=2), encoding="utf-8")
+
+
+def reuse_recordings(source: Path, destination: Path) -> None:
+    """Seed a fresh attempt from immutable entries; never replace a file."""
+    if not source.is_dir():
+        return
+    for path in source.rglob("*.json"):
+        if path.is_symlink() or not path.resolve().is_relative_to(source.resolve()):
+            raise CheckpointError("REPLAY_SOURCE_OUTSIDE_DIRECTORY")
+        target = destination / path.relative_to(source)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("xb") as stream:
+            stream.write(path.read_bytes())
+
+
 def story_pass(plan: StoryPlan, output_dir: Path, *, mode: Literal["record", "replay", "fallback"] = "record",
-               execute: bool = False, replay_dir: Path | None = None) -> StoryReport:
+               execute: bool = False, replay_dir: Path | None = None,
+               count_images: bool = False) -> StoryReport:
     """Record only with explicit execution; replay/fallback never contact a provider."""
     validate_caps(plan.max_calls, plan.max_usd)
     report = StoryReport(plan=plan, not_recorded=[item.name for item in plan.items])
@@ -634,8 +716,13 @@ def story_pass(plan: StoryPlan, output_dir: Path, *, mode: Literal["record", "re
             output_dir.mkdir(parents=True, exist_ok=False)
             saved.write_text(plan.model_dump_json(indent=2), encoding="utf-8")
             copy_database(folder / "base.db", output_dir / "base.db")
+            if replay_dir is not None:
+                reuse_recordings(existing_replay_dir, output_dir / "replay")
             prices = PriceBook.model_validate_json((ROOT / "backend/app/data/model_prices.json").read_text(encoding="utf-8"))
             ledger = PassLedger(output_dir / "ledger.jsonl", prices, max_calls=plan.max_calls, max_usd=plan.max_usd)
+            if count_images:
+                with pass_settings(folder, "record", web=plan.web):
+                    prepare_image_counts(plan, output_dir, ledger, existing_replay_dir.parent / "image-counts.json")
         copy_database(folder / "base.db", folder / (mode + ".db"))
         stop_recording = False
 
@@ -696,6 +783,7 @@ def main() -> int:
     parser.add_argument("--max-usd", type=float, default=2.0, help="Finite story USD reservation cap (default 2)")
     parser.add_argument("--replay-dir", type=Path, help="Existing story recordings when no saved base/plan is available")
     parser.add_argument("--web", choices=("off", "on"), default="off", help="Story web discovery; defaults off, shared session cap when on")
+    parser.add_argument("--count-image-tokens", action="store_true", help="Story record preflight: exact image token counts; attempts share session cap")
     args = parser.parse_args()
     try:
         validate_caps(args.max_calls, args.max_usd)
@@ -709,8 +797,9 @@ def main() -> int:
             print(f"Story plan: <= {plan.estimated_calls_upper} calls; USD upper={estimate}; caps={plan.max_calls} calls / ${plan.max_usd:.6f}", flush=True)
             mode = "replay" if args.replay_only else (args.mode or "record")
             report = story_pass(plan, args.output_dir.resolve(), mode=mode,
-                execute=not args.dry_run and (args.execute or mode in {"replay", "fallback"}), replay_dir=args.replay_dir or config.settings.replay_dir)
-        elif args.mode or args.replay_dir or args.web != "off" or args.max_calls != 30 or args.max_usd != 2.0:
+                execute=not args.dry_run and (args.execute or mode in {"replay", "fallback"}), replay_dir=args.replay_dir or config.settings.replay_dir,
+                count_images=args.count_image_tokens)
+        elif args.mode or args.replay_dir or args.web != "off" or args.max_calls != 30 or args.max_usd != 2.0 or args.count_image_tokens:
             raise CheckpointError("STORY_OPTIONS_REQUIRE_STORY")
         elif args.events:
             if args.snapshot or (args.execute and args.replay_only):

@@ -807,3 +807,147 @@ cache identities advance to fallback-v5-notification-header and
 coverage-v4-notification-header so previously cached omissions are reprocessed.
 Model prompt text and its replay identity are unchanged; changed coverage hints
 already participate in the retry request key. Old cache/recording rows are retained.
+
+### Phase 5 freeze receipt — 31 October 2026, P2
+
+This receipt starts after the deadlines: task entry was16:10 ICT (T+6:10),
+recordings deadline15:35, code deadline16:00. Local p2 fast-forwarded to
+sync-4 eca731b. That tag integrates all four lanes; its gate explicitly reports
+no provider recording pass. Phase4 integration and Phase5 recording coverage are
+separate evidence. Local ignored backend/.env now has REPLAY_FREEZE=1.
+
+Current local configuration, read without exposing credentials:
+
+| Item | Frozen value |
+| --- | --- |
+| Extraction / agent model | gpt-6.1-sol / gpt-6.1-sol |
+| Cheap model | unset; canon/claims use extraction model |
+| Embedding model | text-embedding-3-small |
+| Extraction / agent effort | low / medium |
+| Maximum output tokens |16000 |
+| Run model calls / deadline |24 /120 seconds |
+| Agent calls / tools / deadline |10 /16 /75 seconds |
+| Manager turns / retrieval hops / single-call maximum |3 /2 /8; Manager is not implemented |
+| Web searches / pages |3 /4 per run; CLI requires --web on |
+| Phase5 aggregate authorization |200 network attempts / USD40 reserved upper cost; explicit user increase after first capped pass |
+| Replay directory | fixtures/replay |
+| Local mode / vision | replay / enabled; REPLAY_FREEZE=1 |
+
+| Model step | Current prompt/request version |
+| --- | --- |
+| extract | extract-v1; image path extract-vision-v1 |
+| extract:retry | extract-retry-v1 |
+| canon:learn | canon-v1 |
+| claims:audit | claims-v2-passage-scope |
+| agent:scope_single | scope-single-v1 |
+| agent:web_scout | web-queries-v1 and web-pages-v1 |
+| web search/fetch transport | web-transport-v2 (supersedes the historical v1 paragraph above) |
+
+No demo-story or blind-set1 provider recordings or story-report.json were found
+in the checkout at entry. Per-demo-step provider calls, tokens and cost are
+therefore NOT MEASURED, rather than zero. The sole tracked baseline_b1 recording
+is isolated evaluation evidence, not demo coverage. Test-generated recordings
+are not provider measurements. The CLI dry plan covers28 inputs with0 missing
+inputs/blockers; its784-call/USD552.776 worst-case estimate is not authorized
+spend. Execution remains capped at30 attempts/USD2 and may be incomplete.
+
+Preflight review identified the initial P2 limitation: PassLedger rejected every
+input_image with VISION_TOKEN_COST_NOT_VERIFIED. Demo bootstrap contains a
+packaging image and local vision is enabled. The dry plan currently does not
+surface this request-time blocker. The user authorized its post-freeze repair
+while retaining images. The new --count-image-tokens story option uses the
+documented responses.input_tokens.count endpoint before generation, with a
+finite operational Budget and the same durable session call cap. It reuses
+label_image and build_input, binding counts to model, canonical PNG bytes and
+detail. Reservation adds exact image-plus-framing tokens to conservative
+text/schema bytes and maximum output; the actual model input is unchanged.
+Unknown image counts still block. No counting endpoint runs in replay/fallback.
+
+Record mode writes to a new output directory's replay subdirectory. The Phase5
+continuation fix imports immutable entries from --replay-dir using exclusive
+creation and reuses strictly validated image-count receipts from its parent.
+Existing files are never replaced. Fresh-reset sync gates still need their own
+successful replay, separately from a saved-base comparison.
+
+Stored source-version and passage IDs are content-derived; review found no
+unstable reset identifier in the inspected model inputs. Actual replay keys
+include model, effort and token limit, although the saved story plan fingerprint
+does not include all those settings. Keep this configuration receipt with the
+recording set. A miss remains a missing request or an identity defect to diagnose.
+
+Measured spending evidence available locally:
+
+| Receipt | Provider calls | Estimated actual usage cost, USD |
+| --- | --- | --- |
+| p2-smoke-report-02.json |9 |0.00287018 |
+| p2-smoke-web-02.json, brand-domain probe |1 |0.02981400 |
+| p2-smoke-web-alt-02.json, alternate-domain probe |1 |0.02774000 |
+| P2 smoke total |11 |0.06042418 |
+| Phase5 attempt01 model/search calls (plus5 count requests and1 HTTP fetch) |8 |0.10264600 |
+| Tracked baseline_b1, caller not attributed to P2 |1 |0.00528800 |
+| Distinct stored smoke plus baseline evidence before Phase5 |12 |0.06571218 |
+
+Smoke receipts are under backend/.venv and the earlier Phase0 tables preserve
+their measurements. Baseline usage is1959 input/137 output tokens. Reasoning is
+already included in output. The first failed-auth smoke report retained
+USD0.3772076 reservation with no returned usage; that is not measured spending.
+Supplemental smoke ledgers are cumulative and must not be added together.
+Complete account spending today remains NOT VERIFIED without account usage and
+any external terminal receipts. Phase5 attempt01 returned28053 input/2654 output
+tokens and2 hosted searches. Its14 total attempts reserved USD1.926710 and
+completed bootstrap01; the next event hit RECORD_PASS_CAP. Nine replay files
+were published append-only. Later FALLBACK receipts are not recorded coverage.
+Attempt02 has only the remaining186 attempts/USD38.073290 allowance, reusing
+attempt01 entries and counts. The two allowances total200/USD40, not two fresh caps.
+
+Costs above use the existing dated model_prices.json rates; current general
+[pricing documentation](https://developers.openai.com/api/docs/pricing) was
+fetched, but the configured model page could not be fetched and the returned
+vision guide did not establish its image-token bound. The exact
+[token-counting endpoint](https://developers.openai.com/api/docs/guides/token-counting)
+resolved image sizing without assuming a model multiplier; all5 canonical image
+preflights returned1120 tokens including framing. Installed versions remain openai3.42.0, openai-agents0.24.0,
+pydantic2.14.2 and pytest9.2.0; no dependency was changed.
+
+Phase4c measurements remain the explicitly scoped f6655f6 diagnostic described
+above: catalogue fallback3/5 DRAFT fields,3 CODE placements,0 agent anchors,
+2 UNKNOWN placements,0 model calls,1.933s wall. Typed replay failed at prerequisite01;
+Manager and deferred blind scope10 have no comparison result. No agent benefit
+or current-tree score is inferred.
+
+CCR P2->P4, tracked backend/app/config.py and backend/.env.example: document stage
+LLM_MODE=replay and REPLAY_FREEZE=1; freeze must keep record/live load-only with
+REPLAY_MISS on absence, no provider fallback or recording overwrite. Keep keys
+local. P4 tags rec-freeze only after actual recordings are merged. This CCR is
+prepared here; direct delivery is pending a reachable P4 destination.
+
+Final publication status16:36 ICT: user requested immediate push and no more
+testing. Image/recording checks completed56 and13 passes; continuation exposed
+2 failures among49 tests, fixed by importing replay entries only when a source
+directory is explicitly supplied. Final affected image/reuse/regression/guards
+receipt is19 passed,0 failed/errors/skips/deselections; counts overlap. The full
+Phase4 replay pytest invocation was interrupted with visible failures and has no
+completed summary. No full-green claim. Sync1 passed17/17 after attempt01;
+sync2–4 stopped at evidence06 ('new document results differ'). No post-stop rerun.
+
+Attempt02 reused all prior recordings/counts, then hit HTTP_STATUS_403 fetching
+a source in the real Foaming event. That event remains PARTIAL. It consumed12
+new attempts/USD1.693980 reserved. Total Phase5 is26 attempts/USD3.620690
+reserved, with19 immutable published entries:17 model/search responses and2
+fetched pages. Blind-set1 provider coverage is not complete. Subsequent CLI
+FALLBACK diagnostics do not count as recording success. Both attempts were
+stopped/completed before publication; there is no background paid pass.
+
+| Recorded demo work | Model/search requests | Input / output tokens | Estimated usage USD |
+| --- | --- | --- | --- |
+| Bootstrap01, completed |4 |4838 /1849 |0.028166 |
+| Real Foaming, PARTIAL HTTP403 |13 |52170 /8884 |0.213180 including2 hosted searches |
+| Phase5 total |17 |57008 /10733 |0.241346 |
+
+Five token-count requests and four HTTP attempts are counted separately in the
+26-attempt session total; two HTTP fetches produced stored pages. Known P2 daily
+usage estimate is USD0.30177018 including smoke. Adding the separately attributed
+baseline gives USD0.30705818 of distinct stored evidence; this is not an account
+billing total. Keep both attempt ledgers; never add the cumulative reused records
+twice. P4's config/.env.example CCR and rec-freeze tag remain pending. Full Phase5
+completion is not claimed by this immediate publication receipt.
