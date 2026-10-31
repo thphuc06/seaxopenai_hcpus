@@ -1,14 +1,40 @@
 """Offline script/UI handoff checks; no Local server or replay is exercised."""
 from pathlib import Path
+from datetime import datetime, timezone
 import sys
 
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, Route, expect
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from e2e import Journey
 from test_phase1_api_browser import ApiScenario, BASE, api_page
 from test_phase2_browser import ReviewScenario, review_page
+
+
+@pytest.mark.parametrize("field_key", ["volume", "key_ingredients"])
+def test_operator_refreshes_stored_passport_after_event_before_next_poll(api_page: tuple[Page, ApiScenario], field_key: str) -> None:
+    page, state = api_page
+    page.clock.install(time=datetime(2026, 10, 31, 8, tzinfo=timezone.utc))
+    page.clock.pause_at(datetime(2026, 10, 31, 9, tzinfo=timezone.utc))
+    state.passport["run_status"] = "COMPLETED"
+    for item in state.passport["fields"]:
+        item["freshness"] = "CURRENT"
+
+    def admit(route: Route) -> None:
+        next(item for item in state.passport["fields"] if item["field_key"] == field_key)["freshness"] = "STALE"
+        route.fulfill(json={"event_id":"unrelated-admission", "outcome":"ADMITTED", "reason":"Source changed.", "stale_fields":[field_key]})
+
+    page.route("**/api/internal/demo/fire/unseen-change", admit)
+    page.goto(BASE)
+    page.get_by_label("Demo role").select_option("OPERATOR")
+    label = page.get_by_test_id("field-label-" + field_key)
+    expect(label).to_be_visible()
+    expect(label).not_to_have_text("Stale")
+    reads = sum(path.endswith("/passport") for _, path, _ in state.requests)
+    page.get_by_test_id("event-btn-unseen-change").click()
+    expect(label).to_have_text("Stale", timeout=1900)
+    assert sum(path.endswith("/passport") for _, path, _ in state.requests) > reads
 
 
 @pytest.mark.parametrize("product", ["another-product", "product with space"])

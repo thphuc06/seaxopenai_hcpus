@@ -14,7 +14,7 @@ import { createApiClient } from '../src/api/client.ts';
 const render = (component, props) => renderToStaticMarkup(createElement(component, props));
 const receipt = () => {
   const snapshot = toPassportResponse(structuredClone(raw));
-  return {id:'unrelated-order', product_id:snapshot.product_id, created_at:'2026-10-31T07:00:00Z', snapshot, snapshot_hash:null, chain_head:null, changed_since_purchase:false, diff:receiptDiff(snapshot,snapshot)};
+  return {id:'unrelated-order', product_id:snapshot.product_id, case_id:'unrelated-case',case_revision:3,placed_at:'2026-10-31T07:00:00Z', snapshot, snapshot_hash:'', hash_valid:false,chain_head:null, changed_since_purchase:false, diff:receiptDiff(snapshot,snapshot)};
 };
 
 test('an empty comparison is not a no-change finding and still shows five saved fields', () => {
@@ -30,7 +30,7 @@ test('at-purchase labels retain the frozen run state for unrelated current field
   value.snapshot.run_status = 'RUNNING';
   for (const key of ['volume', 'key_ingredients']) {
     const row = value.diff.find(item => item.field_key === key);
-    row.before.freshness = 'CURRENT';
+    row.then.freshness = 'CURRENT';
     value.diff = [row];
     const html = render(ReceiptView, {receipt:value, role:'BUYER'});
     assert.match(html, /<td>Updating<p>/);
@@ -44,14 +44,14 @@ test('receipt boundary rejects malformed findings, unknown or duplicate diff key
     r => { r.snapshot.fields[0].verdict = ['CONSISTENT']; },
     r => { r.diff[0].field_key = 'claim:unexpected:private'; },
     r => { r.diff.push(structuredClone(r.diff[0])); },
-    r => { r.diff[0].after.field_key = 'skin_type'; },
+    r => { r.diff[0].now.field_key = 'skin_type'; },
     r => { r.snapshot.product_id = 'different-product'; },
   ];
   for (const mutate of mutations) { const value = receipt(); mutate(value); assert.throws(() => readReceipt(value), /supported contract/); }
 });
 
-test('web audit rejects unknown classifications and negative/non-finite counts', () => {
-  for (const mutate of [a => {a.searches[0].results[0].classification='UNRECOGNIZED';}, a => {a.searches[0].results[0].rank=-1;}, a => {a.snapshots[0].passages_count=NaN;}]) {
+test('web audit rejects malformed class, non-finite score and missing passage collections', () => {
+  for (const mutate of [a => {a.queries[0].results[0].class=[];}, a => {a.queries[0].results[0].score=NaN;}, a => {a.snapshots[0].passages=null;}]) {
     const value = structuredClone(sample.audit); mutate(value); assert.throws(() => readWebAudit(value), /supported contract/);
   }
 });
@@ -73,7 +73,7 @@ test('preview expert requests require actor and recognized role', async () => {
 });
 
 test('audit empty state and missing/computed scorecards keep distinct meanings', () => {
-  assert.match(render(WebAuditView, {audit:{case_id:'case',searches:[],snapshots:[]}}), /No web search/);
+  assert.match(render(WebAuditView, {audit:{case_id:'case',queries:[],snapshots:[]}}), /No web search/);
   assert.match(render(Scorecard, {data:null}), /Not computed yet/);
   const html = render(Scorecard, {data:{computed_at:'2026-10-31T07:00:00Z',status:'DRAFT',metrics:{accuracy:0}}});
   assert.match(html, /\/api\/internal\/eval\/metrics/); assert.match(html, /computed/); assert.match(html, /DRAFT/); assert.match(html, /<dd>0<\/dd>/);
@@ -106,5 +106,5 @@ test('receipt projection drops unexpected expert/display extras and audit explai
   const html = render(ReceiptView, {receipt:parsed,role:'BUYER'});
   assert.doesNotMatch(html, /hidden-chain-marker|invalid-object/);
   assert.equal((html.match(/data-testid="field-row-/g) ?? []).length, 5);
-  assert.match(render(WebAuditView, {audit:{case_id:'c',searches:[{query:'unrelated query',results:[]}],snapshots:[]}}), /No results recorded for this query/);
+  assert.match(render(WebAuditView, {audit:{case_id:'c',queries:[{...sample.audit.queries[0],query:'unrelated query',results:[]}],snapshots:[]}}), /No results recorded for this query/);
 });

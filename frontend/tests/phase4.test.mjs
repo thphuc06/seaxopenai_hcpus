@@ -60,7 +60,7 @@ for (const fieldKey of ['notification_number', 'skin_type']) {
 }
 test('receipt buyer redacts integrity references; expert can inspect them', () => {
   const snapshot = toPassportResponse(raw);
-  const receipt = { id: 'order-independent', created_at: '2026-10-31T07:00:00Z', snapshot, snapshot_hash: 'secret-hash-marker', chain_head: 'chain-marker', diff: [], changed_since_purchase: false };
+  const receipt = { id: 'order-independent', placed_at: '2026-10-31T07:00:00Z', snapshot, snapshot_hash: 'secret-hash-marker', chain_head: 'chain-marker', diff: [], changed_since_purchase: false };
   for (const role of ['BUYER', 'SELLER']) {
     const html = render(ReceiptView, { receipt, role });
     assert.doesNotMatch(html, /secret-hash-marker|chain-marker/);
@@ -78,7 +78,7 @@ test('expert-only reads reject buyer and seller in preview', async () => {
 });
 test('web audit shows query, decisions and snapshots without executable links', () => {
   const audit = structuredClone(sample.audit);
-  audit.searches[0].results[0].url = 'javascript:alert(1)';
+  audit.queries[0].results[0].url = 'javascript:alert(1)';
   const html = render(WebAuditView, { audit });
   assert.match(html, /data-testid="web-audit"/);
   assert.match(html, /lead only/); assert.match(html, /skipped/); assert.match(html, /Captured/);

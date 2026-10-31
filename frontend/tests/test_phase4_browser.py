@@ -15,11 +15,11 @@ def test_purchase_then_source_change_preserves_receipt(page: Page) -> None:
     page.get_by_label("Demo role").select_option("OPERATOR")
     page.get_by_test_id("event-btn-05-revoke-notification").click()
     expect(page.get_by_test_id("web-audit")).to_be_visible()
+    page.get_by_label("Demo role").select_option("BUYER")
     # SPA navigation keeps the explicit in-memory preview receipt.
     page.evaluate("path => { history.pushState({}, '', path); dispatchEvent(new PopStateEvent('popstate')); }", receipt_path)
     expect(page.get_by_test_id("receipt-diff")).to_contain_text("Changed since purchase")
     expect(page.locator(".passport-card")).to_have_text(frozen)
-    page.get_by_label("Demo role").select_option("BUYER")
     expect(page.get_by_text("Receipt integrity references")).to_have_count(0)
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     page.screenshot(path=str(ARTIFACTS / "receipt-phase4-1280x720.png"))

@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/api/sources/{source_version_id}/image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Source Image */
+        get: operations["source_image_api_sources__source_version_id__image_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/products": {
         parameters: {
             query?: never;
@@ -174,6 +191,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/cases/{case_id}/web-search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Web Search Audit */
+        get: operations["web_search_audit_api_cases__case_id__web_search_get"];
+        put?: never;
+        /** Request Web Search */
+        post: operations["request_web_search_api_cases__case_id__web_search_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/review/queue": {
         parameters: {
             query?: never;
@@ -236,6 +271,23 @@ export interface paths {
         put?: never;
         /** Upload Evidence */
         post: operations["upload_evidence_api_cases__case_id__evidence_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/internal/eval/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Evaluation Metrics */
+        get: operations["evaluation_metrics_api_internal_eval_metrics_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -361,6 +413,75 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Orders */
+        get: operations["orders_api_orders_get"];
+        put?: never;
+        /** Create Order */
+        post: operations["create_order_api_orders_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/orders/{order_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Order */
+        get: operations["order_api_orders__order_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/products/{product_id}/marketplace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Marketplace */
+        get: operations["marketplace_api_products__product_id__marketplace_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/internal/marketplace/{product_id}/scan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Scan Marketplace */
+        post: operations["scan_marketplace_api_internal_marketplace__product_id__scan_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -414,6 +535,21 @@ export interface components {
             citations: components["schemas"]["EvidencePassage"][];
             /** Hidden Citations */
             hidden_citations: number;
+        };
+        /** BuyerMarketplaceResponse */
+        BuyerMarketplaceResponse: {
+            /**
+             * Audience
+             * @default BUYER
+             * @constant
+             */
+            audience: "BUYER";
+            /** Product Id */
+            product_id: string;
+            /** Scan Id */
+            scan_id: string | null;
+            /** Fields */
+            fields: components["schemas"]["MarketplaceFieldTally"][];
         };
         /** CaseHistoryResponse */
         CaseHistoryResponse: {
@@ -644,6 +780,23 @@ export interface components {
             /** Reviews */
             reviews: components["schemas"]["ReviewResponse"][];
         };
+        /** ExpertMarketplaceResponse */
+        ExpertMarketplaceResponse: {
+            /**
+             * Audience
+             * @default EXPERT
+             * @constant
+             */
+            audience: "EXPERT";
+            /** Product Id */
+            product_id: string;
+            /** Scan Id */
+            scan_id: string | null;
+            /** Fields */
+            fields: components["schemas"]["MarketplaceFieldTally"][];
+            /** Findings */
+            findings: components["schemas"]["MarketplaceSellerFinding"][];
+        };
         /** ExplainClaim */
         ExplainClaim: {
             /** Source Version Id */
@@ -744,6 +897,71 @@ export interface components {
             data_base64: string;
         };
         JsonValue: unknown;
+        /** MarketplaceFieldTally */
+        MarketplaceFieldTally: {
+            /** Field Key */
+            field_key: string;
+            /** Independent Clusters */
+            independent_clusters: number;
+            /** Values */
+            values: components["schemas"]["MarketplaceValueTally"][];
+            /** Majority */
+            majority: {
+                [key: string]: components["schemas"]["JsonValue"];
+            } | null;
+        };
+        /** MarketplaceScanResponse */
+        MarketplaceScanResponse: {
+            /** Product Id */
+            product_id: string;
+            /** Scan Id */
+            scan_id: string;
+            /** Sellers Processed */
+            sellers_processed: number;
+            /** Sellers Skipped */
+            sellers_skipped: number;
+            /** Findings */
+            findings: number;
+            /**
+             * Llm Mode
+             * @enum {string}
+             */
+            llm_mode: "LIVE" | "REPLAY" | "FALLBACK";
+            /** Stop Reason */
+            stop_reason: string | null;
+        };
+        /** MarketplaceSellerFinding */
+        MarketplaceSellerFinding: {
+            /** Seller Source Id */
+            seller_source_id: string;
+            /** Shop */
+            shop: string;
+            /** Field Key */
+            field_key: string;
+            /** Value */
+            value: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Display */
+            display: string;
+            /** Cluster */
+            cluster: string;
+            /** Outlier */
+            outlier: boolean;
+            citation: components["schemas"]["Citation"];
+            dataset_origin: components["schemas"]["DatasetOrigin"];
+        };
+        /** MarketplaceValueTally */
+        MarketplaceValueTally: {
+            /** Value */
+            value: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Display */
+            display: string;
+            /** Independent Clusters */
+            independent_clusters: number;
+        };
         /** MetricsResponse */
         MetricsResponse: {
             events: components["schemas"]["EventCounts"];
@@ -795,6 +1013,11 @@ export interface components {
             review_queue_size: number;
             /** Oldest Review Age S */
             oldest_review_age_s: number | null;
+        };
+        /** OrderRequest */
+        OrderRequest: {
+            /** Product Id */
+            product_id: string;
         };
         /** OtelResponse */
         OtelResponse: {
@@ -879,6 +1102,39 @@ export interface components {
             market: string;
             dataset_origin: components["schemas"]["DatasetOrigin"];
             presentation?: components["schemas"]["ProductPresentation"] | null;
+        };
+        /** ReceiptFieldDiff */
+        ReceiptFieldDiff: {
+            /** Field Key */
+            field_key: string;
+            then: components["schemas"]["PassportField"] | null;
+            now: components["schemas"]["PassportField"] | null;
+            /** Changed */
+            changed: boolean;
+        };
+        /** ReceiptResponse */
+        ReceiptResponse: {
+            /** Id */
+            id: string;
+            /** Product Id */
+            product_id: string;
+            /** Case Id */
+            case_id: string;
+            /** Placed At */
+            placed_at: string;
+            /** Case Revision */
+            case_revision: number;
+            snapshot: components["schemas"]["PassportResponse"];
+            /** Snapshot Hash */
+            snapshot_hash: string;
+            /** Chain Head */
+            chain_head: string | null;
+            /** Hash Valid */
+            hash_valid: boolean;
+            /** Changed Since Purchase */
+            changed_since_purchase: boolean;
+            /** Diff */
+            diff: components["schemas"]["ReceiptFieldDiff"][];
         };
         /** ResetResponse */
         ResetResponse: {
@@ -982,6 +1238,11 @@ export interface components {
          * @enum {string}
          */
         ReviewState: "AUTO_DRAFT" | "NEEDS_REVIEW" | "REVIEWED" | "SUPERSEDED";
+        /**
+         * Role
+         * @enum {string}
+         */
+        Role: "BUYER" | "SELLER" | "REVIEWER" | "OPERATOR" | "SYSTEM";
         /** RuleStep */
         RuleStep: {
             /** Rule */
@@ -1117,6 +1378,75 @@ export interface components {
          * @enum {string}
          */
         Verdict: "CONSISTENT" | "CONFLICTING" | "SINGLE_SOURCE" | "INSUFFICIENT" | "UNCERTAIN" | "NOT_APPLICABLE";
+        /** WebAuditQuery */
+        WebAuditQuery: {
+            /** Id */
+            id: string;
+            /** Run Id */
+            run_id: string;
+            /** Query */
+            query: string;
+            /** Provider */
+            provider: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "LIVE" | "REPLAY" | "FALLBACK";
+            /** Results */
+            results: components["schemas"]["WebAuditResult"][];
+            /** Created At */
+            created_at: string;
+        };
+        /** WebAuditResponse */
+        WebAuditResponse: {
+            /** Case Id */
+            case_id: string;
+            /** Queries */
+            queries: components["schemas"]["WebAuditQuery"][];
+            /** Snapshots */
+            snapshots: components["schemas"]["WebAuditSnapshot"][];
+        };
+        /** WebAuditResult */
+        WebAuditResult: {
+            /** Url */
+            url: string;
+            /** Domain */
+            domain: string;
+            /** Class */
+            class: string;
+            /** Score */
+            score: number | null;
+            /** Decision */
+            decision: string;
+            /** Reason */
+            reason: string;
+        };
+        /** WebAuditSnapshot */
+        WebAuditSnapshot: {
+            /** Source Version Id */
+            source_version_id: string;
+            /** Url */
+            url: string;
+            /** Sha256 */
+            sha256: string;
+            /** Captured At */
+            captured_at: string;
+            dataset_origin: components["schemas"]["DatasetOrigin"];
+            /** Identity Verified */
+            identity_verified: boolean;
+            /** Passages */
+            passages: components["schemas"]["WebSnapshotPassage"][];
+        };
+        /** WebSnapshotPassage */
+        WebSnapshotPassage: {
+            /** Id */
+            id: string;
+            /** Locator */
+            locator: string;
+            /** Text */
+            text: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -1126,6 +1456,41 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    source_image_api_sources__source_version_id__image_get: {
+        parameters: {
+            query: {
+                as_role: components["schemas"]["Role"];
+            };
+            header?: never;
+            path: {
+                source_version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": string;
+                    "image/jpeg": string;
+                    "image/webp": string;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     products_api_products_get: {
         parameters: {
             query?: never;
@@ -1459,6 +1824,74 @@ export interface operations {
             };
         };
     };
+    web_search_audit_api_cases__case_id__web_search_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebAuditResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    request_web_search_api_cases__case_id__web_search_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdmitResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     review_queue_api_review_queue_get: {
         parameters: {
             query?: never;
@@ -1588,6 +2021,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdmitResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    evaluation_metrics_api_internal_eval_metrics_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: components["schemas"]["JsonValue"];
+                    };
                 };
             };
             /** @description Validation Error */
@@ -1826,6 +2293,176 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetricsResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    orders_api_orders_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_order_api_orders_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    order_api_orders__order_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                order_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    marketplace_api_products__product_id__marketplace_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                product_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuyerMarketplaceResponse"] | components["schemas"]["ExpertMarketplaceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    scan_marketplace_api_internal_marketplace__product_id__scan_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                product_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketplaceScanResponse"];
                 };
             };
             /** @description Validation Error */

@@ -29,7 +29,6 @@ export function withPassportMetadata(passport: PassportView, metadata?: Passport
   return {
     ...passport,
     llm_mode: metadata.llm_mode ?? passport.llm_mode,
-    web_sources: metadata.web_sources ?? passport.web_sources,
     fields: passport.fields.map((field) => ({
       ...field,
       hidden_citations: metadata.hidden_citations[field.field_key] ?? field.hidden_citations,

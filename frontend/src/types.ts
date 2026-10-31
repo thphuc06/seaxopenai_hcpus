@@ -13,12 +13,12 @@ export type OtelResponse = Schema['OtelResponse'];
 export type Citation = Schema['Citation'];
 export type PassportField = Schema['PassportField'];
 export type PassportResponse = Schema['PassportResponse'];
-// Optional S4 display metadata proposal; absent values never imply source provenance.
+// Display-only metadata for explicit callers; contract-4 does not supply web provenance.
 export interface WebSourceMetadata { source_version_id: string; url: string; captured_at: string; origin: DatasetOrigin; visibility: 'PUBLIC' | 'PRIVATE' }
-export type PassportMetadata = Schema['PassportMetadata'] & { web_sources?: WebSourceMetadata[] };
+export type PassportMetadata = Schema['PassportMetadata'];
 export type Product = Schema['ProductResponse'];
 export type EvidencePassage = Schema['EvidencePassage'] & { source_url?: string };
-export type EvidenceResponse = Omit<Schema['EvidenceResponse'], 'citations'> & { citations: EvidencePassage[] };
+export type EvidenceResponse = Schema['EvidenceResponse'];
 export type EventCatalogItem = Schema['EventCatalogItem'];
 export type EventLogItem = Schema['EventLogItem'];
 export type AdmitResult = Schema['AdmitResult'];

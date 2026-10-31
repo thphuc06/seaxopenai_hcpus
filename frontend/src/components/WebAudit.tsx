@@ -11,15 +11,16 @@ export function webUrl(value: string): string | undefined {
 }
 export function WebAuditView({ audit }: { audit: WebAuditResponse }) {
   return <section className="phase4-panel" data-testid="web-audit" data-snapshot-count={audit.snapshots.length}><p className="eyebrow">Source discovery</p><h3>Web search audit</h3>
-    {!audit.searches.length && <p>No web search has been recorded for this case.</p>}
-    {audit.searches.map((search, index) => <section key={index}><h4>Query: {search.query}</h4>{!search.results.length && <p>No results recorded for this query.</p>}<ol className="audit-results">{search.results.map((result, i) => <li key={i}>
-      <div><span className="plain-badge">{result.classification}</span> Rank {result.rank} · {result.domain}</div>
-      <a href={webUrl(result.url)} target="_blank" rel="noreferrer">{result.title}</a><p>{result.decision} · {result.reason}</p>
-    </li>)}</ol></section>)}
+    {!audit.queries.length && <p>No web search has been recorded for this case.</p>}
+    {audit.queries.map((query) => <section key={query.id}><h4>Query: {query.query}</h4><p>{query.provider} · {query.mode} · {formatTime(query.created_at)}</p>{!query.results.length && <p>No results recorded for this query.</p>}<ul className="audit-results">{query.results.map((result, i) => <li key={i}>
+      <div><span className="plain-badge">{result.class}</span> · {result.domain} · Score: {result.score ?? 'Not recorded'}</div>
+      <a href={webUrl(result.url)} target="_blank" rel="noreferrer">{webUrl(result.url) ?? 'Link unavailable'}</a><p>{result.decision} · {result.reason}</p>
+    </li>)}</ul></section>)}
     <h4>Stored snapshots</h4>{!audit.snapshots.length && <p>No page snapshots recorded.</p>}
-    {audit.snapshots.map((snapshot, index) => <article className="audit-snapshot" key={index}><a href={webUrl(snapshot.url)} target="_blank" rel="noreferrer">{snapshot.url}</a>
-      <p>Captured {formatTime(snapshot.captured_at)} · {snapshot.passages_count} passages · {snapshot.sha256.slice(0, 12)}</p>
-      <span className="plain-badge">{snapshot.confirm_only ? 'confirm-only' : snapshot.identity_verified ? 'identity verified' : 'Identity not established'}</span>
+    {audit.snapshots.map((snapshot, index) => <article className="audit-snapshot" key={index}><a href={webUrl(snapshot.url)} target="_blank" rel="noreferrer">{webUrl(snapshot.url) ?? 'Link unavailable'}</a>
+      <p>{snapshot.dataset_origin} · Captured {formatTime(snapshot.captured_at)} · {snapshot.passages.length} passages · {snapshot.sha256.slice(0, 12)}</p>
+      <span className="plain-badge">{snapshot.identity_verified ? 'identity verified' : 'Identity not established'}</span>
+      <details><summary>Stored source text</summary>{snapshot.passages.map((passage) => <div key={passage.id}><p>{passage.locator} · Source text</p><blockquote>{passage.text}</blockquote></div>)}</details>
     </article>)}
   </section>;
 }

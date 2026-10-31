@@ -15,11 +15,11 @@ export function receiptDiff(before: PassportResponse, after: PassportResponse): 
   return [...keys].map((key) => {
     const old = before.fields.find((field) => field.field_key === key) ?? null;
     const current = after.fields.find((field) => field.field_key === key) ?? null;
-    return { field_key: key as FieldKey, before: old, after: current, changed: stableJson(old) !== stableJson(current) };
+    return { field_key: key as FieldKey, then: old, now: current, changed: stableJson(old) !== stableJson(current) };
   });
 }
 export function createPhase4Transport(base: Transport = reviewTransport, now = () => new Date().toISOString()): Transport {
-  const orders = new Map<string, ReceiptResponse>();
+  const orders = new Map<string, { actor: string; receipt: ReceiptResponse }>();
   return async (path, init) => {
     if (init.signal?.aborted) throw new DOMException('Request aborted', 'AbortError');
     const role = new Headers(init.headers).get('X-Demo-Role');
@@ -31,7 +31,7 @@ export function createPhase4Transport(base: Transport = reviewTransport, now = (
     if (path === '/api/internal/observability' || path === '/api/internal/eval/metrics' || parts[4] === 'web-search') {
       if (!expert) return new Response(null, { status: 403 });
       if (init.method !== 'GET') return new Response(null, { status: 501 });
-      if (path === '/api/internal/eval/metrics') return Response.json(null);
+      if (path === '/api/internal/eval/metrics') return Response.json({ available: false });
       if (path === '/api/internal/observability') return Response.json(sample.observability);
       return Response.json({ ...sample.audit, case_id: parts[3] });
     }
@@ -40,13 +40,14 @@ export function createPhase4Transport(base: Transport = reviewTransport, now = (
       const response = await base(`/api/products/${encodeURIComponent(input.product_id)}/passport`, { ...init, method: 'GET', body: undefined });
       if (!response.ok) return response;
       const snapshot = await response.json() as PassportResponse;
-      const receipt: ReceiptResponse = { id: `preview-order-${orders.size + 1}`, product_id: input.product_id, created_at: now(), snapshot: structuredClone(snapshot), snapshot_hash: null, chain_head: null, changed_since_purchase: false, diff: receiptDiff(snapshot, snapshot) };
-      orders.set(receipt.id, structuredClone(receipt));
+      const receipt: ReceiptResponse = { id: `preview-order-${orders.size + 1}`, product_id: input.product_id, case_id: 'preview-case', case_revision: 1, placed_at: now(), snapshot: structuredClone(snapshot), snapshot_hash: '', chain_head: null, hash_valid: false, changed_since_purchase: false, diff: receiptDiff(snapshot, snapshot) };
+      orders.set(receipt.id, { actor, receipt: structuredClone(receipt) });
       return Response.json(receipt);
     }
     if (parts[2] === 'orders' && parts.length === 4 && init.method === 'GET') {
-      const receipt = orders.get(parts[3]!);
-      if (!receipt) return new Response(null, { status: 404 });
+      const stored = orders.get(parts[3]!);
+      if (!stored || stored.actor !== actor) return new Response(null, { status: 404 });
+      const { receipt } = stored;
       const response = await base(`/api/products/${encodeURIComponent(receipt.product_id)}/passport`, init);
       if (!response.ok) return response;
       const diff = receiptDiff(receipt.snapshot, await response.json() as PassportResponse);

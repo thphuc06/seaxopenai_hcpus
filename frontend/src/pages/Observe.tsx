@@ -17,15 +17,15 @@ export function ObserveView({ data, readAt }: { data: ObservabilityResponse; rea
     {Object.entries(data.calls_by_step).map(([step, counts]) => <Counts key={step} title={`Calls · ${step}`} values={counts} />)}
   </div></>;
 }
-export function Scorecard({ data }: { data: ScorecardResponse | null }) {
-  return <section className="phase4-panel"><h2>Offline scorecard</h2>{!data || !data.computed_at ? <p>Not computed yet</p> : <><p>Source: /api/internal/eval/metrics · computed {formatTime(data.computed_at)} · {data.status}</p><Counts title="Evaluation metrics" values={data.metrics} /></>}</section>;
+export function Scorecard({ data, readAt }: { data: ScorecardResponse | null; readAt?: string }) {
+  return <section className="phase4-panel"><h2>Offline scorecard</h2><p>Source: /api/internal/eval/metrics{readAt && <> · retrieved {formatTime(readAt)}</>}</p>{!data ? <p>Not computed yet</p> : <><p>computed {data.computed_at ? formatTime(data.computed_at) : 'Date not recorded'} · {data.status}</p><Counts title="Evaluation metrics" values={data.metrics} /></>}</section>;
 }
 function ExpertObserve({ api }: { api: ApiClient }) {
   const load = useCallback(async (signal: AbortSignal) => ({ value: await api.getObservability(signal), readAt: new Date().toISOString() }), [api]);
-  const loadScore = useCallback((signal: AbortSignal) => api.getScorecard(signal), [api]);
+  const loadScore = useCallback(async (signal: AbortSignal) => ({ value: await api.getScorecard(signal), readAt: new Date().toISOString() }), [api]);
   const state = usePoll(load, 10_000), score = usePoll(loadScore, 30_000);
   return <><h1>Observe</h1><p>Stored activity and offline evaluation.</p>{state.loading && <LoadingNotice />}{state.error && <ErrorNotice error={state.error} technical />}
-    {state.data && <ObserveView data={state.data.value} readAt={state.data.readAt} />}{score.error ? <ErrorNotice error={score.error} technical /> : score.loading ? <LoadingNotice /> : <Scorecard data={score.data} />}</>;
+    {state.data && <ObserveView data={state.data.value} readAt={state.data.readAt} />}{score.error ? <ErrorNotice error={score.error} technical /> : score.loading ? <LoadingNotice /> : score.data && <Scorecard data={score.data.value} readAt={score.data.readAt} />}</>;
 }
 export function Observe({ api, role }: { api: ApiClient; role: DemoRole }) {
   return role === 'OPERATOR' || role === 'REVIEWER' ? <ExpertObserve key={role} api={api} /> : <EmptyPanel eyebrow="Observability" title="Follow the work behind each finding."><p>Expert access required. Choose the Operator or Reviewer role to inspect activity.</p></EmptyPanel>;

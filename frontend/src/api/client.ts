@@ -6,6 +6,7 @@ import type { CaseHistory, EvidenceUpload, ReviewQueueItem, ReviewRecord, Review
 import { matchingReviewEvidence } from './reviewEvidence.ts';
 import { explanation } from '../glassbox.ts';
 import { readReceipt, readWebAudit, readScorecard } from './phase4Types.ts';
+import type { CreateOrderResponse, OrderDetailResponse, WebAuditResponse, ScorecardWire } from './phase4Types.ts';
 import type { ChainResponse, GraphResponse, SearchResponse, ExplanationResponse, ObservabilityResponse, OtelResponse } from '../types.ts';
 
 export interface ReviewErrorDetail { code?: string; current_revision?: number }
@@ -70,21 +71,21 @@ export function createApiClient({ getSession, transport = (path, init) => fetch(
   const segment = encodeURIComponent;
   return {
     createOrder: async (productId: string) => {
-      const receipt = readReceipt(await request<unknown>('/orders', 'POST', { product_id: productId }));
+      const receipt = readReceipt(await request<CreateOrderResponse>('/orders', 'POST', { product_id: productId }));
       if (receipt.product_id !== productId) throw new Error('The receipt belongs to a different product.');
       return receipt;
     },
     getOrder: async (id: string, signal?: AbortSignal) => {
-      const receipt = readReceipt(await request<unknown>(`/orders/${segment(id)}`, 'GET', undefined, signal));
+      const receipt = readReceipt(await request<OrderDetailResponse>(`/orders/${segment(id)}`, 'GET', undefined, signal));
       if (receipt.id !== id) throw new Error('The receipt does not match the requested order.');
       return receipt;
     },
     getWebAudit: async (id: string, signal?: AbortSignal) => {
-      const audit = readWebAudit(await request<unknown>(`/cases/${segment(id)}/web-search`, 'GET', undefined, signal));
+      const audit = readWebAudit(await request<WebAuditResponse>(`/cases/${segment(id)}/web-search`, 'GET', undefined, signal));
       if (audit.case_id !== id) throw new Error('The audit does not match the requested case.');
       return audit;
     },
-    getScorecard: async (signal?: AbortSignal) => readScorecard(await request<unknown>('/internal/eval/metrics', 'GET', undefined, signal)),
+    getScorecard: async (signal?: AbortSignal) => readScorecard(await request<ScorecardWire>('/internal/eval/metrics', 'GET', undefined, signal)),
     getExplanation: async (id: string, field: FieldKey, signal?: AbortSignal) => explanation(await request<ExplanationResponse>(`/products/${segment(id)}/fields/${segment(field)}/explain`, 'GET', undefined, signal)),
     getGraph: (id: string, signal?: AbortSignal) => request<GraphResponse>(`/cases/${segment(id)}/graph`, 'GET', undefined, signal),
     getChain: (id: string, signal?: AbortSignal) => request<ChainResponse>(`/cases/${segment(id)}/chain`, 'GET', undefined, signal),
