@@ -659,3 +659,70 @@ manifest remain in the auxiliary worktree backend/.venv/p2b3-retrieval-eval.md
 and p2b3-expected.json; P4 owns copying the report to docs/results. Fresh uploaded
 image transcription remains the open S2 limitation and is unrelated to this scope
 implementation. No provider record pass or completed S3 integration is claimed.
+
+### Phase 4 Web Scout — P2 Stage B, offline implementation
+
+`discover(ctx) -> WebOutcome(new_sv_ids, searches, stop_reason)` now implements
+the P2 discovery path. It requires stored case/tenant/product/run revision to
+match the server context and both WEB_SEARCH=on and product.web.enabled.
+Product identity and domain settings are read from storage, not model arguments.
+The default remains off. This supersedes the earlier Phase0 discovery-stub note;
+it does not establish the missing P1 run hook or a completed Sync4.
+
+Strict query and page proposals use agent:web_scout with web-queries-v1 and
+web-pages-v1. Hosted search uses the existing llm gateway transport, one
+web_search tool call, allowed domains, country and action.sources. URLs come only
+from that typed sources collection; citation titles may describe candidates,
+but generated answer text is never used as source evidence. Code checks brand,
+distinct queries, actual returned URLs and each separate evidence phrase.
+Empty candidate sets do not trigger another model call. Non-replay agent errors
+retain a stop reason and use labelled template/candidate fallback; replay misses
+remain errors. Optional Tavily and Manager paths are not implemented.
+
+Search/fetch use the same child and root Budget, WEB_MAX_SEARCHES/WEB_MAX_PAGES
+and the earliest deadline. Hosted searches consume a model call and a tool call;
+fetch consumes a tool call. Source text supplied to models is escaped inside
+SOURCE_DATA. Fallback never uses the default network providers. Tests replace
+only provider/HTTP/gateway seams. Transport recordings use web-transport-v1 under
+fixtures/replay/web and bind model/request/instructions/tools/schema/domain
+settings. Record reuses immutable existing entries; live never overwrites them;
+freeze/replay cannot fall through to the network. Replayed calls count against
+the Budget; replay makes no new token spend. Search token usage is recorded in
+the Budget, trace and recording. Query and page audit entries label replay hits.
+
+Code classifies candidates from URL hostname boundaries (never a provider's
+domain assertion), rejects comparison headings before alias slicing, and uses
+the single scripts.capture_page.clean_html implementation for HTML. The data file
+contains the source-noted query/domain/comparison/section vocabulary. An alias in
+cleaned text establishes identity. Missing identity sets identity_verified=false
+and confirm_only=true and uses WEB_PAGE even on an official host; it cannot gain
+BRAND_PAGE authority merely from its hostname. Retailers always use WEB_PAGE.
+Related sections are removed; stored passages have web#pN locators and at least
+30 characters. Extraction still rejects instruction-bearing claims. Every search
+result, including unselected/invalid results, has a class, decision and reason.
+
+Snapshots are REAL/PUBLIC, content-hashed through store.add_source_version;
+same URL/content/scope/kind does not create another version merely because its
+fetch timestamp changes. Same-run discovery returns its stored receipt without
+another request. Failed fetch/clean steps retain stop reasons and already stored
+evidence. This function does not extract, publish or decide a verdict. P1 must
+invoke it from the authorized pinned run, extract new_sv_ids, apply R4w/R7w/R9w,
+propagate stop_reason and publish through the normal gate. Buyer reads remain
+outside discovery.
+
+Integration limitations remain explicit: the current store API cannot atomically
+compare the expected case revision with its ingestion write; P2 rechecks before
+and after fetch and immediately before storage, but a cross-transaction race
+requires P1's revision-aware ingestion interface. HTTP rejects redirects,
+credentials, IP-literal hosts, nonpublic DNS answers, unsupported content types
+and oversized responses, with a hard caller deadline. DNS preflight does not pin
+HTTPX's subsequent resolution; DNS rebinding protection is not claimed. No paid
+provider/real page recording has been run for this implementation. P2-4b must
+support hosted-tool cost reservation in its network guard before any paid pass.
+OCR remains unimplemented Should work; the evaluator15s timeout CCR stays open.
+
+API names checked against installed openai3.42.0, pydantic2.14.2 and httpx0.28.1,
+and the official [web search guide](https://developers.openai.com/api/docs/guides/tools-web-search),
+[Pydantic models](https://docs.pydantic.dev/latest/concepts/models/) and
+[HTTPX quickstart](https://www.python-httpx.org/quickstart/). Actual provider
+quality and complete event14 replay remain NOT VERIFIED.
