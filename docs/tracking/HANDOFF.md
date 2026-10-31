@@ -17,7 +17,7 @@ contract-3 into each lane. No WAITING failure, omitted previous-sync lane or sco
 - P2: documentation checkpoint e8eb571 accepted via6e73f1f; scope/retrieval Python
   signatures unchanged. Scope pre-pass, agent validation and retrieval remain S3
   implementation work. Open indexing-context CCR requires run Budget/trace/db
-  binding before paid embedding; documented BM25-only fallback remains available.
+  binding before paid embedding; planned BM25-only fallback remains a Stage-B option.
 - P3: prior S2 delivery already belongs to main; no delayed S2 lane to merge.
   Generate clients against the new schemas; no frontend file changed in this gate.
 

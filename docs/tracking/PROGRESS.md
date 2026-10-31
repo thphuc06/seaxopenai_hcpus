@@ -8,6 +8,7 @@
 | S2 / M2 | 13:00 | 13:09:49 ICT | Current retained gate complete; sync-2 c7b413d pushed; PHASE=2; 1059 passed/14 future skips/+2 subtests; no WAITING; provider/browser/gold review limitations in handoff |
 | contract-2 | 12:05 | 11:49:48 ICT | Explicit early checkpoint; 2811f3b pushed, PHASE=1; 679 passed +2 subtests, 44 skips; S2 implementation pending |
 | S3 / M3 | 14:15 | — | Pending |
+| contract-3 | 13:20 | 13:42:22 ICT | ab992d4 pushed and remote verified; PHASE=2;1090 passed/14 future skips/+2 subtests; no WAITING; P4 Stage-B WIP excluded |
 | S4 / M4 | 15:15 | — | Pending |
 | Recordings freeze | 15:35 | — | Pending |
 | Freeze | 16:00 | — | Pending |

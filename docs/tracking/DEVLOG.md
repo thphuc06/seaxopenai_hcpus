@@ -1,5 +1,35 @@
 # Development log — 31 Oct 2026
 
+## contract-3 — published 13:42:22 ICT (T+3:42)
+
+Remote main and contract-3 verified at ab992d4cf1cd195648463fca1119d5c9ea039daf.
+PHASE stays2. No current-phase WAITING, omitted lane or scope cut. P4 Stage-B WIP
+was explicitly excluded:79 files saved in stash b2cd705 with hashes before switching
+main. No Stage-B files enter the tag. Existing p4 head30627cb was pushed first.
+
+- P4: Done — retained-phase gate, HANDOFF and tag. Blocked — none in this checkpoint.
+  Surprise — concurrent Local work required WIP isolation. Decision — preserve
+  all uncommitted work separately. Next — restore WIP and continue Stage B separately.
+- P1: Done — cb9f05f typed S3 contracts, accepted via6c3e661. Blocked — no contract
+  blocker. Decision —501 stubs until Stage B; all six routes retain optional scope.
+  Next — actual gap/registry/glassbox behavior and server-side evidence filtering.
+- P2: Done — e8eb571 documentation checkpoint, accepted via6e73f1f. No application
+  contract changed. Open CCR — indexing Budget/trace/db context before embeddings.
+  Next — scope/agent and retrieval implementation; BM25-only is a planned option,
+  not implemented search. Existing search still returns empty results.
+- P3: prior S2 delivery already in main; no delayed lane. Next — consume new schemas.
+
+P1 fresh baseline/post1044→1090; P2 fresh baseline/post1090→1090. Each has14 future
+skips,2 passing subtests,0 failed/errors/deselected. Zero node regression. Final
+guards4, fixtures53, fallback sync2 path26 pass; frontend untouched. No paid call,
+server, policy/gold/assertion/phase change. Full command receipt in results/contract-3-gate.md.
+
+Three read-only post-tag reviews: Code Review Rules and overfitting found no issue;
+contracts found one wording issue in HANDOFF (BM25 fallback sounded delivered).
+Corrected that sentence in this log commit; tag remains unchanged. Local review-base
+now points to sync-2 for optional human /review against contract-3. Browser path,
+provider replay and S3 completion remain unverified by this checkpoint.
+
 ## sync-2 — published 13:09:49 ICT (T+3:09)
 
 Remote main and sync-2 verified at c7b413d6dc798fb74b76dd19269913f3008fb7bf.

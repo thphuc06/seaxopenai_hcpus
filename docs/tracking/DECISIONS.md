@@ -1,5 +1,14 @@
 # Contest decisions
 
+## D012 — S3 interface checkpoint, Stage B isolated (13:42 ICT)
+
+Publish contract-3 at phase2 with P1's six typed role/query-checked501 GET stubs
+and P2's documentation-only checkpoint. No policy or Python signature/env change;
+no optional feature promoted to Must. User directs preserving uncommitted P4 Stage B
+outside the contract tag. BM25-only retrieval is a planned Stage-B alternative to
+unbudgeted embeddings, not delivered behavior in this checkpoint. Tag stays pinned
+after the post-tag HANDOFF wording correction. S3 completion remains a later gate.
+
 ## D011 — S2 authorized integration corrections (13:00 ICT)
 
 The user explicitly authorized fixing the combined-head failures and publishing
