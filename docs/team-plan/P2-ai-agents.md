@@ -112,7 +112,7 @@ BUILD
 3. After merging origin/main: backend/app/llm/client.py skeleton (signature from README §7.1, modes stubbed) and
    backend/app/budget.py (replace P4's stub: Budget with run-level caps from settings, an agent sub-budget that shares the
    parent's counters, take_model_call(step), take_tool(name), remaining_s(), stop_reason, usage(); BudgetExceeded(reason)
-   where reason ∈ MODEL_CALLS|TOOL_CALLS|DEADLINE|AGENT_MODEL_CALLS|AGENT_TOOL_CALLS|AGENT_DEADLINE) + unit tests.
+   where reason ∈ MODEL_CALL_LIMIT|TOOL_CALL_LIMIT|RUN_DEADLINE|AGENT_MODEL_CALLS|AGENT_TOOL_CALLS|AGENT_DEADLINE) + unit tests. S0 retains the existing tested root names (README §7).
 
 CONSTRAINTS
 - Budget for smoke: ≤ 15 API calls, ≤ $0.50. Print the estimate before running step 7.

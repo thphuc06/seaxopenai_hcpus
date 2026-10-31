@@ -159,6 +159,9 @@ buyer GET passport ─► read stored results only (never a model call, never a 
 
 Budget: **một `Budget` cho mỗi run**, mọi model call đều trừ vào đó (extract, retry, canon, claims, agent, web scout). Agent loop giữ thêm giới hạn riêng theo AGENTS rule 8. Hết budget thì run chuyển `PARTIAL` + `stop_reason`.
 
+S0 stop-code vocabulary: root budget uses `MODEL_CALL_LIMIT`, `TOOL_CALL_LIMIT`, `RUN_DEADLINE`;
+agent child uses `AGENT_MODEL_CALLS`, `AGENT_TOOL_CALLS`, `AGENT_DEADLINE`. Retain these tested names.
+
 ## 7. Hợp đồng liên lane
 
 ### 7.1 Python interfaces (P4 tạo stub ở Phase 0)
@@ -218,6 +221,10 @@ Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
 `field-row-<field_key>` · `field-label-<field_key>` · `evidence-open-<field_key>` · `why-open-<field_key>` · `event-btn-<fixture_name>` · `scenario-next` · `run-status` · `model-calls-counter` · `review-task-<field_key>` · `review-approve` · `review-override` · `agent-panel` · `budget-meter-<kind>` · `buy-button` · `receipt-diff` · `web-audit` · `badge-origin` · `badge-mode`
 
 ### 7.5 Biến môi trường (P4 đưa hết vào `config.py` và `.env.example` ở Phase 0)
+
+Frontend only: `VITE_USE_MOCK=1|0` selects local mock transport or `/api`. This is a Vite
+build/development switch documented in `frontend/.env.example`, not a backend setting.
+Use Node >=24 for frontend tests; keep Python 3.11/3.12 for the shared backend/OCR environment.
 
 `OPENAI_API_KEY` · `LLM_MODE=fallback|replay|record|live` · `MODEL_EXTRACT` · `MODEL_AGENT` · `MODEL_CHEAP` · `EMBED_MODEL=text-embedding-3-small` · `LLM_EFFORT_EXTRACT=low` · `LLM_EFFORT_AGENT=medium` · `LLM_MAX_OUTPUT_TOKENS=16000` · `REPLAY_DIR=../fixtures/replay` (test trỏ sang thư mục tạm) · `LLM_VISION=1` · `RUN_MAX_MODEL_CALLS=24` · `RUN_DEADLINE_S=120` · `AGENT_MAX_MODEL_CALLS=10` · `AGENT_MAX_TOOL_CALLS=16` · `AGENT_MANAGER_TURNS=3` · `AGENT_RETRIEVAL_HOPS=2` · `AGENT_DEADLINE_S=75` · `AGENT_SINGLE_CALL_MAX=8` · `WEB_SEARCH=on|off` · `WEB_PROVIDER=openai|tavily` · `WEB_MAX_SEARCHES=3` · `WEB_MAX_PAGES=4` · `OCR_ENABLED=1` · `AGENTS_TRACING=1` · `REPLAY_FREEZE=0` · `WORKER_INLINE=0` · `DEMO_RUN_DELAY_S=0` · `DB_PATH` · `FIXTURES_DIR` · `CONTEST_PHASE`
 
