@@ -8,6 +8,7 @@ import { PassportCard } from '../components/PassportCard.tsx';
 import { ErrorNotice, LoadingNotice } from '../components/Feedback.tsx';
 import { EvidenceDrawer } from '../components/EvidenceDrawer.tsx';
 import { passportPollInterval } from '../evidence.ts';
+import { EvidenceUploadForm } from '../components/EvidenceUpload.tsx';
 
 export function BuyerPassportView({ product, passport, onEvidence }: { product: Product | undefined; passport: PassportView; onEvidence?: (key: FieldKey) => void }) {
   const presentation = product?.presentation;
@@ -42,6 +43,7 @@ export function BuyerPassport({ api, products, role = 'BUYER' }: { api: ApiClien
     {error && <ErrorNotice error={error} />}
     {loading && <LoadingNotice />}
     {data && <BuyerPassportView product={products.find((item) => item.id === productId)} passport={data} onEvidence={setEvidenceKey} />}
+    {role === 'SELLER' && <EvidenceUploadForm key={productId} api={api} />}
     {evidenceKey && <EvidenceDrawer key={`${productId}:${evidenceKey}`} api={api} productId={productId} fieldKey={evidenceKey} allowPrivate={role === 'REVIEWER' || role === 'OPERATOR'}
       withinSource={data?.fields.find((field) => field.field_key === evidenceKey)?.conflict_locus === 'WITHIN_SOURCE'} onClose={() => setEvidenceKey(null)} />}
   </>;

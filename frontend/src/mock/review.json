@@ -1,0 +1,17 @@
+{
+  "case_id": "preview-case",
+  "fields": ["volume", "skin_type"],
+  "claim": { "field_key": "claim:ingredient:example", "public_text": "The listing claim needs a closer look at the ingredient passages.", "source_field": "key_ingredients" },
+  "catalog": [
+    { "name": "04-volume-change", "title": "Change the stated volume", "type": "LISTING_CHANGED", "product_id": "DEMO-PROD-01", "resource": { "kind": "LISTING", "id": "preview-listing", "version": 3 }, "expect": "The changed volume goes to a reviewer with the stored passages." },
+    { "name": "05-revoke-notification", "title": "Revoke a source snapshot", "type": "SOURCE_REVOKED", "product_id": "DEMO-PROD-01", "resource": { "kind": "SOURCE", "id": "preview-notification", "version": 1 }, "expect": "Only dependent fields become stale. The trace records the change without a model call." }
+  ],
+  "scenarios": [
+    { "name": "04-volume-change", "event_id": "preview-volume", "idempotency_key": "preview-volume", "outcome": "ADMITTED", "reason": "Preview volume comparison awaits review.", "stale_fields": ["volume"] },
+    { "name": "05-revoke-notification", "event_id": "preview-revoke", "idempotency_key": "preview-revoke", "outcome": "ADMITTED", "reason": "Preview source status changed.", "stale_fields": ["notification_number", "responsible_company"] }
+  ],
+  "updates": [
+    { "name": "04-volume-change", "fields": [{ "field_key": "volume", "verdict": "CONFLICTING", "conflict_locus": "LISTING_VS_SOURCE", "freshness": "CURRENT", "review_state": "NEEDS_REVIEW", "public_text": "The listing and packaging label give different volume information. Under review." }] },
+    { "name": "05-revoke-notification", "fields": [{ "field_key": "notification_number", "freshness": "STALE", "public_text": "A source this relied on changed. Re-checking." }, { "field_key": "responsible_company", "freshness": "STALE", "public_text": "A source this relied on changed. Re-checking." }] }
+  ]
+}

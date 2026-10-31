@@ -28,7 +28,7 @@ export function EvidenceContent({ evidence, withinSource = false, allowPrivate =
           {group.map((citation, citationIndex) => {
             const parts = highlightExcerpt(citation.text, citation.excerpt);
             return <article className="evidence-passage" key={`${citation.passage_id}:${citationIndex}`}>
-              <p className="evidence-locator">Location: {citation.locator}{citation.visibility === 'PRIVATE' && <span className="plain-badge">Reviewer document</span>}</p>
+              <p className="evidence-locator">Location: {citation.locator}{(citation.source_kind === 'LISTING' || citation.source_kind === 'SELLER_UPLOAD') && <span className="plain-badge">Seller text</span>}{citation.visibility === 'PRIVATE' && <span className="plain-badge">Reviewer document</span>}</p>
               <blockquote>{parts.map((part, partIndex) => part.highlighted ? <mark key={partIndex}>{part.text}</mark> : part.text)}</blockquote>
               {!parts.some((part) => part.highlighted) && <p className="evidence-mismatch" role="alert">The cited excerpt could not be located in this passage.</p>}
             </article>;

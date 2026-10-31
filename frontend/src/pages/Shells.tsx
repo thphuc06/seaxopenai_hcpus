@@ -1,9 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { EmptyPanel } from '../components/Feedback.tsx';
 
-export function Reviewer() {
-  return <EmptyPanel eyebrow="Reviewer workspace" title="Make room for a closer look."><p>Review tasks and the evidence behind each finding will appear here once the review queue is connected.</p><span className="shell-tag">Review queue · coming next</span></EmptyPanel>;
-}
 export function Observe() {
   return <EmptyPanel eyebrow="Observability" title="Follow the work behind each finding."><p>Run timelines, resource use and the changes made by the agent will appear here when traces are connected.</p><span className="shell-tag">Run activity · awaiting connection</span></EmptyPanel>;
 }
