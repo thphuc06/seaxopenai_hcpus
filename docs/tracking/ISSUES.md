@@ -2,6 +2,9 @@
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
+| S2 replay mode storage | P1/P2 | Observed by retained phase(2) acceptance | test_record_replay_story_and_model_isolation[offline-record-model] expects REPLAY in runs.llm_mode; current storage is replay (API normalizes). Reconcile documented persistence contract in owner work; no P4 assertion change. |
+| S2 diagnostic story | P1/P2 | Owner BUILD not integrated into contract-2 | P4 eval emits execution errors for rejected events06/09/10; sync_check2 fails at revoke after17 S1 passes. Preserve 16 acceptance failures in P4 plan; implement owner lifecycle/review/vision/audit/retry before full S2 gate. |
+| B0/candidate preliminary report | P4 human | DRAFT only | Review source-grounded labels independently; report51/65 vs16/65 includes unmet story/Phase3 conditions and shared extraction. No gold changed to match output. |
 | S2 evidence-request history status | P1 | Stage B integration CCR, contract-2 review | Existing publish.py stores CLOSED; new EvidenceRequestResponse allows OPEN/FULFILLED. Reconcile explicitly in history implementation and test a closed request; 501 stubs have no current serialization failure. |
 | Storage/seed integration | P1 | S0 complete | Actual S1 startup 1 product/1 case/4 sources/4 versions/14 passages |
 | Model IDs, prices and budget tuning | P2 | S0 report integrated | Keep measured recommendation/current caps; production client at S1 |

@@ -1,5 +1,28 @@
 # Development log — 31 Oct 2026
 
+## P4 Phase 2 Stage B — local implementation (12:00 ICT, T+2:00)
+
+User authorized continuation after verifying contract-2/2811f3b was already in clean
+p4/f6955ce. Delivered pure B0, isolated offline eval with separate DRAFT/REVIEWED
+metrics, immutable timestamped reports, and S2 operational path. No sync-gate,
+cross-lane BUILD merge, commit/push, model provider call or gold change in this task.
+Existing PHASE remains 1. P4-2b real capture/blind drafting remains separate.
+
+Owned tests and original evaluator smoke: 110 passed, zero failed/skipped/deselected.
+Final phase-1 regression: 747 passed, 44 skipped, 2 subtests; zero failures/errors/
+deselections. Three read-only reviewers rechecked the fixes with no remaining P4
+blocker. Fixture validator: 37/37. Final phase-2 suite: 757 passed, 16 owner-WAITING
+failures, 18 skipped, 2 subtests passed, zero errors/deselections. Full S2 acceptance
+still awaits P1/P2 BUILD; the exact ledger is retained in P4 ExecPlan, without test changes.
+
+Report: docs/results/eval-latest.md and .json, all 13 checkpoints, raw DRAFT B0
+16/65 versus candidate 51/65; false-blame 2/57 versus 0/57, reviewed 0/0. Scores include
+literal preconditions, including a future registry path, and are not S2 success.
+Unexpected rejected events 06/09/10 are marked errors; eval exits 1. S2 sync path
+passes all 17 S1 steps then fails revoke re-assessment. Replay diagnostic hits
+REPLAY_MISS, retains that attempt and clearly restarts fallback; full replay remains
+unverified. See docs09 for baseline shared-extraction and scoring limitations.
+
 ## contract-2 — published 11:49:48 ICT (T+1:49)
 
 Explicit early mini-sync; main and contract-2 remote SHA verified as 2811f3b.
