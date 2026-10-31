@@ -239,8 +239,9 @@ supersedes the older five-check outline above for Phase 0 delivery.
 | Hosted web search | SKIP | — | — | — |
 | Local record/replay, second request has no network call | PASS | 1.663 s | 63 / 21 / 0 | 0.000336 |
 
-Web was skipped because the local configuration has `WEB_SEARCH=off`; availability
-is NOT VERIFIED. The image/number used by this capability probe lives only in the
+Web was skipped in the original run because the local configuration has
+`WEB_SEARCH=off`; the supplemental checks below now establish API availability.
+The image/number used by this capability probe lives only in the
 smoke script, not application rules or dataset/gold. Replay check files are temporary
 and are not evaluation recordings. The production four-mode client is only a typed
 Phase-0 contract stub; Phase 1 implements its behaviour.
@@ -250,6 +251,30 @@ usage and the dated standard-rate table in `backend/app/data/model_prices.json`.
 Reasoning tokens are part of output tokens and are not charged twice. Per-request
 median latency: text 2.436 s; structured 1.641 s; agent 1.899 s; embeddings 3.172 s.
 This is a small capability sample, not an end-to-end performance benchmark.
+
+Supplemental web verification at 10:17–10:18 ICT used the remaining authorization
+and the same attempt-02 spending ledger, without changing `backend/.env`:
+
+| Allowed domain | Status | Check latency | Input / output / reasoning tokens | Estimated USD |
+| --- | --- | --- | --- | --- |
+| cerave.com.vn | FAIL: WEB_SOURCES_MISSING | 6.057 s | 4632 / 55 / 37 | 0.029814 |
+| openai.com, one alternate-domain probe | PASS, 16 source URLs within domain/subdomains | 5.089 s | 8550 / 64 / 37 | 0.027740 |
+
+The empty brand-domain result does not establish its cause or guarantee future
+coverage. The alternate probe verifies hosted search, source metadata and domain
+validation for this account/model. All eight capability categories now have a
+successful observation, while the original SKIP and brand-domain FAIL remain in
+their reports. Attempt 02 now totals 11/15 API requests and USD 0.06042418/0.50
+estimated. Original and supplemental reports are retained separately as
+`p2-smoke-report-02.json`, `p2-smoke-web-02.json` and `p2-smoke-web-alt-02.json` in
+`backend/.venv/`; the ledger holds the cumulative total.
+
+Recommendation: keep application `WEB_SEARCH=off` through the current phase.
+`pipeline/web_sources.py::discover` is still the S4 interface stub and the fetch,
+identity, snapshot, citation and run-budget integration is not implemented yet.
+The capability smoke can enable web for its process only. Enable application web
+when the Phase-4 flow and its acceptance checks are ready; this is separate from
+the now-verified API capability. No shared configuration or contract was changed.
 
 An earlier attempt made 8 requests rejected with HTTP 401. It produced no usage
 measurements; its USD 0.377208 ledger value is a conservative reservation, not a
