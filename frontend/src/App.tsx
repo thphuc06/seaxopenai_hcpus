@@ -31,7 +31,7 @@ export function App({ api, role, onRoleChange, useMock, sessionError }: AppProps
       <div className="header-inner">
         <Link className="wordmark" to="/" aria-label="Product Truth Passport home"><span className="brand-symbol" aria-hidden="true">p<span>↗</span></span><span>product truth<span className="wordmark-sub">PASSPORT</span></span></Link>
         <nav className="main-nav" aria-label="Workspaces">
-          <NavLink to="/" end>Operator</NavLink>
+          <NavLink to="/" end data-testid="operator-nav">Operator</NavLink>
           {buyerPath && <NavLink to={buyerPath}>Buyer Passport</NavLink>}
           <NavLink to="/reviewer">Reviewer</NavLink>
           <NavLink to="/observe">Observe</NavLink>

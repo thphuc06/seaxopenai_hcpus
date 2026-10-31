@@ -75,7 +75,7 @@ function ReviewCase({ api, task, onReload, onPendingChange }: { api: ApiClient; 
     <form className="review-form" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
       <h3>Record a decision</h3>
       <label>Decision<select aria-label="Decision" value={decision} disabled={pending || saved} onChange={(event) => setDecision(event.target.value as ReviewDecision)}><option value="APPROVE">Approve</option><option value="OVERRIDE">Override</option><option value="REJECT">Reject</option></select></label>
-      <label>Reason<textarea aria-label="Reason" required value={reason} disabled={pending || saved} onChange={(event) => setReason(event.target.value)} /></label>
+      <label>Reason<textarea aria-label="Reason" data-testid="review-reason" required value={reason} disabled={pending || saved} onChange={(event) => setReason(event.target.value)} /></label>
       {decision === 'OVERRIDE' && <fieldset disabled={pending || saved}><legend>Replacement finding</legend>
         <label>Verdict<select aria-label="Verdict" value={verdict} onChange={(event) => setVerdict(event.target.value as Verdict)}>{(['CONSISTENT', 'SINGLE_SOURCE', 'CONFLICTING', 'INSUFFICIENT', 'UNCERTAIN', 'NOT_APPLICABLE'] as const).map((value) => <option key={value}>{value}</option>)}</select></label>
         <label>Public explanation<textarea aria-label="Public explanation" required value={publicText} onChange={(event) => setPublicText(event.target.value)} /></label>

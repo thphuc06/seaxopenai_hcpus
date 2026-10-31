@@ -79,6 +79,16 @@ test('audit empty state and missing/computed scorecards keep distinct meanings',
   assert.match(html, /\/api\/internal\/eval\/metrics/); assert.match(html, /computed/); assert.match(html, /DRAFT/); assert.match(html, /<dd>0<\/dd>/);
 });
 
+test('audit snapshot count follows stored snapshots including empty and multiple results', () => {
+  for (const count of [0, 2]) {
+    const audit = structuredClone(sample.audit);
+    audit.snapshots = Array.from({length: count}, (_, index) => ({...sample.audit.snapshots[0], url:`https://reference.example/${index}`}));
+    const html = render(WebAuditView, {audit});
+    assert.match(html, new RegExp(`data-snapshot-count="${count}"`));
+    assert.equal((html.match(/class="audit-snapshot"/g) ?? []).length, count);
+  }
+});
+
 test('S4 reads and purchase reject responses belonging to another requested resource', async () => {
   const api = createApiClient({getSession: () => ({role:'REVIEWER',actor:'reviewer-unrelated'}), transport: async path => Response.json(path.includes('web-search') ? sample.audit : receipt())});
   await assert.rejects(() => api.getOrder('other-order'), /requested order/);

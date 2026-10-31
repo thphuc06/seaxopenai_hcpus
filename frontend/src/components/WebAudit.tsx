@@ -10,7 +10,7 @@ export function webUrl(value: string): string | undefined {
   catch { return undefined; }
 }
 export function WebAuditView({ audit }: { audit: WebAuditResponse }) {
-  return <section className="phase4-panel" data-testid="web-audit"><p className="eyebrow">Source discovery</p><h3>Web search audit</h3>
+  return <section className="phase4-panel" data-testid="web-audit" data-snapshot-count={audit.snapshots.length}><p className="eyebrow">Source discovery</p><h3>Web search audit</h3>
     {!audit.searches.length && <p>No web search has been recorded for this case.</p>}
     {audit.searches.map((search, index) => <section key={index}><h4>Query: {search.query}</h4>{!search.results.length && <p>No results recorded for this query.</p>}<ol className="audit-results">{search.results.map((result, i) => <li key={i}>
       <div><span className="plain-badge">{result.classification}</span> Rank {result.rank} · {result.domain}</div>

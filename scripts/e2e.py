@@ -165,6 +165,12 @@ class Journey:
         self.shot += 1
         self.page.screenshot(path=str(self.out / f'{self.shot:02d}-{name}.png'), full_page=True)
 
+    def operator_for(self, product: str) -> None:
+        # A document navigation to / loses App's selected product state.
+        self.open('/buyer/' + quote(product, safe=''), 'OPERATOR')
+        expect(self.page.get_by_test_id('field-label-skin_type')).to_be_visible()
+        self.page.get_by_test_id('operator-nav').click()
+
     def reset(self) -> None:
         # A long rehearsal must stop if the human restarts Local in another mode.
         preflight(self.base, self.api)
@@ -179,7 +185,7 @@ class Journey:
         require(len(matches) == 1, f'event {number:02d}: missing/ambiguous catalog entry')
         event = matches[0]
         product = str(event['product_id'])
-        self.open('/')
+        self.operator_for(product)
         with self.page.expect_response(lambda r: r.url.endswith('/internal/demo/fire/' + event['name'])) as pending:
             self.page.get_by_test_id('event-btn-' + event['name']).click()
         response = pending.value
@@ -286,12 +292,7 @@ def scene_6(j: Journey) -> None:
 def scene_7(j: Journey) -> None:
     j.reset()
     product = j.fire(14)
-    # Keep the requested product selected within the SPA when opening its control room.
-    # CCR P3 Local/P4: add operator-nav to the existing Operator navigation link.
-    j.open('/buyer/' + quote(product, safe=''), 'OPERATOR')
-    expect(j.page.get_by_test_id('field-label-skin_type')).to_be_visible()
-    j.page.get_by_test_id('operator-nav').click()
-    # CCR P3 Local/P4: expose a semantic snapshot count on the existing web-audit testid.
+    j.operator_for(product)
     expect(j.page.get_by_test_id('web-audit')).to_have_attribute(
         'data-snapshot-count', re.compile(r'^[1-9]\d*$'), timeout=10_000)
 
@@ -312,7 +313,6 @@ def scene_9(j: Journey) -> None:
     expect(j.page.get_by_test_id('field-label-volume')).to_have_text('Conflicting')
     j.open('/reviewer', 'REVIEWER')
     j.page.get_by_test_id('review-task-volume').click()
-    # CCR P3 Local/P4: review-reason is absent from S3; fail instead of a fragile selector.
     j.page.get_by_test_id('review-reason').fill('Reviewed the cited passages for this revision.')
     j.page.get_by_test_id('review-approve').click()
     expect(j.page.get_by_test_id(re.compile(r'^review-decision-')).filter(
@@ -322,9 +322,17 @@ def scene_9(j: Journey) -> None:
     j.page.get_by_test_id('buy-button').click()
     j.page.wait_for_url('**/orders/*')
     receipt = j.page.url
+    saved_fields: dict[str, str] = {}
+    for key in FIELDS:
+        row = j.page.get_by_test_id('field-row-' + key)
+        expect(row).to_be_visible()
+        # Match DOM text rather than CSS-transformed inner_text in to_have_text.
+        saved_fields[key] = row.text_content() or ''
     j.fire(7)
     j.open(receipt.removeprefix(j.base), 'BUYER')
     expect(j.page.get_by_test_id('receipt-diff')).to_contain_text(re.compile('changed since purchase', re.I))
+    for key, saved in saved_fields.items():
+        expect(j.page.get_by_test_id('field-row-' + key)).to_have_text(saved)
 
 
 SCENES: tuple[Callable[[Journey], None], ...] = (
