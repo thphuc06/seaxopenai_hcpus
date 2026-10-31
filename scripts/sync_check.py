@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 import httpx
 from fastapi.testclient import TestClient
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, JsonValue, ValidationError
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
@@ -341,6 +341,145 @@ def run_phase_two(client: httpx.Client, state: Callable[[str], CaseState], count
     return checks
 
 
+class ScopeProbe(BaseModel):
+    scope_match: str
+    decided_by: str
+    anchor_passage_id: str | None
+
+
+class PhaseThreeProbe(BaseModel):
+    mode: str
+    status: str
+    stop_reason: str | None
+    scopes: list[ScopeProbe]
+    effects: list[dict[str, JsonValue]]
+    registry_closed: bool
+    private_fragments: list[str]
+
+
+def checked_scope_anchor(connection: sqlite3.Connection, placement: sqlite3.Row,
+                         validations: list[dict[str, JsonValue]]) -> str | None:
+    """Read a serialized code-verified PassageScope, never a raw agent proposal."""
+    if placement["decided_by"] != "AGENT_VERIFIED":
+        return None
+    if not connection.execute("SELECT 1 FROM passages WHERE id=? AND source_version_id=?",
+            (placement["passage_id"], placement["source_version_id"])).fetchone():
+        return None
+    anchors: set[str] = set()
+    for detail in validations:
+        if (detail.get("passage_id"), detail.get("sv_id"), detail.get("scope_match"), detail.get("decided_by")) != (
+                placement["passage_id"], placement["source_version_id"], placement["scope_match"], "AGENT_VERIFIED"):
+            continue
+        anchor = detail.get("anchor_passage_id")
+        if isinstance(anchor, str) and anchor != placement["passage_id"] and connection.execute(
+                "SELECT 1 FROM passages WHERE id=? AND source_version_id=?",
+                (anchor, placement["source_version_id"])).fetchone():
+            anchors.add(anchor)
+    return next(iter(anchors)) if len(anchors) == 1 else None
+
+
+def scope_validation(connection: sqlite3.Connection, row: sqlite3.Row) -> dict[str, JsonValue]:
+    """Normalize accepted producer refs; retain the earlier serialized placement form."""
+    detail = json.loads(row["detail"] or "{}")
+    if not isinstance(detail, dict):
+        return {}
+    if "accepted" not in detail:
+        return detail
+    if detail["accepted"] is not True or not {"input_refs", "output_refs"} <= set(row.keys()):
+        return {}
+    inputs = json.loads(row["input_refs"] or "[]")
+    outputs = json.loads(row["output_refs"] or "[]")
+    if not (isinstance(inputs, list) and isinstance(outputs, list) and len(inputs) == len(outputs) == 1
+            and isinstance(inputs[0], str) and isinstance(outputs[0], str)):
+        return {}
+    target = connection.execute("SELECT source_version_id FROM passages WHERE id=?", (inputs[0],)).fetchall()
+    if len(target) != 1:
+        return {}
+    return {"passage_id": inputs[0], "sv_id": target[0][0], "scope_match": detail.get("scope_match"),
+            "decided_by": "AGENT_VERIFIED", "anchor_passage_id": outputs[0]}
+
+
+def phase_three_probe(database: Path, case_id: str) -> PhaseThreeProbe:
+    with closing(sqlite3.connect(f"file:{database.as_posix()}?mode=ro", uri=True)) as connection:
+        connection.row_factory = sqlite3.Row
+        run = connection.execute("SELECT * FROM runs WHERE case_id=? ORDER BY case_revision DESC,created_at DESC,id DESC LIMIT 1",
+                                 (case_id,)).fetchone()
+        if run is None:
+            raise CheckFailure("phase3 run absent")
+        steps = [(row["step"], json.loads(row["detail"] or "{}")) for row in connection.execute(
+            "SELECT step,detail FROM trace_steps WHERE run_id=?", (run["id"],))]
+        validations = [scope_validation(connection, row) for row in connection.execute(
+            "SELECT * FROM trace_steps WHERE run_id=? AND step='scope:validate' AND actor='code' AND error IS NULL",
+            (run["id"],)) if row["detail"]]
+        scopes = [ScopeProbe(scope_match=row["scope_match"], decided_by=row["decided_by"],
+                            anchor_passage_id=checked_scope_anchor(connection, row, validations))
+                  for row in connection.execute(
+                      "SELECT source_version_id,passage_id,scope_match,decided_by FROM passage_scopes WHERE run_id=?", (run["id"],))]
+        private = [str(row[0]) for row in connection.execute("SELECT p.text FROM passages p JOIN source_versions sv "
+            "ON sv.id=p.source_version_id JOIN sources s ON s.id=sv.source_id WHERE s.case_id=? AND s.visibility='PRIVATE'",
+            (case_id,)) if row[0]]
+        for row in connection.execute("SELECT explain_json FROM field_results WHERE case_id=? AND superseded_by IS NULL", (case_id,)):
+            private.extend(str(step["rule"]) for step in json.loads(row[0] or "[]") if step.get("rule"))
+        private.extend(str(value) for value in (run["model"],) if value and value not in {"FALLBACK", "REPLAY"})
+    return PhaseThreeProbe(mode=str(run["llm_mode"]).upper(), status=run["status"], stop_reason=run["stop_reason"], scopes=scopes,
+        effects=[detail for name, detail in steps if name == "agent:effect"],
+        registry_closed=any(name == "gap:stop" and detail.get("stop_reason") == "GAP_CLOSED" for name, detail in steps),
+        private_fragments=private)
+
+
+def run_phase_three(client: httpx.Client, state: Callable[[str], CaseState], counts: Callable[[], dict[str, int]],
+                    probe: Callable[[str], PhaseThreeProbe], product_id: str, case_id: str,
+                    sun_product: str, sun_case: str, *, expected_mode: str) -> list[Check]:
+    checks: list[Check] = []
+    stage = "09-catalogue-published"
+    try:
+        before_skin = state(case_id).fields["skin_type"].verdict
+        result = AdmitResult.model_validate(successful(client.post(f"/api/internal/demo/fire/{stage}", headers=HEADERS["OPERATOR"])).json())
+        require(result.outcome == "ADMITTED", "catalogue must be admitted")
+        current = probe(case_id)
+        require(current.mode == expected_mode.upper(), "catalogue run mode differs")
+        require(current.stop_reason is None and current.status == "COMPLETED", f"{current.status}: {current.stop_reason}")
+        require(any(row.decided_by == "CODE" and row.scope_match == "MATCH" for row in current.scopes), "no code MATCH")
+        require(any(row.decided_by == "CODE" and row.scope_match == "MISMATCH" for row in current.scopes), "no code MISMATCH")
+        if expected_mode == "fallback":
+            require(any(row.scope_match == "UNKNOWN" for row in current.scopes), "size-less scope should remain unresolved")
+            require(not any(row.decided_by == "AGENT_VERIFIED" for row in current.scopes), "fallback invented an agent placement")
+            require(not any(effect.get("before") != effect.get("after") for effect in current.effects), "fallback invented an agent effect")
+        else:
+            require(any(row.decided_by == "AGENT_VERIFIED" and row.scope_match == "MATCH" and row.anchor_passage_id
+                        for row in current.scopes), "recorded code-checked anchor absent")
+            require(state(case_id).fields["skin_type"].verdict != before_skin, "recorded agent did not change skin type")
+            require(any(effect.get("before") is not None and effect.get("after") is not None and
+                        effect["before"] != effect["after"] for effect in current.effects), "agent:effect before/after absent")
+        checks.append(Check(stage, "PASS", expected_mode + " scope evidence"))
+        stage = "12-bootstrap-sun-fluid"
+        result = AdmitResult.model_validate(successful(client.post(f"/api/internal/demo/fire/{stage}", headers=HEADERS["OPERATOR"])).json())
+        require(result.outcome == "ADMITTED", "registry scenario must be admitted")
+        sun = probe(sun_case)
+        require(sun.mode == expected_mode.upper() and sun.stop_reason is None and sun.status == "COMPLETED", "registry run incomplete/mode mismatch")
+        if expected_mode == "replay":
+            require(sun.registry_closed, "recorded registry GAP_CLOSED absent")
+            require(all(state(sun_case).fields[key].verdict == "CONSISTENT" for key in
+                        ("notification_number", "responsible_company")), "registry identifiers not supported")
+        checks.append(Check(stage, "PASS", "registry scenario completed; closure independently checked in acceptance"))
+        stage = "role-filtered explain"
+        before_counts = counts()
+        for product, case in ((product_id, case_id), (sun_product, sun_case)):
+            forbidden = probe(case).private_fragments
+            for field in PUBLIC_FIELDS:
+                route = f"/api/products/{product}/fields/{field}/explain"
+                buyer = successful(client.get(route, headers=HEADERS["BUYER"]))
+                expert = successful(client.get(route, headers=HEADERS["REVIEWER"]))
+                require(bool(buyer.json()) and bool(expert.json()), "empty explain response")
+                buyer_values = json.dumps(buyer.json(), ensure_ascii=False)
+                require(not any(fragment in buyer_values for fragment in forbidden), "buyer explain leaks private/internal detail")
+        require(counts() == before_counts, "explain created persistent work")
+        checks.append(Check(stage, "PASS", "buyer/expert projections; no added rows"))
+    except (CheckFailure, ValidationError, KeyError, ValueError) as error:
+        checks.append(Check(stage, "FAIL", str(error)))
+    return checks
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", type=int, choices=(1, 2, 3, 4))
@@ -349,8 +488,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     mode = args.mode if args.mode is not None else os.getenv("LLM_MODE", "fallback")
     if mode not in {"fallback", "replay"}:
         parser.error("select fallback or replay; record/live are not supported by the offline gate")
-    if args.phase not in {1, 2}:
-        parser.error("only phase-1/2 paths are implemented; later phases must extend this gate before use")
+    if args.phase not in {1, 2, 3}:
+        parser.error("only phase-1/2/3 paths are implemented; later phases must extend this gate before use")
     print(f"phase={args.phase} mode={mode}")
     from app import config
     from app.main import create_app
@@ -371,7 +510,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             with TestClient(create_app()) as client:
                 checks = run_phase_one(client, lambda: table_counts(database), product_id,
                                        lambda: wrong_market_passages(database, product_id), expected_mode=mode)
-                if args.phase == 2 and all(check.status == "PASS" for check in checks):
+                if args.phase >= 2 and all(check.status == "PASS" for check in checks):
                     required = ("05-revoke-notification", "06-evidence-added", "04-volume-change",
                                 "07-injection-listing", "10-blurred-label-photo", "11-bootstrap-hydra",
                                 "13-bootstrap-clear-serum")
@@ -393,6 +532,17 @@ def main(argv: Sequence[str] | None = None) -> int:
                         checks.extend(run_phase_two(client, lambda case: case_state(database, case),
                             lambda: table_counts(database), product_id, case_id, hydra_product, hydra_case,
                             claims_product, claims_case, expected_mode=mode))
+                        if args.phase == 3 and all(check.status == "PASS" for check in checks):
+                            missing = [name for name in ("09-catalogue-published", "12-bootstrap-sun-fluid")
+                                       if not (config.settings.fixtures_dir / "events" / (name + ".json")).exists()]
+                            if missing:
+                                checks.append(Check("S3 fixtures", "SKIP", "missing: " + ", ".join(missing)))
+                            else:
+                                sun_event = json.loads((config.settings.fixtures_dir / "events/12-bootstrap-sun-fluid.json").read_text(encoding="utf-8"))
+                                sun_product, sun_case = str(sun_event["payload"]["product_id"]), str(sun_event["payload"]["case_id"])
+                                checks.extend(run_phase_three(client, lambda case: case_state(database, case),
+                                    lambda: table_counts(database), lambda case: phase_three_probe(database, case),
+                                    product_id, case_id, sun_product, sun_case, expected_mode=mode))
             if network_attempts:
                 checks.append(Check("network", "FAIL", "model network call attempted"))
     print("check | status | detail")

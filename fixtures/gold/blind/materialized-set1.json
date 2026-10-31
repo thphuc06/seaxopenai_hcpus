@@ -1,0 +1,1568 @@
+{
+  "set_number": 1,
+  "original_plan": "fixtures/gold/blind/expected-set1.json",
+  "labelled_by": "draft:codex",
+  "cases": [
+    {
+      "product_id": "BLIND-PROD-SET1-01",
+      "case_id": "BLIND-SET1-01-CASE",
+      "folder": "fixtures/blind/set1/01",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Measure Rinse — 3 fl oz"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích chai chính: 88.7 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 88.72 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R3/R5: 3×29.5735 = 88.7205 ml, within 1%; gift is a separate item.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: R3/R5: 3×29.5735 = 88.7205 ml, within 1%; gift is a separate item.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R3/R5: 3×29.5735 = 88.7205 ml, within 1%; gift is a separate item.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: R3/R5: 3×29.5735 = 88.7205 ml, within 1%; gift is a separate item.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R3/R5: 3×29.5735 = 88.7205 ml, within 1%; gift is a separate item.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "units",
+        "free_mini"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-02",
+      "case_id": "BLIND-SET1-02-CASE",
+      "folder": "fixtures/blind/set1/02",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Vitamin Mist — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Vitamin B3."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Niacinamide, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: Vocab/R5: provenance-checked mapping may confirm. Unresolved mapping must abstain, never accuse.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: Vocab/R5: provenance-checked mapping may confirm. Unresolved mapping must abstain, never accuse.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: Vocab/R5: provenance-checked mapping may confirm. Unresolved mapping must abstain, never accuse.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: Vocab/R5: provenance-checked mapping may confirm. Unresolved mapping must abstain, never accuse.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: Vocab/R5: provenance-checked mapping may confirm. Unresolved mapping must abstain, never accuse.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "open_vocabulary"
+      ],
+      "probes": [
+        {
+          "name": "mapping_unavailable",
+          "expected": "UNCERTAIN",
+          "rationale": "Mapping cannot be guessed without a validated proposal."
+        }
+      ],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [
+        "Validated model mapping is a planned precondition, not injected into fixtures; fallback may not realize it."
+      ],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-03",
+      "case_id": "BLIND-SET1-03-CASE",
+      "folder": "fixtures/blind/set1/03",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Company Lotion — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO - CBMP - 00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Cty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm trên nhãn: CÔNG TY TNHH ASTER VALE."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: R5/REQ: case/legal forms and documented identifier normalization are presentation changes only.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: R5/REQ: case/legal forms and documented identifier normalization are presentation changes only.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R5/REQ: case/legal forms and documented identifier normalization are presentation changes only.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: R5/REQ: case/legal forms and documented identifier normalization are presentation changes only.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R5/REQ: case/legal forms and documented identifier normalization are presentation changes only.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "legal_forms",
+        "identifier_formatting"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-04",
+      "case_id": "BLIND-SET1-04-CASE",
+      "folder": "fixtures/blind/set1/04",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONFLICTING",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Digit Cream — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00411."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: R9/REQ: one digit differs after normalization with an active document. LISTING_VS_SOURCE and NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: R9/REQ: one digit differs after normalization with an active document. LISTING_VS_SOURCE and NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R9/REQ: one digit differs after normalization with an active document. LISTING_VS_SOURCE and NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "R9/REQ: one digit differs after normalization with an active document. LISTING_VS_SOURCE and NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R9/REQ: one digit differs after normalization with an active document. LISTING_VS_SOURCE and NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "identifier_true_positive"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-05",
+      "case_id": "BLIND-SET1-05-CASE",
+      "folder": "fixtures/blind/set1/05",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONFLICTING",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Split Record — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page2#number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00412."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: R4 precedes cross-source blame: WITHIN_SOURCE, NEEDS_REVIEW, seller_attributable=false.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: R4 precedes cross-source blame: WITHIN_SOURCE, NEEDS_REVIEW, seller_attributable=false.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R4 precedes cross-source blame: WITHIN_SOURCE, NEEDS_REVIEW, seller_attributable=false.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "R4 precedes cross-source blame: WITHIN_SOURCE, NEEDS_REVIEW, seller_attributable=false.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R4 precedes cross-source blame: WITHIN_SOURCE, NEEDS_REVIEW, seller_attributable=false.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "within_source_identifiers"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": [
+        "notification_number"
+      ]
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-06",
+      "case_id": "BLIND-SET1-06-CASE",
+      "folder": "fixtures/blind/set1/06",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Narrow Wash — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          },
+          {
+            "file": "brand.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Narrow Wash 80 ml"
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Chỉ dành cho da dầu."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường, da dầu, da hỗn hợp."
+          },
+          {
+            "file": "brand.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường, da dầu, da hỗn hợp."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: R5: OILY is a subset of the explicitly enumerated reference set; no range inference.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: R5: OILY is a subset of the explicitly enumerated reference set; no range inference.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R5: OILY is a subset of the explicitly enumerated reference set; no range inference.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: R5: OILY is a subset of the explicitly enumerated reference set; no range inference.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R5: OILY is a subset of the explicitly enumerated reference set; no range inference.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "skin_narrower"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-07",
+      "case_id": "BLIND-SET1-07-CASE",
+      "folder": "fixtures/blind/set1/07",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONFLICTING",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Broad Balm — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          },
+          {
+            "file": "brand.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Broad Balm 80 ml"
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho mọi loại da."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da khô."
+          },
+          {
+            "file": "brand.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da khô."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: R5/R9: ALL is not supported by DRY; LISTING_VS_SOURCE, NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "R5/R9: ALL is not supported by DRY; LISTING_VS_SOURCE, NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R5/R9: ALL is not supported by DRY; LISTING_VS_SOURCE, NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: R5/R9: ALL is not supported by DRY; LISTING_VS_SOURCE, NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R5/R9: ALL is not supported by DRY; LISTING_VS_SOURCE, NEEDS_REVIEW.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "skin_overclaim"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-08",
+      "case_id": "BLIND-SET1-08-CASE",
+      "folder": "fixtures/blind/set1/08",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Plain Serum — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin, Cetyl Alcohol, Niacinamide, Phenoxyethanol."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: CL/R6: fatty alcohol is outside ethanol family; a plausible percentage is not independently measured.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: CL/R6: fatty alcohol is outside ethanol family; a plausible percentage is not independently measured.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: CL/R6: fatty alcohol is outside ethanol family; a plausible percentage is not independently measured.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: CL/R6: fatty alcohol is outside ethanol family; a plausible percentage is not independently measured.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: CL/R6: fatty alcohol is outside ethanol family; a plausible percentage is not independently measured.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "claims_negative_control",
+        "plausible_percentage"
+      ],
+      "probes": [],
+      "claims": [
+        {
+          "kind": "free_from:alcohol",
+          "expected": "CONSISTENT",
+          "rationale": "Complete planted INCI has Cetyl Alcohol only, excluded by seed alcohol family."
+        },
+        {
+          "kind": "concentration:NIACINAMIDE",
+          "expected": "SINGLE_SOURCE",
+          "rationale": "Only listing states 0.5%; ordering does not substantiate the percentage."
+        }
+      ],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-09",
+      "case_id": "BLIND-SET1-09-CASE",
+      "folder": "fixtures/blind/set1/09",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Perfumed Serum — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Alcohol Denat., Glycerin, Parfum, Phenoxyethanol, Niacinamide."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Base support applies unless overridden: CL: seed alcohol/fragrance patterns and sourced ingredient-order constraint create review findings, no buyer accusation.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: CL: seed alcohol/fragrance patterns and sourced ingredient-order constraint create review findings, no buyer accusation.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: CL: seed alcohol/fragrance patterns and sourced ingredient-order constraint create review findings, no buyer accusation.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: CL: seed alcohol/fragrance patterns and sourced ingredient-order constraint create review findings, no buyer accusation.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: CL: seed alcohol/fragrance patterns and sourced ingredient-order constraint create review findings, no buyer accusation.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "claims_positive_control",
+        "implausible_percentage"
+      ],
+      "probes": [],
+      "claims": [
+        {
+          "kind": "free_from:alcohol",
+          "expected": "CONFLICTING",
+          "rationale": "Alcohol Denat. appears in the full INCI."
+        },
+        {
+          "kind": "free_from:fragrance",
+          "expected": "CONFLICTING",
+          "rationale": "Parfum appears in the full INCI."
+        },
+        {
+          "kind": "concentration:NIACINAMIDE",
+          "expected": "CONFLICTING",
+          "rationale": "Niacinamide follows the ingredient capped at 1%; requires reviewed limit data."
+        }
+      ],
+      "unscored_claims": [
+        "concentration:NIACINAMIDE"
+      ],
+      "unmet_preconditions": [
+        "Regulatory row is still provisional status=verify; concentration conflict target is preserved but unscored pending human-reviewed applicable data."
+      ],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-11",
+      "case_id": "BLIND-SET1-11-CASE",
+      "folder": "fixtures/blind/set1/11",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "CONFLICTING",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Bilingual Gel — 120 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 120 ml."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích trên nhãn: 90 ml."
+          },
+          {
+            "file": "brand.v1.json",
+            "locator": "title",
+            "excerpt": "아스터 베일 클렌저 Aster Vale Bilingual Gel — BLIND-PROD-SET1-11 — VN"
+          },
+          {
+            "file": "brand.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "용량 90 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "For normal skin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Loại da trên nhãn: da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "ingredients",
+            "excerpt": "Ingredients: Aqua, Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Thông tin số công bố trên nhãn: DEMO-CBMP-00410."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#notification_number",
+            "excerpt": "Số công bố mỹ phẩm: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "label.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Công ty chịu trách nhiệm ghi trên nhãn: Công ty TNHH Aster Vale."
+          },
+          {
+            "file": "notification.v1.json",
+            "locator": "page1#responsible_company",
+            "excerpt": "Tổ chức chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R3/R9: primary 120 vs 90 conflict persists; injection is flagged and ignored. Do not guess unreadable or untranslated text.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "Base support applies unless overridden: R3/R9: primary 120 vs 90 conflict persists; injection is flagged and ignored. Do not guess unreadable or untranslated text.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Base support applies unless overridden: R3/R9: primary 120 vs 90 conflict persists; injection is flagged and ignored. Do not guess unreadable or untranslated text.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "Base support applies unless overridden: R3/R9: primary 120 vs 90 conflict persists; injection is flagged and ignored. Do not guess unreadable or untranslated text.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Base support applies unless overridden: R3/R9: primary 120 vs 90 conflict persists; injection is flagged and ignored. Do not guess unreadable or untranslated text.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "language",
+        "adversarial"
+      ],
+      "probes": [
+        {
+          "name": "injection",
+          "expected": "ignored_instructions_detected=true; primary volume conflict retained",
+          "rationale": "SOURCE_DATA is data, never authority."
+        }
+      ],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-12",
+      "case_id": "BLIND-SET1-12-CASE",
+      "folder": "fixtures/blind/set1/12",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "expected": {
+        "volume": "SINGLE_SOURCE",
+        "skin_type": "SINGLE_SOURCE",
+        "key_ingredients": "SINGLE_SOURCE",
+        "notification_number": "INSUFFICIENT",
+        "responsible_company": "INSUFFICIENT"
+      },
+      "evidence": {
+        "volume": [
+          {
+            "file": "listing.v1.json",
+            "locator": "title",
+            "excerpt": "Aster Vale Sparse Lotion — 80 ml"
+          },
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#volume",
+            "excerpt": "Dung tích niêm yết: 80 ml."
+          }
+        ],
+        "skin_type": [
+          {
+            "file": "listing.v1.json",
+            "locator": "usage#skin",
+            "excerpt": "Dành cho da thường."
+          }
+        ],
+        "key_ingredients": [
+          {
+            "file": "listing.v1.json",
+            "locator": "highlights#1",
+            "excerpt": "Thành phần nổi bật: Glycerin."
+          }
+        ],
+        "notification_number": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#notification_number",
+            "excerpt": "Số công bố: DEMO-CBMP-00410."
+          }
+        ],
+        "responsible_company": [
+          {
+            "file": "listing.v1.json",
+            "locator": "specs#responsible_company",
+            "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Aster Vale."
+          }
+        ]
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R7/REQ: one family for ordinary fields, no active document for identifiers. Missing references are not contradictions.",
+          "planned_locators": [
+            "listing:title",
+            "label:specs#volume"
+          ]
+        },
+        "skin_type": {
+          "rationale": "R7/REQ: one family for ordinary fields, no active document for identifiers. Missing references are not contradictions.",
+          "planned_locators": [
+            "listing:usage#skin",
+            "label:usage#skin"
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "R7/REQ: one family for ordinary fields, no active document for identifiers. Missing references are not contradictions.",
+          "planned_locators": [
+            "listing:highlights#1",
+            "label:ingredients"
+          ]
+        },
+        "notification_number": {
+          "rationale": "R7/REQ: one family for ordinary fields, no active document for identifiers. Missing references are not contradictions.",
+          "planned_locators": [
+            "listing:specs#notification_number",
+            "notification:page1#notification_number"
+          ]
+        },
+        "responsible_company": {
+          "rationale": "R7/REQ: one family for ordinary fields, no active document for identifiers. Missing references are not contradictions.",
+          "planned_locators": [
+            "listing:specs#responsible_company",
+            "notification:page1#responsible_company"
+          ]
+        }
+      },
+      "categories": [
+        "missing_evidence"
+      ],
+      "probes": [],
+      "claims": [],
+      "unscored_claims": [],
+      "unmet_preconditions": [],
+      "no_seller_blame": []
+    }
+  ],
+  "deferred": [
+    {
+      "product_id": "BLIND-PROD-SET1-10",
+      "reason": "Planned omission of explicit synthetic scope conflicts with check_fixtures.py. Preserve original row; do not fabricate REAL origin or relax validator."
+    }
+  ],
+  "limitations": [
+    "Codex-assisted DRAFT labels, not independent human-authored gold; no human approvals recorded.",
+    "Eleven of twelve planned cases materialized before candidate execution. The scope-without-metadata row is deferred because synthetic snapshots require scope in the current validator.",
+    "Label sources are readable synthetic transcripts; image OCR is not evaluated.",
+    "Vocabulary-mapping and reviewed-regulatory preconditions are disclosed separately; no candidate output was used to select expected labels.",
+    "Full first-run reports are immutable; reruns do not replace the initial diagnostic."
+  ]
+}

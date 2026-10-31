@@ -105,6 +105,84 @@ Vietnamese gold notes on Windows without changing the stored text.
 
 ## Metrics to record per run
 
+### Phase 3 independent evaluator delivery
+
+`scripts/blind_eval.py --set 1 --freeze` validates and records input hashes without
+running a candidate. `--set 1|all --mode fallback|replay|record --max-calls N` then
+checks that freeze before loading each product with P1's generic loader into an
+empty temporary database. Record runs print a conservative estimate and refuse
+an estimate above $3; the call cap is shared across selected sets. Replay misses
+stay errors, with no silent fallback. Score misses exit0; execution errors exit1.
+
+The original planned `fixtures/gold/blind/expected-set1.json` is retained verbatim.
+The separate `materialized-set1.json` links actual source locators and excerpts,
+preserves expected labels and DRAFT status, records unmet preconditions and one
+deferred scope-without-metadata case. Frozen hashes normalize CRLF to LF so the
+same text survives Windows checkouts. Eleven products, 55 public-field labels;
+claim targets are reported separately, including the explicitly unscored
+concentration target requiring reviewed regulatory data. No human approval is
+implied by materialization or a passing fixture check.
+
+`docs/results/blind-set1.json`/`.md` are the first attempt and are created exclusively.
+Subsequent attempts receive `-rerun-<id>` names; `blind-summary.md` reports only
+first attempts. A source/label change fails freeze verification before execution.
+Corrections require an explicitly versioned dataset and preservation of the old
+freeze and reports, not an overwritten hash list. Cases with execution failures
+remain visibly incomplete and are not counted as successful abstentions.
+
+B1 is an **unpublished diagnostic baseline**, not a candidate policy or a buyer
+finding. `baseline.predict_once` sends all current source passages and target
+metadata, without candidate verdicts or expected labels, in one escaped
+`SOURCE_DATA` block through P2 `llm.client.parse`, step `baseline:b1`, prompt
+`baseline-b1-v1`. A closed typed schema returns the same six verdict values and
+an injection flag. A fresh one-call Budget also prevents provider retries from
+creating a second call. Refusal, incomplete output and invalid recordings are
+errors; no prediction is fabricated. Its trace sink lives in the diagnostic
+report, so it never changes candidate rows or invokes publication.
+
+`scripts/eval.py --mode fallback --b1-mode record --max-calls 1
+--limit-checkpoints 1 --output-dir <new-directory>` keeps the candidate offline
+and records at most one B1 call. Replace `record` with `replay` to verify that
+recording; `--b1-mode off` is the default. Model comes from `MODEL_EXTRACT`, prices
+from the source-noted price file. B1 usage is separate from candidate usage and
+still counts replay against its call cap. NOT_RUN, CALL_CAP and errors are not
+accuracy denominators. Requested B1 execution errors return exit1. The first
+record attempt and a later successful record/replay are retained in separate
+`docs/results/p4-phase3-b1-*` directories. This single dev checkpoint is a smoke
+comparison, not a measured full-set model baseline.
+
+P4 owns supporting `scripts/baseline_eval.py` and the diagnostic tests
+`test_baseline_b1.py`, `test_blind_evaluation.py`, `test_sync_phase_three.py`.
+No candidate rule, model gateway contract, source vocabulary or public API changes.
+
+Self-review corrections: B1 execution errors in any retained attempt still make
+the CLI fail, even if candidate replay fallback later exhausts the B1 cap. Blind
+FAILED/PARTIAL/unfinished cases retain their raw findings but are excluded from
+successful accuracy/abstention totals; their claims are marked unscored. A crash
+with uncertain call accounting preserves its report and stops all selected sets.
+
+Blind record mode validates prices for configured extract, cheap, agent and embed
+models before execution. One shared gateway guard reserves actual request-model
+costs and network attempts across sets, including failures. It rejects unpriced
+models, images whose token accounting is unverified, tool-bearing requests and
+long-context requests outside the checked price tier. The per-run Budget still
+counts every call/replay; this separate pool prevents lost report accounting from
+creating a new spending allowance. No previously frozen result is rewritten by
+these evaluator corrections.
+
+The phase3 operational probe reads the existing passage_scopes schema, which has
+no anchor column. Its local adapter recognizes a current-run code `scope:validate`
+detail carrying the typed PassageScope keys (`passage_id`, `sv_id`, `scope_match`,
+`decided_by=AGENT_VERIFIED`, `anchor_passage_id`). It matches the stored placement
+and checks that the anchor exists in that source version. Raw agent proposals,
+old runs, foreign anchors and contradictory validation records cannot establish
+an anchor. Missing/unrecognized trace data stays unresolved and fails the replay
+check. At sync-3 the adapter also consumes P2's actual accepted validation form:
+one target in input_refs, one anchor in output_refs, accepted=true and matching
+scope_match. Both passages must belong to the stored placement's source version;
+only current-run code validations without errors qualify. This closes the trace
+adapter CCR; full provider replay still requires matching recordings.
+
 latency (median/max), model calls, input/output tokens, estimated cost, stop_reason, number of manager turns/hops, number of review tasks created.
 
 ## FR coverage (cross-check)

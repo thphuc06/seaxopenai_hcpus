@@ -1,0 +1,209 @@
+{
+  "generated_at": "2026-10-31T06:25:17.347302+00:00",
+  "requested_mode": "fallback",
+  "mode": "fallback",
+  "fallback_reason": null,
+  "baseline_version": "b0-v1",
+  "gold_status": "DRAFT",
+  "labelled_by": "draft:codex",
+  "gold_sha256": "d071ab0d0c0ffb6985d1fd75f50459d09043c362d0503876c963c131d28e3871",
+  "models": [
+    "FALLBACK"
+  ],
+  "prompt_versions": [
+    "extract-v1"
+  ],
+  "policy_versions": [
+    "policy-v1.6"
+  ],
+  "checkpoints": [
+    {
+      "event": "01-bootstrap-demo",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": null,
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 859.0000000003783
+      },
+      "run_ids": [
+        "run_2477d3a160594c949602f12ed7b83a38"
+      ],
+      "run_statuses": [
+        "COMPLETED"
+      ],
+      "stop_reasons": [],
+      "b1": {
+        "version": "baseline-b1-v1",
+        "mode": "record",
+        "status": "MODEL_NOT_CONFIGURED",
+        "model": null,
+        "prediction": null,
+        "calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "estimated_max_usd": null,
+        "trace": []
+      }
+    }
+  ],
+  "totals": {
+    "DRAFT": {
+      "B0": {
+        "total": 5,
+        "correct": 1,
+        "false_blame": 0,
+        "false_blame_eligible": 5,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      },
+      "B1": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      },
+      "candidate": {
+        "total": 5,
+        "correct": 5,
+        "false_blame": 0,
+        "false_blame_eligible": 5,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      }
+    },
+    "REVIEWED": {
+      "B0": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      },
+      "B1": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      },
+      "candidate": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      }
+    }
+  },
+  "usage": {
+    "model_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "latency_ms": 859.0000000003783
+  },
+  "limitations": [
+    "DRAFT scores are exploratory diagnostics, not human-reviewed accuracy.",
+    "B0 uses candidate-stored claims; upstream scope/extraction filtering is shared, not an independent extraction baseline.",
+    "B0 adds zero model calls. Usage is counted once per newly observed candidate run; NOOP/DUPLICATE do not reuse prior usage.",
+    "Literal expected labels are scored; preconditions and alternative gold scenarios are not inferred from candidate output.",
+    "Only five public fields are scored; expert claim findings and isolated image scenarios have separate acceptance tests.",
+    "False-blame attribution is unscored for expected conflicts without an explicit attribution invariant.",
+    "B1 is an unpublished single-call diagnostic over source passages, with separate usage. NOT_RUN/errors/caps are unscored, never zero-accuracy claims."
+  ],
+  "previous_attempt": null
+}

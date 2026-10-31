@@ -1,0 +1,11 @@
+{
+  "product_id": "BLIND-PROD-SET1-01",
+  "name": "Aster Vale Measure Rinse",
+  "brand": "Aster Vale Lab (fictional)",
+  "variant": "88.72ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "BLIND-SET1-01-CASE",
+  "tenant_id": "blind-eval",
+  "listing_id": "BLIND-SET1-01-LISTING"
+}
