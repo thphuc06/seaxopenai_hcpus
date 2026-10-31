@@ -100,12 +100,35 @@ def test_real_transport_handles_null_presentation_evidence_error_and_retry(api_p
     expect(page.get_by_role("heading", name="Unseen lotion")).to_be_visible()
     expect(page.get_by_text("Product image unavailable")).to_be_visible()
     page.get_by_test_id("evidence-open-volume").click()
-    expect(page.get_by_role("dialog").get_by_role("alert")).to_contain_text("501")
-    expect(page.get_by_role("dialog").get_by_role("alert")).to_contain_text("/fields/volume/evidence")
+    alert = page.get_by_role("dialog").get_by_role("alert")
+    expect(alert).to_contain_text("This information is not available yet. Please try again later.")
+    expect(alert).not_to_contain_text("501")
+    expect(alert).not_to_contain_text("/api/")
+    expect(alert).not_to_contain_text("/fields/volume/evidence")
+    expect(alert).not_to_contain_text("Endpoint implementation pending")
     state.evidence_error = False
     page.get_by_role("button", name="Retry evidence").click()
     expect(page.get_by_role("dialog").locator("mark")).to_have_text("stored passage")
     assert all(method == "GET" and role == "BUYER" for method, _, role in state.requests)
+
+
+@pytest.mark.parametrize("role,field_key", [("OPERATOR", "volume"), ("REVIEWER", "skin_type")])
+def test_expert_evidence_error_keeps_diagnostics_and_retry(api_page: tuple[Page, ApiScenario], role: str, field_key: str) -> None:
+    page, state = api_page
+    state.evidence_error = True
+    page.goto(f"{BASE}/buyer/{state.passport['product_id']}")
+    page.get_by_label("Demo role").select_option(role)
+    page.get_by_test_id(f"evidence-open-{field_key}").click()
+    alert = page.get_by_role("dialog").get_by_role("alert")
+    expect(alert).to_contain_text("501")
+    expect(alert).to_contain_text(f"/fields/{field_key}/evidence")
+    state.evidence_error = False
+    page.get_by_role("button", name="Retry evidence").click()
+    expect(page.get_by_role("dialog").locator("mark")).to_have_text("stored passage")
+    evidence_requests = [request for request in state.requests if request[1].endswith("/evidence")]
+    assert len(evidence_requests) == 2
+    assert all(method == "GET" and request_role == role for method, _, request_role in evidence_requests)
+    assert all(method == "GET" for method, _, _ in state.requests)
 
 
 def test_buyer_full_reload_only_issues_get_requests(api_page: tuple[Page, ApiScenario]) -> None:
