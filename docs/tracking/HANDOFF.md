@@ -1,5 +1,58 @@
 # Integration handoff
 
+## sync-1
+
+S1/M1 gate passed at 11:33 ICT, 31 Oct 2026 (T+1:33). PHASE=1.
+Status: complete for retained S1 scope; no WAITING failures, omitted lanes or new
+scope cuts. All four pushed lanes integrated in P4→P1→P2→P3 order with fresh
+phase-0 baseline/post-merge checks and zero regressions. Phase 2 was not started.
+
+### P4 — acceptance, fixtures and integration
+- Integrated p4 8295979 via b9c4182, including Stage B, CI/Render preparation and auxiliary dataset; all ExecPlan history preserved.
+- Delivered all AC-01…20 targets and extended later-phase checks, seed/reset utilities and in-process sync_check 1; later sync paths remain scheduled for their own phases.
+- Fixtures: 37 validated files, S1–S4 story/events and five label PNGs. All 13 gold checkpoints remain DRAFT; original checkpoint unchanged. Optional AC-31/33 test targets retain the existing later-phase boundary in D007.
+- Gate: 640 passed, 44 skipped, 2 subtests passed; 0 failed/errors/deselected. Skips are 43 future-phase nodes plus AC-01 real R2 capture due P4-2b/S2, not WAITING failures.
+
+### P1 — backend core
+- Integrated origin/p1 3bce796 via f3e1096: admission/idempotency, persisted jobs, run orchestration, ordered policy, publication gate and eleven S1 routes.
+- policy-v1.1 records ACROSS_SOURCES for reference/reference disagreement; DTOs remain in api/contracts.py. Shared producer/type and non-material constants are consumed. D008 closes metadata and admission-config CCRs.
+- Buyer reads are stored-data-only; public citations and pinned-revision gate pass integrated acceptance. Queue is single-process; crash recovery/multi-process scheduling is outside S1.
+- Open CCR P4→P1: zero-result BudgetExceeded selects FAILED instead of PARTIAL in run.py. Existing phase(2) deadline test is retained; fix at S2 with a zero-call-cap variant. No failing S1 node is relabelled.
+
+### P2 — extraction and replay gateway
+- Integrated origin/p2 7844d30 via 0426c28 (earlier P2 work also arrives through P1): strict four-mode gateway, complete replay keys, budget accounting, fallback/extract/cache and source-noted normalization data.
+- Robustness/property tests cover unrelated values, Unicode, casing, passage order and injection boundaries; fallback implementation cache version is documented in docs07.
+- Lane report: one explicitly authorized single-listing provider call, 6 validated claims, estimated USD 0.00749; same isolated DB replay made no network call. Gate made no paid calls and does not claim shared full-story replay coverage.
+- Open P1/P2 CCR: preserve source/passage identity across reset before stage recordings; never omit model-visible identifiers from replay hashes. Local recording checkpoint remains ignored, not a shared fixture.
+
+### P3 — buyer and Operator v1
+- Integrated origin/p3 8a17436 via ef096c2: five-field buyer view, cited evidence drawer, role filtering, polling and Operator events/counters/runs/reset with stable testids.
+- Generated OpenAPI types consume P1 DTOs; frontend-only VITE_USE_MOCK selects transport. API production build passes; for human Local Actions set VITE_USE_MOCK=0 when checking the integrated backend (development defaults to mock).
+- Node 24.22.1: 37 tests passed, 0 failed/skipped; TypeScript/Vite API build passed after npm ci. Earlier 501 WAITING report is superseded by this integrated S1 gate.
+- Existing two Router bundler warnings remain; npm ci reports 3 moderate dependency advisories. No forced upgrade or lockfile edit by P4. Browser click path on the combined backend remains NOT VERIFIED here.
+
+### Gate evidence and reproduction
+From backend: CONTEST_PHASE=1, LLM_MODE=fallback, WORKER_INLINE=1,
+OCR_ENABLED=0, WEB_SEARCH=off, tracing disabled, no CONTEST_LANE override:
+
+    .venv/Scripts/python -m pytest -q tests ../frontend/tests/test_backend_contract.py ../frontend/tests/test_s1_contract.py ../scripts/dev/render/tests --tb=short -rs
+    .venv/Scripts/python -m pytest -q tests/test_guards.py
+    .venv/Scripts/python ../scripts/check_fixtures.py
+    .venv/Scripts/python ../scripts/sync_check.py 1 --mode fallback
+
+Results respectively: 640 passed/44 skipped/+2 subtests; guards 4 passed;
+fixtures 37/37; sync path 17/17 PASS, FALLBACK COMPLETED, four CONSISTENT fields
+and skin_type SINGLE_SOURCE, NOOP/DUPLICATE/REJECTED and unchanged buyer-read counters.
+All executed suites have zero failures/errors/deselections. Node commands from
+frontend: npm ci --prefer-offline, npm test, VITE_USE_MOCK=0 npm run build (set
+environment using PowerShell syntax). Local JUnit node/outcome evidence: .git/s1-*.xml.
+
+Three read-only automatic reviewers covered rules/contracts/overfitting; user waived
+the separate /review. No S1 blocker found. Known S2 budget boundary is explicitly
+tracked, not hidden. Gold review, hosted deployment, browser click path and full
+reset-story replay remain NOT VERIFIED. No servers started. Fetch tags and merge
+sync-1 into lane branches when resuming; this task does not start Phase 2.
+
 ## contract-1
 
 Mini-sync contract gate passed at 10:50 ICT, 31 Oct 2026 (T+0:50).

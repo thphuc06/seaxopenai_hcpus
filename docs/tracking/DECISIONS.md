@@ -52,3 +52,24 @@ AC-18 API asserts run failure/no invented findings; existing field label precede
 is preserved. P1/P3 must add the run-level update-failure notice or agree a later
 precedence change. Record/replay tests restore the same pre-run source IDs; stable
 identity across demo reset remains a P1/P2 CCR before stage recordings.
+
+## D008 — S1 integrated policy and resolved contracts (11:33 ICT)
+Record P1's implemented policy-v1.1: reference/reference disagreement has locus
+ACROSS_SOURCES; listing/reference disagreement remains LISTING_VS_SOURCE, and
+within-source disagreement retains precedence after access/validity/scope checks.
+This records the already implemented and tested rule (docs06 As built), not a new
+gate-time policy edit. P2 remains the normalization owner.
+
+The S1 collection DTOs and live mode/hidden-count metadata are implemented in
+P1 api/contracts.py and consumed by P3's generated types. P1 consumes P4's shared
+admission constants; these CCRs are closed. P3 implements the failed-update notice.
+Keep random source/passage identity across reset as an open recording-stage CCR.
+
+## D009 — S1 scope and review boundary (11:33 ICT)
+User requested automatic review and waived the separate /review turn. Three
+read-only reviewers cover rules, contracts and overfitting. No Phase 2 kickoff.
+No retained S1 feature is cut; AC-01 waits for the already scheduled S2 real capture,
+and future-phase tests retain their original markers. All gold remains DRAFT.
+The review found a P1 Phase-2 boundary issue: zero-result budget exhaustion selects
+FAILED rather than PARTIAL; track it explicitly, preserving the existing phase(2)
+deadline assertions. Full run-budget hardening remains scheduled for S2.
