@@ -1,0 +1,33 @@
+# Schema checked against installed Codex 26.1027.3384.0.
+version = 1
+name = "Product Truth Passport"
+
+[setup]
+script = ""
+
+[setup.win32]
+script = 'powershell -ExecutionPolicy Bypass -File scripts\dev\setup_worktree.ps1'
+
+[[actions]]
+name = "backend"
+icon = "run"
+platform = "win32"
+command = 'cd backend; .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000'
+
+[[actions]]
+name = "frontend"
+icon = "run"
+platform = "win32"
+command = 'cd frontend; npm run dev'
+
+[[actions]]
+name = "tests"
+icon = "test"
+platform = "win32"
+command = '''$env:CONTEST_PHASE = (Get-Content backend\tests\PHASE -Raw).Trim(); $env:LLM_MODE = 'fallback'; $env:WORKER_INLINE = '1'; cd backend; .\.venv\Scripts\python.exe -m pytest -q'''
+
+[[actions]]
+name = "sync_check"
+icon = "test"
+platform = "win32"
+command = '''$phase = (Get-Content backend\tests\PHASE -Raw).Trim(); $env:LLM_MODE = 'fallback'; $env:WORKER_INLINE = '1'; cd backend; .\.venv\Scripts\python.exe ..\scripts\sync_check.py $phase'''

@@ -1,0 +1,127 @@
+{
+  "status": "DRAFT",
+  "labelled_by": "draft:codex",
+  "labelled_at": "2026-10-31T03:03:32Z",
+  "reviewed_by": null,
+  "reviewed_at": null,
+  "derivation": "Soạn từ DATASET-SPEC S1, docs/06 và các passage lưu trong fixture trước lần chạy pipeline đầu tiên.",
+  "checkpoints": [
+    {
+      "after_event": "01-bootstrap-demo",
+      "product_id": "DEMO-PROD-S1",
+      "case_id": "DEMO-CASE-S1",
+      "expected": {
+        "volume": "CONSISTENT",
+        "skin_type": "SINGLE_SOURCE",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "CONSISTENT",
+        "responsible_company": "CONSISTENT"
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "Listing và nhãn độc lập đều ghi 50 ml; trang PH ghi 100 mL nhưng sai scope nên bị loại (R3, R5, R8).",
+          "evidence": [
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/listing.v1.json",
+              "source_id": "DEMO-SRC-S1-LISTING",
+              "passage_id": "DEMO-PSG-S1-LISTING-02",
+              "locator": "specs#volume",
+              "excerpt": "Dung tích niêm yết: 50 ml."
+            },
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/packaging_label.v1.json",
+              "source_id": "DEMO-SRC-S1-PACKAGING",
+              "passage_id": "DEMO-PSG-S1-LABEL-01",
+              "locator": "image:full",
+              "excerpt": "Dung tích: 50 ml."
+            }
+          ]
+        },
+        "skin_type": {
+          "rationale": "Chỉ listing cùng scope nêu mọi loại da. Nhãn và hồ sơ không nêu loại da; trang PH sai scope không tạo mâu thuẫn (R3, R6, R7).",
+          "evidence": [
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/listing.v1.json",
+              "source_id": "DEMO-SRC-S1-LISTING",
+              "passage_id": "DEMO-PSG-S1-LISTING-03",
+              "locator": "usage#skin",
+              "excerpt": "mọi loại da"
+            }
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "Niacinamide và Hyaluronic Acid trên listing được hỗ trợ bởi Niacinamide và Sodium Hyaluronate trong INCI của nhãn; dùng mapping seed có nguồn ở DATASET-SPEC §6 (R5, R8).",
+          "evidence": [
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/listing.v1.json",
+              "source_id": "DEMO-SRC-S1-LISTING",
+              "passage_id": "DEMO-PSG-S1-LISTING-04",
+              "locator": "highlights#1",
+              "excerpt": "Niacinamide và Hyaluronic Acid"
+            },
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/packaging_label.v1.json",
+              "source_id": "DEMO-SRC-S1-PACKAGING",
+              "passage_id": "DEMO-PSG-S1-LABEL-01",
+              "locator": "image:full",
+              "excerpt": "Ingredients: Aqua, Glycerin, Niacinamide, Sodium Hyaluronate."
+            }
+          ]
+        },
+        "notification_number": {
+          "rationale": "Listing, nhãn và hồ sơ ACTIVE cùng ghi một số; hồ sơ NOTIFICATION_DOC đáp ứng REQ (R5, R8, REQ).",
+          "evidence": [
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/listing.v1.json",
+              "source_id": "DEMO-SRC-S1-LISTING",
+              "passage_id": "DEMO-PSG-S1-LISTING-05",
+              "locator": "specs#notification",
+              "excerpt": "DEMO-CBMP-00042"
+            },
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/notification_doc.v1.json",
+              "source_id": "DEMO-SRC-S1-NOTIFICATION",
+              "passage_id": "DEMO-PSG-S1-DOC-02",
+              "locator": "page1#number",
+              "excerpt": "DEMO-CBMP-00042"
+            }
+          ]
+        },
+        "responsible_company": {
+          "rationale": "Listing, nhãn và hồ sơ ACTIVE cùng tên công ty, khác kiểu chữ; chuẩn hóa casing giữ cùng giá trị (R5, R8, REQ).",
+          "evidence": [
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/listing.v1.json",
+              "source_id": "DEMO-SRC-S1-LISTING",
+              "passage_id": "DEMO-PSG-S1-LISTING-06",
+              "locator": "specs#company",
+              "excerpt": "Công ty TNHH Lumivy Demo"
+            },
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/notification_doc.v1.json",
+              "source_id": "DEMO-SRC-S1-NOTIFICATION",
+              "passage_id": "DEMO-PSG-S1-DOC-03",
+              "locator": "page1#company",
+              "excerpt": "CÔNG TY TNHH LUMIVY DEMO"
+            }
+          ]
+        }
+      },
+      "excluded_sources": [
+        {
+          "source_id": "DEMO-SRC-S1-BRAND-PH",
+          "reason": "Thị trường PH và dung tích 100ml khác sản phẩm VN 50ml; loại khỏi mọi phép so sánh của S1.",
+          "evidence": [
+            {
+              "snapshot": "synthetic/s1-gentle-cleanser/brand_ph.v1.json",
+              "source_id": "DEMO-SRC-S1-BRAND-PH",
+              "passage_id": "DEMO-PSG-S1-PH-02",
+              "locator": "specs#market",
+              "excerpt": "100 mL variant for the Philippines market"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "source_id": "DEMO-SRC-S1-PACKAGING",
+  "kind": "PACKAGING_IMAGE",
+  "product_id": "DEMO-PROD-S1",
+  "version": 1,
+  "uri": "demo://s1/packaging",
+  "captured_at": "2026-10-31T03:03:32Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "packaging:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "50ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-LABEL-01",
+      "locator": "image:full",
+      "section": "label",
+      "text": "LUMIVY LAB — Gentle Niacinamide Cleanser\nDung tích: 50 ml.\nIngredients: Aqua, Glycerin, Niacinamide, Sodium Hyaluronate.\nSố công bố: DEMO-CBMP-00042.\nChịu trách nhiệm đưa sản phẩm ra thị trường: công ty tnhh lumivy demo.\nSYNTHETIC — nhãn minh họa cho sản phẩm hư cấu."
+    }
+  ],
+  "note": "Phase 0: bản chép chữ đọc được của nhãn synthetic; PNG cùng tên sẽ được dựng ở Phase 1.",
+  "image_todo": "PNG được tạo ở Phase 1; bản chép chữ hiện tại đọc được."
+}

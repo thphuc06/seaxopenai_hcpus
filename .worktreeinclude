@@ -1,0 +1,2 @@
+# Only ignored local files are copied by the app.
+backend/.env

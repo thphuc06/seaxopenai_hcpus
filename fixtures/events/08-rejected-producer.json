@@ -1,0 +1,20 @@
+{
+  "event_id": "DEMO-EVT-08",
+  "idempotency_key": "demo:s1:event:08",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "unlisted-producer",
+  "resource": {
+    "kind": "CASE",
+    "id": "DEMO-CASE-S1",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1"
+  },
+  "occurred_at": "2026-10-31T03:03:32Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Producer ngoài danh sách cho phép bị REJECTED; không tạo job hay gọi model."
+}

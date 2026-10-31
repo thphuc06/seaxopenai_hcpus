@@ -1,0 +1,23 @@
+{
+  "event_id": "DEMO-EVT-03",
+  "idempotency_key": "listing:DEMO-LISTING-S1:price:v2",
+  "type": "LISTING_CHANGED",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "LISTING",
+    "id": "DEMO-LISTING-S1",
+    "version": 2
+  },
+  "changed_fields": [
+    "price"
+  ],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1",
+    "price_vnd": 119000
+  },
+  "occurred_at": "2026-10-31T03:03:32Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Gửi lại cùng idempotency key của event 02 trả DUPLICATE; không thêm dữ liệu."
+}
