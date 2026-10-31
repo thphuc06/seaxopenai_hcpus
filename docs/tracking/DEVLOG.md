@@ -1,5 +1,39 @@
 # Development log — 31 Oct 2026
 
+## sync-3 — published14:37:41 ICT (T+4:37)
+
+Remote main/tag verified at07160983ca6ef8def8357fc9bbd0dfa40aae5eb1. PHASE3,
+all lanes, no WAITING. Tag contains HANDOFF sync-3 and results/sync-3-gate.md.
+User authorized repairable integration conflicts and later explicitly prohibited
+repeating completed checks. Final gate reuses full regression and executes every
+newly enabled S3 node plus changed frontend/wire/guard checks; no assertion weakened.
+
+- P4: Done — blind/B1/silent storyboard, Sites adapter, S3 gate and publication.
+  Surprise — assumed trace/status/privacy shapes differed from actual producers.
+  Decision — fix adapters with independent variants; keep frozen reports/DRAFT.
+  Next — Phase4 kickoff separately; human storyboard/browser review remains.
+- P1: Done — gap/registry, explain/observability, chain/graph/search route.
+  Surprise — MULTI was compared as a literal size and excluded before extraction.
+  Decision — policy-v1.8 generic marker semantics, explicit mismatches preserved.
+  Next — pre-S3 DB reset/migration decision and Phase4; no automatic destructive reset.
+- P2: Done — typed single-call scope/anchor verification and retrieval helpers.
+  Blocked — no current-phase offline blocker. Decision — read-only BM25 for GET.
+  Next — provider recordings and paid indexing coordination; Manager remains optional.
+- P3: Done — Why, waterfall, scope/effect, graph/search/chain views and contracts.
+  Decision — missing producer metadata stays unavailable. Node66/build/wire pass.
+  Next — human combined UI path and Phase4. Agent started no server.
+
+Metrics: latest full phase2 regression1261 passed/62 then-future skips/+2 subtests;
+final57 S3 nodes+guards4+wire1=62 passed; helpers77; focused repair208; fixtures98;
+sync3 29; frontend66; proxy9; all zero final failures. Blind rerun DRAFT54/55,
+false blame0/52,0 model calls, original report unchanged. Five phase4 tests remain
+future work. No provider calls, scope cuts, model-key/config change or moved tag.
+
+Three read-only reviews found no blocker, including the final integration fixes.
+review-base points to sync-2; prior automatic-review preference retained. Operational
+logs follow the tag without moving it. Full provider replay, hosted rollout and
+human click path remain NOT VERIFIED. Phase4 planned deadline15:15 ICT.
+
 ## contract-3 — published 13:42:22 ICT (T+3:42)
 
 Remote main and contract-3 verified at ab992d4cf1cd195648463fca1119d5c9ea039daf.

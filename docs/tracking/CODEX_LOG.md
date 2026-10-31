@@ -2,6 +2,10 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+| 14:37 ICT (T+4:37) | P4 | sync-gate3, integration corrections and three read-only reviews | ordered lane merges; scope/policy; P4 harness/tests; PHASE/HANDOFF/specs/results/tracking | edited | resolve repairable conflicts; reuse completed checks and push immediately | full1261 pass/62 then-future skip/+2 subtests; final62 pass; helper77; repair208; Node66/build; fixtures98; sync29/29; tag0716098 remote verified |
+| 13:59 ICT | P1 | S3 delivered lane checkpoint | lifecycle/gaps/registry/glassbox/chain/tests/docs | accepted | lane delivery integrated at sync3 | lane1177 pass/4 then-unmerged P2 failures/5 future skips/+2 subtests; integration closes those dependencies |
+| 13:54 ICT | P2 | S3 delivered typed scope/retrieval checkpoint | scope/prepass/agent/budget/retrieval/tests/docs | accepted | lane delivery integrated at sync3 | lane focused166 pass; prior nine P1 dependencies closed by integration |
+| 14:12 ICT | P3 | S3 delivered Why and glass-box UI | frontend/contracts/tests/plan | accepted | lane delivery integrated at sync3 | final integration Node66 and wire1 pass; API build pass |
 | 13:59 ICT (T+3:59) | P4 | S3 self-review and evaluator corrections | eval/blind scripts, two regression modules, docs09, ExecPlan | edited | human waived separate /review; preserve gold and first-run reports | final1132 passed/9 owner-WAITING failed/5 phase4 skipped/+2 subtests/0 deselected; focused44 passed; all1126 prior passes retained; four review findings resolved |
 | 13:28–13:43 ICT | P4 | sync-gate3 contract and three read-only reviews | P1/P2 contract merges; P4 plan; handoff/results/tracking | edited | user separates Stage-B WIP and requests earliest passing push | P1 1044→1090; P2 1090→1090; each14 future skips/+2 subtests/0 failed/errors/deselected; guards4/fixtures53/sync26; zero regressions; one documentation clarification |
 | 12:49–13:09 ICT | P4 | sync-gate 2, authorized integration fixes, three read-only reviews | lane merges; scope/trace/vocab/cache; 10 regression variants; PHASE/HANDOFF/eval/tracking | edited | user explicitly requested fixing failures then pushing tag; assertions and gold retained | focused99; phase1 1029 pass/43 skip/+2 subtests; phase2 1059 pass/14 skip/+2 subtests; guards4/fixtures53/sync26/Node51/build pass; no current-phase failures |
@@ -92,6 +96,22 @@ five DRAFT expected field labels before any pipeline execution. Validator: 9 fil
   Python 3.11 and made the setup script check compatibility explicitly.
 
 ## Execution context
+
+### S3 notable loop — MULTI before scope resolution
+
+Failing tests: unchanged AC21 and both AC40 anchor variants (3), plus six new
+unrelated volume/mass/marker variants. Trace run160ab6fcae4e48bcb3eadb4345e8f139:
+scope_check seq2 excluded the catalogue as an explicit variant mismatch before
+extraction. DATASET-SPEC defines MULTI as a multi-variant source. Generic repair
+preserves identity/market/version exclusions and requires stored passage placement;
+policy-v1.8 and docs06 record it. User explicitly authorized integration conflict
+repair; no assertion, source or gold edit. Focused208 passed, full1261+2 regression,
+final S3 incremental62 passed; isolated blind rerun54/55 DRAFT, zero false blame.
+
+P4 checker loops separately reproduced actual-ref mismatch, missing isolated
+registry, valid review state, code-only effects and duplicated public/private text.
+Final77 helper variants pass; private provenance remains prohibited. Original
+blind input freeze and first report are unchanged. Tag0716098 pushed14:37:41 ICT.
 
 ### S2 notable loop — integrated source interpretation (13:09 ICT)
 
