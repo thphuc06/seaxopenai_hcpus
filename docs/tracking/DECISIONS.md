@@ -1,5 +1,21 @@
 # Contest decisions
 
+## D015 — S4 integration and approved checker semantics (16:08 ICT)
+
+Integrate P1 policy-v2 web rules and receipts/marketplace, P2 bounded Web Scout
+and story ledger, P3 receipt/audit/Observe UI. Repair the P1/P2 audit envelope
+adapter without changing its transport shape. policy-v2.1 keeps identity-matched
+retailer inferred-size disagreement UNKNOWN for review, preserving explicit
+scope exclusions and confirm-only evidence. Requested story web completion
+requires query activity; preserve preflight failure reasons.
+
+Human explicitly approves conservative zero-finding marketplace scans and
+receipt timestamp-only rechecks: compare substantive field changes separately
+from the full API changed flags, keeping immutable evidence and exact diff checks.
+No label or acceptance assertion was changed. Human requests incremental reuse
+and only affected reruns after repair; do not describe the union as one full run.
+No new scope cut; replay freeze and browser/video readiness remain separate.
+
 ## D014 — S4 contract checkpoint and authorized gate recovery (15:20 ICT)
 
 Retain P1's S4 transport shapes/ACL from docs05, with501 stubs until Stage B;

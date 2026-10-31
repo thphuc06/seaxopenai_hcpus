@@ -1,5 +1,26 @@
 # Development log — 31 Oct 2026
 
+## sync-4 — published16:09:02 ICT (T+6:09)
+
+Remote main and sync-4 verified at eca731bcd4c2713526e875d812c6b4d0fb4aae08.
+Tag includes HANDOFF sync-4, PHASE4 and detailed incremental gate report.
+- P4 Done: captures/checker/blind evidence/storyboard; Surprise: receipt checker
+  conflated substantive changes with checked_at; Decision: human-approved semantic
+  distinction and valid marketplace abstention; Next: recording handoff.
+- P1 Done: receipts/marketplace/web policy; Blocked audit/retailer scope now fixed;
+  Decision: policy-v2.1; Next: optional marketplace actions and atomic-ingest CCR.
+- P2 Done: bounded discovery/recording ledger and R3/R4 extraction; Surprise:
+  terminal preflight receipt did not prove query execution; corrected; Next: replay.
+- P3 Done: receipt/audit/Observe UI and recording scaffolds; tests/build pass;
+  Next: actual replay browser/video; no scene execution claimed by this gate.
+- Metrics:1626 current backend nodes have passing JUnit receipts,0 unresolved
+  failed/error/skipped/deselected nodes;2 historical subtests; Node93; wire/guards9;
+  fixtures101; sync36 incremental. Fresh sets overlap; user waived redundant full
+  runs. No WAITING, omitted lane, scope cut, provider call, server or gold change.
+- Three read-only skill reviews plus repair review clear. Local review-base is
+  sync-3; human /review against review-base and UI click path remain unperformed.
+  Main/tag code is published; operational logs follow without moving the tag.
+
 ## contract-4 — gate passed15:20 ICT (T+5:20)
 
 - P4 Done: authorized deadline race repair and retained checkpoint records;
