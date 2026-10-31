@@ -1,0 +1,4 @@
+{
+  "_about": "Closed legal-form tokens, 2026-10-31. Source: docs/DATASET-SPEC.md section 6 and docs/team-plan/P2-ai-agents.md Phase 1. Longest matching forms are stripped at token boundaries; punctuation is normalized consistently.",
+  "forms": ["Công ty trách nhiệm hữu hạn một thành viên", "Công ty TNHH một thành viên", "Công ty trách nhiệm hữu hạn", "Công ty cổ phần", "Công ty TNHH MTV", "Cty TNHH MTV", "Công ty TNHH", "Cty TNHH", "TNHH MTV", "Công ty CP", "Cty CP", "Cổ phần", "Co., Ltd", "Company Limited", "TNHH", "MTV", "JSC", "LLC", "Ltd"]
+}
