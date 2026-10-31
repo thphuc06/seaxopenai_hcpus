@@ -48,5 +48,21 @@ EventActor = Annotated[RequestActor, Depends(event_actor)]
 RunActor = Annotated[RequestActor, Depends(run_actor)]
 
 
+def reviewer_actor(actor: Actor) -> RequestActor:
+    if actor.role != Role.REVIEWER:
+        raise HTTPException(status_code=403, detail="Reviewer role required")
+    return actor
+
+
+def evidence_actor(actor: Actor) -> RequestActor:
+    if actor.role not in {Role.SELLER, Role.REVIEWER}:
+        raise HTTPException(status_code=403, detail="Evidence submission role required")
+    return actor
+
+
+ReviewerActor = Annotated[RequestActor, Depends(reviewer_actor)]
+EvidenceActor = Annotated[RequestActor, Depends(evidence_actor)]
+
+
 def not_implemented() -> NoReturn:
     raise HTTPException(status_code=501, detail="Endpoint implementation pending")

@@ -1,5 +1,52 @@
 # Development log — 31 Oct 2026
 
+## sync-1 — 11:33:58 ICT (T+1:33), complete for S1 scope
+
+Published main and sync-1 at be91b3bd0051568d4795801b438409326ac51dc3;
+remote SHA and tagged HANDOFF/PHASE=1 verified. Returned p4 to the tag. User chose
+automatic review, waived separate /review and explicitly prohibited Phase 2 kickoff.
+Three read-only reviewers confirmed the final tag has the reviewed code, no S1
+blocker and unchanged DRAFT gold. review-base is local-only at sync-0.
+
+- P4: Done — acceptance/helpers, auxiliary dataset and CI/Render package integrated;
+  ordered gate, tagged handoff and operational logs. Blocked — no S1 gate blocker.
+  Surprise — system Node remains 22; bundled Node 24.22.1 is required. Decision —
+  retain all plan history, 13 DRAFT gold checkpoints and existing fixture deferral.
+  Next — human combined UI click path/gold review; no next-phase work in this task.
+- P1: Done — admission/jobs/run/policy/publication and eleven S1 routes. Blocked —
+  no S1 failure. Surprise — budget exhaustion with zero results selects FAILED;
+  Phase-2 test already requires PARTIAL. Decision — explicit P1 CCR in ISSUES,
+  retain assertions; policy-v1.1/ACROSS_SOURCES recorded in D008. Next — owner fix
+  at S2 and source-ID/reset recording agreement with P2.
+- P2: Done — four modes, complete replay key, fallback/extract/cache, normalization
+  and robustness tests. Blocked — no S1 failure. Surprise — lane's successful
+  capped record required a Windows terminal-encoding fix, documented with regression.
+  Decision — count only reported one paid call (USD0.00749); gate used none.
+  Next — shared reset-story replay is not established by isolated listing replay.
+- P3: Done — buyer evidence/private filtering/polling, Operator events/counters/runs,
+  generated API types and API build. Blocked — no S1 failure. Surprise — npm ci
+  reports 3 moderate advisories; two existing Router warnings persist. Decision —
+  no forced pin changes; set VITE_USE_MOCK=0 for human integrated Actions check.
+  Next — human combined UI click path; earlier 501 WAITING is superseded by this gate.
+
+Fresh phase-0 baseline→post-merge: P4 220→276 passed (14→57 skips), P1 288→394
+(57→156 skips), P2 394→527 (156 skips), P3 527→527 (156 skips). The P1 baseline
+adds 12 newly available hosted-adapter tests. Every run adds 2 passing subtests;
+zero prior passing nodes lost, failures/errors/deselections or merge conflicts.
+JUnit node/outcome evidence remains local in .git/s1-*.xml.
+
+Final phase-1 combined suite: 640 passed, 44 skipped, 2 subtests, 0 failed/errors/
+deselected. Skips: 43 future-phase tests and AC-01 R2 Foaming capture due S2.
+Separate guards 4 passed; fixture validator 37/37; sync_check 1 fallback 17/17 PASS;
+frontend npm test 37 passed and API build passed after npm ci. No omitted lanes,
+WAITING failures or new cuts. No assertion/fixture label changed by this gate.
+The original gold checkpoint and all prior ExecPlan text survived integration.
+
+NOT VERIFIED in this gate: human browser path, hosted deployment, full reset-story
+replay and human gold approval. P3's prior offline browser report is retained as
+lane evidence, not rerun here. No servers or model calls started. Later logs do
+not move sync-1; Phase 2 remains pending an explicit new instruction.
+
 ## contract-1 — 10:50 ICT (T+0:50), contract gate passed
 
 - P4: phase-1 acceptance checkpoint and reporting support integrated; direct

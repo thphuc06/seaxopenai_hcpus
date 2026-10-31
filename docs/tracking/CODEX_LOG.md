@@ -11,7 +11,51 @@
 | 09:49–10:01 ICT | P4 | P4-0 skeleton and shared contracts | backend, scripts/dev, docs/tracking, .codex, .worktreeinclude, P4 plan, team README | accepted | Authorized early start; requested agent-configured Actions | pytest 37 passed, 0 failed/skipped/deselected; guards 4 passed; pip check and PowerShell setup passed |
 | 10:02–10:04 ICT | P4 | P4-0c initial dataset and validator | fixtures, scripts/check_fixtures.py, test_fixtures.py, docs, P4 plan | accepted | Requested auxiliary task in same session | 66 passed, 0 failed/skipped/deselected; validator 9 files passed; 2 temp-cleanup warnings |
 
+## S1 lane report task receipts
+
+These rows preserve the individual tasks reported in the incoming ExecPlans;
+historical WAITING failures are not the final integrated gate. The Stage-B P4
+summary is already in the table above. No unreported task/test count is inferred.
+
+| time | lane | task | files | accepted/edited/rejected | human change | test |
+|---|---|---|---|---|---|---|
+| 10:42 ICT | P1 | Phase 1 Stage A contract checkpoint | 6 api modules; test_events_contract.py; docs05 As-built; ExecPlan | accepted | phase-kickoff P1 1 authorizes checkpoint push | 205 passed + 2 subtests; guards 4; 0 failed/skipped/deselected |
+| 11:12 ICT | P1 | S1 Stage B implementation and self-review | P1 pipeline/events/API/worker/db/seed; unit/property tests; docs03–06; ExecPlan | edited | continuation plus conditional commit/push/PR authorized; human /review waived | 437 passed, 1 P4 skip, 2 subtests; 3 read-only reviewers; no unresolved in-lane blocker |
+| 11:14 ICT | P1 | S1 ready; integrate P4 config and click-path gate | admission; own tests; docs05; ExecPlan; upstream P2/P4 deliveries | accepted | commit/push/PR authorized | 475 passed, 44 P4 skips, 2 subtests; guards 4 included; sync_check 17 PASS; 0 failures/deselections |
+| 11:15 ICT | P1 | publish S1 PR #6 | ExecPlan publication record | accepted | requested commit/push/PR | origin SHA verified; PR open/mergeable; local gate 475 passed + 2 subtests, 44 P4 skips; sync 17 PASS |
+| 10:56 ICT | P1 | Phase 1 readiness audit | ExecPlan only | accepted | commit/push/PR conditional on readiness | 220 passed, 36 failed, 2 subtests; guards 4; NOT READY |
+| 10:54 ICT | P1 auxiliary | Phase 1b property tests | test_policy_props.py; ExecPlan | accepted | explicit test-only prompt | 36 failed on stubs/constructor; guards 4 passed; 0 skipped/deselected |
+| 10:46 ICT | P1 | quick self-review + mini-sync PR | contract tests; ExecPlan | edited | separate human review waived; commit/push/PR authorized | 220 + 2 subtests; guards 4; Phase-0 focused 83; 3 read-only explorers |
+| 10:37 ICT | P1 | pull latest and verify Phase 1 entry | .agent/plans/P1.md; integrated origin/main e7417ee | accepted | requested pull/readiness check | pytest 141 + 2 subtests; guards 4; fixtures 9/9; frontend 23; build passed |
+| 10:36 ICT | P2 | P2-1 Stage A contract checkpoint | .agent/plans/P2.md | accepted | user limited scope to Stage A; existing contracts retained | 140 passed + 2 subtests; guards 4 passed; 0 failed/skipped/deselected |
+| 11:00 ICT | P2 | P2-1 Stage B + self-review (3 read-only agents) | gateway, budget, normalize/fallback/extract, seed data, 3 test modules, AI As built, ExecPlan | edited | user requested autonomous review; approved company-name accent assertion correction | full gate 325 passed + 2 subtests / 12 WAITING failed / 1 skipped; final focused 122 passed; 0 deselected |
+| 11:27 ICT | P2 | complete P2-1/P2-1b, integrate P1/P4, record/replay check | fallback/extract, 3 test files, record_all.py, docs07, ExecPlan | edited | user authorized agent's capped real record; prior company-accent decision retained | full 625 passed + 2 subtests / 44 skipped / 0 failed; final focused 135 passed; sync 17/17; one paid call USD0.00749, replay 0 tokens |
+| 10:35 ICT (T+0:35) | P3 | Phase 1 readiness check | fast-forward sync-0; .agent/plans/P3.md | accepted | requested readiness check, no implementation | Node 23 + Python guard/contract 5 passed; both builds pass; full Python suite blocked by 1 collection error (missing openai) |
+| 10:36 ICT (T+0:36) | P3 | official Local sync-0 verification | .agent/plans/P3.md; Git fetch metadata | accepted | preparation only; preserve concurrent plan edit; no build prompt or push | fetch passed; merge already up to date; runtime tests not rerun |
+| 10:38 ICT (T+0:38) | P3 | backend environment guidance | .agent/plans/P3.md | accepted | asked for next setup steps | read-only environment checks; runtime tests not run |
+| 11:25 ICT (T+1:25) | P3 | authorized S1 delivery preflight | 31 reviewed frontend/plan files | accepted | exact commit message, non-force push and PR authorized | reuse unchanged 11:21 passing P3 checks; backend 220 + 2 subtests / 12 WAITING failures / 1 P4 skip / 0 deselected; SHA/PR verification follows |
+| 11:21 ICT (T+1:21) | P3 | Phase 1 self-review with three read-only explorers | frontend/src/pages/Operator.tsx; frontend/tests/test_phase1_api_browser.py; frontend/README.md; .agent/plans/P3.md | edited | user selected origin/main at contract-1 plus uncommitted scope; no commit/push | Node 37; browser 11; contract 2; guards 4 pass; both builds/types pass; backend 220 + 2 subtests pass / 12 WAITING failures / 1 P4 skip / 0 deselected |
+| 11:06 ICT (T+1:06) | P3 | Phase 1 buyer/evidence and Operator v1 | frontend/**; .agent/plans/P3.md | edited | explicit P3-1 execution once; preserved concurrent Local setup/Action notes; no push | Node 37, browser 10, final guards/contracts 6 passed; both builds pass; full diagnostic 222 + 2 subtests passed / 12 WAITING failures / 1 P4 skip; live S1 reads 501 |
+| 10:50 ICT (T+0:50) | P3 | Local backend environment setup | ignored backend/.venv and backend/.env; frontend dependencies; .agent/plans/P3.md | accepted | setup authorized; key to be entered locally; stopped exact Vite lock holder | pip check + 12 pins OK; Python 141 + 2 subtests; Node 23; build pass; 0 failed/skipped/deselected |
+| 10:52 ICT (T+0:52) | P3 | rerun P4 Local setup script | local dependencies; .agent/plans/P3.md | accepted | exact requested command; existing venv and machine policy preserved | setup exit 0; 12/12 pins; pip check; guards 4 passed; frontend build passed |
+| 10:54 ICT (T+0:54) | P3 | kickoff readiness and local Python path repair | ignored backend/.venv/pyvenv.cfg; .agent/plans/P3.md | edited | asked whether kickoff can start; preserved concurrent contract-1 integration | pip check pass; latest checkpoint 220 passed + 2 subtests, 14 phase skips, 0 failed/errors/deselected |
+| 11:01 ICT (T+1:01) | P3 | backend Action readiness | .agent/plans/P3.md | accepted | user requested Action check | Python/Uvicorn OK; startup/health/OpenAPI 2 passed; live port 8000 not listening |
+| 11:05 ICT (T+1:05) | P3 | diagnose backend Not Found | .agent/plans/P3.md | accepted | user reported Not Found | live root 404 as defined; health/docs/OpenAPI 200 |
+| 11:10 ICT (T+1:10) | P3 | post-kickoff status | .agent/plans/P3.md | accepted | user requested next runbook step | Node 37 + guards/contracts 6 passed; build pass; live API 501; next human mock UI check then self-review |
+| 10:53 ICT (T+0:53) | P4 | P4-1c synthetic story and label images | fixtures/**; scripts/make_label_images.py; backend/tests/test_label_images.py; backend/tests/test_phase1_dataset.py; docs/DATASET-SPEC.md; .agent/plans/P4.md | accepted | user requested isolated worktree execution; gold review pending | fixture validator 37 valid; focused 52 passed; phase0 159 passed/14 skipped/2 subtests; staged checks 12 passed |
+| 10:58 ICT (T+0:58) | P4 | P4-1c isolated environment verification | .agent/plans/P4.md | accepted | none; gold remains DRAFT | own venv: phase0 159 passed/14 skipped/2 subtests; guards 4 passed; fixtures 37 valid |
+| 11:11 ICT (T+1:11) | P4 | integrate local P4-1c 7692b0d into p4 | 39 auxiliary files + preserved ExecPlan receipt | accepted | keep all plan sections and DRAFT gold; no sync-gate | fixtures 37/37; phase1 289 passed/12 WAITING failures/44 skipped +2 subtests; guards 4 passed; no regression |
+| 10:38 ICT (T+0:38) | P4 | S1 Stage A contract tests | backend/tests/test_acceptance.py; backend/tests/conftest.py; .agent/plans/P4.md | accepted | approved direct public publish.gate test for AC-16 | phase0 141 passed/14 skipped +2 subtests; guards 4 passed; phase1 140 passed/13 WAITING failures/1 fixture skip +2 subtests |
+| 11:34 ICT (T+1:34) | P4 | sync-gate 1 and automatic self-review (3 read-only agents) | ordered lane merges; PHASE; full P4 ExecPlan; HANDOFF and tracking logs | accepted | user waived separate /review; keep gold DRAFT; no Phase 2 | phase1 640 passed/44 skipped/+2 subtests; guards 4; fixtures 37/37; sync 17/17; Node 37; API build PASS; 0 failures/errors/deselections/WAITING |
+| 10:35 ICT | P4 | CI/Render preparation | deployment files, docs, P4 appendix | accepted | separate worktree requested | 153 Python + 2 subtests, 23 frontend; image pending CI |
+
 ## Notable loops
+
+S1 integration: fresh per-merge node/outcome comparisons retained every passing
+test through P4/P1/P2/P3. Historical 501 WAITING became 640 passing checks in the
+combined Phase-1 gate, with 44 documented skips and 2 subtests. Automatic final-tag
+review surfaced the S2 zero-result budget status CCR without changing assertions
+or masking it as an S1 failure. Three reviewers reconfirmed the tagged code.
 
 S0 integration: initial frontend test run selected system Node 22.15.1 and reported
 1 pass/5 module-load failures. Selected existing bundled Node 24.22.1 through process

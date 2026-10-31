@@ -4,7 +4,7 @@
 |---|---|---|---|
 | S0 | 10:30 | 10:32 ICT | Complete; sync-0 62f759a pushed; all lanes, no WAITING |
 | contract-1 | 10:50 | 10:50 ICT | Gate passed; P4/P1/P2 contracts integrated, PHASE=0; S1 implementation pending |
-| S1 / M1 | 11:45 | — | Pending |
+| S1 / M1 | 11:45 | 11:33:58 ICT | Complete retained S1 scope; sync-1 be91b3b pushed; 640 passed +2 subtests, 44 documented skips, no WAITING; DRAFT gold; Phase 2 not started |
 | S2 / M2 | 13:00 | — | Pending |
 | S3 / M3 | 14:15 | — | Pending |
 | S4 / M4 | 15:15 | — | Pending |
