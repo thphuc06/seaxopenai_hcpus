@@ -1,0 +1,57 @@
+{
+  "source_id": "DEMO-SRC-S2-LISTING",
+  "kind": "LISTING",
+  "product_id": "DEMO-PROD-S2",
+  "version": 1,
+  "uri": "demo://s2/listing",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "seller:demo-shop",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S2",
+    "variant": "236ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S2-LISTING-V1-01",
+      "locator": "title",
+      "section": "overview",
+      "text": "Sữa rửa mặt Hydra Cream Cleanser 236 ml dành cho da khô"
+    },
+    {
+      "id": "DEMO-PSG-S2-LISTING-V1-02",
+      "locator": "specs#volume",
+      "section": "specifications",
+      "text": "Dung tích chai: 236 ml."
+    },
+    {
+      "id": "DEMO-PSG-S2-LISTING-V1-03",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Sản phẩm được giới thiệu dành cho da khô."
+    },
+    {
+      "id": "DEMO-PSG-S2-LISTING-V1-04",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Thành phần nổi bật trên gian hàng: Glycerin."
+    },
+    {
+      "id": "DEMO-PSG-S2-LISTING-V1-05",
+      "locator": "specs#notification",
+      "section": "specifications",
+      "text": "Số công bố minh họa: DEMO-CBMP-00088."
+    },
+    {
+      "id": "DEMO-PSG-S2-LISTING-V1-06",
+      "locator": "specs#company",
+      "section": "specifications",
+      "text": "Đơn vị chịu trách nhiệm: Công ty TNHH Lumivy Demo."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

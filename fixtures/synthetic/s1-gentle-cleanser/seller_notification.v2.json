@@ -1,0 +1,46 @@
+{
+  "source_id": "DEMO-SRC-S1-UPLOAD-NOTIFICATION",
+  "kind": "NOTIFICATION_DOC",
+  "product_id": "DEMO-PROD-S1",
+  "version": 2,
+  "uri": "demo://s1/upload-notification",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PRIVATE",
+  "family": "upload:seller:demo-shop",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "50ml",
+    "market": "VN",
+    "version": "2"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-UPLOAD-NOTIFICATION-V2-01",
+      "locator": "page1#product",
+      "section": "record",
+      "text": "Tài liệu người bán cung cấp cho Gentle Niacinamide Cleanser, chai 50 ml, thị trường VN."
+    },
+    {
+      "id": "DEMO-PSG-S1-UPLOAD-NOTIFICATION-V2-02",
+      "locator": "page1#number",
+      "section": "record",
+      "text": "Số tiếp nhận trên tài liệu bổ sung: DEMO-CBMP-00077."
+    },
+    {
+      "id": "DEMO-PSG-S1-UPLOAD-NOTIFICATION-V2-03",
+      "locator": "page1#company",
+      "section": "record",
+      "text": "Đơn vị chịu trách nhiệm: Công ty TNHH Lumivy Demo."
+    },
+    {
+      "id": "DEMO-PSG-S1-UPLOAD-NOTIFICATION-V2-04",
+      "locator": "page1#issued",
+      "section": "record",
+      "text": "Ngày cấp minh họa: 2026-10-31; trạng thái ACTIVE. Tài liệu SYNTHETIC."
+    }
+  ],
+  "note": "SYNTHETIC — bản chụp hồ sơ công bố do người bán nộp ở event 06; loại chứng cứ là NOTIFICATION_DOC.",
+  "submitted_by": "SELLER"
+}

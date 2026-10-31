@@ -1,0 +1,33 @@
+{
+  "source_id": "DEMO-SRC-S4-BRAND",
+  "kind": "BRAND_PAGE",
+  "product_id": "DEMO-PROD-S4",
+  "version": 1,
+  "uri": "demo://s4/brand",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "brand:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S4",
+    "variant": "30ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S4-BRAND-V1-01",
+      "locator": "title",
+      "section": "overview",
+      "text": "Lumivy Lab — Clear Skin Serum 30 ml"
+    },
+    {
+      "id": "DEMO-PSG-S4-BRAND-V1-02",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Thông tin loại da: Clear Skin Serum dành cho da dầu và da hỗn hợp."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

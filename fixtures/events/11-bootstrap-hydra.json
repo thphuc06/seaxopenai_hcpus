@@ -1,0 +1,20 @@
+{
+  "event_id": "DEMO-EVT-11",
+  "idempotency_key": "demo:s2:event:11",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "CASE",
+    "id": "DEMO-CASE-S2",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "DEMO-CASE-S2",
+    "product_id": "DEMO-PROD-S2"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S2",
+  "expect": "Trang nhãn hàng tự mâu thuẫn về loại da và Niacinamide; chuyển người duyệt, không quy cho người bán."
+}
