@@ -7,7 +7,9 @@ import { usePoll } from './usePoll.ts';
 import { ErrorNotice } from './components/Feedback.tsx';
 import { BuyerPassport } from './pages/BuyerPassport.tsx';
 import { Operator } from './pages/Operator.tsx';
-import { NotFound, Observe, Receipt } from './pages/Shells.tsx';
+import { NotFound } from './pages/Shells.tsx';
+import { Observe } from './pages/Observe.tsx';
+import { Receipt } from './pages/Receipt.tsx';
 import { Reviewer } from './pages/Reviewer.tsx';
 
 interface AppProps { api: ApiClient; role: DemoRole; onRoleChange: (role: DemoRole) => void; useMock: boolean; sessionError: Error | null }
@@ -29,7 +31,7 @@ export function App({ api, role, onRoleChange, useMock, sessionError }: AppProps
       <div className="header-inner">
         <Link className="wordmark" to="/" aria-label="Product Truth Passport home"><span className="brand-symbol" aria-hidden="true">p<span>↗</span></span><span>product truth<span className="wordmark-sub">PASSPORT</span></span></Link>
         <nav className="main-nav" aria-label="Workspaces">
-          <NavLink to="/" end>Operator</NavLink>
+          <NavLink to="/" end data-testid="operator-nav">Operator</NavLink>
           {buyerPath && <NavLink to={buyerPath}>Buyer Passport</NavLink>}
           <NavLink to="/reviewer">Reviewer</NavLink>
           <NavLink to="/observe">Observe</NavLink>
@@ -51,8 +53,8 @@ export function App({ api, role, onRoleChange, useMock, sessionError }: AppProps
         <Route path="/" element={<Operator api={api} role={role} buyerPath={buyerPath} productId={activeId} product={products.data?.find((product) => product.id === activeId)} />} />
         <Route path="/buyer/:productId" element={<BuyerPassport key={`${location.pathname}:${role}`} api={api} products={products.data ?? []} role={role} />} />
         <Route path="/reviewer" element={<Reviewer api={api} role={role} />} />
-        <Route path="/observe" element={<Observe />} />
-        <Route path="/orders/:orderId" element={<Receipt />} />
+        <Route path="/observe" element={<Observe api={api} role={role} />} />
+        <Route path="/orders/:orderId" element={<Receipt key={`${location.pathname}:${role}`} api={api} role={role} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </main>

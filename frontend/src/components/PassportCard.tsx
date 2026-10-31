@@ -49,6 +49,7 @@ export function PassportCard({ passport, onEvidence, onWhy }: { passport: Passpo
       <p>What the sources say, one detail at a time.</p>
       <div className="passport-meta">
         <span className="plain-badge" data-testid="badge-origin">{passport.dataset_origin}</span>
+        {passport.web_sources && <span className="plain-badge">{new Set(passport.web_sources.filter((source) => source.origin === 'REAL' && source.visibility === 'PUBLIC').map((source) => source.source_version_id)).size} REAL web sources</span>}
         {passport.llm_mode && <span className="plain-badge" data-testid="badge-mode">{passport.llm_mode}</span>}
         <span>Checked {formatTime(passport.last_checked_at)}</span>
       </div>

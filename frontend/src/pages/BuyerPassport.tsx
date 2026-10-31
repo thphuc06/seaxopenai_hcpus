@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useCallback, useRef, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import type { ApiClient } from '../api/client.ts';
 import type { DemoRole, FieldKey, PassportView, Product } from '../types.ts';
 import { withPassportMetadata } from '../passportView.ts';
@@ -37,6 +37,17 @@ export function BuyerPassportView({ product, passport, onEvidence, onWhy }: { pr
 
 export function BuyerPassport({ api, products, role = 'BUYER' }: { api: ApiClient; products: Product[]; role?: DemoRole }) {
   const { productId = '' } = useParams();
+  const navigate = useNavigate();
+  const orderLock = useRef(false);
+  const [buying, setBuying] = useState(false);
+  const [buyError, setBuyError] = useState<Error | null>(null);
+  async function buy() {
+    if (orderLock.current) return;
+    orderLock.current = true; setBuying(true); setBuyError(null);
+    try { const order = await api.createOrder(productId); navigate(`/orders/${encodeURIComponent(order.id)}`); }
+    catch (error) { setBuyError(error instanceof Error ? error : new Error('The receipt could not be saved.')); }
+    finally { orderLock.current = false; setBuying(false); }
+  }
   const [evidenceKey, setEvidenceKey] = useState<FieldKey | null>(null);
   const [whyKey, setWhyKey] = useState<FieldKey | null>(null);
   const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
@@ -44,6 +55,8 @@ export function BuyerPassport({ api, products, role = 'BUYER' }: { api: ApiClien
   return <>
     {error && <ErrorNotice error={error} />}
     {loading && <LoadingNotice />}
+    {buyError && <ErrorNotice error={buyError} />}
+    {data && <section className="purchase-bar"><div><strong>Keep the evidence you saw</strong><p>Save this Passport as an evidence receipt.</p></div><button type="button" data-testid="buy-button" disabled={buying} onClick={() => void buy()}>{buying ? 'Saving…' : 'Buy · save receipt'}</button></section>}
     {data && <BuyerPassportView product={products.find((item) => item.id === productId)} passport={data} onEvidence={setEvidenceKey} onWhy={setWhyKey} />}
     {whyKey && <WhyDialog key={`${productId}:${whyKey}:${role}`} api={api} productId={productId} fieldKey={whyKey} role={role} onClose={() => setWhyKey(null)} />}
     {role === 'SELLER' && <EvidenceUploadForm key={productId} api={api} />}

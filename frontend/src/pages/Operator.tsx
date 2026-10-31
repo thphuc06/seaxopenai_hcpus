@@ -15,6 +15,7 @@ import type { FieldKey } from '../types.ts';
 import { withPassportMetadata } from '../passportView.ts';
 import { WhyDialog } from '../components/WhyDialog.tsx';
 import { RunGlassbox } from '../components/RunGlassbox.tsx';
+import { WebAudit } from '../components/WebAudit.tsx';
 
 const OUTCOMES = ['ADMITTED', 'NOOP', 'DUPLICATE', 'REJECTED'] as const;
 
@@ -50,11 +51,11 @@ export function TraceTable({ detail }: { detail: RunDetail }) {
 function RunInspector({ api, runId }: { api: ApiClient; runId: string }) {
   const load = useCallback((signal: AbortSignal) => api.getRun(runId, signal), [api, runId]);
   const { data, error, loading } = usePoll(load, 2_000);
-  return <section className="run-inspector" aria-label="Selected run">{error && <ErrorNotice error={error} technical />}{loading && <LoadingNotice />}{data && <TraceTable detail={data} />}</section>;
+  return <section className="run-inspector" aria-label="Selected run">{error && <ErrorNotice error={error} technical />}{loading && <LoadingNotice />}{data && <><TraceTable detail={data} /><WebAudit key={data.run.case_id} api={api} caseId={data.run.case_id} /></>}</section>;
 }
 
-function LivePassport({ api, productId, product }: { api: ApiClient; productId: string; product?: Product }) {
-  const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
+function LivePassport({ api, productId, product, refresh }: { api: ApiClient; productId: string; product?: Product; refresh: number }) {
+  const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId, refresh]);
   const passport = usePoll(load, 2_000);
   const [evidenceKey, setEvidenceKey] = useState<FieldKey | null>(null);
   const [whyKey, setWhyKey] = useState<FieldKey | null>(null);
@@ -110,7 +111,7 @@ function OperatorDashboard({ api, productId, product }: { api: ApiClient; produc
       <p className="scenario-caption" aria-live="polite">{nextEvent?.expect ?? (scenario.length ? 'All catalog steps have been sent. Read the stored results alongside the run trace.' : 'Select a product with catalog events.')}</p>
       <button type="button" className="primary-button" data-testid="scenario-next" disabled={!nextEvent || pending !== null} onClick={() => { if (nextEvent) void act(nextEvent.name).then((sent) => { if (sent) setScenarioIndex((value) => value + 1); }); }}>{pending === nextEvent?.name ? 'Sending…' : 'Next'}</button>
       <ol>{scenario.map((event, index) => <li key={event.name} aria-current={index === scenarioIndex ? 'step' : undefined}>{index < scenarioIndex ? '✓ ' : ''}{event.title}</li>)}</ol>
-    </section>{productId && <LivePassport key={productId} api={api} productId={productId} product={product} />}</div>
+    </section>{productId && <LivePassport key={productId} api={api} productId={productId} product={product} refresh={refresh} />}</div>
     <div className="section-heading"><div><p className="eyebrow">Event catalog</p><h2>Trigger a change</h2></div><button type="button" onClick={() => { setActionError(null); setConfirmReset(true); }} disabled={pending !== null}>Reset demo</button></div>
     {catalog.error && <ErrorNotice error={catalog.error} technical />}
     {catalog.loading && <LoadingNotice />}
