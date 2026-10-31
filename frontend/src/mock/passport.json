@@ -1,0 +1,80 @@
+{
+  "product_id": "DEMO-PROD-01",
+  "dataset_origin": "SYNTHETIC",
+  "last_checked_at": "2026-10-31T03:05:00Z",
+  "run_status": "COMPLETED",
+  "llm_mode": "FALLBACK",
+  "fields": [
+    {
+      "field_key": "volume",
+      "label": "CONSISTENT",
+      "public_text": "50 ml. Consistent across 2 independent sources checked: the listing and packaging label.",
+      "verdict": "CONSISTENT",
+      "conflict_locus": null,
+      "freshness": "CURRENT",
+      "review_state": "AUTO_DRAFT",
+      "checked_at": "2026-10-31T03:05:00Z",
+      "citations": [
+        { "passage_id": "preview-listing-volume", "source_kind": "LISTING", "source_version": 1, "locator": "specifications/volume", "excerpt": "Dung tích: 50 ml." },
+        { "passage_id": "preview-label-volume", "source_kind": "PACKAGING_IMAGE", "source_version": 1, "locator": "label/front", "excerpt": "Thể tích thực: 50 ml." }
+      ],
+      "hidden_citations": 0
+    },
+    {
+      "field_key": "skin_type",
+      "label": "CONFLICT_IN_SOURCE",
+      "public_text": "The brand page gives different skin type information in different sections. This is not attributed to the seller.",
+      "verdict": "CONFLICTING",
+      "conflict_locus": "WITHIN_SOURCE",
+      "freshness": "CURRENT",
+      "review_state": "NEEDS_REVIEW",
+      "checked_at": "2026-10-31T03:05:00Z",
+      "citations": [
+        { "passage_id": "preview-brand-title", "source_kind": "BRAND_PAGE", "source_version": 1, "locator": "title", "excerpt": "Dành cho da khô." },
+        { "passage_id": "preview-brand-description", "source_kind": "BRAND_PAGE", "source_version": 1, "locator": "description#p2", "excerpt": "Dành cho da thường và da dầu." }
+      ],
+      "hidden_citations": 0
+    },
+    {
+      "field_key": "key_ingredients",
+      "label": "SINGLE_SOURCE",
+      "public_text": "Niacinamide and Hyaluronic Acid. Stated by the listing only; not independently confirmed.",
+      "verdict": "SINGLE_SOURCE",
+      "conflict_locus": null,
+      "freshness": "CURRENT",
+      "review_state": "AUTO_DRAFT",
+      "checked_at": "2026-10-31T03:05:00Z",
+      "citations": [
+        { "passage_id": "preview-listing-ingredients", "source_kind": "LISTING", "source_version": 1, "locator": "highlights", "excerpt": "Thành phần nổi bật: Niacinamide và Hyaluronic Acid." }
+      ],
+      "hidden_citations": 0
+    },
+    {
+      "field_key": "notification_number",
+      "label": "NOT_VERIFIED",
+      "public_text": "Not verified: a current notification document is needed to compare this number.",
+      "verdict": "INSUFFICIENT",
+      "conflict_locus": null,
+      "freshness": "CURRENT",
+      "review_state": "NEEDS_REVIEW",
+      "checked_at": "2026-10-31T03:05:00Z",
+      "citations": [],
+      "hidden_citations": 1
+    },
+    {
+      "field_key": "responsible_company",
+      "label": "STALE",
+      "public_text": "A source this relied on changed on 31 Oct 2026. Re-checking.",
+      "verdict": "SINGLE_SOURCE",
+      "conflict_locus": null,
+      "freshness": "STALE",
+      "review_state": "NEEDS_REVIEW",
+      "checked_at": "2026-10-31T03:03:00Z",
+      "citations": [
+        { "passage_id": "preview-label-company", "source_kind": "PACKAGING_IMAGE", "source_version": 1, "locator": "label/back/company", "excerpt": "Đơn vị chịu trách nhiệm: Công ty TNHH Lumivy Demo." }
+      ],
+      "hidden_citations": 0
+    }
+  ],
+  "disclaimer": "Describes only the sources checked; it does not establish product origin or suitability."
+}
