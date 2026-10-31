@@ -1,5 +1,37 @@
 # Integration handoff
 
+## contract-4
+
+Phase3 incremental gate passed15:20 ICT,31 Oct2026 (T+5:20). PHASE stays3;
+this is the S4 interface checkpoint, not S4 implementation completion. Merge
+contract-4 into each lane. No WAITING, omitted prior lane or scope cut.
+
+- P4: CONTRACT_NO_CHANGE for shared schemas. Integrated3fe5302 via392a9e9:
+  user-authorized P2 deadline race repair, two regression variants and preserved
+  kickoff/live-probe records. Absolute wait deadline is captured before worker
+  submission; late response usage is retained, expired outputs are not recorded.
+- P1: contract0539dc7 accepted viaa27790d. Nine route operations and typed S4
+  DTOs cover receipts, marketplace, web audit, image and eval metrics. Authorized
+  stubs return501 until Stage B. Receipt diff is a list of field/then/now/changed;
+  buyer marketplace DTO excludes seller findings. docs05 records ACL and shapes.
+- P2: contractf17affe accepted via78b2b7e, documentation only; web/OCR signatures
+  unchanged. Its local evaluator timeout remains disclosed in its receipt but
+  did not reproduce in this gate. Preserve existing paid-indexing/image CCRs.
+- P3: already merged at sync-3; no frontend edits or rebuild in this checkpoint.
+  Generate against api/s4_contracts.py; implementation and browser checks remain.
+
+User explicitly requested reusing completed checks and earliest publication.
+Initial full suite:1340 passed,1 deadline failure,5 future skips,+2 subtests.
+Repair/client/budget/guards:52 passed. P1 affected/new contracts and S3 wire:225
+passed. Per-node incremental coverage:1367 passed,5 future-phase skips,0 unresolved
+failures/errors/deselections; this is not one full green invocation. Fixtures98/98;
+fallback sync3 path29/29. Three read-only reviews plus repair review found no blocker.
+The redundant second baseline was stopped at user request and not counted.
+
+No policy, env, fixture, gold or test-control change. Provider replay, browser
+path and S4 functions are NOT VERIFIED. Existing gold remains DRAFT. Commands
+and original failure evidence: docs/results/contract-4-gate.md. All checks offline.
+
 ## sync-3
 
 Retained Phase3 gate passed at14:37 ICT,31 Oct2026 (T+4:37). All four lanes
