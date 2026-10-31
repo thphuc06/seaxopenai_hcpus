@@ -212,3 +212,36 @@ Exceeding any limit → tool returns `BUDGET_EXCEEDED`; harness stops the loop �
 audit and agent), with a hard deadline, and the run ends `PARTIAL` + `stop_reason` on exhaustion. Count the agent's
 submit turn in `max_turns`. Estimate: the demo story needs roughly 30 model calls in total, so decide the per-run
 number before coding.
+
+## As built (contest)
+
+### S1 P1 contract checkpoint
+
+The eleven S1 routes in team-plan README §7.2 are declared with response models.
+At this checkpoint they return HTTP 501 after identity/role checks; business behavior
+arrives after contract-1. No placeholder findings, admission effects or counters are emitted.
+Every S1 route requires both X-Demo-Role and a nonblank X-Demo-Actor; invalid identity
+returns 403. Public reads accept all declared roles; event submission accepts
+OPERATOR/SYSTEM, run and event-log reads accept OPERATOR/REVIEWER, and catalog,
+demo fire/reset and metrics require OPERATOR.
+
+P1-owned transport DTOs live in backend/app/api/contracts.py. Products, event catalog,
+event log and runs are arrays, matching P3's client. Evidence is
+`{citations: EvidencePassage[], hidden_citations: int}`. Run detail is `{run, steps}`.
+Metrics has `events` (ADMITTED/NOOP/DUPLICATE/REJECTED counts), `runs`, `jobs`,
+`model_calls` (live/replayed/avoided) and `passport_reads`. Event catalog items carry
+`name, title, type, product_id, resource, expect`; event log items extend AdmitResult
+with `received_at, run_id`. Reset returns `{status}`.
+
+PassportResponse remains the strict shared S0 model. Optional product presentation
+can contain separate `passport_metadata` with `llm_mode` (LIVE/REPLAY/FALLBACK or null)
+and `hidden_citations` per field, matching P3's adapter. Product presentation itself
+may be null when unavailable; P3 must handle this explicitly when generating types.
+No private passages belong in this metadata. All DTOs reject extra fields.
+
+CCR P1→P4: shared model ownership · need: coordinate whether the new collection DTOs
+should later move from api/contracts.py to models.py · why: P3's S0 collection/metadata
+request needs a concrete OpenAPI schema now; P1 has not edited P4's shared models.
+CCR P1→P4: config producer/type allowlist and non-material event fields · need:
+expose closed-set configuration for Phase 1 admission · why: config.py is P4-owned;
+Stage A adds route contracts only, not an alternative admission policy.
