@@ -158,3 +158,12 @@ and future-phase tests retain their original markers. All gold remains DRAFT.
 The review found a P1 Phase-2 boundary issue: zero-result budget exhaustion selects
 FAILED rather than PARTIAL; track it explicitly, preserving the existing phase(2)
 deadline assertions. Full run-budget hardening remains scheduled for S2.
+
+## S5 expedited scope checkpoint —31 Oct16:45 ICT
+
+User explicitly requests quick tests and accepts current deficiencies. Integrate
+all pushed lanes, use fresh guards per merge plus final focused regressions and
+frontend build, and preserve known replay/LIVE failures. This overrides the skill's
+full-suite/full-replay tag gate for this invocation. sync-5/freeze mean accepted
+code and closed scope, not complete replay readiness. No assertion, marker, gold
+or evidence changes to manufacture success. No further optional repairs.

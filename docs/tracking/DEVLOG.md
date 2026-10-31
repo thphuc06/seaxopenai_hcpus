@@ -1,5 +1,21 @@
 # Development log — 31 Oct 2026
 
+## sync-5 — accepted limitations,16:46 ICT (T+6:46)
+
+- P4 Done: LIVE video/docs, eval archive repair, hosted receipts; preserved original evidence.
+- P1 Done: superseded citation rejection and atomic source-ingestion context checks.
+- P2 Done: budgeted image counts and19 added recordings; replay journey incomplete.
+- P3 Done: UI readability/error polish;95 tests/build pass; browser replay unverified.
+- Decision: user explicitly requests fast checks and acceptance of current problems;
+  scope checkpoint tags do not mean full replay success. No optional repairs.
+- Tests: initial61 pass; fresh guards4 each; final focused120 pass; tooling45 pass;
+  frontend95 pass/build pass; fixtures101/101. All pytest runs0 failures/skips/deselections.
+  Interrupted full-suite attempt yields no completion result. Windows cleanup warnings retained.
+- Replay probe:18 PASS/1 FAIL, evidence06 results differ; later path unexecuted.
+  Hosted LIVE remains PARTIAL/WEB_CAPTUREERROR. No newly created WAITING classification.
+- Review: three read-only checks found no actionable blocker; no secrets detected.
+- Next: preserve these limitations in presentation; no new paid run or submission performed.
+
 ## sync-4 — published16:09:02 ICT (T+6:09)
 
 Remote main and sync-4 verified at eca731bcd4c2713526e875d812c6b4d0fb4aae08.

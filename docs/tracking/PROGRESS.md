@@ -18,5 +18,5 @@
 | P4 local final video | User scope, no public upload | 16:20 ICT |90.02s H.264/AAC720p/30fps; full decode and sampled-frame QA; read-only refinement, no extra model spend; web search absent; no sync5/freeze claim |
 | P4 web-enabled video | Explicit user addition | 16:27 ICT |90.03s720p;2 LIVE searches/2 new REAL snapshots;skin-type families2→3;PARTIAL/403 retained;9 extra calls/$0.145388 estimate;7 web-recorder+4 guards pass;original cut/evidence preserved;no publication |
 | P4 branch handoff | User requests immediate push |16:35 ICT|Demo unchanged;recorder22+9 pass;full1624 pass/2 fail;eval archive fix and offline config documented;user stopped repair tests;no freeze claim|
-| Freeze | 16:00 | — | Pending |
+| Freeze | 16:00 | 16:46 ICT | User-accepted scope checkpoint sync-5/freeze; all lanes, PHASE5; focused120/tooling45/frontend95/build/fixtures101 pass; replay18 PASS/1 FAIL; full replay readiness NOT VERIFIED |
 | Submitted | 16:45 | — | Pending |

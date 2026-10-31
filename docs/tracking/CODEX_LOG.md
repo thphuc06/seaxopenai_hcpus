@@ -2,6 +2,7 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+|16:46 ICT|P4|expedited sync-gate5|lane merges;PHASE5;handoff/plan/tracking|accepted|user requests quick tests and accepts current limitations|focused120/tooling45/frontend95/build/fixtures101 pass;replay18 PASS/1 FAIL;no full replay claim|
 |16:35 ICT|P4|authorized immediate video/docs branch handoff|recorder/tests/docs/plan;eval archive repair|edited|user stops tests and requests push; preserve concurrent Sites/hosted work|recorder22+9 pass;full1624 pass/2 fail/+2 subtests;repair rerun interrupted;no full-green claim;demo unchanged|
 | 16:27 ICT (T+6:27) | P4 | add actual LIVE Web Search to90s video | web recorder/test; README/storyboard/description/results/plan/tracking; ignored flag/media/DB backup | edited | user requested web flag and explicitly reconfirmed backend restart |7 new recorder+4 guards pass;9 LIVE calls/2 searches/2 snapshots;PARTIAL403 retained;90.03s decode/frames;prior evidence preserved |
 | 16:20 ICT (T+6:20) | P4 | Phase5 Local LIVE90s video and README | P4 recorder/tests/storyboard/description; README; results/live-demo; plan/tracking; ignored media and isolated DB | edited | P4 sole video owner; LIVE spend and hidden server start authorized; no gate/commit/push/upload |61 acceptance+guards and13 recorder tests pass;4 LIVE calls/$0.07075 estimate;90.02s720p decode/frames; gold/first blind/Sites preserved |

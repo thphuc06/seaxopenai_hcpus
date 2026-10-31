@@ -1,5 +1,53 @@
 # Integration handoff
 
+## sync-5
+
+31 Oct2026,16:45 ICT (T+6:45): user explicitly requested quick tests and acceptance
+of current limitations. All four lanes merged; PHASE=5. This is an accepted scope
+checkpoint, **not a passing full replay freeze**. The sync-5 and freeze tag names
+record this user-directed checkpoint; their annotations carry the same limitation.
+No omitted lane; no failure relabelled WAITING. No test assertion/marker changed.
+
+### P4
+- Merged97fa34a: LIVE90s video tooling, README/evidence, hosted and Sites receipts.
+- Eval archive uses unique exclusive paths; first outputs and DRAFT gold preserved.
+- Hosted LIVE remains PARTIAL/WEB_CAPTUREERROR; full five-field completion unproven.
+
+### P1
+- Merged5eff409: reject superseded marketplace citations and atomically check
+  pinned run/tenant/revision before source ingestion.
+- Optional add_source_version(expected_context=...) documented in docs05; existing
+  signatures remain compatible. No policy verdict change.
+
+### P2
+- Merged3c16d9f: budgeted image token counting and19 append-only replay recordings.
+- Whole-story and blind replay coverage remain incomplete. Existing replay failure
+  at evidence06 is accepted as a limitation, not converted to PASS.
+
+### P3
+- Merged1425b06: readability/layout polish and plain Buyer errors; stable API/testids.
+- Frontend95 tests and build pass. Populated replay browser journey not verified.
+- Existing selector scoping/eval501 notes remain follow-up items.
+
+### Checks and accepted limits
+- Initial phase4 acceptance+guards:61 passed,0 failed/skipped/deselected.
+- Fresh phase4 guards before/after merges:4 passed each. Three read-only reviewers
+  found no actionable blocker in rules, contracts or overfitting.
+- Node24.22.1 npm test:95 passed,0 failed/skipped; npm run build passes.
+- check_fixtures.py:101 checked,0 failed.
+- sync_check.py4 --mode replay:18 PASS,1 FAIL at06-evidence-added, "new document
+  results differ". Later checks not reached. CLI supports phases1–4, no phase5 path.
+- Final phase5 pytest (acceptance, guards, marketplace, web ingestion revision,
+  image counts, evaluation):120 passed,0 failed/skipped/deselected (66.19s).
+  Recorder and deployment tooling:45 passed,0 failed/skipped/deselected (14.42s).
+  Existing Windows temporary-directory cleanup warnings are retained.
+- Full suite was stopped for the requested abbreviated gate; no full-suite success
+  claimed. Tests use process-local WEB_SEARCH=off; live services remain unchanged.
+- No model spend, additional recording, source/gold edit, public upload or submit.
+
+Merge with git fetch --tags; git merge sync-5. Scope is closed; unresolved replay,
+web capture and browser evidence remains visible for the presentation.
+
 ## sync-4
 
 Incremental gate passed at16:08 ICT,31 Oct2026 (T+6:08). PHASE=4. All four
