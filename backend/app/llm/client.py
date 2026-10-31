@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import asyncio
 import base64
-from collections.abc import Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -29,6 +31,17 @@ from app.llm.messages import ImagePart, InputMessage, TextPart, build_input
 SchemaT = TypeVar("SchemaT", bound=BaseModel)
 ErrorCode = Literal["INCOMPLETE", "REFUSAL", "REPLAY_MISS", "API_ERROR"]
 _cancelled: ContextVar[Event | None] = ContextVar("llm_cancelled", default=None)
+_network_guard: ContextVar[Callable[[Mapping[str, object]], None] | None] = ContextVar("llm_network_guard", default=None)
+
+
+@contextmanager
+def network_guard(reserve: Callable[[Mapping[str, object]], None]) -> Iterator[None]:
+    """Additional server-side spending cap; never replaces the per-run Budget."""
+    token = _network_guard.set(reserve)
+    try:
+        yield
+    finally:
+        _network_guard.reset(token)
 
 
 class LLMError(Exception):
@@ -91,6 +104,28 @@ def _active(ctx: RunContext) -> None:
     if cancelled is not None and cancelled.is_set():
         raise asyncio.CancelledError()
     ctx.budget.check_active()
+
+
+def _request(ctx: RunContext, **request: object) -> Response:
+    """Bound caller latency even if a provider ignores its transport timeout.
+
+    The worker performs only the provider request. Usage, traces and recordings
+    remain on the calling thread, so a late result cannot publish side effects.
+    """
+    guard = _network_guard.get()
+    if guard is not None:
+        guard(request)
+    _active(ctx)
+    pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="llm-request")
+    future = pool.submit(_call_api, **request)
+    try:
+        return future.result(timeout=ctx.budget.remaining_s())
+    except TimeoutError:
+        if future.done() and future.exception() is not None:
+            raise
+        ctx.budget.expire()
+    finally:
+        pool.shutdown(wait=False, cancel_futures=True)
 
 
 def _identity(*, step: str, model: str, prompt_version: str, instructions: str,
@@ -206,7 +241,7 @@ def parse(
                 replayed = True
                 _active(ctx)
                 return LLMResult(parsed, usage.model_dump(), True, model)
-            response = _call_api(model=model, input=messages, text_format=schema,
+            response = _request(ctx, model=model, input=messages, text_format=schema,
                                  reasoning={"effort": selected_effort}, max_output_tokens=cap,
                                  timeout=ctx.budget.remaining_s())
             usage = _usage(response)
