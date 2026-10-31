@@ -65,7 +65,7 @@ def reset(*, db_path: db.DBPath | None = None, fixtures_dir: str | Path | None =
     fixtures_dir = config.settings.fixtures_dir if fixtures_dir is None else fixtures_dir
     added: list[store.SourceVersionRef] = []
     with db.transaction(db_path) as connection:
-        for table in ("embeddings", "web_searches", "orders", "marketplace_findings", "ocr_lines", "vocab", "extraction_cache", "passage_scopes", "trace_steps", "runs", "events", "reviews", "review_tasks", "evidence_requests", "gaps", "field_results", "claims", "passages_fts", "passages", "source_versions", "sources", "cases", "products"):
+        for table in ("embeddings", "web_searches", "orders", "marketplace_findings", "ocr_lines", "vocab", "extraction_cache", "passage_scopes", "reviews", "review_tasks", "evidence_requests", "gaps", "field_results", "claims", "jobs", "trace_steps", "runs", "events", "passages_fts", "passages", "source_versions", "sources", "cases", "products"):
             connection.execute(f'DELETE FROM "{table}"')
         for group in ("synthetic", "real"):
             for product in sorted((Path(fixtures_dir) / group).rglob("product.json")):

@@ -95,6 +95,11 @@ CREATE TABLE IF NOT EXISTS runs (
  trigger_event_id TEXT REFERENCES events(id), status TEXT, stop_reason TEXT, model TEXT,
  prompt_version TEXT, policy_version TEXT, llm_mode TEXT, budget_json TEXT, usage_json TEXT,
  started_at TEXT, finished_at TEXT, error TEXT, created_at TEXT);
+CREATE TABLE IF NOT EXISTS jobs (
+ id TEXT PRIMARY KEY, case_id TEXT NOT NULL REFERENCES cases(id), target_revision INTEGER NOT NULL,
+ trigger_event_id TEXT REFERENCES events(id), status TEXT NOT NULL, run_id TEXT REFERENCES runs(id),
+ created_at TEXT NOT NULL, finished_at TEXT);
+CREATE UNIQUE INDEX IF NOT EXISTS one_queued_job ON jobs(case_id) WHERE status='QUEUED';
 CREATE TABLE IF NOT EXISTS trace_steps (
  id TEXT PRIMARY KEY, run_id TEXT NOT NULL REFERENCES runs(id), seq INTEGER NOT NULL,
  step TEXT, actor TEXT, input_refs TEXT, output_refs TEXT, latency_ms REAL,
