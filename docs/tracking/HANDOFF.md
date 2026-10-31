@@ -1,5 +1,41 @@
 # Integration handoff
 
+## contract-2
+
+Mini-sync gate passed at 11:49 ICT, 31 Oct 2026 (T+1:49), on explicit early
+invocation. PHASE remains 1. Merge contract-2 into lane branches before Stage B.
+This checkpoint publishes S2 interfaces; it does not complete S2 implementation.
+No omitted contract lane, catch-up lane, WAITING failure, regression or scope cut.
+
+- P4: CONTRACT_NO_CHANGE in shared application interfaces. Saved Stage-A plan and
+  gate receipt f8808e3 integrated via 700353a; earlier concurrent plan notes retained.
+  B0/eval and phase-2 sync path remain Stage B. Gold remains DRAFT and unchanged.
+- P1: contract c1d7a5a integrated via 5cc6162. Four typed review queue, review,
+  history and evidence routes expose DTOs in api/contracts.py. Reviewer routes
+  require REVIEWER; evidence accepts SELLER/REVIEWER. Valid authorized requests
+  return 501 until Stage B. Text or base64 PNG/JPEG JSON replaces no existing route.
+  P3 can generate OpenAPI types now; docs05 As-built describes the exact payloads.
+- P2: contract 15bcca4 integrated via 23bb150; documentation-only checkpoint,
+  existing Budget/parse/extract/audit signatures retained. Claims audit, coverage
+  retry and vision behavior remain Stage B; no new policy/env/trace vocabulary.
+- P3: no contract commit required; its S1 work was already integrated in sync-1.
+  No frontend files changed, so a new frontend build was not required.
+
+Fresh phase-1 baseline/post-merge tests: P4 640/640; P1 640/679; P2 679/679
+passed, each with 44 skipped and 2 passing subtests. Zero failed/errors/deselected;
+JUnit comparison retained every previously passing node. Final guards 4/4,
+fixture validation 37/37, fallback sync_check.py 1 path 17/17 PASS. Final suite
+has 23 existing Windows temporary-directory cleanup warnings, not test failures.
+Skips: 43 later-phase nodes and the existing AC-01 real R2 capture due P4-2b.
+
+Reproduce with the sync-1 commands below, CONTEST_PHASE=1, bundled Node 24.22.1,
+LLM_MODE=fallback, inline worker, OCR/web/tracing disabled. Per-merge node/outcome
+evidence and full logs: local .git/contract2-*.xml and .git/contract2-*.log.
+Open CCRs remain: P1 zero-result budget PARTIAL and P1/P2 stable source/passage
+identity across reset; prior S2 diagnostics remain unresolved implementation work.
+NOT VERIFIED here: full S2 behavior, browser click path, full-story replay, live
+model calls and human gold approval. No server started or paid call made.
+
 ## sync-1
 
 S1/M1 gate passed at 11:33 ICT, 31 Oct 2026 (T+1:33). PHASE=1.
