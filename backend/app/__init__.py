@@ -1,0 +1,1 @@
+"""Product Truth Passport backend."""

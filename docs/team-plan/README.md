@@ -185,6 +185,14 @@ Budget: **một `Budget` cho mỗi run**, mọi model call đều trừ vào đ�
 
 ### 7.2 REST (P1 → P3), tất cả dưới `/api`, role đi qua header `X-Demo-Role`
 
+**S0 implementation conventions (31 Oct, P4):** Settings attributes use snake_case and environment keys use uppercase;
+relative paths resolve from `backend/`. `reload_settings()` updates the shared object in place. Model IDs stay empty
+until P2 smoke selects them; absent price data means `price unknown`. `GET /api/health` returns `llm_mode`,
+`models` (`extract`, `agent`, `cheap`, `embed`), `policy_version`, `phase`, `demo_run_delay_s`.
+`RuleStep.detail` is a string; trace detail is JSON. `ClaimFinding` currently has the `FieldDecision` shape.
+P4 also owns `backend/tests/test_skeleton.py` for these startup/config/schema contracts.
+Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
+
 | Sync | Route | Ghi chú cho P3 |
 |---|---|---|
 | S1 | `GET /products` · `GET /products/{id}/passport` · `GET /products/{id}/fields/{f}/evidence` · `POST /internal/events` · `GET /internal/events/catalog` · `POST /internal/demo/fire/{name}` · `GET /internal/events/log` · `GET /internal/runs` · `GET /internal/runs/{id}` · `GET /internal/metrics` · `POST /internal/demo/reset` | Passport shape giống `PassportResponse` trong `models.py`. P3 nên sinh type từ `/openapi.json` (`npx openapi-typescript`) |
