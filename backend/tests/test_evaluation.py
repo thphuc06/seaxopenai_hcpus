@@ -131,6 +131,22 @@ def test_usage_schema_matches_actual_budget_keys() -> None:
     assert usage.seconds.used * 1000 == 1250
 
 
+def test_report_archives_keep_distinct_payloads_for_same_measurement_time(tmp_path: Path) -> None:
+    for tokens in (11, 37, 55):
+        report = evaluator.EvaluationReport(
+            generated_at="2026-10-31T01:02:03+00:00", requested_mode="fallback", mode="fallback",
+            gold_status="DRAFT", labelled_by="draft:test", gold_sha256="unrelated-digest",
+            models=[], prompt_versions=[], policy_versions=[], checkpoints=[], totals={},
+            usage=evaluator.Usage(tokens_in=tokens), limitations=[],
+        )
+        evaluator.write_report(report, tmp_path)
+    archives = list(tmp_path.glob("eval-2*.json"))
+    assert len(archives) == 3
+    assert {json.loads(path.read_text(encoding="utf-8"))["usage"]["tokens_in"] for path in archives} == {11, 37, 55}
+    assert all(path.with_suffix(".md").is_file() for path in archives)
+    assert json.loads((tmp_path / "eval-latest.json").read_text(encoding="utf-8"))["usage"]["tokens_in"] == 55
+
+
 def test_console_supports_unicode_under_windows_legacy_encoding(tmp_path: Path) -> None:
     gold = json.loads((ROOT / "fixtures/gold/dev/demo-story.json").read_text(encoding="utf-8"))
     gold["checkpoints"] = gold["checkpoints"][:1]

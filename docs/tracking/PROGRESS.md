@@ -12,5 +12,11 @@
 | S4 / M4 | 15:15 | 16:09:02 ICT | Complete retained incremental gate; sync-4 eca731b pushed/remote verified; all lanes, PHASE4, no WAITING;1626 passing node receipts, Node93/build, fixtures101, sync36; provider replay/browser not verified |
 | contract-4 | 14:35 | 15:20 ICT gate | Incremental gate passed; P4 repair + P1/P2 contracts; PHASE3;1367 passing nodes/5 future skips; user authorized reuse; S4 implementation pending |
 | Recordings freeze | 15:35 | — | Pending |
+| P4 LIVE video kickoff | User scope override | 16:09 ICT | Local p4 contains sync-4; cost authorized; isolated LIVE server and API frontend checked16:12; first cut in progress; no freeze/gate/push/upload |
+| P4 first watchable LIVE cut | Approximately90s | 16:17 ICT |90.0s/720p/silent; one REAL run,4 LIVE calls, estimated$0.07075; WAITING_REVIEW retained; local only |
+| P4 video checks | Task scope | 16:18 ICT |61 acceptance+guards and13 recorder tests passed; original gold/blind/source/Sites preserved; visual refinement in progress |
+| P4 local final video | User scope, no public upload | 16:20 ICT |90.02s H.264/AAC720p/30fps; full decode and sampled-frame QA; read-only refinement, no extra model spend; web search absent; no sync5/freeze claim |
+| P4 web-enabled video | Explicit user addition | 16:27 ICT |90.03s720p;2 LIVE searches/2 new REAL snapshots;skin-type families2→3;PARTIAL/403 retained;9 extra calls/$0.145388 estimate;7 web-recorder+4 guards pass;original cut/evidence preserved;no publication |
+| P4 branch handoff | User requests immediate push |16:35 ICT|Demo unchanged;recorder22+9 pass;full1624 pass/2 fail;eval archive fix and offline config documented;user stopped repair tests;no freeze claim|
 | Freeze | 16:00 | — | Pending |
 | Submitted | 16:45 | — | Pending |
