@@ -1,0 +1,185 @@
+{
+  "source_id": "REAL-PROD-R3-brand_page-95da036aafc4",
+  "kind": "BRAND_PAGE",
+  "product_id": "REAL-PROD-R3",
+  "version": 1,
+  "uri": "https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-giam-mun",
+  "requested_uri": "https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-giam-mun",
+  "captured_at": "2026-10-31T04:41:50.904954+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "brand:cerave.com.vn",
+  "raw_sha256": "c449065e30423a8390843df6c2cf8a198e87e2eff48ee9e466cf574249739fb8",
+  "cleaned_sha256": "73fe958881cabe9733592dd998f0bf99819eb9ea20905194c28bfeff73922ac1",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa rửa mặt giảm mụn"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "Phù hợp với da dầu, da hỗn hợp, da có mụn ẩn, bít tắt lỗ chân lông"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "KIỂM SOÁT NHỜN"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Làm sạch bã nhờn dư thừa, giúp giảm mụn, mà không làm tổn thương hàng rào bảo vệ da."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "Sữa rửa mặt giảm mụn tác động kép CeraVe Blemish Control Cleanser được phát triển cùng các chuyên gia, dạng gel tạo bọt với 2% Salicylic Acid giúp thông thoáng lỗ chân lông, đất sét tinh khiết giúp giảm dầu thừa mà không gây khô da. Ngoài ra, sản phẩm còn chứa Niacinamide và 3 Ceramides thiết yếu, giúp duy trì độ ẩm mà không làm tổn thương hàng rào bảo vệ da.Cho dù bạn có làn da khô, da dầu mụn, da hỗn hợp hay da nhạy cảm, sữa rửa mặt CeraVe đều có thể đáp ứng nhu cầu của bạn mà không để lại cảm giác khó chịu trên da. Nếu bạn đang tìm các sản phẩm không gây bít tắc lỗ chân lông, kiểm soát dầu thừa, dịu nhẹ cho da nhạy cảm thì các loại sữa rửa mặt của chúng tôi sẽ giúp bạn. Tất cả các loại sữa rửa mặt của chúng tôi đều dịu nhẹ và chứa ba loại Ceramides thiết yếu giúp dưỡng ẩm và khôi phục hàng rào bảo vệ da. Dù loại da hay mối quan tâm của bạn là gì, chúng tôi đáp ứng mọi nhu cầu về thói quen chăm sóc da của bạn."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p006",
+      "locator": "ingredients#1",
+      "section": "ingredients",
+      "text": "Thành phần"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p007",
+      "locator": "ingredients#2",
+      "section": "ingredients",
+      "text": "AQUA / WATER, OCAMIDOPROPYL HYDROXYSULTAINE, GLYCERIN, SODIUM LAUROYL SARCOSINATE, NIACINAMIDE, SALICYLIC ACID, SODIUM METHYL COCOYL TAURATE, PEG-150 PENTAERYTHRITYL, TETRASTEARATE, TETRASTEARATE, GLUCONOLACTONE, SODIUM COCOYL ISETHIONATE, CERAMIDE NP, CERAMIDE AP, CERAMIDE EOP, CARBOMER, CALCIUM GLUCONATE, CALCIUM GLUCONATE, TRIETHYL CITRATE, SODIUM HYDROXIDE, SODIUM BENZOATE, SODIUM CHLORIDE, SODIUM LAUROYL LACTYLATE, CHOLESTEROL, COCONUT ACID, TETRASODIUM EDTA, CAPRYLYL GLYCOL, HYDROLYZED HYALURONIC ACID, TRISODIUM ETHYLENEDIAMINE, DISUCCINATE, HECTORITE, PHYTOSPHINGOSINE, XANTHAN GUM, ACRYLATES COPOLYMER, BENZOIC ACID"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p008",
+      "locator": "ingredients#3",
+      "section": "ingredients",
+      "text": "Xin lưu ý rằng danh sách thành phần cho các sản phẩm được cập nhật thường xuyên. Vui lòng tham khảo danh sách thành phần trên gói sản phẩm để biết danh sách cập nhật mới nhất nhằm đảm bảo cho mục đích sử dụng của bạn."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p009",
+      "locator": "ingredients#4",
+      "section": "ingredients",
+      "text": "(Đối với các sản phẩm được nhập lại trong cửa hàng, danh sách cập nhật thành phần mới nhất phải được lấy tại điểm bán sau khi nhập sản phẩm)."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p010",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Công dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p011",
+      "locator": "highlights#2",
+      "section": "highlights",
+      "text": "Ngăn chặn các dấu hiệu mụn trứng cá khi giải quyết chu kỳ lặp lại của da mụn mà không gây tổn thương hàng rào bảo vệ da"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p012",
+      "locator": "highlights#3",
+      "section": "highlights",
+      "text": "Salicylic Acid giúp tẩy tế bào chết, thông thoáng lỗ chân lông và thúc đẩy tái tạo tế bào"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p013",
+      "locator": "highlights#4",
+      "section": "highlights",
+      "text": "Đất sét tinh khiết giúp làm sạch bã nhờn dư thừa, giúp giảm mụn, mà không làm tổn thương hàng rào bảo vệ da."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p014",
+      "locator": "highlights#5",
+      "section": "highlights",
+      "text": "3 Ceramides thiết yếu giúp phục hồi và duy trì hàng rào bảo vệ da"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p015",
+      "locator": "highlights#6",
+      "section": "highlights",
+      "text": "Niacinamide giúp làm dịu da"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p016",
+      "locator": "usage#1",
+      "section": "usage",
+      "text": "Cách sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p017",
+      "locator": "usage#2",
+      "section": "usage",
+      "text": "86% người dùng đồng ý rằng da cảm thấy sạch và không khô da sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p018",
+      "locator": "usage#3",
+      "section": "usage",
+      "text": "93% người dùng xác nhận rằng làn da sạch thoáng, không nhờn rít sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p019",
+      "locator": "usage#4",
+      "section": "usage",
+      "text": "Giúp giảm mụn sau một tuần sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p020",
+      "locator": "usage#5",
+      "section": "usage",
+      "text": "Sử dụng 2 lần mỗi ngày vào sáng và tối. Lắc kĩ. Làm ướt mặt và massage kĩ. Rửa sạch lại với nước."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p021",
+      "locator": "usage#6",
+      "section": "usage",
+      "text": "Phù hợp da dầu mụn. Tránh tiếp xúc với mắt. Nếu tiếp xúc, rửa kĩ bằng nước. Lưu trữ ở nơi khô thoáng."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p022",
+      "locator": "usage#7",
+      "section": "usage",
+      "text": "Tính năng và công dụng sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p023",
+      "locator": "usage#8",
+      "section": "usage",
+      "text": "Sữa rửa mặt tạo bọt Cerave phù hợp cho da thường và da dầu. Công thức bao gồm ceramides,​ hyaluronic axit giúp duy trì độ ẩm và niaciamide để làm dịu làn da. Sữa rửa mặt này giúp loại bỏ dầu thừa, bụi bẩn và lớp trang điểm đồng thời cung cấp cho làn da các thành phần dưỡng ẩm mà không gây hại đến hàng rào bảo vệ da tự nhiên."
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p024",
+      "locator": "usage#9",
+      "section": "usage",
+      "text": "Dr. Camille Howard-Verovic,"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p025",
+      "locator": "usage#10",
+      "section": "usage",
+      "text": "Dermatologist"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p026",
+      "locator": "usage#11",
+      "section": "usage",
+      "text": "Tìm hiểu"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p027",
+      "locator": "usage#12",
+      "section": "usage",
+      "text": "sản phẩm Cerave"
+    },
+    {
+      "id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p028",
+      "locator": "usage#13",
+      "section": "usage",
+      "text": "phù hợp với bạn"
+    }
+  ]
+}

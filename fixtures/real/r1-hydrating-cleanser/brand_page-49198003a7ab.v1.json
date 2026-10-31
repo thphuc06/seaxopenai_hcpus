@@ -1,0 +1,185 @@
+{
+  "source_id": "REAL-PROD-R1-brand_page-49198003a7ab",
+  "kind": "BRAND_PAGE",
+  "product_id": "REAL-PROD-R1",
+  "version": 1,
+  "uri": "https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-thuong-va-da-kho",
+  "requested_uri": "https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-thuong-va-da-kho",
+  "captured_at": "2026-10-31T04:41:50.731243+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "brand:cerave.com.vn",
+  "raw_sha256": "8b8be5d9aeb632820d109ead748a9ec1e0b74b34ee801a6291e43318a0a776ae",
+  "cleaned_sha256": "9cc31e7de835270438826aef342216cec89a265e379dfcab9c4a435b659b9dbf",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa rửa mặt dành cho da khô"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "THÍCH HỢP CHO DA KHÔ ĐẾN RẤT KHÔ"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "CÂN BẰNG ĐỘ ẨM"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Sạch dịu nhẹ, duy trì độ ẩm của da"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "Sữa rửa mặt tạo bọt CeraVe phù hợp để loại bỏ dầu thừa, bụi bẩn và lớp trang điểm, dịu nhẹ với các thành phần giúp duy trì độ ẩm, mang lại công dụng hiệu quả trên da. Với công thức có chứa ceramides, hyaluronic acid và niacinamide giúp khôi phục hàng rào độ ẩm tự nhiên của da, dưỡng ẩm và làm dịu da. Sữa rửa mặt dành cho da thường, da dầu CeraVe được phát triển bởi các chuyên gia chăm sóc da giúp làm sạch hiệu quả mà không khiến da bị bong tróc quá mức hoặc làm căng khô da."
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p006",
+      "locator": "ingredients#1",
+      "section": "ingredients",
+      "text": "Thành phần"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p007",
+      "locator": "ingredients#2",
+      "section": "ingredients",
+      "text": "Aqua / Water / Eau, Glycerin, Cetearyl Alcohol, Peg-40 Stearate, Stearyl Alcohol, Potassium Phosphate, Ceramide NP, Ceramide AP, Ceramide EOP, Carbomer, Glyceryl Stearate, Behentrimonium Methosulfate, Sodium Lauroyl Lactylate, Sodium Hyaluronate, Cholesterol, Phenoxyethanol, Disodium EDTA, Dipotassium Phosphate, Tocopherol, Phytosphingosine, Xanthan Gum, Cetyl Alcohol, Polysorbate 20, Ethylhexylglycerin"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p008",
+      "locator": "ingredients#3",
+      "section": "ingredients",
+      "text": "Xin lưu ý rằng danh sách thành phần cho các sản phẩm được cập nhật thường xuyên. Vui lòng tham khảo danh sách thành phần trên gói sản phẩm để biết danh sách cập nhật mới nhất nhằm đảm bảo cho mục đích sử dụng của bạn."
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p009",
+      "locator": "ingredients#4",
+      "section": "ingredients",
+      "text": "(Đối với các sản phẩm được nhập lại trong cửa hàng, danh sách cập nhật thành phần mới nhất phải được lấy tại điểm bán sau khi nhập sản phẩm)."
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p010",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Công dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p011",
+      "locator": "highlights#2",
+      "section": "highlights",
+      "text": "Nhẹ nhàng loại bỏ bụi bẩn, dầu và lớp trang điểm mà không làm căng hoặc khô da"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p012",
+      "locator": "highlights#3",
+      "section": "highlights",
+      "text": "Công nghệ MVE: liên tục giải phóng các hoạt chất cấp ẩm giúp da ẩm suốt ngày dài"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p013",
+      "locator": "highlights#4",
+      "section": "highlights",
+      "text": "Ceramides: Giúp phục hồi và duy trì hàng rào độ ẩm tự nhiên của da"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p014",
+      "locator": "highlights#5",
+      "section": "highlights",
+      "text": "Hyaluronic acid: Giữ độ ẩm tự nhiên của da"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p015",
+      "locator": "highlights#6",
+      "section": "highlights",
+      "text": "Không gây mụn, không gây kích ứng và không có chất tạo mùi"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p016",
+      "locator": "highlights#7",
+      "section": "highlights",
+      "text": "Phát triển bởi chuyên gia chăm sóc da"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p017",
+      "locator": "highlights#8",
+      "section": "highlights",
+      "text": "Được chấp nhận bởi National Eczema Association"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p018",
+      "locator": "usage#1",
+      "section": "usage",
+      "text": "Cách sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p019",
+      "locator": "usage#2",
+      "section": "usage",
+      "text": "Làm ướt da bằng nước ấm"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p020",
+      "locator": "usage#3",
+      "section": "usage",
+      "text": "Mát-xa sữa rửa mặt vào da một cách nhẹ nhàng theo chuyển động tròn"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p021",
+      "locator": "usage#4",
+      "section": "usage",
+      "text": "Rửa lại bằng nước sạch"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p022",
+      "locator": "usage#5",
+      "section": "usage",
+      "text": "Tính năng và công dụng sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p023",
+      "locator": "usage#6",
+      "section": "usage",
+      "text": "Sữa rửa mặt cấp ẩm CeraVe là loại sữa rửa mặt hiệu quả nhưng vô cùng dịu nhẹ phù hợp với mọi loại da. Bên cạnh đó, với công thức chứa ba ceramide thiết yếu giúp khôi phục hàng rào bảo vệ và duy trì độ ẩm cho làn da."
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p024",
+      "locator": "usage#7",
+      "section": "usage",
+      "text": "Dr. Dustin Portela,"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p025",
+      "locator": "usage#8",
+      "section": "usage",
+      "text": "Board Certified Dermatologist"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p026",
+      "locator": "usage#9",
+      "section": "usage",
+      "text": "Tìm hiểu"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p027",
+      "locator": "usage#10",
+      "section": "usage",
+      "text": "sản phẩm Cerave"
+    },
+    {
+      "id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p028",
+      "locator": "usage#11",
+      "section": "usage",
+      "text": "phù hợp với bạn"
+    }
+  ]
+}

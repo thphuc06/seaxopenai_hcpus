@@ -1,0 +1,24 @@
+{
+  "product_id": "REAL-PROD-R1",
+  "name": "CeraVe Hydrating Facial Cleanser",
+  "brand": "CeraVe",
+  "variant": "236ml",
+  "market": "VN",
+  "dataset_origin": "REAL",
+  "case_id": "REAL-CASE-R1",
+  "tenant_id": "demo-tenant",
+  "listing_id": "REAL-LISTING-R1",
+  "web": {
+    "enabled": true,
+    "brand_domains": [
+      "cerave.com.vn"
+    ],
+    "aliases": [
+      "Hydrating",
+      "sữa rửa mặt dành cho da khô",
+      "sữa rửa mặt dành cho da thường và da khô",
+      "cerave srm"
+    ]
+  },
+  "note": "Captured public product pages; expected answers require human review."
+}

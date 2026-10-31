@@ -2,6 +2,12 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+| 12:05 ICT (T+2:05) | P4 | local merge p4-b2 e6ef732 | auxiliary captures/tests/gold/docs; preserved Local and auxiliary plans; tracking | accepted | exact SHA requested; local commit only; retain DRAFT and all work; defer CCR fixes | focused 167 pass; phase1 776 pass/1 WAITING fail/43 skip/+2 subtests; phase2 acceptance 23 pass/20 WAITING fail/14 skip; fixtures 53/53; sync1 17/17; no prior passing-node regression |
+| 12:01 ICT (T+2:01) | P4 | Phase 2 Stage B: B0/eval/S2 harness and three read-only reviews | baseline.py; eval.py; sync_check.py; two P4 test modules; results/specs/ExecPlan | edited | user verified contract-2 and authorized continuation; preserve DRAFT; no sync-gate | focused 110 passed; phase1 747 passed/44 skipped/+2 subtests; phase2 757 passed/16 owner-WAITING failed/18 skipped/+2 subtests; guards pass; fixtures 37/37; 0 errors/deselected |
+| 11:44–11:51 ICT | P4 | sync-gate 2 contract + three read-only reviews | P4 plan, tracking, P1/P2 scoped merges | accepted | explicit early mini-sync; Stage B separate | final phase1 679 passed/44 skipped/+2 subtests; 0 failed/errors/deselected; guards 4; fixtures 37; sync1 17; no regression |
+| 11:40 ICT | P4 | Stage A saved kickoff receipts | .agent/plans/P4.md | accepted | no shared contract change; prior concurrent notes preserved | initial 638 pass/2 Node failures/44 skip/+2 subtests, exact 2 rerun pass on Node24; guards 4; S2 diagnostic 22 pass/17 fail/18 skip |
+| 11:43 ICT | P1 | S2 contract c1d7a5a | cases/contracts/dependencies, contract tests, docs05, P1 plan | accepted | Stage A only | lane report 122 focused pass; phase1 679 pass/44 skip/+2 subtests; integrated gate independently agrees |
+| 11:42 ICT | P2 | S2 contract 15bcca4 | P2 plan | accepted | documentation-only contract checkpoint | lane report backend 626 pass/44 skip/+2 subtests; guards 4 |
 | 11:08 ICT | P4 | Phase 1 B + CI/Render merge + self-review (3 read-only agents) | P4 support/tests/scripts/specs/plan; merge d21488c | edited | preserve both ExecPlans; separate human review waived | phase1 270 passed/12 WAITING failures/44 skipped +2 subtests; phase0 269 passed/57 skipped; helpers+guards 41 passed; fixture validator 9/9 |
 | 10:48–10:50 ICT | P4 | mini-sync contract-1 | scoped P4/P1/P2 merges; P4 plan; tracking/HANDOFF | accepted | user requested mini-sync; Stage B remains separate | phase0 220 passed/14 skipped +2 subtests; guards 4; fixtures 9/9; S1 diagnostic 1 passed/12 pending failures/1 fixture skip |
 | 10:29–10:33 ICT | P4 | sync-gate 0 + self-review (3 read-only agents) | lane merges; P4 plan; shared docs; tracking | accepted | confirmed P4/Local | Python 141 + 2 subtests; guards 4; Node 23; API/mock builds; fixtures 9/9; all final 0 failed/skipped/deselected |
@@ -50,6 +56,16 @@ summary is already in the table above. No unreported task/test count is inferred
 | 10:35 ICT | P4 | CI/Render preparation | deployment files, docs, P4 appendix | accepted | separate worktree requested | 153 Python + 2 subtests, 23 frontend; image pending CI |
 
 ## Notable loops
+
+P4 S2 evaluation: the first complete diagnostic wrote its JSON/Markdown artifacts,
+then failed while printing Vietnamese notes through Windows cp1252. Preserved the
+first report and gold; set only CLI stdout to UTF-8 and added a cp1252 subprocess
+regression with unrelated Vietnamese/Japanese text. Self-review then found a
+REPLAY_FREEZE restoration leak and missing admission-outcome/run-completion checks.
+Fixed the common settings-restoration path and explicit event/job/run checks, with
+independent success/error/unfinished-run variants. Final focused suite: 110 passed.
+Gold is unchanged: current raw DRAFT candidate 51/65 vs B0 16/65 is a diagnostic of
+unfinished S2 dependencies, not a gate pass or a reviewed accuracy claim.
 
 S1 integration: fresh per-merge node/outcome comparisons retained every passing
 test through P4/P1/P2/P3. Historical 501 WAITING became 640 passing checks in the

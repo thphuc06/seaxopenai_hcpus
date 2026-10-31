@@ -1,0 +1,21 @@
+{
+  "product_id": "REAL-PROD-R4",
+  "name": "La Roche-Posay Effaclar Purifying Foaming Gel",
+  "brand": "La Roche-Posay",
+  "variant": "200ml",
+  "market": "VN",
+  "dataset_origin": "REAL",
+  "case_id": "REAL-CASE-R4",
+  "tenant_id": "demo-tenant",
+  "listing_id": "REAL-LISTING-R4",
+  "web": {
+    "enabled": true,
+    "brand_domains": [
+      "laroche-posay.vn"
+    ],
+    "aliases": [
+      "Effaclar"
+    ]
+  },
+  "note": "Captured public product pages; expected answers require human review."
+}

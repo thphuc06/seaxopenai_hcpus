@@ -1,0 +1,454 @@
+{
+  "status": "DRAFT",
+  "labelled_by": "draft:codex",
+  "labelled_at": "2026-10-31T04:43:00Z",
+  "reviewed_by": null,
+  "reviewed_at": null,
+  "derivation": "Read captured pages and DATASET-SPEC/docs06/docs09 before any candidate run. Codex-assisted expectations, pending human approval.",
+  "policy_target": "docs/06 ordered R3-R8, REQ; docs/09 AC-01–04; scope inference prerequisite",
+  "candidate_run_before_labelling": false,
+  "review_attention": [
+    "R3: AC-04 applies SINGLE_SOURCE to key_ingredients although ingredient presence has two families; concentration has only one. Preserve current target pending human/schema decision.",
+    "Unknown scope before Phase 2 inference caps findings at UNCERTAIN; these are intended matched-scope targets, not claims about S1 fallback behavior.",
+    "R4 free-from is unsubstantiated without a complete in-scope INCI; version note requires review, not accusation."
+  ],
+  "checkpoints": [
+    {
+      "product_id": "REAL-PROD-R1",
+      "case_id": "REAL-CASE-R1",
+      "after_event": "14-bootstrap-real-hydrating",
+      "status": "DRAFT",
+      "expected": {
+        "volume": "SINGLE_SOURCE",
+        "skin_type": "CONFLICTING",
+        "key_ingredients": "CONFLICTING",
+        "notification_number": "INSUFFICIENT",
+        "responsible_company": "INSUFFICIENT"
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R3/R7/REQ: listing ghi 236ml. Brand không ghi dung tích; quà tặng 20ml không phải variant đang xét. Long Châu bị 403.",
+          "evidence": [
+            {
+              "snapshot": "real/r1-hydrating-cleanser/listing-db3c8ae5f4c5.v1.json",
+              "source_id": "REAL-PROD-R1-listing-db3c8ae5f4c5",
+              "passage_id": "REAL-PROD-R1-listing-db3c8ae5f4c5-v1-p055",
+              "locator": "specs#19",
+              "excerpt": "Quy cách đóng gói: 236ml"
+            }
+          ]
+        },
+        "skin_type": {
+          "rationale": "R4/R5: brand title khô đối lập đoạn mô tả thường/dầu trong cùng version. WITHIN_SOURCE, NEEDS_REVIEW, seller_attributable=false; câu mọi loại da không xóa hai passage bất tương thích.",
+          "evidence": [
+            {
+              "snapshot": "real/r1-hydrating-cleanser/brand_page-49198003a7ab.v1.json",
+              "source_id": "REAL-PROD-R1-brand_page-49198003a7ab",
+              "passage_id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p001",
+              "locator": "title",
+              "excerpt": "Sữa rửa mặt dành cho da khô"
+            },
+            {
+              "snapshot": "real/r1-hydrating-cleanser/brand_page-49198003a7ab.v1.json",
+              "source_id": "REAL-PROD-R1-brand_page-49198003a7ab",
+              "passage_id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p005",
+              "locator": "description#p4",
+              "excerpt": "Sữa rửa mặt dành cho da thường, da dầu CeraVe"
+            }
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "R4/R5/R6: brand mô tả nêu niacinamide nhưng danh sách INCI đầy đủ của chính brand không chứa tên đó. WITHIN_SOURCE, NEEDS_REVIEW, không quy cho người bán.",
+          "evidence": [
+            {
+              "snapshot": "real/r1-hydrating-cleanser/brand_page-49198003a7ab.v1.json",
+              "source_id": "REAL-PROD-R1-brand_page-49198003a7ab",
+              "passage_id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p005",
+              "locator": "description#p4",
+              "excerpt": "ceramides, hyaluronic acid và niacinamide"
+            },
+            {
+              "snapshot": "real/r1-hydrating-cleanser/brand_page-49198003a7ab.v1.json",
+              "source_id": "REAL-PROD-R1-brand_page-49198003a7ab",
+              "passage_id": "REAL-PROD-R1-brand_page-49198003a7ab-v1-p007",
+              "locator": "ingredients#2",
+              "excerpt": "Aqua / Water / Eau, Glycerin, Cetearyl Alcohol, Peg-40 Stearate, Stearyl Alcohol, Potassium Phosphate, Ceramide NP, Ceramide AP, Ceramide EOP, Carbomer, Glyceryl Stearate, Behentrimonium Methosulfate, Sodium Lauroyl Lactylate, Sodium Hyaluronate, Cholesterol, Phenoxyethanol, Disodium EDTA, Dipotassium Phosphate, Tocopherol, Phytosphingosine, Xanthan Gum, Cetyl Alcohol, Polysorbate 20, Ethylhexylglycerin"
+            }
+          ]
+        },
+        "notification_number": {
+          "rationale": "REQ: chỉ đọc được từ listing; không có ACTIVE NOTIFICATION_DOC/REGISTRY_RECORD. Không xác nhận trường định danh bằng trang bán lẻ.",
+          "evidence": [
+            {
+              "snapshot": "real/r1-hydrating-cleanser/listing-db3c8ae5f4c5.v1.json",
+              "source_id": "REAL-PROD-R1-listing-db3c8ae5f4c5",
+              "passage_id": "REAL-PROD-R1-listing-db3c8ae5f4c5-v1-p059",
+              "locator": "specs#23",
+              "excerpt": "169170/22/CBMP-QLD"
+            }
+          ]
+        },
+        "responsible_company": {
+          "rationale": "REQ: chỉ đọc được từ listing; không có ACTIVE NOTIFICATION_DOC/REGISTRY_RECORD. Không xác nhận trường định danh bằng trang bán lẻ.",
+          "evidence": [
+            {
+              "snapshot": "real/r1-hydrating-cleanser/listing-db3c8ae5f4c5.v1.json",
+              "source_id": "REAL-PROD-R1-listing-db3c8ae5f4c5",
+              "passage_id": "REAL-PROD-R1-listing-db3c8ae5f4c5-v1-p058",
+              "locator": "specs#22",
+              "excerpt": "L'Oréal Việt Nam"
+            }
+          ]
+        }
+      },
+      "expected_details": {
+        "skin_type": {
+          "conflict_locus": "WITHIN_SOURCE",
+          "review_state": "NEEDS_REVIEW",
+          "seller_attributable": false
+        },
+        "key_ingredients": {
+          "conflict_locus": "WITHIN_SOURCE",
+          "review_state": "NEEDS_REVIEW",
+          "seller_attributable": false
+        }
+      }
+    },
+    {
+      "product_id": "REAL-PROD-R2",
+      "case_id": "REAL-CASE-R2",
+      "after_event": "15-bootstrap-real-foaming",
+      "status": "DRAFT",
+      "expected": {
+        "volume": "SINGLE_SOURCE",
+        "skin_type": "CONSISTENT",
+        "key_ingredients": "CONSISTENT",
+        "notification_number": "INSUFFICIENT",
+        "responsible_company": "INSUFFICIENT"
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R3/R7/REQ: chai chính 236ml; quà tặng 30ml không phải chai chính. Brand không nêu size. Không đếm quà tặng thành xung đột dung tích.",
+          "evidence": [
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p056",
+              "locator": "specs#19",
+              "excerpt": "Quy cách đóng gói: 236ml"
+            },
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p018",
+              "locator": "description#p17",
+              "excerpt": "Tặng 1 sữa rửa mặt Cerave Foaming Cleanser 30ml"
+            }
+          ]
+        },
+        "skin_type": {
+          "rationale": "R5/R8: title oily là tập con usage NORMAL/OILY/COMBINATION; brand có câu range theo convention DATASET-SPEC §6. Hai family cùng scope tương thích; không phạt khác cách diễn đạt.",
+          "evidence": [
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p051",
+              "locator": "usage#6",
+              "excerpt": "Da thường, da dầu, da hỗn hợp"
+            },
+            {
+              "snapshot": "real/r2-foaming-cleanser/brand_page-4c916b8d9042.v1.json",
+              "source_id": "REAL-PROD-R2-brand_page-4c916b8d9042",
+              "passage_id": "REAL-PROD-R2-brand_page-4c916b8d9042-v1-p002",
+              "locator": "description#p1",
+              "excerpt": "Thích hợp cho da thường đến da dầu"
+            }
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "R5/R6/R8: các hoạt chất niacinamide, ceramides và hyaluronic acid có hỗ trợ trong INCI/điểm nhấn của hai family. Hai INCI không giống nguyên danh sách không tự tạo lỗi key ingredients.",
+          "evidence": [
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p045",
+              "locator": "ingredients#3",
+              "excerpt": "NIACINAMIDE"
+            },
+            {
+              "snapshot": "real/r2-foaming-cleanser/brand_page-4c916b8d9042.v1.json",
+              "source_id": "REAL-PROD-R2-brand_page-4c916b8d9042",
+              "passage_id": "REAL-PROD-R2-brand_page-4c916b8d9042-v1-p007",
+              "locator": "ingredients#2",
+              "excerpt": "Niacinamide"
+            },
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p045",
+              "locator": "ingredients#3",
+              "excerpt": "CERAMIDE NP, CERAMIDE AP, CERAMIDE EOP"
+            },
+            {
+              "snapshot": "real/r2-foaming-cleanser/brand_page-4c916b8d9042.v1.json",
+              "source_id": "REAL-PROD-R2-brand_page-4c916b8d9042",
+              "passage_id": "REAL-PROD-R2-brand_page-4c916b8d9042-v1-p007",
+              "locator": "ingredients#2",
+              "excerpt": "Hydrolyzed Hyaluronic Acid"
+            }
+          ]
+        },
+        "notification_number": {
+          "rationale": "REQ: chỉ đọc được từ listing; không có ACTIVE NOTIFICATION_DOC/REGISTRY_RECORD. Không xác nhận trường định danh bằng trang bán lẻ.",
+          "evidence": [
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p060",
+              "locator": "specs#23",
+              "excerpt": "169170/22/CBMP-QLD"
+            }
+          ]
+        },
+        "responsible_company": {
+          "rationale": "REQ: chỉ đọc được từ listing; không có ACTIVE NOTIFICATION_DOC/REGISTRY_RECORD. Không xác nhận trường định danh bằng trang bán lẻ.",
+          "evidence": [
+            {
+              "snapshot": "real/r2-foaming-cleanser/listing-ee79ecff03a5.v1.json",
+              "source_id": "REAL-PROD-R2-listing-ee79ecff03a5",
+              "passage_id": "REAL-PROD-R2-listing-ee79ecff03a5-v1-p059",
+              "locator": "specs#22",
+              "excerpt": "L'Oréal Việt Nam"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "product_id": "REAL-PROD-R3",
+      "case_id": "REAL-CASE-R3",
+      "after_event": "16-bootstrap-real-blemish",
+      "status": "DRAFT",
+      "expected": {
+        "volume": "SINGLE_SOURCE",
+        "skin_type": "CONFLICTING",
+        "key_ingredients": "SINGLE_SOURCE",
+        "notification_number": "INSUFFICIENT",
+        "responsible_company": "INSUFFICIENT"
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R3/R7: chỉ listing nêu chai 473ml; brand không có size. Quà tặng Hydrating 20ml là sản phẩm khác.",
+          "evidence": [
+            {
+              "snapshot": "real/r3-blemish-cleanser/listing-872ac1e65bf9.v1.json",
+              "source_id": "REAL-PROD-R3-listing-872ac1e65bf9",
+              "passage_id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p001",
+              "locator": "title",
+              "excerpt": "CeraVe Blemish Control Cleanser 473ml"
+            }
+          ]
+        },
+        "skin_type": {
+          "rationale": "R4/R5: brand ghi dầu/hỗn hợp/mụn và đoạn khác thường/dầu; không tập nào bao trọn tập còn lại. DRAFT WITHIN_SOURCE, NEEDS_REVIEW, không quy người bán. Đoạn quảng bá mọi loại da cần người duyệt kiểm tra phạm vi.",
+          "evidence": [
+            {
+              "snapshot": "real/r3-blemish-cleanser/brand_page-95da036aafc4.v1.json",
+              "source_id": "REAL-PROD-R3-brand_page-95da036aafc4",
+              "passage_id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p002",
+              "locator": "description#p1",
+              "excerpt": "Phù hợp với da dầu, da hỗn hợp, da có mụn ẩn, bít tắt lỗ chân lông"
+            },
+            {
+              "snapshot": "real/r3-blemish-cleanser/brand_page-95da036aafc4.v1.json",
+              "source_id": "REAL-PROD-R3-brand_page-95da036aafc4",
+              "passage_id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p023",
+              "locator": "usage#8",
+              "excerpt": "Sữa rửa mặt tạo bọt Cerave phù hợp cho da thường và da dầu."
+            }
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "AC-04 docs/09 và DATASET-SPEC R3: chỉ brand nêu nồng độ 2% Salicylic Acid. Listing có Salicylic Acid thứ 6 nhưng không có phần trăm. SINGLE_SOURCE ở đây là kỳ vọng đặc thù claim nồng độ; sự có mặt của hoạt chất được cả hai INCI hỗ trợ. Cần duyệt cách chiếu claim nồng độ lên field tổng (CCR), không sửa nguồn hay test.",
+          "evidence": [
+            {
+              "snapshot": "real/r3-blemish-cleanser/brand_page-95da036aafc4.v1.json",
+              "source_id": "REAL-PROD-R3-brand_page-95da036aafc4",
+              "passage_id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p005",
+              "locator": "description#p4",
+              "excerpt": "2% Salicylic Acid"
+            },
+            {
+              "snapshot": "real/r3-blemish-cleanser/listing-872ac1e65bf9.v1.json",
+              "source_id": "REAL-PROD-R3-listing-872ac1e65bf9",
+              "passage_id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p047",
+              "locator": "ingredients#3",
+              "excerpt": "Niacinamide, Salicylic Acid, Sodium Methyl Cocoyl Taurate"
+            }
+          ]
+        },
+        "notification_number": {
+          "rationale": "REQ: chỉ đọc được từ listing; không có ACTIVE NOTIFICATION_DOC/REGISTRY_RECORD. Không xác nhận trường định danh bằng trang bán lẻ.",
+          "evidence": [
+            {
+              "snapshot": "real/r3-blemish-cleanser/listing-872ac1e65bf9.v1.json",
+              "source_id": "REAL-PROD-R3-listing-872ac1e65bf9",
+              "passage_id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p064",
+              "locator": "specs#25",
+              "excerpt": "267602/25/CBMP-QLD"
+            }
+          ]
+        },
+        "responsible_company": {
+          "rationale": "REQ: chỉ đọc được từ listing; không có ACTIVE NOTIFICATION_DOC/REGISTRY_RECORD. Không xác nhận trường định danh bằng trang bán lẻ.",
+          "evidence": [
+            {
+              "snapshot": "real/r3-blemish-cleanser/listing-872ac1e65bf9.v1.json",
+              "source_id": "REAL-PROD-R3-listing-872ac1e65bf9",
+              "passage_id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p062",
+              "locator": "specs#23",
+              "excerpt": "Công ty TNHH L'OREAL VIỆT NAM"
+            }
+          ]
+        }
+      },
+      "expected_details": {
+        "skin_type": {
+          "conflict_locus": "WITHIN_SOURCE",
+          "review_state": "NEEDS_REVIEW",
+          "seller_attributable": false
+        }
+      },
+      "claims": [
+        {
+          "kind": "concentration",
+          "ingredient": "SALICYLIC_ACID",
+          "value_percent": 2,
+          "expected": "SINGLE_SOURCE",
+          "evidence": [
+            {
+              "snapshot": "real/r3-blemish-cleanser/brand_page-95da036aafc4.v1.json",
+              "source_id": "REAL-PROD-R3-brand_page-95da036aafc4",
+              "passage_id": "REAL-PROD-R3-brand_page-95da036aafc4-v1-p005",
+              "locator": "description#p4",
+              "excerpt": "2% Salicylic Acid"
+            }
+          ],
+          "rationale": "Only the brand states a percentage; absence of a percentage in retailer INCI is not a contradiction."
+        }
+      ]
+    },
+    {
+      "product_id": "REAL-PROD-R4",
+      "case_id": "REAL-CASE-R4",
+      "after_event": "17-bootstrap-real-effaclar",
+      "status": "DRAFT",
+      "expected": {
+        "volume": "SINGLE_SOURCE",
+        "skin_type": "SINGLE_SOURCE",
+        "key_ingredients": "SINGLE_SOURCE",
+        "notification_number": "INSUFFICIENT",
+        "responsible_company": "INSUFFICIENT"
+      },
+      "rationale": {
+        "volume": {
+          "rationale": "R3/R7/REQ: listing 200ml; WEB_PAGE 400ml sai variant và cùng family bán lẻ, không là xác nhận độc lập. Quà tặng 50ml không phải chai chính.",
+          "evidence": [
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p068",
+              "locator": "specs#17",
+              "excerpt": "Đóng gói: Chai 200ml"
+            },
+            {
+              "snapshot": "real/r4-effaclar-gel/web_page-3a9ef50a7c6e.v1.json",
+              "source_id": "REAL-PROD-R4-web_page-3a9ef50a7c6e",
+              "passage_id": "REAL-PROD-R4-web_page-3a9ef50a7c6e-v1-p061",
+              "locator": "specs#19",
+              "excerpt": "Đóng gói: Chai 400ml."
+            }
+          ]
+        },
+        "skin_type": {
+          "rationale": "R7: chỉ listing 200ml dùng được cho da dầu/nhạy cảm; trang brand không truy cập được.",
+          "evidence": [
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p052",
+              "locator": "description#p31",
+              "excerpt": "Sản phẩm phù hợp cho da dầu và nhạy cảm"
+            }
+          ]
+        },
+        "key_ingredients": {
+          "rationale": "R6/R7: listing nêu Kẽm PCA và Hexylene Glycol, không cung cấp INCI đầy đủ. Trang 400ml bị loại theo scope. Không suy ra cồn từ glycol.",
+          "evidence": [
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p046",
+              "locator": "description#p25",
+              "excerpt": "Kẽm PCA: Giảm bã nhờn và thanh lọc làn da."
+            },
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p047",
+              "locator": "description#p26",
+              "excerpt": "Hexylene Glycol"
+            }
+          ]
+        },
+        "notification_number": {
+          "rationale": "REQ/R10: không đọc được số công bố ở snapshot 200ml, không có tài liệu công bố. Không lấy số ở variant 400ml.",
+          "evidence": []
+        },
+        "responsible_company": {
+          "rationale": "REQ/R10: không có company chịu trách nhiệm trong snapshot 200ml. Tên thương hiệu và nơi sản xuất không thay cho company.",
+          "evidence": []
+        }
+      },
+      "claims": [
+        {
+          "kind": "free_from:alcohol",
+          "expected": "INSUFFICIENT",
+          "evidence": [
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p050",
+              "locator": "description#p29",
+              "excerpt": "Không chứa paraben, không xà phòng, không màu, không cồn, độ pH trung tính 5.5."
+            },
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p047",
+              "locator": "description#p26",
+              "excerpt": "Hexylene Glycol"
+            }
+          ],
+          "rationale": "No complete in-scope INCI to substantiate a free-from result; glycol alone must not trigger an alcohol conflict.",
+          "seller_attributable": false
+        }
+      ],
+      "probes": [
+        {
+          "name": "version_ambiguity",
+          "evidence": [
+            {
+              "snapshot": "real/r4-effaclar-gel/listing-149462496680.v1.json",
+              "source_id": "REAL-PROD-R4-listing-149462496680",
+              "passage_id": "REAL-PROD-R4-listing-149462496680-v1-p041",
+              "locator": "description#p20",
+              "excerpt": "Sản phẩm đã được thay đổi bao bì."
+            }
+          ],
+          "expected": "Request version/label evidence before drawing formulation-specific conclusions."
+        }
+      ]
+    }
+  ]
+}
