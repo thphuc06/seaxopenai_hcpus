@@ -13,7 +13,7 @@ from app.models import (
 from app.pipeline import compare
 from app.pipeline.scope import listing_copies_reference
 
-POLICY_VERSION = "policy-v1.3"
+POLICY_VERSION = "policy-v1.4"
 
 
 def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str, JsonValue] | None) -> FieldDecision:
@@ -267,6 +267,13 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
         reference = right if listing is left else left
         supported = compare.compatible(field_key, listing.normalized, reference.normalized) if listing else compare.agree(field_key, left.normalized, right.normalized)
         if not supported:
+            if listing and field_key == "skin_type" and any(
+                candidate.source_version_id == reference.source_version_id
+                and compare.compatible(field_key,listing.normalized,candidate.normalized)
+                for candidate in adverse
+            ):
+                step("R5", "COVERED", "A fuller statement in the same source supports the listing claim")
+                continue
             if field_key == "key_ingredients" and reference.field_key != "inci_list":
                 step("R6", "UNMENTIONED", "Highlight list is not a complete ingredient declaration")
                 continue

@@ -12,7 +12,7 @@ from app.context import RunContext
 from app.llm.client import LLMError
 from app.models import PUBLIC_FIELDS, FieldDecision, Readability, ReviewState, ScopeMatch, SourceKind, SourceStatus
 from app.pipeline import claims_audit, extract, policy, publish
-from app.pipeline.scope import infer_scope
+from app.pipeline.scope import infer_scope, volume_claim_scope
 from app.trace import TraceWriter
 
 Extractor = Callable[[str, RunContext], extract.Extraction]
@@ -60,7 +60,14 @@ def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], c
         ):
             ctx.trace.step("extract", detail={"reason": "INVALID_LOCATOR"})
             continue
-        placed = dict(common,scope_match=inferred.for_passage(claim.passage_id).scope_match)
+        claim_scope = inferred.for_passage(claim.passage_id).scope_match
+        if claim.field_key == "volume" and claim.readability != Readability.UNREADABLE:
+            quantity_scope, quantity_reason = volume_claim_scope(str(passage["text"]),claim.normalized)
+            if quantity_scope != ScopeMatch.MATCH and claim_scope != ScopeMatch.MISMATCH:
+                claim_scope = quantity_scope
+                ctx.trace.step("scope_check",input_refs=[claim.passage_id],detail={
+                    "field_key":"volume","scope_match":claim_scope.value,"reason":quantity_reason})
+        placed = dict(common,scope_match=claim_scope)
         observations.append(policy.SourceObs(**placed,field_key=claim.field_key,passage_id=claim.passage_id,
             locator=str(passage["locator"]),quote=quote,normalized=claim.normalized,
             readability=claim.readability,mapped_by=claim.mapped_by))

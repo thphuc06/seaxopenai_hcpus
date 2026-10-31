@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 import json
+import re
 from pathlib import Path
 import unicodedata
 from urllib.parse import urlsplit
@@ -21,6 +22,74 @@ Passage = str | Record
 class MarketRules:
     country_tlds: frozenset[str]
     generic_cctlds: frozenset[str]
+
+
+@dataclass(frozen=True)
+class ScopeTextRules:
+    gift_markers: tuple[str, ...]
+    indirect_markers: tuple[str, ...]
+
+
+def load_scope_text_rules(path: Path | None = None) -> ScopeTextRules | None:
+    path = path or Path(__file__).parents[1] / "data/scope_text_rules.json"
+    if not path.exists():
+        return None
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict) or not isinstance(value.get("_about"),str) or not value["_about"].strip():
+        raise ValueError("Scope text rules require a source note")
+    arrays: dict[str, tuple[str,...]] = {}
+    for key in ("gift_markers","indirect_markers"):
+        markers = value.get(key)
+        if not isinstance(markers,list) or not markers or not all(isinstance(item,str) and item.strip() for item in markers):
+            raise ValueError("Scope text markers must be nonblank strings")
+        arrays[key] = tuple(markers)
+    return ScopeTextRules(arrays["gift_markers"],arrays["indirect_markers"])
+
+
+def _volume_roles(text: str, rules: ScopeTextRules) -> list[tuple[str, dict[str, JsonValue], ScopeMatch]]:
+    volumes = normalize.volume_spans(text)
+    offsets: list[int] = []
+    cursor = 0
+    for raw,_ in volumes:
+        start = text.index(raw,cursor)
+        offsets.append(start)
+        cursor = start+len(raw)
+    roles = [ScopeMatch.MATCH]*len(volumes)
+    markers: list[tuple[int,int]] = []
+    for start,end in sorted({span for cue in rules.gift_markers for span in normalize.phrase_spans(text,cue)}):
+        if markers and not text[markers[-1][1]:start].strip():
+            markers[-1] = (markers[-1][0],max(markers[-1][1],end))
+        else:
+            markers.append((start,end))
+    boundaries = [m.start() for m in re.finditer(r"[;\n!?]|(?<!\d)\.(?=\s|$)",text)]
+    for start,end in markers:
+        stop = min([p for p in boundaries if p >= end]+[p for p,_ in markers if p > start]+[len(text)])
+        clause_start = max([p+1 for p in boundaries if p < start]+[0])
+        following = [i for i,offset in enumerate(offsets) if end <= offset < stop]
+        indirect = normalize.has_negation(text[clause_start:stop]) or any(
+            normalize.phrase_spans(text[end:stop],cue) for cue in rules.indirect_markers)
+        # Never pick the quantity matching the case from ambiguous promotional wording.
+        for index in following:
+            roles[index] = ScopeMatch.MISMATCH if len(following) == 1 and not indirect else ScopeMatch.UNKNOWN
+        if not following:
+            preceding = [i for i,offset in enumerate(offsets) if clause_start <= offset < start]
+            if preceding:
+                roles[preceding[-1]] = ScopeMatch.UNKNOWN
+    return [(raw,value,role) for (raw,value),role in zip(volumes,roles)]
+
+
+def volume_claim_scope(text: str, value: Record, *, text_rules: ScopeTextRules | None = None) -> tuple[ScopeMatch, str]:
+    rules = text_rules if text_rules is not None else load_scope_text_rules()
+    if rules is None:
+        return ScopeMatch.UNKNOWN, "Scope text rules are unavailable"
+    if not any(normalize.phrase_spans(text,cue) for cue in rules.gift_markers):
+        return ScopeMatch.MATCH, "No marked gift context"
+    roles = {role for _,candidate,role in _volume_roles(text,rules) if compare.same_volume(candidate,dict(value))}
+    if roles == {ScopeMatch.MISMATCH}:
+        return ScopeMatch.MISMATCH, "GIFT_CONTEXT: quantity belongs to an explicitly marked gift"
+    if roles == {ScopeMatch.MATCH}:
+        return ScopeMatch.MATCH, "Quantity is outside marked gift context"
+    return ScopeMatch.UNKNOWN, "AMBIGUOUS_VOLUME_CONTEXT: quantity cannot be assigned to the main item"
 
 
 @dataclass(frozen=True)
@@ -190,7 +259,15 @@ def infer_scope(source: Record, product: Record, *, market_rules: MarketRules | 
     texts = [str(item.get("text") or "") for item in passages]
     if isinstance(source.get("text"), str):
         texts.append(str(source["text"]))
-    sizes = _sizes(texts)
+    rules = load_scope_text_rules()
+    if rules is None and any(normalize.volumes_in(text) for text in texts):
+        return decision(ScopeMatch.UNKNOWN, "Scope text rules are unavailable", True)
+    scoped_sizes = [item for text in texts for item in _volume_roles(text,rules)] if rules else []
+    if any(role == ScopeMatch.UNKNOWN for _,_,role in scoped_sizes):
+        return decision(ScopeMatch.UNKNOWN, "Ambiguous promotional quantities require passage-level scope", True)
+    if scoped_sizes and all(role == ScopeMatch.MISMATCH for _,_,role in scoped_sizes):
+        return decision(ScopeMatch.UNKNOWN, "Only gift quantities are stated; main size needs confirmation", True)
+    sizes = _sizes([raw for raw,_,role in scoped_sizes if role == ScopeMatch.MATCH])
     if len(sizes) > 1:
         by_id = {item.passage_id: item for item in placements}
         unresolved = not passages or any(

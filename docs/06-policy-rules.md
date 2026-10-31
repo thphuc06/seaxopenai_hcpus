@@ -86,6 +86,25 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+S2 REAL follow-up advances POLICY_VERSION to policy-v1.4. Volume scope examines stored
+passage text using source-noted gift cues in data/scope_text_rules.json (explicitly approved
+P1 ownership exception). A single quantity after a cue within a clause is gift-context
+MISMATCH; multiple quantities there, or the same value appearing in both main and gift
+contexts, remain UNKNOWN. Negated, conditional purchase, gift-container and unresolved
+suffix-cue wording also remain UNKNOWN using curated indirect cues and existing negation
+rules. A page naming only gift quantities does not acquire product-level MATCH by omission.
+Main quantities before the cue or in separate clauses remain
+eligible. Source size inference excludes only unambiguous gift quantities. Unknown wording
+is not resolved by picking whichever quantity matches the case. Existing normalization,
+unit conversion and tolerance remain P2/compare helpers; no duplicate size parser is added.
+Trace scope_check records GIFT_CONTEXT/AMBIGUOUS_VOLUME_CONTEXT and policy R3 filters scope.
+
+For skin-type comparisons, a shorter source summary does not negate a fuller, compatible
+statement in the same source version. R4 still checks within-source contradictions first;
+R9 accepts the fuller code/seed evidence only from that same version, and the final citations
+include supporting passages. Another source or an unverified model mapping cannot suppress
+the disagreement. CCR P1→P4: record policy-v1.4 and the trace-debug loop in tracking docs.
+
 S2 P1 advances POLICY_VERSION to policy-v1.3 (v1.2 plus the approved MODEL_ERROR rule). Pure scope inference and stored passage
 placements feed SourceObs; R7c joins copied listing passages with their reference family.
 The run supplies stored full passage text for copy comparison, while citations retain the
