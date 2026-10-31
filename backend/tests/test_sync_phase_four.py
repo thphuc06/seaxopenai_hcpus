@@ -174,3 +174,34 @@ def test_marketplace_allows_explicit_unavailable_field_without_invented_evidence
     with httpx.Client(transport=httpx.MockTransport(story.handle), base_url="http://test") as client:
         check_marketplace(client, story.count, story.product, story.case, "another-bootstrap", "fallback")
     assert story.writes == 0
+
+
+@pytest.mark.parametrize("fault", [None, "invented-count", "invented-majority", "read-write"])
+@pytest.mark.parametrize("product", ["abstained-159", "unrelated-233"])
+def test_marketplace_conservative_abstention_preserves_consistency(product: str, fault: str | None) -> None:
+    story = Story("fallback", product=product)
+
+    def respond(request: httpx.Request) -> httpx.Response:
+        response = story.handle(request)
+        if request.url.path.endswith("/scan"):
+            data = response.json()
+            data["findings"] = 1 if fault == "invented-count" else 0
+            return httpx.Response(200, json=data)
+        if request.url.path.endswith("/marketplace"):
+            data = response.json()
+            data["fields"] = [dict(field_key="volume", independent_clusters=0, values=[],
+                                   majority={"ml":159} if fault == "invented-majority" else None)]
+            if data["audience"] == "EXPERT":
+                data["findings"] = []
+            if fault == "read-write":
+                story.writes += 1
+            return httpx.Response(200, json=data)
+        return response
+
+    with httpx.Client(transport=httpx.MockTransport(respond), base_url="http://test") as client:
+        if fault is None:
+            check_marketplace(client, story.count, product, story.case, "arbitrary-bootstrap", "fallback")
+            assert story.writes == 0
+        else:
+            with pytest.raises(CheckFailure):
+                check_marketplace(client, story.count, product, story.case, "arbitrary-bootstrap", "fallback")

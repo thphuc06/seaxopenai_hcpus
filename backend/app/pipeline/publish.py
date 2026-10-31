@@ -2,10 +2,12 @@
 import re
 import sqlite3
 import unicodedata
+from hashlib import sha256
+from dataclasses import dataclass
 from uuid import uuid4
 from pydantic import JsonValue
 from app import chain, db
-from app.models import FieldDecision, Verdict, DependsOn
+from app.models import Citation, FieldDecision, Verdict, DependsOn
 from app.pipeline import policy
 from app.trace import TraceWriter
 
@@ -14,6 +16,50 @@ class ReviewError(ValueError):
     def __init__(self, status: int, reason: str):
         super().__init__(reason)
         self.status = status
+
+
+@dataclass(frozen=True)
+class MarketplacePublication:
+    product_id: str
+    scan_id: str
+    seller_source_id: str
+    shop: str
+    field_key: str
+    value: dict[str, JsonValue]
+    display: str
+    cluster: str
+    outlier: bool
+    citation: Citation
+
+
+def marketplace_gate(findings: list[MarketplacePublication]) -> bool:
+    """Publish a source-bound marketplace observation, never a passport result."""
+    with db.transaction() as connection:
+        for finding in findings:
+            run = connection.execute("SELECT case_id,status FROM runs WHERE id=?", (finding.scan_id,)).fetchone()
+            source = connection.execute(
+                "SELECT s.*,v.version,p.text,p.locator FROM sources s JOIN source_versions v ON v.source_id=s.id "
+                "JOIN passages p ON p.source_version_id=v.id WHERE p.id=? AND s.id=?",
+                (finding.citation.passage_id, finding.seller_source_id)).fetchone()
+            if (run is None or run["case_id"] is not None or run["status"] != "RUNNING"
+                    or source is None or source["case_id"] is not None or source["product_id"] != finding.product_id
+                    or source["visibility"] != "PUBLIC" or source["status"] != "ACTIVE"
+                    or source["kind"] != "LISTING" or source["kind"] != finding.citation.source_kind.value
+                    or source["version"] != finding.citation.source_version or source["locator"] != finding.citation.locator
+                    or not quote_text(finding.citation.excerpt)
+                    or quote_text(finding.citation.excerpt) not in quote_text(source["text"])):
+                return False
+        for finding in findings:
+            connection.execute("INSERT INTO marketplace_findings VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                (finding.product_id, finding.scan_id, finding.seller_source_id, finding.shop, finding.field_key,
+                 db.dumps(finding.value), finding.display, finding.cluster, int(finding.outlier),
+                 db.dumps(finding.citation.model_dump(mode="json")), db.now_iso()))
+            if finding.outlier:
+                task_id = sha256(db.dumps([finding.scan_id, finding.seller_source_id, finding.field_key]).encode("utf-8")).hexdigest()
+                connection.execute("INSERT INTO review_tasks(id,case_id,field_key,result_id,reason_code,status) "
+                                   "VALUES(?,NULL,?,NULL,'MARKETPLACE_OUTLIER','OPEN')",
+                                   ("marketplace_" + task_id, finding.field_key))
+    return True
 
 
 def _stored_decision(connection: sqlite3.Connection, row: sqlite3.Row) -> FieldDecision:

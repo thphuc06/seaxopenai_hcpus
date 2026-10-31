@@ -301,8 +301,18 @@ def _shingles(text: str) -> set[str]:
     return {text[index:index + 5] for index in range(len(text) - 4)}
 
 
+def copy_shingles(passage: Passage) -> set[str]:
+    """Shared case/space/NFC normalization and five-character copy tokens."""
+    return _shingles(_copy_text(passage))
+
+
+def shingle_jaccard(left: set[str], right: set[str]) -> float:
+    union = left | right
+    return len(left & right) / len(union) if union else 0.0
+
+
 def listing_copies_reference(listing_passages: Sequence[Passage],
-                             reference: Record | Sequence[Passage]) -> bool:
+                             reference: Record | Sequence[Passage], *, min_chars: int = 30) -> bool:
     """R7c: caller supplies only passages stating ONE field from ONE reference.
 
     True means policy should reuse that reference's family and record R7c in
@@ -315,12 +325,12 @@ def listing_copies_reference(listing_passages: Sequence[Passage],
         identities = {item[key] for item in references if isinstance(item, Mapping) and item.get(key)}
         if len(identities) > 1:
             return False
-    reference_sets = [_shingles(text) for item in references if len(text := _copy_text(item)) >= 30]
+    reference_sets = [_shingles(text) for item in references if len(text := _copy_text(item)) >= min_chars]
     for passage in listing_passages:
         text = _copy_text(passage)
-        if len(text) < 30:
+        if len(text) < min_chars:
             return False
         shingles = _shingles(text)
-        if not any(len(shingles & other) / len(shingles | other) >= 0.8 for other in reference_sets):
+        if not any(shingle_jaccard(shingles, other) >= 0.8 for other in reference_sets):
             return False
     return True

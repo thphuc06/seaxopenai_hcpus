@@ -589,7 +589,8 @@ def check_marketplace(client: httpx.Client, counts: Callable[[], dict[str, int]]
     require(buyer.audience == "BUYER" and expert.audience == "EXPERT" and
             buyer.product_id == expert.product_id == product and buyer.scan_id == expert.scan_id == scan.scan_id,
             "marketplace projection identity mismatch")
-    require(buyer.fields == expert.fields and bool(expert.findings), "marketplace tallies/findings absent or inconsistent")
+    require(buyer.fields == expert.fields, "marketplace tallies are inconsistent")
+    require(scan.findings == len(expert.findings), "marketplace scan/findings count differs")
     require(len(buyer.fields) == len({row.field_key for row in buyer.fields}) and
             {row.field_key for row in expert.findings} <= {row.field_key for row in buyer.fields},
             "marketplace tally fields omit/duplicate expert evidence")

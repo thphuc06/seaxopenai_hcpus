@@ -96,6 +96,24 @@ cannot verify. The design answers them with one budget per run, a hard deadline 
 
 ## As built (contest)
 
+### S4 local wiring after contract-4
+
+Orders freeze one BUYER projection, case revision and verified chain head in the
+writer transaction, hash those exact snapshot bytes, and validate them on reads.
+Receipt diffs use a consistent read transaction; neither reads nor order creation
+start pipeline work. Marketplace scans have separate runs with no case linkage,
+PUBLIC outside-case sources, the existing extraction seam, one Budget, pure
+consensus and a transactional marketplace publication gate. They cannot become
+the case's latest run or write passport results. Case-run DTOs remain unchanged;
+scan usage is counted directly for metrics/observability.
+
+Explicit web events and eligible once-per-case automatic discovery call the P2
+discover interface before extraction. Errors are traced and preserve independently
+checked evidence. Empty stub outcomes are marked partial, not successful discovery.
+Web audit reads persisted evidence only. Provider/OCR implementation and full S4
+integration remain pending; tests cover a fake provider seam and real fallback
+marketplace extraction. No demo DB reset is part of this delivery.
+
 ### S3 P1 orchestration
 
 After public policy pass 1, unresolved fields invoke P2's scope resolver; P1 reloads
