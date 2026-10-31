@@ -63,3 +63,11 @@ def test_payload_cannot_rebind_resource_to_another_case(core_db: CoreDB) -> None
     result = admit(event,role=Role.OPERATOR,actor_id="operator")
     assert result.outcome == EventOutcome.REJECTED
     assert not core_db.rows("SELECT * FROM jobs")
+
+
+def test_shared_producer_config_limits_seller_portal_to_evidence(core_db: CoreDB) -> None:
+    evidence = core_db.event("EVIDENCE_ADDED",producer="seller-portal")
+    assert admit(evidence,role=Role.SELLER,actor_id="seller").outcome == EventOutcome.ADMITTED
+    bootstrap = core_db.event(producer="seller-portal")
+    assert admit(bootstrap,role=Role.SYSTEM,actor_id="system").outcome == EventOutcome.REJECTED
+    assert len(core_db.rows("SELECT * FROM jobs")) == 1

@@ -3,7 +3,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 import sqlite3
 from uuid import uuid4
-from app import db
+from app import config, db
 from app.models import AdmitResult, EventEnvelope, EventOutcome, EventType, Role
 from app.pipeline.policy import stale_freshness
 
@@ -14,8 +14,8 @@ class AdmissionRules:
     non_material: frozenset[str]
 
 
-# Closed protocol values from docs05 §1; local adapter until P4 exposes settings.
-DEFAULT_RULES = AdmissionRules({"publisher-panel": frozenset(EventType)}, frozenset({"price", "stock", "promo"}))
+# P4 owns the single closed-set protocol configuration; tests may inject rules.
+DEFAULT_RULES = AdmissionRules(config.PRODUCER_EVENT_TYPES, config.NON_MATERIAL_FIELDS)
 
 
 def _case(connection: sqlite3.Connection, event: EventEnvelope) -> sqlite3.Row | None:

@@ -1,8 +1,7 @@
 """P1-1b spec-derived properties; no fixture/gold reads or app replacement.
 
-The observation constructor is deliberately isolated: SourceObs is an empty S0
-dataclass in the starting checkout. Its proposed keyword binding below needs P1's
-final contract. Constructor errors are prerequisite failures, not verdict defects.
+The isolated observation constructor now matches P1's S1 SourceObs contract.
+All expectations were authored from docs06 before the implementation was run.
 """
 from itertools import permutations
 

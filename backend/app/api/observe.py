@@ -1,4 +1,4 @@
-"""S1 metrics contract; counters will be implemented in Stage B."""
+"""S1 persisted execution counts and the in-memory buyer read counter."""
 from fastapi import APIRouter
 
 from app.api import read

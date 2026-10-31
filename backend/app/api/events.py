@@ -1,5 +1,4 @@
-"""S1 event contracts; no admission side effects at the contract checkpoint."""
-from pathlib import Path
+"""S1 admission, fixture dispatch and persisted event-log routes."""
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from app import config, db, seed, worker
 from app.events.admit import admit
