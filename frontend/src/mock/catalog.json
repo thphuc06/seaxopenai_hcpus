@@ -1,6 +1,6 @@
 [
-  { "name": "01-bootstrap-demo", "title": "Load the first listing", "expect": "Start the first comparison with the available source snapshots." },
-  { "name": "02-price-change", "title": "Change the price", "expect": "A price-only edit leaves the checked product fields unchanged." },
-  { "name": "03-duplicate-price-change", "title": "Repeat the same event", "expect": "The same event key creates no additional work." },
-  { "name": "08-rejected-producer", "title": "Check event admission", "expect": "An unknown producer is rejected before a run begins." }
+  { "name": "01-bootstrap-demo", "title": "Load the first listing", "type": "BOOTSTRAP", "product_id": "DEMO-PROD-01", "resource": { "kind": "CASE", "id": "preview-case", "version": 1 }, "expect": "Start the first comparison with the available source snapshots." },
+  { "name": "02-price-change", "title": "Change the price", "type": "LISTING_CHANGED", "product_id": "DEMO-PROD-01", "resource": { "kind": "LISTING", "id": "preview-listing", "version": 2 }, "expect": "A price-only edit leaves the checked product fields unchanged." },
+  { "name": "03-duplicate-price-change", "title": "Repeat the same event", "type": "LISTING_CHANGED", "product_id": "DEMO-PROD-01", "resource": { "kind": "LISTING", "id": "preview-listing", "version": 2 }, "expect": "The same event key creates no additional work." },
+  { "name": "08-rejected-producer", "title": "Check event admission", "type": "BOOTSTRAP", "product_id": "DEMO-PROD-01", "resource": { "kind": "CASE", "id": "preview-case", "version": 1 }, "expect": "An unknown producer is rejected before a run begins." }
 ]

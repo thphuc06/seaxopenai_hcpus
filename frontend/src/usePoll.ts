@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { startPolling } from './polling.ts';
+import type { PollInterval } from './polling.ts';
 
-export function usePoll<T>(load: (signal: AbortSignal) => Promise<T>, intervalMs = 10_000) {
+export function usePoll<T>(load: (signal: AbortSignal) => Promise<T>, intervalMs: PollInterval<T> = 10_000) {
   const [state, setState] = useState<{ data: T | null; error: Error | null; loading: boolean }>({ data: null, error: null, loading: true });
   useEffect(() => {
     setState({ data: null, error: null, loading: true });

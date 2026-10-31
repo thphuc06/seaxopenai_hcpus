@@ -4,7 +4,7 @@ export function ErrorNotice({ error, technical = false }: { error: Error; techni
   return <div className="error-notice" role="alert">
     <strong>We couldn’t load this information.</strong>
     <p>{technical ? error.message : error instanceof ApiError
-      ? `Please try again. ${error.status ? `Response status: ${error.status}.` : 'Check your connection.'}`
+      ? `/api${error.path} · ${error.status ? `Response status: ${error.status}.` : 'Network error. Check your connection.'} Please try again.`
       : 'Please try again or reload the page.'}</p>
   </div>;
 }

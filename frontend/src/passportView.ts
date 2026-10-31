@@ -24,7 +24,7 @@ export function toPassportResponse(preview: PassportView): PassportResponse {
 }
 
 /** Restore display-only information supplied separately, without changing findings. */
-export function withPassportMetadata(passport: PassportView, metadata?: PassportMetadata): PassportView {
+export function withPassportMetadata(passport: PassportView, metadata?: PassportMetadata | null): PassportView {
   if (!metadata) return passport;
   return {
     ...passport,

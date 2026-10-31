@@ -1,13 +1,15 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import type { ApiClient } from '../api/client.ts';
-import type { PassportView, Product } from '../types.ts';
+import type { DemoRole, FieldKey, PassportView, Product } from '../types.ts';
 import { withPassportMetadata } from '../passportView.ts';
 import { usePoll } from '../usePoll.ts';
 import { PassportCard } from '../components/PassportCard.tsx';
 import { ErrorNotice, LoadingNotice } from '../components/Feedback.tsx';
+import { EvidenceDrawer } from '../components/EvidenceDrawer.tsx';
+import { passportPollInterval } from '../evidence.ts';
 
-export function BuyerPassportView({ product, passport }: { product: Product | undefined; passport: PassportView }) {
+export function BuyerPassportView({ product, passport, onEvidence }: { product: Product | undefined; passport: PassportView; onEvidence?: (key: FieldKey) => void }) {
   const presentation = product?.presentation;
   return <>
     <div className="breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">/</span><span>{presentation?.category ?? 'Product information'}</span></div>
@@ -26,18 +28,21 @@ export function BuyerPassportView({ product, passport }: { product: Product | un
           <div className="product-note"><span className="note-line" /><p>A little more context.<br /><strong>A clearer choice.</strong></p><p>Read each detail alongside the sources checked.</p></div>
         </div>
       </aside>
-      <PassportCard passport={withPassportMetadata(passport, presentation?.passport_metadata)} />
+      <PassportCard passport={withPassportMetadata(passport, presentation?.passport_metadata)} onEvidence={onEvidence} />
     </div>
   </>;
 }
 
-export function BuyerPassport({ api, products }: { api: ApiClient; products: Product[] }) {
+export function BuyerPassport({ api, products, role = 'BUYER' }: { api: ApiClient; products: Product[]; role?: DemoRole }) {
   const { productId = '' } = useParams();
+  const [evidenceKey, setEvidenceKey] = useState<FieldKey | null>(null);
   const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
-  const { data, error, loading } = usePoll(load);
+  const { data, error, loading } = usePoll(load, passportPollInterval);
   return <>
     {error && <ErrorNotice error={error} />}
     {loading && <LoadingNotice />}
-    {data && <BuyerPassportView product={products.find((item) => item.id === productId)} passport={data} />}
+    {data && <BuyerPassportView product={products.find((item) => item.id === productId)} passport={data} onEvidence={setEvidenceKey} />}
+    {evidenceKey && <EvidenceDrawer key={`${productId}:${evidenceKey}`} api={api} productId={productId} fieldKey={evidenceKey} allowPrivate={role === 'REVIEWER' || role === 'OPERATOR'}
+      withinSource={data?.fields.find((field) => field.field_key === evidenceKey)?.conflict_locus === 'WITHIN_SOURCE'} onClose={() => setEvidenceKey(null)} />}
   </>;
 }
