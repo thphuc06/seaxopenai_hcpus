@@ -115,6 +115,9 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
             for source in store.current_sources(job.case_id):
                 try:
                     observations.extend(_observations(source, product, ctx, extractor or extract.extract_source_version))
+                    if budget.stop_reason:
+                        # Optional retries may retain valid claims after exhausting the budget.
+                        raise BudgetExceeded(budget.stop_reason)
                 except BudgetExceeded as failure:
                     stop_reason = failure.reason
                     trace.step("run:stop", detail={"stop_reason": stop_reason})

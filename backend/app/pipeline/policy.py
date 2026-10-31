@@ -13,7 +13,7 @@ from app.models import (
 from app.pipeline import compare
 from app.pipeline.scope import listing_copies_reference
 
-POLICY_VERSION = "policy-v1.4"
+POLICY_VERSION = "policy-v1.5"
 
 
 def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str, JsonValue] | None) -> FieldDecision:
@@ -101,13 +101,17 @@ def concentration_bound(ingredients: list[str], target: str, limits: dict[str, f
     return 1.0 if any(name in limits and limits[name] <= 1.0 for name in before) else None
 
 
-def regulatory_limits() -> dict[str, float]:
-    path = Path(__file__).parents[1]/"data"/"regulatory_limits.json"
+def regulatory_limits(*, path: Path | None = None) -> dict[str, float]:
+    path = path or Path(__file__).parents[1]/"data"/"regulatory_limits.json"
     if not path.exists():
         return {}
     with path.open(encoding="utf-8") as stream:
         value = json.load(stream)
     values = value.get("limits",value)
+    # P2's delivered row table is explicitly provisional (status=verify).
+    # Its market/product qualifications need a reviewed contract before use.
+    if isinstance(values,list):
+        return {}
     return {str(name).casefold():float(limit) for name,limit in values.items()
             if isinstance(limit,(int,float)) and not isinstance(limit,bool)}
 
@@ -218,7 +222,7 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                     if bound is not None and percent > bound and source.mapped_by != "model":
                         verdict = Verdict.CONFLICTING
             if not limits:
-                notes.append("Regulatory reference data is unavailable; concentration needs review.")
+                notes.append("Regulatory reference data is unavailable or awaiting verification; concentration needs review.")
         if any(o.scope_match in {ScopeMatch.UNKNOWN,ScopeMatch.AGENT} for o in selected):
             verdict = Verdict.UNCERTAIN
             step("R3", "UNCERTAIN", "Claim evidence scope needs confirmation")
@@ -251,7 +255,8 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
         gap = Gap(field_key=field_key, missing_kind="SOURCE", needed_doc="Source stating this field",
                   known_ids=[], reason="No usable source statement for this field")
         if any(o.readability == Readability.UNREADABLE for o in related):
-            gap = Gap(field_key=field_key,missing_kind="IMAGE",needed_doc="A clearer photo of the label",known_ids=[],reason="The label information is unreadable")
+            gap = Gap(field_key=field_key,missing_kind="IMAGE",needed_doc="A clearer photo of the label",
+                      known_ids=[],reason="The label information is unreadable; provide a clearer photo of the label")
         return finish(Verdict.INSUFFICIENT, [], reason=gap.reason, gap=gap)
     if field_key in {"notification_number", "responsible_company"} and not any(
         o.source_kind == SourceKind.NOTIFICATION_DOC for o in usable

@@ -96,6 +96,11 @@ cannot verify. The design answers them with one budget per run, a hard deadline 
 
 ## As built (contest)
 
+S2 integrated extraction may retain validated claims after an optional retry exhausts its
+Budget. After accepting those observations, P1 consumes the shared Budget.stop_reason through
+the normal PARTIAL path, stops further extraction/audit, and publishes only assessed fields.
+This also applies when the retry belonged to the final source and no later model step runs.
+
 S1 P1: admission writes the event, field-specific STALE flags, case revision and queued job in one
 SQLite write transaction. Duplicate keys write nothing; non-material listing events write only their event.
 One QUEUED job per case coalesces to the newest revision. `worker.execute_job` drains persisted jobs,

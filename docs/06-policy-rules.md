@@ -86,6 +86,17 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+Current version is policy-v1.5 after integrating P2 S2. P2's regulatory table is a list
+whose rows are explicitly provisional (status=verify) and qualified by use/market. It is
+treated as unavailable for automated concentration contradiction, rather than causing a
+mapping-shape error or silently promoting provisional limits into facts. Concentration stays
+UNCERTAIN/NEEDS_REVIEW with a verification note. The earlier numeric-map contract remains
+supported; activating the row table requires a reviewed applicability contract with P2/P4.
+CCR P1→P4: record v1.5 as the current version, preserving v1.4's R2 changes below.
+For an unreadable-only field, the IMAGE gap reason includes the replacement action (provide
+a clearer photo of the label), so the persisted seller evidence request is actionable as well
+as its needed_doc. Readable support is still retained without opening an unnecessary gap.
+
 S2 REAL follow-up advances POLICY_VERSION to policy-v1.4. Volume scope examines stored
 passage text using source-noted gift cues in data/scope_text_rules.json (explicitly approved
 P1 ownership exception). A single quantity after a cue within a clause is gift-context
