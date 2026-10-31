@@ -1,0 +1,21 @@
+{
+  "_about": "Conservative name recognition for a standalone INCI heading followed by a separate list, checked 2026-10-31. Names transcribed from stored brand-page ingredient passages (captured today) and FDA substance nomenclature; this registry supplies names only, never product membership, limits or expected verdicts. Every item must be recognized before fallback treats that layout as an exhaustive list. Unknown entries remain for structured extraction/review, rather than being inferred as names from prose.",
+  "sources": [
+    "docs/07-ai-integration.md#inci-name-provenance",
+    "https://precision.fda.gov/uniisearch/srs/unii/wv9cm0o67z"
+  ],
+  "names": [
+    "Aqua / Water / Eau", "Aqua / Water", "Water", "Glycerin", "Cetearyl Alcohol",
+    "PEG-40 Stearate", "Stearyl Alcohol", "Potassium Phosphate", "Ceramide NP",
+    "Ceramide AP", "Ceramide EOP", "Carbomer", "Glyceryl Stearate",
+    "Behentrimonium Methosulfate", "Sodium Lauroyl Lactylate", "Sodium Hyaluronate",
+    "Cholesterol", "Phenoxyethanol", "Disodium EDTA", "Dipotassium Phosphate",
+    "Tocopherol", "Phytosphingosine", "Xanthan Gum", "Cetyl Alcohol",
+    "Polysorbate 20", "Ethylhexylglycerin", "Sodium Chloride", "Panthenol",
+    "Cocamidopropyl Hydroxysultaine", "Sodium Lauroyl Sarcosinate",
+    "PEG-150 Pentaerythrityl Tetrastearate", "Niacinamide",
+    "PEG-6 Caprylic/Capric Glycerides", "Sodium Methyl Cocoyl Taurate",
+    "Propylene Glycol", "Methylparaben", "Propylparaben", "Citric Acid",
+    "Tetrasodium EDTA", "Hydrolyzed Hyaluronic Acid"
+  ]
+}

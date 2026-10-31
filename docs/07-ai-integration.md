@@ -529,3 +529,50 @@ budget/record suites and guards passed; no failures, skips or deselections.
 Three read-only self-review passes checked grounding, ownership, contracts,
 budgets and generalization. Live vision, paid pass1, legal applicability and the
 supported OCR runtime remain unverified; no paid request was made in P2-2.
+
+S2 REAL-source follow-up: p2 now includes published P1 007d900 and P4 47d3bdb.
+R2 scope is MATCH with that P1 consumer. Extraction uses source-noted
+product_context.json to separate explicitly offered gifts from the purchased
+product. Both fallback and model/replay validation check the full passage, even
+for cropped quotes; numeric boundaries use original source positions. Sentence,
+purchase-return and completed-offer line boundaries preserve main sizes, while
+incomplete offers can wrap across a line. Gift sets and genuine multiple-size
+statements remain eligible. Generic volume normalization used by scope is unchanged.
+Extraction caches are invalidated with fallback-v3 / coverage-v2-product-context;
+model prompts and replay request hashes are unchanged, and replay output is still
+validated. R2 volume now passes AC-01; its skin-type comparison remains a P1 R9
+CCR. The integrated P1 regulatory consumer still expects limits as a dictionary,
+so concentration auditing is not integration-ready with the documented limits[]
+schema. Canon integration and optional budget-stop propagation remain explicit
+P1 handoff items; merging the branch alone does not establish their completion.
+
+The REAL-source regression gate also exposed extraction gaps beyond R2. Fallback
+now preserves positive claims before independent negative benefit clauses, while
+code grounding keeps cropped negative claims rejected. A standalone INCI heading
+can anchor an adjacent list in the same section only when every item matches an
+exact name in source-noted inci_names.json or existing seed INCI names. Unknown
+names and ingredient-benefit prose do not create exhaustive fallback lists; the list keeps its
+own passage locator. Additional source-noted imperative cues exclude separate
+instruction-bearing sentences. Synthetic variants cover all three mechanisms;
+no fixture, acceptance assertion or P1 policy rule changed.
+Supplemental-notification caption variants are sourced in vocab_seed.json and
+verified through EVIDENCE_ADDED acceptance. The INCI name registry supplies no
+product membership, expected verdict or regulatory classification.
+
+### INCI name provenance
+
+inci_names.json uses the ingredient passages captured on 31 Oct 2026 from
+https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-thuong-va-da-kho
+and https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-dau.
+Panthenol nomenclature was checked separately in FDA SRS:
+https://precision.fda.gov/uniisearch/srs/unii/wv9cm0o67z.
+Exact brand-containing provenance URLs live here because the application guard
+prohibits fixture brand tokens anywhere in app/data; the JSON links to this section.
+No product association is encoded in the recognition rule.
+
+Follow-up validation: final P2 extraction/normalization/source-context/guards plus
+repaired Hydrating, injection and EVIDENCE_ADDED acceptance gate: 255 passed,
+0 failed/skipped/deselected. The broader Phase2 run before the last caption and
+provenance corrections was 982 passed/7 failed/14 skipped/+2 subtests; those two
+P2 failures subsequently passed. Five P1 acceptance nodes remain WAITING, listed
+with concrete CCRs in the P2 ExecPlan. No complete S2 gate is claimed.

@@ -17,11 +17,11 @@ from app.llm import client
 from app.llm.messages import ImagePart, TextPart
 from app.models import ClaimExtraction, ExtractedClaim, PUBLIC_FIELDS, Readability
 from app.pipeline import fallback_extract
-from app.pipeline.fallback_extract import Passage, clean_regions, injection_spans, sentence_spans
+from app.pipeline.fallback_extract import Passage, clean_regions, injection_spans
 from app.pipeline.normalize import has_negation, normalize
 
 PROMPT_VERSION = "extract-v1"
-CACHE_VERSION = "coverage-v1"
+CACHE_VERSION = "coverage-v2-product-context"
 VISION_VERSION = "extract-vision-v1"
 RETRY_VERSION = "extract-retry-v1"
 INSTRUCTIONS = """Extract product claims from every passage, including titles and tables.
@@ -185,7 +185,7 @@ def _positive_context(text: str, quote: str) -> bool:
     start = text.find(quote)
     while start >= 0:
         end = start + len(quote)
-        context = " ".join(text[left:right] for left, right in sentence_spans(text) if left < end and right > start)
+        context = " ".join(text[left:right] for left, right in fallback_extract.claim_context_spans(text) if left < end and right > start)
         if not has_negation(context):
             return True
         start = text.find(quote, start + 1)
@@ -198,7 +198,7 @@ def _validate(sv_id: str, passages: list[Passage], proposed: ClaimExtraction, ex
     located_injection = any(injection_spans(p.text) for p in passages)
     ignored = proposed.ignored_instructions_detected or located_injection
     claims: dict[str, Claim] = {}
-    rejected = {"INVALID_LOCATOR": 0, "UNLOCATED_INJECTION": 0, "UNSUPPORTED_POLARITY": 0}
+    rejected = {"INVALID_LOCATOR": 0, "UNLOCATED_INJECTION": 0, "UNSUPPORTED_POLARITY": 0, "PROMOTIONAL_CONTEXT": 0}
     for candidate in proposed.claims:
         # The shared schema has a source-level flag, not an anchored instruction
         # location. Known patterns elsewhere cannot localize that model warning.
@@ -219,6 +219,12 @@ def _validate(sv_id: str, passages: list[Passage], proposed: ClaimExtraction, ex
             _positive_context(region, quote) for region in clean_regions(passage.text)
         ):
             rejected["UNSUPPORTED_POLARITY"] += 1
+            continue
+        if candidate.field_key == "volume" and not unreadable and not any(
+            fallback_extract.product_volume_supported(region, candidate.raw_value, candidate.quote)
+            for region in clean_regions(passage.text)
+        ):
+            rejected["PROMOTIONAL_CONTEXT"] += 1
             continue
         normalized = normalize(candidate.field_key, candidate.raw_value) or {}
         identity = json.dumps([sv_id, candidate.passage_id, candidate.field_key, candidate.raw_value,
