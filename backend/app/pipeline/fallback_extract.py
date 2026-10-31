@@ -6,7 +6,9 @@ import re
 from pydantic import BaseModel
 
 from app.models import ClaimExtraction, ExtractedClaim
-from app.pipeline.normalize import folded, ingredient_keys, phrase_pattern, phrase_spans, skin_types_in, vocabulary, volume_spans
+from app.pipeline.normalize import folded, has_negation, ingredient_keys, phrase_pattern, phrase_spans, skin_types_in, vocabulary, volume_spans
+
+FALLBACK_VERSION = "fallback-v2"
 
 
 class Passage(BaseModel):
@@ -54,17 +56,21 @@ def _claim(field: str, raw: str, passage: Passage, quote: str | None = None) -> 
                           proposed_skin_types=None, proposed_ingredients=None, proposed_volume_ml=None)
 
 
-def _labelled(line: str) -> tuple[str, str] | None:
-    head, separator, tail = line.partition(":")
-    if not separator or not tail.strip():
-        return None
+def _label_field(head: str) -> str | None:
     candidates = [(label, field) for field, labels in vocabulary().field_labels.items() for label in labels]
     for label, field in sorted(candidates, key=lambda item: len(item[0]), reverse=True):
         if re.search(phrase_pattern(label), folded(head)):
-            # Keep INCI periods (Denat., Ext.); other field sentence punctuation is not value data.
-            value = tail.strip() if field == "inci_list" else tail.strip().rstrip(".")
-            return field, value
+            return field
     return None
+
+
+def _labelled(line: str) -> tuple[str, str] | None:
+    head, separator, tail = line.partition(":")
+    field = _label_field(head) if separator else None
+    if field is None or not tail.strip():
+        return None
+    # Keep INCI periods (Denat., Ext.); other field sentence punctuation is not value data.
+    return field, tail.strip() if field == "inci_list" else tail.strip().rstrip(".")
 
 
 def _label_chunks(line: str) -> list[str]:
@@ -89,12 +95,38 @@ def _label_chunks(line: str) -> list[str]:
     return [line[left:right].strip(" .;") for left, right in zip(boundaries, boundaries[1:] + [len(line)])]
 
 
+def _extraction_chunks(text: str) -> list[str]:
+    """Keep wrapped INCI text contiguous; headers and paragraphs end a list."""
+    spans = sentence_spans(text)
+    chunks: list[str] = []
+    index = 0
+    while index < len(spans):
+        left, right = spans[index]
+        head, separator, _ = text[left:right].partition(":")
+        if separator and _label_field(head) == "inci_list":
+            while index + 1 < len(spans):
+                next_left, next_right = spans[index + 1]
+                previous = text[spans[index][0]:right]
+                following = text[next_left:next_right]
+                # A sentence boundary is punctuation; a soft line wrap ends in
+                # exactly one newline. Blank lines and any new header stop it.
+                if (not previous.endswith("\n") or re.search(r"\n\s*\n$", previous)
+                        or not following.strip() or ":" in following
+                        or volume_spans(following) or skin_types_in(following) or has_negation(following)):
+                    break
+                index += 1
+                right = next_right
+        chunks.extend(_label_chunks(text[left:right]))
+        index += 1
+    return chunks
+
+
 def extract(sv_id: str, passages: list[Passage]) -> ClaimExtraction:
     claims: list[ExtractedClaim] = []
     ignored = any(injection_spans(passage.text) for passage in passages)
     for passage in passages:
         for region in clean_regions(passage.text):
-            lines = [chunk for left, right in sentence_spans(region) for chunk in _label_chunks(region[left:right])]
+            lines = _extraction_chunks(region)
             for line in lines:
                 line = line.strip()
                 if not line:

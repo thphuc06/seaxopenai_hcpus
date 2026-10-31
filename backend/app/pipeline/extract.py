@@ -54,11 +54,19 @@ class Extraction:
     cached: bool
 
 
+def extraction_input(sv_id: str, passages: list[Passage]) -> list[TextPart]:
+    """The exact source input, shared with the bounded recording diagnostic."""
+    data = "\n".join(
+        f'<passage id="{escape(p.id, quote=True)}" locator="{escape(p.locator, quote=True)}" '
+        f'section="{escape(p.section or "", quote=True)}">{escape(p.text)}</passage>' for p in passages)
+    return [TextPart(f"source_version_id={escape(sv_id)}\n<SOURCE_DATA>\n{data}\n</SOURCE_DATA>")]
+
+
 def extract_source_version(sv_id: str, ctx: RunContext) -> Extraction:
     """Cache and persist only code-validated claims, scoped to server context."""
     model = config.settings.model_extract
     origin = "fallback" if ctx.mode == "fallback" else ("replay" if ctx.mode == "replay" or config.settings.replay_freeze else ctx.mode)
-    extractor_key = "FALLBACK" if origin == "fallback" else f"{origin}:{model}"
+    extractor_key = f"FALLBACK:{fallback_extract.FALLBACK_VERSION}" if origin == "fallback" else f"{origin}:{model}"
     with db.transaction() as connection:
         source = connection.execute(
             "SELECT s.case_id,s.product_id,s.visibility,c.tenant_id,c.product_id AS case_product "
@@ -84,11 +92,8 @@ def extract_source_version(sv_id: str, ctx: RunContext) -> Extraction:
         proposed = fallback_extract.extract(sv_id, passages)
         extractor = "FALLBACK"
     else:
-        data = "\n".join(
-            f'<passage id="{escape(p.id, quote=True)}" locator="{escape(p.locator, quote=True)}" '
-            f'section="{escape(p.section or "", quote=True)}">{escape(p.text)}</passage>' for p in passages)
         result = client.parse(step="extract", model=model, instructions=INSTRUCTIONS,
-                              input_parts=[TextPart(f"source_version_id={escape(sv_id)}\n<SOURCE_DATA>\n{data}\n</SOURCE_DATA>")],
+                              input_parts=extraction_input(sv_id, passages),
                               schema=ClaimExtraction, ctx=ctx, prompt_version=PROMPT_VERSION)
         proposed = result.parsed
         extractor = "REPLAY" if result.replayed else result.model
