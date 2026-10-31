@@ -285,6 +285,8 @@ def infer_scope(source: Record, product: Record, *, market_rules: MarketRules | 
         if len(targets) != 1:
             return decision(ScopeMatch.UNKNOWN, "Case variant has no unambiguous size", True)
         if not compare.same_volume(sizes[0], targets[0]):
+            if source.get("kind") == SourceKind.WEB_PAGE and scope.get("identity_verified") is True:
+                return decision(ScopeMatch.UNKNOWN, "Identity-matched retailer size requires review", True)
             return decision(ScopeMatch.MISMATCH, "Page names another size")
         return decision(ScopeMatch.MATCH, "Page size matches case variant")
     return decision(ScopeMatch.MATCH, "Page applies at product level")

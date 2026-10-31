@@ -84,6 +84,28 @@ def test_no_cues_skips_model_and_injected_cues_are_excluded(context: RunContext,
     assert context.budget.model_calls == 0
 
 
+@pytest.mark.parametrize("text,subject", [
+    ("Alcohol-free, no soap, no dyes.", "Alcohol-free"),
+    ("No dyes; fragrance-free; without soap.", "fragrance-free"),
+    ("Không cồn, không xà phòng, không chất tạo màu.", "Không cồn"),
+    ("Không xà phòng, không màu, không cồn, độ pH trung tính.", "không cồn"),
+])
+def test_enumerated_absence_keeps_grounded_claim(text: str, subject: str) -> None:
+    proposals = claims_audit._seed_claims("passage", text)
+    assert len(proposals) == 1 and proposals[0].subject == subject
+    assert proposals[0].quote in text and claims_audit._supported(proposals[0], text)
+
+
+@pytest.mark.parametrize("text", ["Not alcohol-free, no soap.", "No alcohol-free claim, no dyes.",
+    "Không phải không cồn, không xà phòng.", "Not claimed, alcohol-free.",
+    "No claim is made, alcohol-free.", "Without any claim, alcohol-free.", "Không khẳng định, không cồn."])
+def test_enumeration_does_not_remove_outer_negation(text: str) -> None:
+    assert claims_audit._seed_claims("passage", text) == []
+    proposal = claims_audit.ClaimProposal(passage_id="passage", kind="free_from", subject="alcohol",
+                                         percent=None, quote="alcohol-free" if "alcohol-free" in text else "không cồn")
+    assert not claims_audit._supported(proposal, text)
+
+
 @pytest.mark.parametrize("text,kind,subject,quote,percent", [
     ("Does not contain 3% Niacinamide.", "concentration", "Niacinamide", "3% Niacinamide", 3.0),
     ("Không đặc trị.", "treatment", "đặc trị", "đặc trị", None),

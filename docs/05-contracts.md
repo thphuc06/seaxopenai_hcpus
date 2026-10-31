@@ -1,5 +1,10 @@
 # 05 — Contracts (code against these)
 
+S4 integration: web audit GET projects the six declared WebAuditResult fields
+from stored query-envelope decisions, omits internal outcome receipts, and retains
+legacy flat-list reads. No DTO/route/ACL change. Receipt `changed` includes
+checked_at; a recheck timestamp alone is distinct from a substantive field change.
+
 Paste this file into the first Codex task on contest day. Names here are binding; see [04-data-model.md](04-data-model.md) for enums.
 
 ## 1. Event envelope — `POST /internal/events`

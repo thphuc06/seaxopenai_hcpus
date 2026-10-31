@@ -1,5 +1,14 @@
 # 09 — Evaluation plan
 
+S4 gate decisions explicitly approved by the human: marketplace may abstain on all
+ambiguous captured pages. The checker still requires a completed scan, processed
+sellers, matching scan/finding counts, exact buyer/expert tally consistency and
+read-only GETs. Receipt checks compare full diff flags/values and frozen evidence;
+only the two identifier fields may change substantive content after revoke, while
+other fields may refresh checked_at. Negative variants retain collateral-change
+and fabricated-count rejection. Incremental gate reuses completed passing checks
+and reruns affected failures at the user's explicit request.
+
 ## Acceptance cases (each = one pytest test + one gold label file)
 
 | ID | Case | Origin | Expected | Test name |

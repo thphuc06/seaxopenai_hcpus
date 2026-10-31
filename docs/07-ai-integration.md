@@ -1,5 +1,10 @@
 # 07 — AI integration (OpenAI API + Agents SDK)
 
+S4 integration: a requested enabled story web path requires a nonempty recorded
+query-attempt list. A terminal preflight receipt alone adds WEB_NOT_EXECUTED while
+retaining its original stop reason. Executed queries returning no hits still count
+as attempted discovery. Stop reasons are deduplicated; no recording is overwritten.
+
 Checked against docs on 2026-10-24. **Pin versions on the day** after checking the docs — APIs move fast.
 
 Sources: [Agents SDK – tools](https://openai.github.io/openai-agents-python/tools/), [running agents](https://openai.github.io/openai-agents-python/running_agents/), [agents](https://openai.github.io/openai-agents-python/agents/), [usage](https://openai.github.io/openai-agents-python/usage/), [Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [Images & vision](https://developers.openai.com/api/docs/guides/images-vision), [Models](https://developers.openai.com/api/docs/models).
@@ -659,3 +664,146 @@ manifest remain in the auxiliary worktree backend/.venv/p2b3-retrieval-eval.md
 and p2b3-expected.json; P4 owns copying the report to docs/results. Fresh uploaded
 image transcription remains the open S2 limitation and is unrelated to this scope
 implementation. No provider record pass or completed S3 integration is claimed.
+
+### Phase 4 Web Scout — P2 Stage B, offline implementation
+
+`discover(ctx) -> WebOutcome(new_sv_ids, searches, stop_reason)` now implements
+the P2 discovery path. It requires stored case/tenant/product/run revision to
+match the server context and both WEB_SEARCH=on and product.web.enabled.
+Product identity and domain settings are read from storage, not model arguments.
+The default remains off. This supersedes the earlier Phase0 discovery-stub note;
+it does not establish the missing P1 run hook or a completed Sync4.
+
+Strict query and page proposals use agent:web_scout with web-queries-v1 and
+web-pages-v1. Hosted search uses the existing llm gateway transport, one
+web_search tool call, allowed domains, country and action.sources. URLs come only
+from that typed sources collection; citation titles may describe candidates,
+but generated answer text is never used as source evidence. Code checks brand,
+distinct queries, actual returned URLs and each separate evidence phrase.
+Empty candidate sets do not trigger another model call. Non-replay agent errors
+retain a stop reason and use labelled template/candidate fallback; replay misses
+remain errors. Optional Tavily and Manager paths are not implemented.
+
+Search/fetch use the same child and root Budget, WEB_MAX_SEARCHES/WEB_MAX_PAGES
+and the earliest deadline. Hosted searches consume a model call and a tool call;
+fetch consumes a tool call. Source text supplied to models is escaped inside
+SOURCE_DATA. Fallback never uses the default network providers. Tests replace
+only provider/HTTP/gateway seams. Transport recordings use web-transport-v1 under
+fixtures/replay/web and bind model/request/instructions/tools/schema/domain
+settings. Record reuses immutable existing entries; live never overwrites them;
+freeze/replay cannot fall through to the network. Replayed calls count against
+the Budget; replay makes no new token spend. Search token usage is recorded in
+the Budget, trace and recording. Query and page audit entries label replay hits.
+
+Code classifies candidates from URL hostname boundaries (never a provider's
+domain assertion), rejects comparison headings before alias slicing, and uses
+the single scripts.capture_page.clean_html implementation for HTML. The data file
+contains the source-noted query/domain/comparison/section vocabulary. An alias in
+cleaned text establishes identity. Missing identity sets identity_verified=false
+and confirm_only=true and uses WEB_PAGE even on an official host; it cannot gain
+BRAND_PAGE authority merely from its hostname. Retailers always use WEB_PAGE.
+Related sections are removed; stored passages have web#pN locators and at least
+30 characters. Extraction still rejects instruction-bearing claims. Every search
+result, including unselected/invalid results, has a class, decision and reason.
+
+Snapshots are REAL/PUBLIC, content-hashed through store.add_source_version;
+same URL/content/scope/kind does not create another version merely because its
+fetch timestamp changes. Same-run discovery returns its stored receipt without
+another request. Failed fetch/clean steps retain stop reasons and already stored
+evidence. This function does not extract, publish or decide a verdict. P1 must
+invoke it from the authorized pinned run, extract new_sv_ids, apply R4w/R7w/R9w,
+propagate stop_reason and publish through the normal gate. Buyer reads remain
+outside discovery.
+
+Integration limitations remain explicit: the current store API cannot atomically
+compare the expected case revision with its ingestion write; P2 rechecks before
+and after fetch and immediately before storage, but a cross-transaction race
+requires P1's revision-aware ingestion interface. HTTP rejects redirects,
+credentials, IP-literal hosts, nonpublic DNS answers, unsupported content types
+and oversized responses, with a hard caller deadline. DNS preflight does not pin
+HTTPX's subsequent resolution; DNS rebinding protection is not claimed. No paid
+provider/real page recording has been run for this implementation. The shared
+recording ledger below now reserves hosted-tool and HTTP attempts before execution.
+OCR remains unimplemented Should work; the evaluator15s timeout CCR stays open.
+
+API names checked against installed openai3.42.0, pydantic2.14.2 and httpx0.28.1,
+and the official [web search guide](https://developers.openai.com/api/docs/guides/tools-web-search),
+[Pydantic models](https://docs.pydantic.dev/latest/concepts/models/) and
+[HTTPX quickstart](https://www.python-httpx.org/quickstart/). Actual provider
+quality and complete event14 replay remain NOT VERIFIED.
+
+For the contract-4 web audit DTO, query rows store a kind=query object containing
+raw results and code decisions. P1 should project decisions to
+{url,domain,class,score,decision,reason}; score is null when not measured. Domain
+is derived from the checked URL. Terminal kind=outcome rows are internal
+idempotency receipts, not UI queries. Record-mode provider work is labelled LIVE
+in this projection; reused search/fetch/selection output is labelled REPLAY.
+The final P2 contract tests validate this projection against P1's actual DTO.
+
+### Phase 4 recording CLI — auxiliary integration
+
+The merged recording CLI retains the Phase2 positional snapshot, --events,
+--output-dir and --replay-only paths. Story mode uses --story (also the default
+when no snapshot/events are supplied), --storyboard, --dry-run, --mode,
+--max-calls, --max-usd, --replay-dir and --web on|off. Default mode only prints a plan;
+record execution requires --execute and separate human authorization. Explicit
+--mode replay or --mode fallback executes offline unless --dry-run is present.
+The session defaults are finite:30 network requests and USD2 reserved cost.
+Unknown prices, unbounded or unsupported tools and image charges are refused
+before a network request; these limits are not measured provider cost.
+
+The plan schedules storyboard action-cell events first, remaining numbered
+events second and materialized blind-set1 products last. Missing inputs and
+preflight blockers stay visible. Source JSON/PNG/JPG hashes and a plan fingerprint
+freeze the exact inputs; gold is not traversed. Execution copies a saved base
+database into a temporary database, preserving source/passage IDs for replay
+while leaving the application database unchanged. Record output directories
+must be new. Existing recording files are immutable and reused; saved replay
+also checks plan identity and compares stored result fields. A replay miss or
+partial run cannot become a completed recording receipt.
+
+Receipt status describes coverage, while run_status preserves the actual run
+lifecycle. Thus status=COMPLETED may accompany WAITING_REVIEW or WAITING_EVIDENCE;
+it does not assert a fully resolved product result. Errors, missing recordings,
+unexpected admission rejection or cap exhaustion remain in not_recorded with
+stop reasons. After a record cap/failure, later inputs run labelled FALLBACK.
+The report retains network_calls, reserved_usd, fallback and incomplete coverage.
+
+Web defaults off (WEB_DISABLED); --web on explicitly enables discovery and adds
+its provider/caps to the frozen plan identity. OCR remains off. One durable
+session ledger reserves every model request, a single bounded hosted search's
+tool fee plus search-context token allowance, and every direct HTTP GET attempt
+(zero model-provider fee). Failed attempts retain their reservations. Replay
+and fallback spend no network reservation; replay still counts against run Budget.
+Unknown tool shapes, nondefault hosted-search pricing and unlimited tool calls
+fail closed. Request identity is web-transport-v2; v1 recordings are not silently
+reused after this request change. A requested, web-enabled BOOTSTRAP without a
+discovery outcome is WEB_NOT_EXECUTED/PARTIAL; discovery stop reasons also make
+coverage incomplete. The CLI does not implement the missing P1 run hook.
+Even complete=true covers only enabled recording steps. An explicitly authorized
+paid pass and integrated P1 lifecycle are still required. Main's provider tests
+and auxiliary replay tests use generated test recordings and fake providers;
+they are not event14 or whole-story provider replay evidence.
+
+P2-4c is a separate diagnostic on app f6655f6: catalogue09 after01–08 scores3/5
+DRAFT fields with3 CODE placements,0 AGENT_VERIFIED anchors and2 CODE UNKNOWN
+without reviewer-dispatch evidence,0 model requests,1.933s wall/1.578s Budget.
+Single-call replay stops at prerequisite01 with REPLAY_MISS (1 Budget request,
+0 provider calls); catalogue09 has no replay score. Blind scope10 input is
+deferred, and Manager is not implemented. These measurements establish no agent
+accuracy or speed gain. Full tables, hashes and commands remain in the P2 ExecPlan.
+
+The current fallback scope trace reports FALLBACK_PENDING when the prepass still
+has pending observations and includes unresolved_placements. This corrects the
+old NO_PENDING diagnostic; it does not resolve UNKNOWN placements, dispatch a
+review, alter published policy or constitute a new catalogue measurement.
+
+P4's Phase4 extraction CCRs are addressed in P2: the source-noted notification
+header family now includes Số Giấy công bố; exact comma/semicolon clauses naming
+known adjunct absence subjects no longer negate an independent free-from claim.
+Unknown disclaimer clauses and outer negation remain checked. This changes
+claim extraction only; P1 policy still decides findings. Persisted extraction
+cache identities advance to fallback-v5-notification-header and
+coverage-v4-notification-header so previously cached omissions are reprocessed.
+Model prompt text and its replay identity are unchanged; changed coverage hints
+already participate in the retry request key. Old cache/recording rows are retained.

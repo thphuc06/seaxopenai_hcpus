@@ -1,0 +1,7 @@
+{
+  "_about": "Discovery vocabulary from docs/DATASET-SPEC.md section 6, reviewed 2026-10-31. Domains are candidate source classes, not product identity or evidence. Query templates are the labelled code fallback; source text remains untrusted.",
+  "query_templates": ["{brand} {name} {variant}", "{brand} {name} skin type", "{brand} {name} ingredients", "{brand} {name} volume"],
+  "retailer_domains": ["nhathuoclongchau.com.vn", "pharmacity.vn", "hasaki.vn", "guardian.com.vn", "watsons.vn", "picare.vn"],
+  "comparison_terms": ["so sánh", "vs", "top"],
+  "section_end_markers": ["sản phẩm liên quan", "có thể bạn cũng thích", "có thể bạn sẽ thích", "xem thêm", "đánh giá từ người mua", "hỏi đáp", "you may also like"]
+}

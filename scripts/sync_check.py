@@ -556,8 +556,11 @@ def check_receipt(client: httpx.Client, counts: Callable[[], dict[str, int]],
     require(after.hash_valid and after.changed_since_purchase, "receipt hash/diff invalid after revoke")
     require(stored(receipt.id) == original_row, "stored purchase evidence was rewritten")
     require(len(after.diff) == len(PUBLIC_FIELDS) and {row.field_key for row in after.diff} == set(PUBLIC_FIELDS), "receipt diff omits/duplicates fields")
-    require({row.field_key for row in after.diff if row.changed} == {"notification_number", "responsible_company"},
-            "receipt must change only the two dependent fields")
+    require(all(row.changed == (row.then != row.now) for row in after.diff), "receipt change flags disagree with full field diff")
+    require({row.field_key for row in after.diff
+             if (row.then.model_dump(exclude={"checked_at"}) if row.then else None) !=
+                (row.now.model_dump(exclude={"checked_at"}) if row.now else None)} ==
+            {"notification_number", "responsible_company"}, "receipt must change only the two dependent fields' content")
     original_fields = {row.field_key: row for row in purchased.fields}
     current_fields = {row.field_key: row for row in current.fields}
     require(all(row.then == original_fields[row.field_key] and row.now == current_fields[row.field_key]

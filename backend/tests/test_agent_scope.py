@@ -86,6 +86,17 @@ def test_single_call_valid_yes_and_no_cache_and_root_budget(context: RunContext,
     assert all(o.passage_id in wire and o.quote in wire for o in obs)
 
 
+@pytest.mark.parametrize("size", ["37 ml", "64 g"])
+def test_fallback_pending_trace_does_not_claim_no_pending(context: RunContext, size: str) -> None:
+    obs = catalogue(context, ["Container " + size, "Dry skin", "Container 89 ml"], variant=size)
+    result = agent.resolve_all(context, obs, ["skin_type"])
+    with db.transaction() as connection:
+        detail = json.loads(connection.execute("SELECT detail FROM trace_steps WHERE step='agent:stop'").fetchone()[0])
+    assert detail["stop_reason"] == "FALLBACK_PENDING" and detail["unresolved_placements"] == 1
+    assert result.stop_reason is None and context.budget.model_calls == 0
+    assert result.decisions[1].scope_match == "UNKNOWN"
+
+
 @pytest.mark.parametrize("kind", ["wrong_size", "other_section", "intervening", "later", "missing", "foreign"])
 def test_invalid_anchor_never_code_verified(context: RunContext, monkeypatch: pytest.MonkeyPatch, kind: str) -> None:
     obs = catalogue(context, ["Bottle 37 ml", "Bottle 89 ml", "Dry skin", "Bottle 37 ml"],

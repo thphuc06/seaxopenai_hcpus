@@ -1,5 +1,10 @@
 # 06 — Policy rules (`policy-v1`)
 
+S4 integration repair: `policy-v2.1` retains an identity-matched WEB_PAGE with a
+single inferred size disagreement as UNKNOWN for code review, rather than dropping
+it before extraction. Explicit product/variant/market mismatches still exclude it.
+R9w removes disagreeing retailer support and requires review without seller blame.
+
 Implemented in `pipeline/policy.py`. Pure functions: `(claims, scope, sources, gaps, reviews) -> FieldResult`. No model calls. Bump `POLICY_VERSION` on any change and note it in [tracking/DECISIONS.md](tracking/DECISIONS.md).
 
 ## Ordered rules (per field)

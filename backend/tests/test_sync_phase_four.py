@@ -29,7 +29,9 @@ class Story:
             run_status="COMPLETED", disclaimer="Evidence only", fields=[dict(field_key=key,
                 label="Not verified" if revoked and key in {"notification_number", "responsible_company"} else "Single source",
                 public_text="Stored evidence", verdict="INSUFFICIENT" if revoked and key in {"notification_number", "responsible_company"} else "SINGLE_SOURCE",
-                freshness="CURRENT", conflict_locus=None, review_state="AUTO_DRAFT", checked_at=None, citations=[]) for key in PUBLIC_FIELDS])
+                freshness="CURRENT", conflict_locus=None, review_state="AUTO_DRAFT",
+                checked_at="2026-10-31T04:00:00Z" if revoked and self.fault == "time-only" else None,
+                citations=[]) for key in PUBLIC_FIELDS])
 
     def count(self) -> dict[str, int]:
         return {"writes": self.writes}
@@ -173,6 +175,16 @@ def test_marketplace_allows_explicit_unavailable_field_without_invented_evidence
     story = Story("fallback", "empty-unobserved")
     with httpx.Client(transport=httpx.MockTransport(story.handle), base_url="http://test") as client:
         check_marketplace(client, story.count, story.product, story.case, "another-bootstrap", "fallback")
+    assert story.writes == 0
+
+
+@pytest.mark.parametrize("mode", ["fallback", "replay"])
+@pytest.mark.parametrize("product", ["time-159", "time-233"])
+def test_receipt_allows_recheck_timestamps_while_verifying_substantive_diff(mode: str, product: str) -> None:
+    story = Story(mode, "time-only", product)
+    with httpx.Client(transport=httpx.MockTransport(story.handle), base_url="http://test") as client:
+        check_receipt(client, story.count, product, story.case, mode, story.stored)
+    assert all(row["changed"] for row in story.receipt()["diff"])
     assert story.writes == 0
 
 

@@ -1,5 +1,6 @@
 {
-  "_about": "Seed extraction cues from docs/DATASET-SPEC.md section 6 and P2-2, created 2026-10-31. They classify quoted listing wording only; P1 policy decides findings. Ingredient families remain in vocab_seed.json. English/Vietnamese variants are extraction vocabulary, not product-specific rules.",
+  "_about": "Seed extraction cues from docs/DATASET-SPEC.md section 6 and P2-2, created 2026-10-31. They classify quoted listing wording only; P1 policy decides findings. Ingredient families remain in vocab_seed.json. English/Vietnamese variants are extraction vocabulary, not product-specific rules. Adjunct absence subjects transcribe soap/color wording in P4 Phase4 fd4c771's captured listing description#p29 plus English synthetic variants. They only isolate complete comma/semicolon list clauses; they add no published claim family or ingredient mapping.",
+  "adjunct_absence_subjects": ["soap", "dyes", "colorants", "xà phòng", "màu", "chất tạo màu"],
   "free_from": {
     "alcohol": ["không chứa cồn", "không cồn", "alcohol-free", "alcohol free", "free from alcohol", "free of alcohol", "no alcohol"],
     "fragrance": ["không hương liệu", "không chứa hương liệu", "fragrance-free", "fragrance free", "free from fragrance", "no fragrance"],

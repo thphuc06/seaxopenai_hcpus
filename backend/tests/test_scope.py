@@ -87,6 +87,24 @@ def test_page_size_uses_normalization_and_shared_tolerance(text: str, variant: s
     assert infer_scope(page(text), product(variant)).scope_match == expected
 
 
+@pytest.mark.parametrize("variant,other", [("137 ml", "212 ml"), ("72 g", "19 g")])
+@pytest.mark.parametrize("kind,identity,market,expected", [
+    ("WEB_PAGE", True, "VN", ScopeMatch.UNKNOWN),
+    ("WEB_PAGE", False, "VN", ScopeMatch.MISMATCH),
+    ("BRAND_PAGE", True, "VN", ScopeMatch.MISMATCH),
+    ("WEB_PAGE", True, "FR", ScopeMatch.MISMATCH),
+])
+def test_identity_matched_retailer_size_keeps_review_without_overriding_market(
+    variant: str, other: str, kind: str, identity: bool, market: str, expected: ScopeMatch,
+) -> None:
+    source = page(f"Capacity: {other}.")
+    source["kind"] = kind
+    source["scope"] = {"identity_verified": identity, "market": market}
+    result = infer_scope(source, product(variant))
+    assert result.scope_match == expected
+    assert result.needs_scope_resolution == (expected == ScopeMatch.UNKNOWN)
+
+
 @pytest.mark.parametrize("sizes", list(permutations(("240 ml", "242 ml", "244 ml"))))
 def test_size_inference_does_not_depend_on_passage_order(sizes: tuple[str, ...]) -> None:
     # The middle size matches both extremes within tolerance, but the extremes
