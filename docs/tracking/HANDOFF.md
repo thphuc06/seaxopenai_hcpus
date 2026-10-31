@@ -1,5 +1,40 @@
 # Integration handoff
 
+## contract-3
+
+Phase-2 contract gate PASSED at 13:42 ICT (T+3:42), 31 Oct 2026. PHASE stays 2;
+this is the Phase-3 interface checkpoint, not completion of Phase 3. Merge
+contract-3 into each lane. No WAITING failure, omitted previous-sync lane or scope cut.
+
+- P4: CONTRACT_NO_CHANGE. Existing p4 HEAD30627cb was pushed before integration.
+  User-directed Stage-B WIP (79 files, including blind/B1/demo) is excluded from
+  this tag and preserved in local stash b2cd705 for restoration on p4.
+- P1: contract cb9f05f accepted via6c3e661. Six typed GET contracts cover explain,
+  observability, chain, graph, search and OTel. Authorized calls still return501
+  until Stage B; role/query validation and read-only behavior have46 new tests.
+  Buyer/expert explanation shapes are distinct; actual filtering and data delivery
+  remain implementation work. docs05 As-built describes the schemas and ACL.
+- P2: documentation checkpoint e8eb571 accepted via6e73f1f; scope/retrieval Python
+  signatures unchanged. Scope pre-pass, agent validation and retrieval remain S3
+  implementation work. Open indexing-context CCR requires run Budget/trace/db
+  binding before paid embedding; documented BM25-only fallback remains available.
+- P3: prior S2 delivery already belongs to main; no delayed S2 lane to merge.
+  Generate clients against the new schemas; no frontend file changed in this gate.
+
+Fresh baseline/post checks: P1 1044→1090 passed, P2 1090→1090 passed; every run
+has14 existing future-phase skips,2 passing subtests and0 failed/errors/deselected.
+JUnit node comparisons found0 missing/regressed previously passing nodes for each
+merge. Final combined phase2 pytest1090 pass; separate guards4/4; fixtures53/53;
+in-process fallback sync_check2 26/26. No frontend build required for unchanged
+frontend. Local JUnit receipts: .git/contract-3-{pre,post}-{p1,p2}.xml.
+
+No policy version, shared Python signature, environment variable, assertion, gold
+label or phase control changed. S3 functional completion, provider replay, browser
+click path and human gold review are NOT VERIFIED by this checkpoint. Preserve
+the existing R3 projection and fresh-image/canon follow-ups from sync-2. Stage-B
+work resumes separately; Phase3 ends14:15 ICT. Full command receipt:
+docs/results/contract-3-gate.md.
+
 ## sync-2
 
 Final phase-2 gate PASSED at 13:09 ICT (T+3:09): 1059 passed, 14 skipped,
