@@ -2,6 +2,7 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+| 12:49–13:09 ICT | P4 | sync-gate 2, authorized integration fixes, three read-only reviews | lane merges; scope/trace/vocab/cache; 10 regression variants; PHASE/HANDOFF/eval/tracking | edited | user explicitly requested fixing failures then pushing tag; assertions and gold retained | focused99; phase1 1029 pass/43 skip/+2 subtests; phase2 1059 pass/14 skip/+2 subtests; guards4/fixtures53/sync26/Node51/build pass; no current-phase failures |
 | 12:05 ICT (T+2:05) | P4 | local merge p4-b2 e6ef732 | auxiliary captures/tests/gold/docs; preserved Local and auxiliary plans; tracking | accepted | exact SHA requested; local commit only; retain DRAFT and all work; defer CCR fixes | focused 167 pass; phase1 776 pass/1 WAITING fail/43 skip/+2 subtests; phase2 acceptance 23 pass/20 WAITING fail/14 skip; fixtures 53/53; sync1 17/17; no prior passing-node regression |
 | 12:01 ICT (T+2:01) | P4 | Phase 2 Stage B: B0/eval/S2 harness and three read-only reviews | baseline.py; eval.py; sync_check.py; two P4 test modules; results/specs/ExecPlan | edited | user verified contract-2 and authorized continuation; preserve DRAFT; no sync-gate | focused 110 passed; phase1 747 passed/44 skipped/+2 subtests; phase2 757 passed/16 owner-WAITING failed/18 skipped/+2 subtests; guards pass; fixtures 37/37; 0 errors/deselected |
 | 11:44–11:51 ICT | P4 | sync-gate 2 contract + three read-only reviews | P4 plan, tracking, P1/P2 scoped merges | accepted | explicit early mini-sync; Stage B separate | final phase1 679 passed/44 skipped/+2 subtests; 0 failed/errors/deselected; guards 4; fixtures 37; sync1 17; no regression |
@@ -89,6 +90,19 @@ five DRAFT expected field labels before any pipeline execution. Validator: 9 fil
   Python 3.11 and made the setup script check compatibility explicitly.
 
 ## Execution context
+
+### S2 notable loop — integrated source interpretation (13:09 ICT)
+
+Failing tests: AC-01 key_ingredients and the Vietnamese gift-volume scope trace;
+separate SQLite diagnostic published an adverse claim from MISMATCH evidence.
+First divergences: inconsistent family normalization, filtered quantities losing
+trace, and inherited rather than per-passage scope. Ten new generic cases failed
+before correction. Fixes reuse existing classifiers, source-note two family names,
+invalidate caches and pin each audit placement to its source version. New test
+publication setup initially omitted its run revision; corrected setup, no assertion
+edit. Focused99 and final1059 pass; variants cover unrelated sizes, case/order,
+unknown ingredient and UNKNOWN/AGENT placements. Human decision: explicit fix
+and publish instruction in this chat. Tag sync-2=c7b413d; no gold changed.
 
 One Local chat, no subagents and no model API calls for this task. The P4-0c worktree
 is a separate task; this log does not claim it ran.
