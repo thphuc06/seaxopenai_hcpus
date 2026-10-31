@@ -1,0 +1,6 @@
+[
+  { "name": "01-bootstrap-demo", "event_id": "preview-bootstrap", "idempotency_key": "preview-bootstrap", "outcome": "ADMITTED", "reason": "Preview comparison completed with sample source passages.", "stale_fields": [] },
+  { "name": "02-price-change", "event_id": "preview-price", "idempotency_key": "preview-price", "outcome": "NOOP", "reason": "No checked product field changed.", "stale_fields": [] },
+  { "name": "03-duplicate-price-change", "event_id": "preview-price-repeat", "idempotency_key": "preview-price", "outcome": "NOOP", "reason": "No checked product field changed.", "stale_fields": [] },
+  { "name": "08-rejected-producer", "event_id": "preview-rejected", "idempotency_key": "preview-rejected", "outcome": "REJECTED", "reason": "This preview event producer is not permitted.", "stale_fields": [] }
+]

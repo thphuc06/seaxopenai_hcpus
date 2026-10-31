@@ -48,7 +48,7 @@ export function App({ api, role, onRoleChange, useMock, sessionError }: AppProps
       {products.error && <ErrorNotice error={products.error} technical={role === 'OPERATOR' || role === 'REVIEWER'} />}
       <Routes>
         <Route path="/" element={<Operator api={api} role={role} buyerPath={buyerPath} />} />
-        <Route path="/buyer/:productId" element={<BuyerPassport key={`${location.pathname}:${role}`} api={api} products={products.data ?? []} />} />
+        <Route path="/buyer/:productId" element={<BuyerPassport key={`${location.pathname}:${role}`} api={api} products={products.data ?? []} role={role} />} />
         <Route path="/reviewer" element={<Reviewer />} />
         <Route path="/observe" element={<Observe />} />
         <Route path="/orders/:orderId" element={<Receipt />} />

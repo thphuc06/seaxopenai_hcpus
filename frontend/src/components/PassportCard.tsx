@@ -1,5 +1,5 @@
 import { FIELD_KEYS, FIELD_TITLES } from '../labels.ts';
-import type { PassportView } from '../types.ts';
+import type { FieldKey, PassportView, PassportViewField, RunStatus } from '../types.ts';
 import { StatusBadge } from './StatusBadge.tsx';
 
 export function formatTime(value: string | null): string {
@@ -9,7 +9,27 @@ export function formatTime(value: string | null): string {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }).format(date) + ' ICT';
 }
 
-export function PassportCard({ passport }: { passport: PassportView }) {
+export function FieldRow({ fieldKey, field, runStatus, index, onEvidence }: {
+  fieldKey: FieldKey; field: PassportViewField; runStatus: RunStatus | null; index: number; onEvidence?: (key: FieldKey) => void;
+}) {
+  return <article className="field-row" data-testid={`field-row-${fieldKey}`}>
+    <span className="field-index" aria-hidden="true">0{index + 1}</span>
+    <div className="field-content">
+      <div className="field-heading"><h3>{FIELD_TITLES[fieldKey]}</h3><StatusBadge field={field} runStatus={runStatus} /></div>
+      <p className="field-description">{field.public_text}</p>
+      <div className="field-footer">
+        <span className="field-time">{formatTime(field.checked_at)}</span>
+        <div className="field-actions">
+          <button type="button" className="text-button" data-testid={`evidence-open-${fieldKey}`} disabled={!onEvidence} onClick={() => onEvidence?.(fieldKey)}>View evidence <span aria-hidden="true">↗</span></button>
+          <button type="button" className="text-button why-button" data-testid={`why-open-${fieldKey}`} disabled title="Explanation view is coming in a later phase">Why?</button>
+        </div>
+      </div>
+      {(field.hidden_citations ?? 0) > 0 && <p className="private-note">+{field.hidden_citations} private {field.hidden_citations === 1 ? 'document' : 'documents'} (reviewers only)</p>}
+    </div>
+  </article>;
+}
+
+export function PassportCard({ passport, onEvidence }: { passport: PassportView; onEvidence?: (key: FieldKey) => void }) {
   return <section className="passport-card" aria-labelledby="passport-title">
     <header className="passport-heading">
       <div className="passport-heading-top"><span className="eyebrow">A closer look at the listing</span><span className="passport-mark" aria-hidden="true">P<span>↗</span></span></div>
@@ -21,27 +41,14 @@ export function PassportCard({ passport }: { passport: PassportView }) {
         <span>Checked {formatTime(passport.last_checked_at)}</span>
       </div>
     </header>
+    {passport.run_status === 'FAILED' && <div className="update-notice" role="status"><strong>Could not update</strong><p>This says nothing about the product.</p></div>}
     <div className="field-list">
       {FIELD_KEYS.map((key, index) => {
         const field = passport.fields.find((item) => item.field_key === key) ?? {
           field_key: key, label: '', public_text: 'No comparison is available yet.', verdict: null,
           conflict_locus: null, freshness: 'UNKNOWN', review_state: 'AUTO_DRAFT', checked_at: null, citations: [],
         };
-        return <article className="field-row" key={key} data-testid={`field-row-${key}`}>
-          <span className="field-index" aria-hidden="true">0{index + 1}</span>
-          <div className="field-content">
-            <div className="field-heading"><h3>{FIELD_TITLES[key]}</h3><StatusBadge field={field} runStatus={passport.run_status} /></div>
-            <p className="field-description">{field.public_text}</p>
-            <div className="field-footer">
-              <span className="field-time">{formatTime(field.checked_at)}</span>
-              <div className="field-actions">
-                <button type="button" className="text-button" data-testid={`evidence-open-${key}`} disabled title="Evidence view is coming in the next phase">View evidence <span aria-hidden="true">↗</span></button>
-                <button type="button" className="text-button why-button" data-testid={`why-open-${key}`} disabled title="Explanation view is coming in a later phase">Why?</button>
-              </div>
-            </div>
-            {(field.hidden_citations ?? 0) > 0 && <p className="private-note">+{field.hidden_citations} private {field.hidden_citations === 1 ? 'document' : 'documents'} (reviewers only)</p>}
-          </div>
-        </article>;
+        return <FieldRow key={key} fieldKey={key} field={field} runStatus={passport.run_status} index={index} onEvidence={onEvidence} />;
       })}
     </div>
     <footer className="passport-footnote"><span aria-hidden="true">ⓘ</span><p>{passport.disclaimer}</p></footer>
