@@ -35,3 +35,20 @@ Node >=24; this host's bundled 24.22.1 passes, system 22.15.1 fails TypeScript l
 Use a process-local PATH selection; no global upgrade or dependency pin change.
 S1 collection DTOs and live mode/hidden-count metadata remain P1/P4's CCR from P3.
 No scope cut at S0; retain all current tests and DRAFT gold awaiting human review.
+
+## D007 — P4 Stage B support and test boundaries (11:08 ICT)
+The authorized CI/Render branch is merged into p4 with both ExecPlan sections
+preserved. No deployment or paid persistence is created. Admission data lives in
+config.PRODUCER_EVENT_TYPES and config.NON_MATERIAL_FIELDS (docs05 section 1);
+P1 continues role checks. Storage is now required at app startup, since S0 merged it.
+The sync CLI supports the S1 path in fallback/replay only, uses a temporary DB,
+checks observed run mode/status, and rejects unimplemented later-phase paths.
+Phase remains 0 until the separate S1 gate.
+
+All AC-01…20 test targets and concrete extended contract targets are authored.
+Optional AC-31 vocabulary lifecycle and AC-33 web-image OCR targets await their
+Phase-2/4 payload/provider contracts; no existing test or retained feature was cut.
+AC-18 API asserts run failure/no invented findings; existing field label precedence
+is preserved. P1/P3 must add the run-level update-failure notice or agree a later
+precedence change. Record/replay tests restore the same pre-run source IDs; stable
+identity across demo reset remains a P1/P2 CCR before stage recordings.

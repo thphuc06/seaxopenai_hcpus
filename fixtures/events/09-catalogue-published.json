@@ -1,0 +1,23 @@
+{
+  "event_id": "DEMO-EVT-09",
+  "idempotency_key": "demo:s1:event:09",
+  "type": "SOURCE_CHANGED",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "SOURCE",
+    "id": "DEMO-SRC-S1-CATALOGUE",
+    "version": 2
+  },
+  "changed_fields": [
+    "skin_type"
+  ],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1",
+    "snapshot": "synthetic/s1-gentle-cleanser/catalogue.v2.json"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Catalogue nhiều dung tích: code tách các dòng có cỡ; agent cần neo dòng không ghi cỡ vào tiêu đề 50 ml để bổ sung bằng chứng loại da."
+}

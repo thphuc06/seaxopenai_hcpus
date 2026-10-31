@@ -1,0 +1,27 @@
+{
+  "source_id": "DEMO-SRC-S2-PACKAGING",
+  "kind": "PACKAGING_IMAGE",
+  "product_id": "DEMO-PROD-S2",
+  "version": 1,
+  "uri": "demo://s2/packaging",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "packaging:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S2",
+    "variant": "236ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S2-PACKAGING-V1-01",
+      "locator": "image:full",
+      "section": "label",
+      "text": "LUMIVY LAB — Hydra Cream Cleanser\nDung tích: 236 ml.\nIngredients: Aqua, Glycerin, Cocamidopropyl Betaine, Ceramide NP, Phenoxyethanol.\nSố công bố: DEMO-CBMP-00088.\nChịu trách nhiệm: công ty tnhh lumivy demo.\nSYNTHETIC — nhãn minh họa cho sản phẩm hư cấu."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

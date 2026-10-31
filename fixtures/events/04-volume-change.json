@@ -1,0 +1,24 @@
+{
+  "event_id": "DEMO-EVT-04",
+  "idempotency_key": "demo:s1:event:04",
+  "type": "LISTING_CHANGED",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "LISTING",
+    "id": "DEMO-LISTING-S1",
+    "version": 3
+  },
+  "changed_fields": [
+    "title",
+    "volume"
+  ],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1",
+    "snapshot": "synthetic/s1-gentle-cleanser/listing.v3.json"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Listing đổi thành 75 ml trong khi nhãn vẫn 50 ml; dung tích có khác biệt giữa listing và nguồn, cần người duyệt."
+}

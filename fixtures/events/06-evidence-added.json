@@ -1,0 +1,24 @@
+{
+  "event_id": "DEMO-EVT-06",
+  "idempotency_key": "demo:s1:event:06",
+  "type": "EVIDENCE_ADDED",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "SOURCE",
+    "id": "DEMO-SRC-S1-UPLOAD-NOTIFICATION",
+    "version": 2
+  },
+  "changed_fields": [
+    "notification_number",
+    "responsible_company"
+  ],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1",
+    "snapshot": "synthetic/s1-gentle-cleanser/seller_notification.v2.json"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Hồ sơ người bán bổ sung ghi 00077 cùng công ty: công ty khớp trở lại, số công bố khác listing và cần người duyệt."
+}

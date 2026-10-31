@@ -2,29 +2,19 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from importlib import import_module
-from importlib.util import find_spec
-import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app import config
+from app import config, db, seed
 from app.models import ContractModel
 from app.pipeline.policy import POLICY_VERSION
-
-logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    # S0 only: remove the missing-module guard at S1 after P1 is merged.
-    if find_spec("app.db") is None or find_spec("app.seed") is None:
-        logger.info("storage not merged yet")
-    else:
-        db = import_module("app.db")
-        seed = import_module("app.seed")
-        db.init_db()
-        seed.seed_if_empty()
+    db.init_db()
+    seed.seed_if_empty()
     yield
 
 

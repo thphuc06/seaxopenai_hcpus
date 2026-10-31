@@ -1,0 +1,59 @@
+{
+  "source_id": "DEMO-SRC-S1-LISTING",
+  "kind": "LISTING",
+  "product_id": "DEMO-PROD-S1",
+  "version": 3,
+  "uri": "demo://s1/listing",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "seller:demo-shop",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "50ml",
+    "market": "VN",
+    "version": "3"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-LISTING-V3-01",
+      "locator": "title",
+      "section": "overview",
+      "text": "Sữa rửa mặt Gentle Niacinamide Cleanser — chai 75 ml"
+    },
+    {
+      "id": "DEMO-PSG-S1-LISTING-V3-02",
+      "locator": "specs#volume",
+      "section": "specifications",
+      "text": "Dung tích niêm yết: 75 ml."
+    },
+    {
+      "id": "DEMO-PSG-S1-LISTING-V3-03",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Loại da được mô tả trên gian hàng: mọi loại da."
+    },
+    {
+      "id": "DEMO-PSG-S1-LISTING-V3-04",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Thành phần nổi bật được giới thiệu: Niacinamide và Hyaluronic Acid."
+    },
+    {
+      "id": "DEMO-PSG-S1-LISTING-V3-05",
+      "locator": "specs#notification",
+      "section": "specifications",
+      "text": "Số công bố trong bộ dữ liệu minh họa: DEMO-CBMP-00042."
+    },
+    {
+      "id": "DEMO-PSG-S1-LISTING-V3-06",
+      "locator": "specs#company",
+      "section": "specifications",
+      "text": "Đơn vị chịu trách nhiệm: Công ty TNHH Lumivy Demo."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi.",
+  "price_vnd": 119000,
+  "shop_name": "Gian hàng minh họa Lumivy"
+}

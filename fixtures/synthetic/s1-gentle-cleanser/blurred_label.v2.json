@@ -1,0 +1,28 @@
+{
+  "source_id": "DEMO-SRC-S1-BLURRED-LABEL",
+  "kind": "PACKAGING_IMAGE",
+  "product_id": "DEMO-PROD-S1",
+  "version": 2,
+  "uri": "demo://s1/blurred-label",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "packaging:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "50ml",
+    "market": "VN",
+    "version": "2"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-BLURRED-LABEL-V2-01",
+      "locator": "image:full",
+      "section": "label",
+      "text": ""
+    }
+  ],
+  "note": "SYNTHETIC — ảnh nhãn được làm mờ mạnh có chủ ý; không có chữ đọc được. Event 10 thêm ảnh, không thu hồi nhãn cũ. AC-12 riêng cần một case không có bằng chứng đọc được khác.",
+  "submitted_by": "SELLER"
+}

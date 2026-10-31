@@ -1,0 +1,17 @@
+{
+  "product_id": "DEMO-PROD-S3",
+  "name": "Daily Sun Fluid SPF50",
+  "brand": "Lumivy Lab (fictional)",
+  "variant": "40ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "DEMO-CASE-S3",
+  "tenant_id": "demo-tenant",
+  "listing_id": "DEMO-LISTING-S3",
+  "web": {
+    "enabled": false,
+    "brand_domains": [],
+    "aliases": []
+  },
+  "note": "SYNTHETIC — sản phẩm hư cấu, dữ liệu theo DATASET-SPEC §4."
+}

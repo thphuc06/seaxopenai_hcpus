@@ -1,0 +1,24 @@
+# Exclude local credentials and generated state from all image stages.
+.git
+.github
+.codex
+.agent
+_outside-repo
+docs
+**/.env
+**/.env.*
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/*.pyc
+**/*.db
+**/*.db-wal
+**/*.db-shm
+**/*.db-journal
+frontend/dist
+fixtures/gold
+fixtures/blind
+fixtures/uploads
+scripts/demo
+test-results

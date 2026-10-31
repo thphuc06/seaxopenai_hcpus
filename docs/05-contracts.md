@@ -28,6 +28,14 @@ Admission rules (code, in order):
 4. Find dependent results → mark STALE (for `SOURCE_CHANGED`, `SOURCE_REVOKED`, material `LISTING_CHANGED`).
 5. Bump `case.revision`; enqueue one job per case (coalesce: if a job for the same case is QUEUED, update its target revision instead of adding another).
 
+S1 admission configuration (P4): `app.config.PRODUCER_EVENT_TYPES` is immutable
+server-side data: `publisher-panel` may submit the declared event types;
+`seller-portal` may submit `EVIDENCE_ADDED` only. An unknown producer or a type
+outside its set is rejected. `app.config.NON_MATERIAL_FIELDS` is the immutable
+`{price, stock, promo}` set. P1 consumes these constants and independently checks
+the authenticated role; the producer string never grants a role. New producers
+require an explicit config/spec change, not discovery from model or event data.
+
 ## 2. REST API
 
 All paths below are served under the `/api` prefix (e.g. `GET /api/products/{id}/passport`). Phase 1 also adds `GET /products`, `GET /internal/events/catalog`, `POST /internal/demo/fire/{name}` (submit a fixture event), `GET /internal/events/log` and `GET /internal/runs`.

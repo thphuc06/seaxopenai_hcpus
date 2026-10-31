@@ -5,15 +5,25 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field, fields
+from collections.abc import Mapping
 from pathlib import Path
+from types import MappingProxyType
 from typing import Literal, cast
 
 from dotenv import dotenv_values
 from pydantic import JsonValue
+from app.models import EventType
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 ENV_FILE = BACKEND_DIR / ".env"
 LLMMode = Literal["fallback", "replay", "record", "live"]
+
+# Closed admission data, docs/05 section 1; request role checks remain in P1.
+PRODUCER_EVENT_TYPES: Mapping[str, frozenset[EventType]] = MappingProxyType({
+    "publisher-panel": frozenset(EventType),
+    "seller-portal": frozenset({EventType.EVIDENCE_ADDED}),
+})
+NON_MATERIAL_FIELDS = frozenset({"price", "stock", "promo"})
 
 
 @dataclass

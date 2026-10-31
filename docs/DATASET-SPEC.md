@@ -208,3 +208,44 @@ per-field evidence/rationale, written before any pipeline run. Human review is p
 | 2 | P2-2 | `regulatory_limits.json` |
 | 3 | P4-3 | blind set(s) (§5) |
 | 4 | P4-4 / P2-4 | R5 marketplace pages; `web_search.json` |
+
+### P4-1c delivery (31 Oct, auxiliary branch)
+
+S2–S4 now live in `synthetic/s2-hydra-cleanser`, `synthetic/s3-sun-fluid` and
+`synthetic/s4-clear-serum`; the mock registry is `synthetic/registry/mock_registry.json`.
+Events 01–13 are present. Every packaging snapshot has a sibling 1280×720 PNG.
+S0 JSON snapshots and the first gold checkpoint are preserved unchanged.
+
+S1 event-only snapshots use `.v2.json` (notification revocation, uploaded notification,
+catalogue, blurred photo); listing edits use `.v3.json` and `.v4.json`.
+This keeps them out of the existing loader's `*.v1.json` bootstrap selection.
+The seller-uploaded document is `NOTIFICATION_DOC`, PRIVATE, family
+`upload:seller:demo-shop`: seller provenance does not change the document evidence kind.
+All operator fixture events retain the allowlisted `publisher-panel` producer;
+the upload snapshot records `submitted_by: SELLER` as provenance, not an ACL grant.
+
+Gold has 13 DRAFT checkpoints in explicit `event_order` (01–13), with stored excerpts.
+This numeric order differs from the phase-2 click path 01→05→06→04:
+revocation preserves the volume result immediately before it in either ordering.
+The catalogue checkpoint records fallback and code-verified agent-anchor variants.
+Sun Fluid's registry result requires the Phase 3 lookup and a stored `REGISTRY_RECORD`;
+without it both identifier fields remain INSUFFICIENT. Claim concentration expectations
+depend on the sourced regulatory-limit data specified in §6; no limit is introduced by
+this dataset task. Human review is pending; these are not candidate-derived labels.
+
+Event 10 is additive: a new unreadable image source cannot erase the original readable
+label. The separate AC-12 setup in gold requires an isolated case with only that
+unreadable source; do not seed S1's readable sources into that case.
+
+Regenerate readable images from the repository root (PowerShell):
+
+```powershell
+$labels = @(Get-ChildItem fixtures/synthetic -Recurse -Filter packaging_label.v1.json | ForEach-Object { $_.FullName })
+backend/.venv/Scripts/python scripts/make_label_images.py @labels
+backend/.venv/Scripts/python scripts/make_label_images.py fixtures/synthetic/s1-gentle-cleanser/blurred_label.v2.json --blur --blur-source fixtures/synthetic/s1-gentle-cleanser/packaging_label.v1.png
+backend/.venv/Scripts/python scripts/check_fixtures.py
+```
+
+The renderer requires a Unicode TrueType font (Windows Arial or Linux DejaVu Sans;
+override with `--font`). It refuses real sources, readable transcripts in blur mode,
+and text that would overflow the canvas. Readable JSON transcripts are never changed.
