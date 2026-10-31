@@ -2,6 +2,11 @@
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
+| S4 runtime behind contract-4 | P1/P2 | WAITING implementation integration | Receipt/marketplace/web audit are501; five retained phase4 acceptance targets and actual sync4 cannot pass until owner workflows land. P4 checker is implemented; no gate claimed. |
+| R3 captured notification header | P2 | New Phase4 CCR | Source-scoped fallback reads company but omits notification_number at listing specs#25. Add source-noted header-family mapping with unrelated-number tests; preserve missing-document abstention and DRAFT labels. See p4-phase4-readiness report. |
+| R4 enumerated free-from negation | P2 | New Phase4 CCR | Outer-negation check rejects an entire list because unrecognized soap/color negations remain after known phrases are stripped. Add independent-clause positive/negative variants; do not change gold or let model decide verdict. |
+| P4 recording selector/E2E handoff | P3 | Pending S4 delivery | review-reason/review-decision absent; S4 web/receipt controls and e2e.py absent in contract-4. Storyboard records exact pending scene dependencies. |
+| R5 review-section contamination | P4 | Corrected capture-v2 | Mint v1 preserved in docs/results/capture-archive; new v2 excludes reviews by general DOM rule. Three REAL peers retained; multi-size/formula scope still requires owner validation. |
 | S3 validated anchor evidence in stored trace | P4/P2 | Closed sync-3 | Adapter consumes actual accepted target/anchor refs and validates current code run, placement version and unique stored anchor. Raw proposals cannot pass; provider whole-story replay remains separate. |
 | S3 owner integration | P1/P2/P3/P4 | Closed sync-3 | All lanes integrated, unchanged catalogue/anchor acceptance passes, actual fallback sync3 29/29. MULTI contract repair is policy-v1.8. |
 | Pre-S3 persistent result history | P1 / demo operator | Rollout limitation | Existing unchained results require explicitly authorized reset or a designed migration before new publications. Gate used only temporary DBs; no user state reset. |

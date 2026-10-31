@@ -1,0 +1,233 @@
+{
+  "source_id": "REAL-PROD-R1-listing-e13e06b174d7",
+  "kind": "LISTING",
+  "product_id": "REAL-PROD-R1",
+  "version": 2,
+  "uri": "https://mint07.com/shop/skin-care-san-pham-duong-da/lam-sach-da/sua-rua-mat-cleansers/sua-rua-mat-cerave-hydrating-cleanser-normal-dry/",
+  "requested_uri": "https://mint07.com/shop/skin-care-san-pham-duong-da/lam-sach-da/sua-rua-mat-cleansers/sua-rua-mat-cerave-hydrating-cleanser-normal-dry/",
+  "captured_at": "2026-10-31T08:28:20.717053+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "seller:mint07.com",
+  "raw_sha256": "059e8b712996236b5f1ebf9f859610565900bd33b7cd8a7fdfd3affe70d20507",
+  "cleaned_sha256": "0401f33260b65f578f0cbcf49ff30fc5048534710fa8402e9c5295167fa18f6f",
+  "cleaner_version": "html-parser-v2",
+  "passages": [
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser, Normal to Dry"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "5.00 trên 5 dựa trên 4 đánh giá"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "Sữa rửa mặt CeraVe Hydrating Cleanser là sữa rửa mặt được phát triển bởi các bác sĩ da liễu tại Mỹ, và được các bác sĩ khuyên dùng hằng ngày vì độ dịu nhẹ cũng như khả năng làm sạch da lý tưởng cho da thường đến da khô, kể cả da nhạy cảm nhất. Sản phẩm được bình chọn là sữa rửa mặt bán chạy nhất trên Amazon, đạt nhiều giải thưởng top 1 tại các tạp chí làm đẹp."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Đã bán 1910"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "Khoảng giá: từ 49,000 ₫ đến 408,000 ₫"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p006",
+      "locator": "description#p5",
+      "section": "description",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser, Normal to Dry"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p007",
+      "locator": "description#p6",
+      "section": "description",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser hàng xách tay chính hãng từ US. Đảm bảo 100% về nguồn gốc và chất lượng từng sản phẩm đến tay khách hàng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p008",
+      "locator": "description#p7",
+      "section": "description",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser là sữa rửa mặt được phát triển bởi các bác sĩ da liễu tại Mỹ. Và được các bác sĩ khuyên dùng hằng ngày vì độ dịu nhẹ cũng như khả năng làm sạch da lý tưởng cho da thường đến da khô, kể cả da nhạy cảm nhất. Cerave Hydrating Cleanser được bình chọn là sữa rửa mặt bán chạy nhất trên Amazon. Đạt nhiều giải thưởng top 1 tại các tạp chí làm đẹp."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p009",
+      "locator": "description#p8",
+      "section": "description",
+      "text": "Với pH ở mức tốt ~ 5.5, CeraVe Hydrating Cleanser nhẹ nhàng lấy đi bụi bẩn, dầu thừa, tàn dư của lớp make up mà không làm tổn hại đến lớp màng ẩm của da. Các chức năng bảo vệ tự nhiên của da được phục hồi và duy trì, vì thế hạn chế được tình trạng vi khuẩn xâm nhập vào da, tránh tình trạng gây mụn và kích ứng, da sạch nhưng vẫn mềm, mịn, không hề có cảm giác căng rát như khi sử dụng các loại sữa rửa mặt có độ pH cao."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p010",
+      "locator": "description#p9",
+      "section": "description",
+      "text": "Loại da: da thường đến da khô, rất khô"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p011",
+      "locator": "description#p10",
+      "section": "description",
+      "text": "Tình trạng da phù hợp"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p012",
+      "locator": "description#p11",
+      "section": "description",
+      "text": "Da nhạy cảm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p013",
+      "locator": "description#p12",
+      "section": "description",
+      "text": "Da mụn"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p014",
+      "locator": "description#p13",
+      "section": "description",
+      "text": "Da dễ kích ứng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p015",
+      "locator": "description#p14",
+      "section": "description",
+      "text": "Thành phần chính nổi bật"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p016",
+      "locator": "description#p15",
+      "section": "description",
+      "text": "Công nghệ MVE Delivery Technology độc quyền của hãng cung cấp cho da chất dưỡng ổn định khi tìm được hoạt chất Ceramides đồng nhất với da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p017",
+      "locator": "description#p16",
+      "section": "description",
+      "text": "Ceramides 1, 3, 6-II giúp phục hồi lại lớp màng bảo vệ da tự nhiên, đồng thời củng cố độ khỏe của làn da. Từ đó làn da bạn sẽ giảm thiểu được việc kích ứng, mẩn đỏ sau khi rửa mặt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p018",
+      "locator": "description#p17",
+      "section": "description",
+      "text": "Hyaluronic Acid cung cấp độ ẩm cần thiết cho da, đưa da trở vể trạng thái cân bằng độ ẩm và lượng dầu tự nhiên của da. Bạn sẽ cảm nhận được sự mềm ẩm, mịn màng ngay sau khi rửa mặt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p019",
+      "locator": "description#p18",
+      "section": "description",
+      "text": "Công thức không chứa hương liệu, không gây ứng và không gây nổi mụn."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p020",
+      "locator": "description#p19",
+      "section": "description",
+      "text": "Kết cấu sản phẩm: Sản phẩm có kết cấu dạng kem lỏng, màu trắng đục. Sữa rửa mặt không chứa xà phòng vì thế khả năng tạo bọt ít, bù lại mang đến độ ẩm mướt trên da sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p021",
+      "locator": "usage#1",
+      "section": "usage",
+      "text": "Hướng dẫn sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p022",
+      "locator": "usage#2",
+      "section": "usage",
+      "text": "Lấy một lượng sữa rửa mặt ra tay, tạo bọt nhẹ nhàng và mát-xa lên da theo hướng từ trên xuống dưới. Rửa mặt lại thật kĩ với nước sạch"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p023",
+      "locator": "usage#3",
+      "section": "usage",
+      "text": "Bảo quản: nơi khô ráo, thoáng mát và đóng kĩ nắp sản phẩm sau khi sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p024",
+      "locator": "usage#4",
+      "section": "usage",
+      "text": "Quy cách đóng gói: 87ml – 355ml – 473ml"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p025",
+      "locator": "usage#5",
+      "section": "usage",
+      "text": "Thương hiệu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p026",
+      "locator": "usage#6",
+      "section": "usage",
+      "text": "CeraVe là hãng dược mỹ phẩm được các bác sĩ da liễu chuyên khoa khuyên dùng. CeraVe ra đời từ năm 2005 nhưng đã mang lại nhiều tiếng vang lớn nhờ phát triển công nghệ phức hợp Ceramides cho chuỗi các sản phẩm của hãng. Hiện nay, CeraVe tiếp tục nâng tầm sở hữu lên tới 90 sản phẩm từ sữa rửa mặt, dưỡng ẩm mặt, chăm sóc cơ thể, tinh chất, kem chống nắng và các sản phẩm cho em bé. Hãng cam kết rằng luôn hướng tới những sản phẩm an toàn. Và có tác dụng dưới chuyên môn của các bác sĩ da liễu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p027",
+      "locator": "usage#7",
+      "section": "usage",
+      "text": "Xuất xứ: Mỹ"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p028",
+      "locator": "usage#8",
+      "section": "usage",
+      "text": "Mời bạn inbox với Mint qua Fanpage https://www.facebook.com/mint07.myphamxachtay/ để được đội ngũ tư vấn viên tư vấn sản phẩm phù hợp nhất cho mình nhé"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p029",
+      "locator": "usage#9",
+      "section": "usage",
+      "text": "Mint Cosmetics – hệ thống cửa hàng mỹ phẩm uy tín với Slogan “Save The Best For You”. Cam kết chỉ bán hàng chính hãng. Đồng hành thân thiết cùng các cô gái trên hành trình làm đẹp của mình"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p030",
+      "locator": "usage#10",
+      "section": "usage",
+      "text": "Hotline: 0982.576.363 hoặc 0911.118.356"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p031",
+      "locator": "usage#11",
+      "section": "usage",
+      "text": "SKU: Không áp dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p032",
+      "locator": "usage#12",
+      "section": "usage",
+      "text": "Danh mục: Sữa Rửa Mặt"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p033",
+      "locator": "usage#13",
+      "section": "usage",
+      "text": "Thẻ: 1 chú routine không thể lành tính hơn, sữa rửa mặt cho da hỗn hợp, sữa rửa mặt cho da khô, sữa rửa mặt cho da nhạy cảm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p034",
+      "locator": "usage#14",
+      "section": "usage",
+      "text": "Thương hiệu: Cerave"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p035",
+      "locator": "usage#15",
+      "section": "usage",
+      "text": "Size"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v2-p036",
+      "locator": "usage#16",
+      "section": "usage",
+      "text": "20ml, 88ml, 236ml, 355ml, 473ml"
+    }
+  ]
+}

@@ -267,7 +267,13 @@ full story's blurred upload must not erase earlier readable evidence. Phase 3 no
 extends the path with catalogue pre-pass, registry scenario and role-filtered
 explain reads; replay also requires a recorded anchor/effect and registry closure.
 Missing owner behavior fails the check; it does not create a passing Sync. Phase 4
-remains unsupported. `scripts/eval.py` is documented in docs09;
+adds captured real cases14–17, a separate fresh receipt-before-revoke database,
+immutable receipt/diff/read-only checks, marketplace projections/cluster tallies,
+and expert web-audit reads. WEB_SEARCH stays off: the audit read is explicitly not
+discovery evidence; retained provider-seam acceptance tests cover web discovery.
+Missing S4 implementations return FAIL on501, never PASS. P4 owns
+backend/tests/test_sync_phase_four.py and test_codex_stats.py for these helpers.
+`scripts/eval.py` is documented in docs09;
 its labelled replay-to-fallback diagnostic behavior does not apply to sync_check,
 which requires the requested mode throughout and never converts a replay miss to PASS.
 

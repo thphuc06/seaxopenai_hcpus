@@ -1,0 +1,485 @@
+{
+  "source_id": "REAL-PROD-R1-listing-e13e06b174d7",
+  "kind": "LISTING",
+  "product_id": "REAL-PROD-R1",
+  "version": 1,
+  "uri": "https://mint07.com/shop/skin-care-san-pham-duong-da/lam-sach-da/sua-rua-mat-cleansers/sua-rua-mat-cerave-hydrating-cleanser-normal-dry/",
+  "requested_uri": "https://mint07.com/shop/skin-care-san-pham-duong-da/lam-sach-da/sua-rua-mat-cleansers/sua-rua-mat-cerave-hydrating-cleanser-normal-dry/",
+  "captured_at": "2026-10-31T08:10:25.366236+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "seller:mint07.com",
+  "raw_sha256": "14b8b75fbbeaf104863369fc55803c6c3920a049f693e23e45ec9289819abe07",
+  "cleaned_sha256": "b90c9e2c74990400e548176236ec3e2ce03fced79dda0a9867024cfed30eac90",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser, Normal to Dry"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "5.00 trên 5 dựa trên 4 đánh giá"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "(4 đánh giá của khách hàng)"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Sữa rửa mặt CeraVe Hydrating Cleanser là sữa rửa mặt được phát triển bởi các bác sĩ da liễu tại Mỹ, và được các bác sĩ khuyên dùng hằng ngày vì độ dịu nhẹ cũng như khả năng làm sạch da lý tưởng cho da thường đến da khô, kể cả da nhạy cảm nhất. Sản phẩm được bình chọn là sữa rửa mặt bán chạy nhất trên Amazon, đạt nhiều giải thưởng top 1 tại các tạp chí làm đẹp."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "Đã bán 1910"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p006",
+      "locator": "description#p5",
+      "section": "description",
+      "text": "Khoảng giá: từ 49,000 ₫ đến 408,000 ₫"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p007",
+      "locator": "description#p6",
+      "section": "description",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser, Normal to Dry"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p008",
+      "locator": "description#p7",
+      "section": "description",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser hàng xách tay chính hãng từ US. Đảm bảo 100% về nguồn gốc và chất lượng từng sản phẩm đến tay khách hàng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p009",
+      "locator": "description#p8",
+      "section": "description",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Cleanser là sữa rửa mặt được phát triển bởi các bác sĩ da liễu tại Mỹ. Và được các bác sĩ khuyên dùng hằng ngày vì độ dịu nhẹ cũng như khả năng làm sạch da lý tưởng cho da thường đến da khô, kể cả da nhạy cảm nhất. Cerave Hydrating Cleanser được bình chọn là sữa rửa mặt bán chạy nhất trên Amazon. Đạt nhiều giải thưởng top 1 tại các tạp chí làm đẹp."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p010",
+      "locator": "description#p9",
+      "section": "description",
+      "text": "Với pH ở mức tốt ~ 5.5, CeraVe Hydrating Cleanser nhẹ nhàng lấy đi bụi bẩn, dầu thừa, tàn dư của lớp make up mà không làm tổn hại đến lớp màng ẩm của da. Các chức năng bảo vệ tự nhiên của da được phục hồi và duy trì, vì thế hạn chế được tình trạng vi khuẩn xâm nhập vào da, tránh tình trạng gây mụn và kích ứng, da sạch nhưng vẫn mềm, mịn, không hề có cảm giác căng rát như khi sử dụng các loại sữa rửa mặt có độ pH cao."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p011",
+      "locator": "description#p10",
+      "section": "description",
+      "text": "Loại da: da thường đến da khô, rất khô"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p012",
+      "locator": "description#p11",
+      "section": "description",
+      "text": "Tình trạng da phù hợp"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p013",
+      "locator": "description#p12",
+      "section": "description",
+      "text": "Da nhạy cảm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p014",
+      "locator": "description#p13",
+      "section": "description",
+      "text": "Da mụn"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p015",
+      "locator": "description#p14",
+      "section": "description",
+      "text": "Da dễ kích ứng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p016",
+      "locator": "description#p15",
+      "section": "description",
+      "text": "Thành phần chính nổi bật"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p017",
+      "locator": "description#p16",
+      "section": "description",
+      "text": "Công nghệ MVE Delivery Technology độc quyền của hãng cung cấp cho da chất dưỡng ổn định khi tìm được hoạt chất Ceramides đồng nhất với da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p018",
+      "locator": "description#p17",
+      "section": "description",
+      "text": "Ceramides 1, 3, 6-II giúp phục hồi lại lớp màng bảo vệ da tự nhiên, đồng thời củng cố độ khỏe của làn da. Từ đó làn da bạn sẽ giảm thiểu được việc kích ứng, mẩn đỏ sau khi rửa mặt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p019",
+      "locator": "description#p18",
+      "section": "description",
+      "text": "Hyaluronic Acid cung cấp độ ẩm cần thiết cho da, đưa da trở vể trạng thái cân bằng độ ẩm và lượng dầu tự nhiên của da. Bạn sẽ cảm nhận được sự mềm ẩm, mịn màng ngay sau khi rửa mặt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p020",
+      "locator": "description#p19",
+      "section": "description",
+      "text": "Công thức không chứa hương liệu, không gây ứng và không gây nổi mụn."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p021",
+      "locator": "description#p20",
+      "section": "description",
+      "text": "Kết cấu sản phẩm: Sản phẩm có kết cấu dạng kem lỏng, màu trắng đục. Sữa rửa mặt không chứa xà phòng vì thế khả năng tạo bọt ít, bù lại mang đến độ ẩm mướt trên da sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p022",
+      "locator": "usage#1",
+      "section": "usage",
+      "text": "Hướng dẫn sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p023",
+      "locator": "usage#2",
+      "section": "usage",
+      "text": "Lấy một lượng sữa rửa mặt ra tay, tạo bọt nhẹ nhàng và mát-xa lên da theo hướng từ trên xuống dưới. Rửa mặt lại thật kĩ với nước sạch"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p024",
+      "locator": "usage#3",
+      "section": "usage",
+      "text": "Bảo quản: nơi khô ráo, thoáng mát và đóng kĩ nắp sản phẩm sau khi sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p025",
+      "locator": "usage#4",
+      "section": "usage",
+      "text": "Quy cách đóng gói: 87ml – 355ml – 473ml"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p026",
+      "locator": "usage#5",
+      "section": "usage",
+      "text": "Thương hiệu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p027",
+      "locator": "usage#6",
+      "section": "usage",
+      "text": "CeraVe là hãng dược mỹ phẩm được các bác sĩ da liễu chuyên khoa khuyên dùng. CeraVe ra đời từ năm 2005 nhưng đã mang lại nhiều tiếng vang lớn nhờ phát triển công nghệ phức hợp Ceramides cho chuỗi các sản phẩm của hãng. Hiện nay, CeraVe tiếp tục nâng tầm sở hữu lên tới 90 sản phẩm từ sữa rửa mặt, dưỡng ẩm mặt, chăm sóc cơ thể, tinh chất, kem chống nắng và các sản phẩm cho em bé. Hãng cam kết rằng luôn hướng tới những sản phẩm an toàn. Và có tác dụng dưới chuyên môn của các bác sĩ da liễu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p028",
+      "locator": "usage#7",
+      "section": "usage",
+      "text": "Xuất xứ: Mỹ"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p029",
+      "locator": "usage#8",
+      "section": "usage",
+      "text": "Mời bạn inbox với Mint qua Fanpage https://www.facebook.com/mint07.myphamxachtay/ để được đội ngũ tư vấn viên tư vấn sản phẩm phù hợp nhất cho mình nhé"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p030",
+      "locator": "usage#9",
+      "section": "usage",
+      "text": "Mint Cosmetics – hệ thống cửa hàng mỹ phẩm uy tín với Slogan “Save The Best For You”. Cam kết chỉ bán hàng chính hãng. Đồng hành thân thiết cùng các cô gái trên hành trình làm đẹp của mình"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p031",
+      "locator": "usage#10",
+      "section": "usage",
+      "text": "Hotline: 0982.576.363 hoặc 0911.118.356"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p032",
+      "locator": "usage#11",
+      "section": "usage",
+      "text": "SKU: Không áp dụng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p033",
+      "locator": "usage#12",
+      "section": "usage",
+      "text": "Danh mục: Sữa Rửa Mặt"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p034",
+      "locator": "usage#13",
+      "section": "usage",
+      "text": "Thẻ: 1 chú routine không thể lành tính hơn, sữa rửa mặt cho da hỗn hợp, sữa rửa mặt cho da khô, sữa rửa mặt cho da nhạy cảm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p035",
+      "locator": "usage#14",
+      "section": "usage",
+      "text": "Thương hiệu: Cerave"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p036",
+      "locator": "usage#15",
+      "section": "usage",
+      "text": "Size"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p037",
+      "locator": "usage#16",
+      "section": "usage",
+      "text": "20ml, 88ml, 236ml, 355ml, 473ml"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p038",
+      "locator": "usage#17",
+      "section": "usage",
+      "text": "Based on 4 reviews"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p039",
+      "locator": "usage#18",
+      "section": "usage",
+      "text": "5.0 overall"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p040",
+      "locator": "usage#19",
+      "section": "usage",
+      "text": "4"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p041",
+      "locator": "usage#20",
+      "section": "usage",
+      "text": "0"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p042",
+      "locator": "usage#21",
+      "section": "usage",
+      "text": "Only logged in customers who have purchased this product may leave a review."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p043",
+      "locator": "usage#22",
+      "section": "usage",
+      "text": "Được xếp hạng 5 5 sao"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p044",
+      "locator": "usage#23",
+      "section": "usage",
+      "text": "ha"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p045",
+      "locator": "usage#24",
+      "section": "usage",
+      "text": "(xác minh chủ tài khoản) – 04/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p046",
+      "locator": "usage#25",
+      "section": "usage",
+      "text": "Sữa rửa mặt này da mình nhạy cảm vẫn dùng được rất ổn nha"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p047",
+      "locator": "usage#26",
+      "section": "usage",
+      "text": "ha – 04/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p048",
+      "locator": "usage#27",
+      "section": "usage",
+      "text": "Mint Cosmetics"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p049",
+      "locator": "usage#28",
+      "section": "usage",
+      "text": "– 04/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p050",
+      "locator": "usage#29",
+      "section": "usage",
+      "text": "Dạ bạn ơi nếu có bất kì thắc mắc gì về sản phẩm bạn liên lạc với mint nha :*"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p051",
+      "locator": "usage#30",
+      "section": "usage",
+      "text": "Mint Cosmetics – 04/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p052",
+      "locator": "usage#31",
+      "section": "usage",
+      "text": "Được xếp hạng 5 5 sao"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p053",
+      "locator": "usage#32",
+      "section": "usage",
+      "text": "huyền"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p054",
+      "locator": "usage#33",
+      "section": "usage",
+      "text": "(xác minh chủ tài khoản) – 08/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p055",
+      "locator": "usage#34",
+      "section": "usage",
+      "text": "Làm sạch sâu nhưng không khô da"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p056",
+      "locator": "usage#35",
+      "section": "usage",
+      "text": "huyền – 08/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p057",
+      "locator": "usage#36",
+      "section": "usage",
+      "text": "Mint Cosmetics"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p058",
+      "locator": "usage#37",
+      "section": "usage",
+      "text": "– 08/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p059",
+      "locator": "usage#38",
+      "section": "usage",
+      "text": "Dạ Mint cảm ơn bạn, mong rằng bạn tiếp tục ủng Mint trong tương lai nha :*"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p060",
+      "locator": "usage#39",
+      "section": "usage",
+      "text": "Mint Cosmetics – 08/12/2021"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p061",
+      "locator": "usage#40",
+      "section": "usage",
+      "text": "Được xếp hạng 5 5 sao"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p062",
+      "locator": "usage#41",
+      "section": "usage",
+      "text": "tuyết an"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p063",
+      "locator": "usage#42",
+      "section": "usage",
+      "text": "(xác minh chủ tài khoản) – 13/02/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p064",
+      "locator": "usage#43",
+      "section": "usage",
+      "text": "da đâu dung e này dịu nhẹ, k khô da"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p065",
+      "locator": "usage#44",
+      "section": "usage",
+      "text": "tuyết an – 13/02/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p066",
+      "locator": "usage#45",
+      "section": "usage",
+      "text": "Mint Cosmetics"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p067",
+      "locator": "usage#46",
+      "section": "usage",
+      "text": "– 13/02/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p068",
+      "locator": "usage#47",
+      "section": "usage",
+      "text": "Dạ Mint cảm ơn bạn, mong rằng bạn tiếp tục ủng hộ Mint trong tương lai nha :*"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p069",
+      "locator": "usage#48",
+      "section": "usage",
+      "text": "Mint Cosmetics – 13/02/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p070",
+      "locator": "usage#49",
+      "section": "usage",
+      "text": "Được xếp hạng 5 5 sao"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p071",
+      "locator": "usage#50",
+      "section": "usage",
+      "text": "ngọc cúc"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p072",
+      "locator": "usage#51",
+      "section": "usage",
+      "text": "(xác minh chủ tài khoản) – 17/05/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p073",
+      "locator": "usage#52",
+      "section": "usage",
+      "text": "da mình khô dùng ok lắm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p074",
+      "locator": "usage#53",
+      "section": "usage",
+      "text": "ngọc cúc – 17/05/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p075",
+      "locator": "usage#54",
+      "section": "usage",
+      "text": "Mint Cosmetics"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p076",
+      "locator": "usage#55",
+      "section": "usage",
+      "text": "– 17/05/2022"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p077",
+      "locator": "usage#56",
+      "section": "usage",
+      "text": "Dạ Mint cảm ơn những chia sẻ của bạn ạ :*"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-e13e06b174d7-v1-p078",
+      "locator": "usage#57",
+      "section": "usage",
+      "text": "Mint Cosmetics – 17/05/2022"
+    }
+  ]
+}
