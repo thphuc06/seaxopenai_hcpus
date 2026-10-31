@@ -1,0 +1,20 @@
+{
+  "event_id": "REAL-EVT-15",
+  "idempotency_key": "real:REAL-PROD-R2:bootstrap:v1",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "CASE",
+    "id": "REAL-CASE-R2",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "REAL-CASE-R2",
+    "product_id": "REAL-PROD-R2"
+  },
+  "occurred_at": "2026-10-31T04:43:00Z",
+  "correlation_id": "REAL-STORY-REAL-PROD-R2",
+  "expect": "Đối chiếu cách diễn đạt về loại da; phân biệt chai chính với quà tặng."
+}

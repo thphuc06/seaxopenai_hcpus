@@ -1,0 +1,20 @@
+{
+  "event_id": "REAL-EVT-14",
+  "idempotency_key": "real:REAL-PROD-R1:bootstrap:v1",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "CASE",
+    "id": "REAL-CASE-R1",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "REAL-CASE-R1",
+    "product_id": "REAL-PROD-R1"
+  },
+  "occurred_at": "2026-10-31T04:43:00Z",
+  "correlation_id": "REAL-STORY-REAL-PROD-R1",
+  "expect": "Đối chiếu các đoạn nguồn về loại da và thành phần; chuyển điểm bất nhất cho người duyệt."
+}

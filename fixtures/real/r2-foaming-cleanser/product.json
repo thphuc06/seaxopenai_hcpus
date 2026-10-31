@@ -1,0 +1,23 @@
+{
+  "product_id": "REAL-PROD-R2",
+  "name": "CeraVe Foaming Facial Cleanser",
+  "brand": "CeraVe",
+  "variant": "236ml",
+  "market": "VN",
+  "dataset_origin": "REAL",
+  "case_id": "REAL-CASE-R2",
+  "tenant_id": "demo-tenant",
+  "listing_id": "REAL-LISTING-R2",
+  "web": {
+    "enabled": true,
+    "brand_domains": [
+      "cerave.com.vn"
+    ],
+    "aliases": [
+      "Foaming",
+      "sữa rửa mặt dành cho da dầu",
+      "Sữa rửa mặt dành cho da thường – da dầu"
+    ]
+  },
+  "note": "Captured public product pages; expected answers require human review."
+}

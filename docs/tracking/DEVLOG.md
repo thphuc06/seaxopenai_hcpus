@@ -1,5 +1,84 @@
 # Development log — 31 Oct 2026
 
+## Local integration of p4-b2 (12:05 ICT, T+2:05)
+
+User authorized exact local merge e6ef7320f8b0195466e24afd744572cd98e69c92 into p4.
+Saved current B0/eval work first as 55492b3d0baceb03a3f7c0ffe6620ba1ea933789.
+Only conflict was additive ExecPlan content; retained both sections verbatim and
+the complete shared history. Added eight REAL captures, four products/events,
+capture helper/tests and DRAFT real/blind review tables. Incoming content is
+unchanged from its branch; synthetic gold and Local implementation are unchanged.
+
+Focused offline checks: 167 passed, guards included. Fixtures 53/53, S1 path17/17.
+Phase1 combined: 776 passed, 1 failed, 43 skipped, 2 passing subtests. The failure
+is previously skipped AC-01, now UNCERTAIN due missing REAL scope inference.
+Phase2 acceptance: 23 passed, 20 failed, 14 skipped; sixteen existing owner failures
+plus four formerly skipped REAL nodes now fail on scope. Zero errors/deselections.
+JUnit comparison retained every previously passing node in both comparisons.
+
+Commit the requested local merge with these known owner dependencies recorded;
+this is not a passing full S2 gate. Carry scope, R3 ingredient/concentration and
+HTML cleaner CCRs without resolving them here. All gold remains DRAFT. No push,
+tag, sync-gate, server, live call, new capture or Phase3 implementation.
+
+## P4 Phase 2 Stage B — local implementation (12:00 ICT, T+2:00)
+
+User authorized continuation after verifying contract-2/2811f3b was already in clean
+p4/f6955ce. Delivered pure B0, isolated offline eval with separate DRAFT/REVIEWED
+metrics, immutable timestamped reports, and S2 operational path. No sync-gate,
+cross-lane BUILD merge, commit/push, model provider call or gold change in this task.
+Existing PHASE remains 1. P4-2b real capture/blind drafting remains separate.
+
+Owned tests and original evaluator smoke: 110 passed, zero failed/skipped/deselected.
+Final phase-1 regression: 747 passed, 44 skipped, 2 subtests; zero failures/errors/
+deselections. Three read-only reviewers rechecked the fixes with no remaining P4
+blocker. Fixture validator: 37/37. Final phase-2 suite: 757 passed, 16 owner-WAITING
+failures, 18 skipped, 2 subtests passed, zero errors/deselections. Full S2 acceptance
+still awaits P1/P2 BUILD; the exact ledger is retained in P4 ExecPlan, without test changes.
+
+Report: docs/results/eval-latest.md and .json, all 13 checkpoints, raw DRAFT B0
+16/65 versus candidate 51/65; false-blame 2/57 versus 0/57, reviewed 0/0. Scores include
+literal preconditions, including a future registry path, and are not S2 success.
+Unexpected rejected events 06/09/10 are marked errors; eval exits 1. S2 sync path
+passes all 17 S1 steps then fails revoke re-assessment. Replay diagnostic hits
+REPLAY_MISS, retains that attempt and clearly restarts fallback; full replay remains
+unverified. See docs09 for baseline shared-extraction and scoring limitations.
+
+## contract-2 — published 11:49:48 ICT (T+1:49)
+
+Explicit early mini-sync; main and contract-2 remote SHA verified as 2811f3b.
+PHASE remains 1. All contract lanes included; no WAITING failure, regression,
+omitted lane or cut. S2 remains unfinished. Tagged HANDOFF contains the receipt.
+
+- P4: Done — saved prior Stage-A plans, pushed f8808e3, ran ordered gates and
+  published handoff. Blocked — none for this checkpoint. Surprise — Windows
+  switch briefly failed to unlink P4.md; verified the file exactly matched
+  committed contract-2, restored only that file to p4 HEAD and retried the
+  fast-forward successfully. No work discarded. Decision — retain PHASE=1 and
+  DRAFT gold. Next — B0/eval and S2 sync path on separate continuation.
+- P1: Done — c1d7a5a adds four typed S2 route stubs, role gates and 39 contract
+  cases; docs05 carries payloads. No S1 gate failure. Next — Stage B lifecycle,
+  reviews/evidence and carried budget/reset CCRs.
+- P2: Done — 15bcca4 records unchanged shared contracts; no application delta.
+  Decision — preserve Budget/parse/extract/audit signatures. Next — Stage B
+  vision/retry/claims and P1 reset identity coordination.
+- P3: existing S1 work retained; no contract merge or frontend change required.
+  Next — consume generated S2 DTOs from contract-2.
+
+Checks: phase1 P4 baseline/post 640/640; P1 640/679; P2 679/679 passed.
+Every run: 44 skipped, 2 passing subtests, 0 failed/errors/deselected. Per-node
+JUnit comparison shows no lost/regressed pass. Final guards 4, fixtures 37,
+sync path 17 all passed. Skips: 43 future-phase nodes plus AC-01 real R2 pending
+P4-2b. No new build required. Final cleanup warnings: 23, Windows WinError 145.
+
+Three read-only reviewers found no introduced rules/contracts/overfitting blocker.
+Preserved prior user waiver of separate /review; review-base points to sync-1
+locally. UI remains human-run via Actions. CCR P4→P1: reconcile stored
+evidence_requests CLOSED with history DTO OPEN/FULFILLED before implementing
+history; do not blindly serialize closed rows. This is a Stage-B integration
+note, not a failing behavior of intentional 501 stubs.
+NOT VERIFIED: S2 completion, browser path, full-story replay, human gold approval.
+
 ## sync-1 — 11:33:58 ICT (T+1:33), complete for S1 scope
 
 Published main and sync-1 at be91b3bd0051568d4795801b438409326ac51dc3;

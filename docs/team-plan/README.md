@@ -196,6 +196,8 @@ until P2 smoke selects them; absent price data means `price unknown`. `GET /api/
 P4 also owns `backend/tests/test_skeleton.py` for these startup/config/schema contracts.
 P4 owns `backend/tests/test_fixtures.py` for the dataset validator and source/gold integrity checks.
 P4 owns `backend/tests/test_operations.py` for its seed/reset/sync CLI boundaries.
+P4 owns `backend/tests/test_evaluation.py` and `test_sync_phase_two.py` for B0,
+offline reports and S2 operational harness boundaries.
 Admission configuration is `config.PRODUCER_EVENT_TYPES` and `config.NON_MATERIAL_FIELDS`
 (immutable server-side constants, docs05 §1); P1 retains role/type authorization.
 Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
@@ -243,8 +245,16 @@ the operator API; it never starts a server. `--base-url` overrides localhost:800
 `backend/.venv/Scripts/python scripts/sync_check.py 1 --mode fallback` runs the S1
 path in-process in a temporary DB and reports PASS/FAIL. `--mode replay` requires
 the stored run to report REPLAY; misses/failures cannot pass. Mode defaults to
-LLM_MODE, then fallback; record/live are rejected before app startup. Phases 2–4
-must extend the path in their phases; requesting one early exits with an error.
+LLM_MODE, then fallback; record/live are rejected before app startup. Phase 2 now
+extends S1 with revoke, evidence fulfillment, volume/review/409, injection, blurred
+upload preserving prior support, source conflict and expert-claim filtering.
+Its API implementation dependencies must be merged before the real path passes;
+HTTP 501 or a wrong outcome is FAIL. Missing required fixtures are SKIP/incomplete.
+The isolated unreadable-only clearer-photo case remains in acceptance tests; the
+full story's blurred upload must not erase earlier readable evidence. Phases 3–4
+remain unsupported until implemented. `scripts/eval.py` is documented in docs09;
+its labelled replay-to-fallback diagnostic behavior does not apply to sync_check,
+which requires the requested mode throughout and never converts a replay miss to PASS.
 
 ## 8. Luật cắt scope (quyết ngay tại Sync, không tranh luận)
 

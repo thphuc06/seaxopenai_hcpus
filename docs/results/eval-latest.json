@@ -1,0 +1,1232 @@
+{
+  "generated_at": "2026-10-31T04:58:17.456645+00:00",
+  "requested_mode": "fallback",
+  "mode": "fallback",
+  "fallback_reason": null,
+  "baseline_version": "b0-v1",
+  "gold_status": "DRAFT",
+  "labelled_by": "draft:codex",
+  "gold_sha256": "d071ab0d0c0ffb6985d1fd75f50459d09043c362d0503876c963c131d28e3871",
+  "models": [
+    "FALLBACK"
+  ],
+  "prompt_versions": [
+    "extract-v1"
+  ],
+  "policy_versions": [
+    "policy-v1.1"
+  ],
+  "checkpoints": [
+    {
+      "event": "01-bootstrap-demo",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": null,
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 202.9999999995198
+      },
+      "run_ids": [
+        "run_ba358eb04e1a4cff8fa00a602acb3d19"
+      ],
+      "run_statuses": [
+        "COMPLETED"
+      ],
+      "stop_reasons": []
+    },
+    {
+      "event": "02-price-change",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "NOOP",
+      "expected_outcome": "NOOP",
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0.0
+      },
+      "run_ids": [],
+      "run_statuses": [],
+      "stop_reasons": []
+    },
+    {
+      "event": "03-duplicate-price-change",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "DUPLICATE",
+      "expected_outcome": "DUPLICATE",
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0.0
+      },
+      "run_ids": [],
+      "run_statuses": [],
+      "stop_reasons": []
+    },
+    {
+      "event": "04-volume-change",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": "ADMITTED",
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 156.9999999992433
+      },
+      "run_ids": [
+        "run_b6ee1665579f47e88f89f7ce856da0ba"
+      ],
+      "run_statuses": [
+        "COMPLETED"
+      ],
+      "stop_reasons": []
+    },
+    {
+      "event": "05-revoke-notification",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": "ADMITTED",
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "INSUFFICIENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "INSUFFICIENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 2,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 2,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 2,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 140.0000000012369
+      },
+      "run_ids": [
+        "run_62dfd1853a50415fac50a196c79aa6fc"
+      ],
+      "run_statuses": [
+        "COMPLETED"
+      ],
+      "stop_reasons": []
+    },
+    {
+      "event": "06-evidence-added",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "REJECTED",
+      "expected_outcome": "ADMITTED",
+      "error": "event outcome REJECTED, expected ADMITTED",
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 3,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 3,
+          "false_blame": 0,
+          "false_blame_eligible": 3,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0.0
+      },
+      "run_ids": [],
+      "run_statuses": [],
+      "stop_reasons": []
+    },
+    {
+      "event": "07-injection-listing",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": "ADMITTED",
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 140.0000000012369
+      },
+      "run_ids": [
+        "run_35f7814850c345729ce3256ab8b44501"
+      ],
+      "run_statuses": [
+        "COMPLETED"
+      ],
+      "stop_reasons": []
+    },
+    {
+      "event": "08-rejected-producer",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "REJECTED",
+      "expected_outcome": "REJECTED",
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0.0
+      },
+      "run_ids": [],
+      "run_statuses": [],
+      "stop_reasons": []
+    },
+    {
+      "event": "09-catalogue-published",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "REJECTED",
+      "expected_outcome": "ADMITTED",
+      "error": "event outcome REJECTED, expected ADMITTED",
+      "preconditions": [
+        "Thực hiện 01–08 theo event_order.",
+        "Không có placement agent được kiểm chứng."
+      ],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0.0
+      },
+      "run_ids": [],
+      "run_statuses": [],
+      "stop_reasons": []
+    },
+    {
+      "event": "10-blurred-label-photo",
+      "product_id": "DEMO-PROD-S1",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "REJECTED",
+      "expected_outcome": "ADMITTED",
+      "error": "event outcome REJECTED, expected ADMITTED",
+      "preconditions": [
+        "Thực hiện 01–08 theo event_order.",
+        "09 đã chạy, chưa có placement agent được kiểm chứng."
+      ],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0.0
+      },
+      "run_ids": [],
+      "run_statuses": [],
+      "stop_reasons": []
+    },
+    {
+      "event": "11-bootstrap-hydra",
+      "product_id": "DEMO-PROD-S2",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": null,
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "CONSISTENT",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONFLICTING",
+          "b0": "CONFLICTING",
+          "candidate": "CONFLICTING",
+          "b0_seller_attributable": true,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONFLICTING",
+          "b0": "CONFLICTING",
+          "candidate": "CONFLICTING",
+          "b0_seller_attributable": true,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 3,
+          "false_blame": 2,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 1,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 218.99999999914144
+      },
+      "run_ids": [
+        "run_9f3ec88756ac4c598ac4bfc2b6ea061a"
+      ],
+      "run_statuses": [
+        "WAITING_REVIEW"
+      ],
+      "stop_reasons": []
+    },
+    {
+      "event": "12-bootstrap-sun-fluid",
+      "product_id": "DEMO-PROD-S3",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": null,
+      "error": null,
+      "preconditions": [
+        "Phase 3 gap controller và mock registry đã triển khai, lookup được phép."
+      ],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "INSUFFICIENT",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 1,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 3,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 2,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 172.0000000004802
+      },
+      "run_ids": [
+        "run_e2d8bd5aa66d47ca94ec3bf523703e59"
+      ],
+      "run_statuses": [
+        "WAITING_EVIDENCE"
+      ],
+      "stop_reasons": []
+    },
+    {
+      "event": "13-bootstrap-clear-serum",
+      "product_id": "DEMO-PROD-S4",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "expected_outcome": null,
+      "error": null,
+      "preconditions": [],
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "CONSISTENT",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "CONSISTENT",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "INSUFFICIENT",
+          "b0": "INSUFFICIENT",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "INSUFFICIENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 2,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 1,
+          "expected_abstentions": 2,
+          "correct_abstentions": 1
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 2,
+          "expected_abstentions": 2,
+          "correct_abstentions": 2
+        }
+      },
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 172.0000000004802
+      },
+      "run_ids": [
+        "run_c9184c35c54c4c6ab2d307039eb74822"
+      ],
+      "run_statuses": [
+        "WAITING_EVIDENCE"
+      ],
+      "stop_reasons": []
+    }
+  ],
+  "totals": {
+    "DRAFT": {
+      "B0": {
+        "total": 65,
+        "correct": 16,
+        "false_blame": 2,
+        "false_blame_eligible": 57,
+        "abstentions": 2,
+        "expected_abstentions": 4,
+        "correct_abstentions": 1
+      },
+      "candidate": {
+        "total": 65,
+        "correct": 51,
+        "false_blame": 0,
+        "false_blame_eligible": 57,
+        "abstentions": 5,
+        "expected_abstentions": 4,
+        "correct_abstentions": 2
+      }
+    },
+    "REVIEWED": {
+      "B0": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      },
+      "candidate": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      }
+    }
+  },
+  "usage": {
+    "model_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "latency_ms": 1203.0000000013388
+  },
+  "limitations": [
+    "DRAFT scores are exploratory diagnostics, not human-reviewed accuracy.",
+    "B0 uses candidate-stored claims; upstream scope/extraction filtering is shared, not an independent extraction baseline.",
+    "B0 adds zero model calls. Usage is counted once per newly observed candidate run; NOOP/DUPLICATE do not reuse prior usage.",
+    "Literal expected labels are scored; preconditions and alternative gold scenarios are not inferred from candidate output.",
+    "Only five public fields are scored; expert claim findings and isolated image scenarios have separate acceptance tests.",
+    "False-blame attribution is unscored for expected conflicts without an explicit attribution invariant."
+  ],
+  "previous_attempt": null
+}
