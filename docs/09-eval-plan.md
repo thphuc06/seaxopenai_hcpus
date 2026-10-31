@@ -27,6 +27,14 @@
 
 ## Baseline B0 vs candidate
 
+P4 evaluator CLI contract for the phase-2 smoke target:
+`python scripts/eval.py --limit-checkpoints 2 --output-dir <temporary-directory>`.
+The limit restricts this smoke to the first two checkpoints; omission runs all.
+The output directory contains `eval-latest.md` and `eval-latest.json`; omission
+uses `docs/results`. The phase-1 task writes the acceptance target only; evaluator
+implementation remains phase 2. The smoke checks report presence, mode and review
+status, never a candidate-derived expected score.
+
 - **B0**: listing value vs brand page value, exact/normalised compare, no self-conflict check, no scope check, no agent.
 - **Candidate**: full pipeline.
 - Run both on AC-01…AC-12. Report per case: verdict, correct (vs gold), false alarm on seller (Y/N), model calls, tokens, latency ms.

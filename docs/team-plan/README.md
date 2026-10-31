@@ -195,6 +195,9 @@ until P2 smoke selects them; absent price data means `price unknown`. `GET /api/
 `RuleStep.detail` is a string; trace detail is JSON. `ClaimFinding` currently has the `FieldDecision` shape.
 P4 also owns `backend/tests/test_skeleton.py` for these startup/config/schema contracts.
 P4 owns `backend/tests/test_fixtures.py` for the dataset validator and source/gold integrity checks.
+P4 owns `backend/tests/test_operations.py` for its seed/reset/sync CLI boundaries.
+Admission configuration is `config.PRODUCER_EVENT_TYPES` and `config.NON_MATERIAL_FIELDS`
+(immutable server-side constants, docs05 §1); P1 retains role/type authorization.
 Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
 
 | Sync | Route | Ghi chú cho P3 |
@@ -229,6 +232,19 @@ Use Node >=24 for frontend tests; keep Python 3.11/3.12 for the shared backend/O
 `OPENAI_API_KEY` · `LLM_MODE=fallback|replay|record|live` · `MODEL_EXTRACT` · `MODEL_AGENT` · `MODEL_CHEAP` · `EMBED_MODEL=text-embedding-3-small` · `LLM_EFFORT_EXTRACT=low` · `LLM_EFFORT_AGENT=medium` · `LLM_MAX_OUTPUT_TOKENS=16000` · `REPLAY_DIR=../fixtures/replay` (test trỏ sang thư mục tạm) · `LLM_VISION=1` · `RUN_MAX_MODEL_CALLS=24` · `RUN_DEADLINE_S=120` · `AGENT_MAX_MODEL_CALLS=10` · `AGENT_MAX_TOOL_CALLS=16` · `AGENT_MANAGER_TURNS=3` · `AGENT_RETRIEVAL_HOPS=2` · `AGENT_DEADLINE_S=75` · `AGENT_SINGLE_CALL_MAX=8` · `WEB_SEARCH=on|off` · `WEB_PROVIDER=openai|tavily` · `WEB_MAX_SEARCHES=3` · `WEB_MAX_PAGES=4` · `OCR_ENABLED=1` · `AGENTS_TRACING=1` · `REPLAY_FREEZE=0` · `WORKER_INLINE=0` · `DEMO_RUN_DELAY_S=0` · `DB_PATH` · `FIXTURES_DIR` · `CONTEST_PHASE`
 
 Các con số budget ở trên chỉ là default. **Chốt ở S0** dựa trên latency đo được từ `smoke.py`. Ví dụ: một bootstrap 4 nguồn tốn khoảng 4 extract + 4 retry + 1 canon + 1 claims + tối đa 10 lượt agent = 20; web discovery còn cộng thêm, nên default là 24. Nếu thấy trần quá chặt thì tăng trần của run, **không nới** giới hạn của agent loop.
+
+### 7.6 P4 operational helpers
+
+P4 operational helpers (run from the repo root with the backend venv):
+`backend/.venv/Scripts/python scripts/seed.py` seeds only an empty database;
+`--reset` explicitly replaces demo state and `--db <path>` selects an isolated database.
+`backend/.venv/Scripts/python scripts/demo_reset.py` resets the running backend via
+the operator API; it never starts a server. `--base-url` overrides localhost:8000.
+`backend/.venv/Scripts/python scripts/sync_check.py 1 --mode fallback` runs the S1
+path in-process in a temporary DB and reports PASS/FAIL. `--mode replay` requires
+the stored run to report REPLAY; misses/failures cannot pass. Mode defaults to
+LLM_MODE, then fallback; record/live are rejected before app startup. Phases 2–4
+must extend the path in their phases; requesting one early exits with an error.
 
 ## 8. Luật cắt scope (quyết ngay tại Sync, không tranh luận)
 
