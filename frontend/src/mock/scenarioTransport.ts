@@ -6,6 +6,7 @@ import { mockTransport } from './transport.ts';
 export interface PreviewScenario {
   name: string; event_id: string; idempotency_key: string;
   outcome: AdmitResult['outcome']; reason: string; stale_fields: string[];
+  trace?: { step: string; detail: Record<string, unknown> }[];
 }
 
 /** An explicitly labelled UI simulator; production always uses the server policy. */
@@ -49,6 +50,11 @@ export function createScenarioTransport({ scenarios = rawScenarios as PreviewSce
           run: { id: runId, case_id: 'preview-case', case_revision: runs.length + 1, trigger_event_id: result.event_id, status: 'COMPLETED', stop_reason: null, llm_mode: 'FALLBACK', started_at: time, finished_at: time, usage: { model_calls: 0, tokens_in: 0, tokens_out: 0 } },
           steps: steps.map((step, index) => ({ id: `${runId}:step:${index + 1}`, run_id: runId!, seq: index + 1, step, actor: 'code', input_refs: [], output_refs: [], latency_ms: 0, tokens_in: 0, tokens_out: 0, error: null, detail: { preview: true, mode: 'FALLBACK' }, created_at: time, t_ms: index })),
         });
+        for (const sample of scenario.trace ?? []) {
+          const latest = runs[0]!;
+          const seq = latest.steps.length + 1;
+          latest.steps.push({ id: `${runId}:step:${seq}`, run_id: runId, seq, step: sample.step, actor: 'code', input_refs: [], output_refs: [], latency_ms: 12, tokens_in: 0, tokens_out: 0, error: null, detail: { ...sample.detail, preview: true, mode: 'FALLBACK' }, created_at: time, t_ms: seq * 15 });
+        }
         metrics.runs++; metrics.jobs++; metrics.model_calls.avoided++;
       }
       metrics.events[outcome]++;

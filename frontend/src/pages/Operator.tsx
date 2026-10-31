@@ -13,6 +13,8 @@ import { PassportCard } from '../components/PassportCard.tsx';
 import { EvidenceDrawer } from '../components/EvidenceDrawer.tsx';
 import type { FieldKey } from '../types.ts';
 import { withPassportMetadata } from '../passportView.ts';
+import { WhyDialog } from '../components/WhyDialog.tsx';
+import { RunGlassbox } from '../components/RunGlassbox.tsx';
 
 const OUTCOMES = ['ADMITTED', 'NOOP', 'DUPLICATE', 'REJECTED'] as const;
 
@@ -41,6 +43,7 @@ export function TraceTable({ detail }: { detail: RunDetail }) {
       </table>
     </div>
     {detail.steps.length === 0 && <p className="empty-state">No trace steps have been recorded yet.</p>}
+    <RunGlassbox detail={detail} />
   </>;
 }
 
@@ -54,9 +57,11 @@ function LivePassport({ api, productId, product }: { api: ApiClient; productId: 
   const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
   const passport = usePoll(load, 2_000);
   const [evidenceKey, setEvidenceKey] = useState<FieldKey | null>(null);
+  const [whyKey, setWhyKey] = useState<FieldKey | null>(null);
   return <section className="scenario-passport" aria-label="Live buyer passport">
     {passport.error && <ErrorNotice error={passport.error} technical />}{passport.loading && <LoadingNotice />}
-    {passport.data && <PassportCard passport={withPassportMetadata(passport.data, product?.presentation?.passport_metadata)} onEvidence={setEvidenceKey} />}
+    {passport.data && <PassportCard passport={withPassportMetadata(passport.data, product?.presentation?.passport_metadata)} onEvidence={setEvidenceKey} onWhy={setWhyKey} />}
+    {whyKey && <WhyDialog key={whyKey} api={api} productId={productId} fieldKey={whyKey} role="OPERATOR" onClose={() => setWhyKey(null)} />}
     {evidenceKey && <EvidenceDrawer key={evidenceKey} api={api} productId={productId} fieldKey={evidenceKey} withinSource={passport.data?.fields.find((field) => field.field_key === evidenceKey)?.conflict_locus === 'WITHIN_SOURCE'} onClose={() => setEvidenceKey(null)} />}
   </section>;
 }
@@ -110,8 +115,8 @@ function OperatorDashboard({ api, productId, product }: { api: ApiClient; produc
     {catalog.error && <ErrorNotice error={catalog.error} technical />}
     {catalog.loading && <LoadingNotice />}
     {catalog.data?.length === 0 && <p className="empty-state">No events are available.</p>}
-    <div className="event-grid">{catalog.data?.map((event, index) => <article className="event-card" key={event.name}>
-      <span className="eyebrow">Event {String(index + 1).padStart(2, '0')}</span><h3>{event.title}</h3><p>{event.expect}</p>
+    <div className="event-grid">{[...(catalog.data ?? [])].sort((a, b) => a.name.localeCompare(b.name, 'en', { numeric: true })).map((event) => <article className="event-card" key={event.name}>
+      <span className="eyebrow">Event {event.name}</span><h3>{event.title}</h3><p>{event.expect}</p>
       <button type="button" data-testid={`event-btn-${event.name}`} disabled={pending !== null} onClick={() => { void act(event.name); }}>{pending === event.name ? 'Sending…' : 'Run event'} <span aria-hidden="true">↗</span></button>
     </article>)}</div>
     <section className="runs-panel"><div className="section-heading"><div><p className="eyebrow">Decision activity</p><h2>Runs &amp; trace</h2></div></div>

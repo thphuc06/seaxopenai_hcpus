@@ -1,0 +1,11 @@
+{
+  "catalog": [{"name":"09-catalogue-published","title":"Inspect catalogue placement","type":"CATALOGUE_PUBLISHED","product_id":"DEMO-PROD-01","resource":{"kind":"CATALOGUE","id":"preview-catalogue","version":1},"expect":"UI preview: inspect an anchored placement and the recorded no-change effect."}],
+  "scenarios": [{"name":"09-catalogue-published","event_id":"preview-catalogue-event","idempotency_key":"preview-catalogue-event","outcome":"ADMITTED","reason":"Sample catalogue trace loaded; no live agent call.","stale_fields":[],"trace":[
+    {"step":"agent:start","detail":{"question":"Which passage belongs to this size?","fields":["skin_type"],"budget":{"model_calls":{"used":0,"cap":3},"tool_calls":{"used":0,"cap":6},"seconds":{"used":0,"cap":20}}}},
+    {"step":"agent:tool:read_passage","detail":{"passage_id":"preview-placement"}},
+    {"step":"agent:proposal","detail":{"passage_id":"preview-placement","anchor_passage_id":"preview-anchor"}},
+    {"step":"scope:validate","detail":{"passage_id":"preview-placement","anchor_passage_id":"preview-anchor","verified":true}},
+    {"step":"agent:effect","detail":{"field":"skin_type","before":"CONFLICTING","after":"CONFLICTING","changed":false,"passages_added":["preview-placement"],"budget":{"model_calls":{"used":0,"cap":3},"tool_calls":{"used":0,"cap":6},"seconds":{"used":0,"cap":20}}}},
+    {"step":"agent:stop","detail":{"stop_reason":"PREVIEW_COMPLETE"}}
+  ]}]
+}

@@ -314,3 +314,34 @@ mark { background: var(--stale-bg); color: var(--ink); box-shadow: 0 1px 0 #d7ab
   .event-grid { grid-template-columns: 1fr; }
   .site-footer { margin: 0 18px; flex-wrap: wrap; }
 }
+
+.run-glassbox { display: grid; gap: 24px; margin-top: 24px; min-width: 0; }
+.case-explorer { border-top: 1px solid #999; padding-top: 20px; margin-top: 24px; }
+.case-explorer input { max-width: 100%; margin: 10px; }
+.dependency-edge { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; border-bottom: 1px solid #999; padding: 12px 0; overflow-wrap: anywhere; }
+.dependency-edge small { display: block; }
+.dependency-stale { border-bottom: 2px dashed #b33; }
+.search-hit { border-left: 2px solid #b17b49; padding: 12px; margin: 12px 0; overflow-wrap: anywhere; }
+.agent-panel, .run-glassbox > section { padding: 18px; border: 1px solid #686868; border-radius: 12px; min-width: 0; }
+.decision-trail { padding-left: 24px; }
+.decision-trail li { padding: 8px 0 16px 12px; border-left: 2px solid #929292; overflow-wrap: anywhere; }
+.decision-trail p, .agent-effect dd { white-space: pre-wrap; overflow-wrap: anywhere; }
+.budget-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.budget-grid progress { width: 100%; accent-color: #f49859; }
+.effect-comparison { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 14px; }
+.effect-comparison dl { margin: 0; }
+.effect-comparison dd { margin-left: 12px; }
+.agent-effect { padding: 16px; border: 1px solid #b17b49; border-radius: 10px; }
+.waterfall { padding: 0; list-style: none; }
+.waterfall li { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(80px, 2fr); gap: 8px; padding: 10px 0; overflow-wrap: anywhere; }
+.waterfall small { grid-column: 1 / -1; }
+.waterfall .nested-span { padding-left: 20px; border-left: 2px solid #a68bdd; }
+.span-track { background: #71717130; border-radius: 4px; overflow: hidden; align-self: center; }
+.span-bar { display: block; height: 14px; min-width: 2px; background: #b8b8b8; }
+.span-bar.lane-model { background: #6bace0; }
+.span-bar.lane-agent { background: #b48ae0; }
+.span-bar.lane-gap { background: #dbba66; }
+.span-bar.lane-web { background: #69c3ab; }
+.span-error .span-bar { background: #e26767; }
+.span-error small { color: #e26767; }
+@media (max-width: 600px) { .budget-grid { grid-template-columns: 1fr; } }

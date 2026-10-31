@@ -10,8 +10,8 @@ export function formatTime(value: string | null): string {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }).format(date) + ' ICT';
 }
 
-export function FieldRow({ fieldKey, field, runStatus, index, onEvidence }: {
-  fieldKey: FieldKey; field: PassportViewField; runStatus: RunStatus | null; index: number; onEvidence?: (key: FieldKey) => void;
+export function FieldRow({ fieldKey, field, runStatus, index, onEvidence, onWhy }: {
+  fieldKey: FieldKey; field: PassportViewField; runStatus: RunStatus | null; index: number; onEvidence?: (key: FieldKey) => void; onWhy?: (key: FieldKey) => void;
 }) {
   const label = buyerLabel(field, runStatus);
   const [previousLabel, setPreviousLabel] = useState(label.text);
@@ -33,7 +33,7 @@ export function FieldRow({ fieldKey, field, runStatus, index, onEvidence }: {
         <span className="field-time">{formatTime(field.checked_at)}</span>
         <div className="field-actions">
           <button type="button" className="text-button" data-testid={`evidence-open-${fieldKey}`} disabled={!onEvidence} onClick={() => onEvidence?.(fieldKey)}>View evidence <span aria-hidden="true">↗</span></button>
-          <button type="button" className="text-button why-button" data-testid={`why-open-${fieldKey}`} disabled title="Explanation view is coming in a later phase">Why?</button>
+          <button type="button" className="text-button why-button" data-testid={`why-open-${fieldKey}`} disabled={!onWhy} onClick={() => onWhy?.(fieldKey)}>Why?</button>
         </div>
       </div>
       {(field.hidden_citations ?? 0) > 0 && <p className="private-note">+{field.hidden_citations} private {field.hidden_citations === 1 ? 'document' : 'documents'} (reviewers only)</p>}
@@ -41,7 +41,7 @@ export function FieldRow({ fieldKey, field, runStatus, index, onEvidence }: {
   </article>;
 }
 
-export function PassportCard({ passport, onEvidence }: { passport: PassportView; onEvidence?: (key: FieldKey) => void }) {
+export function PassportCard({ passport, onEvidence, onWhy }: { passport: PassportView; onEvidence?: (key: FieldKey) => void; onWhy?: (key: FieldKey) => void }) {
   return <section className="passport-card" aria-labelledby="passport-title">
     <header className="passport-heading">
       <div className="passport-heading-top"><span className="eyebrow">A closer look at the listing</span><span className="passport-mark" aria-hidden="true">P<span>↗</span></span></div>
@@ -60,7 +60,7 @@ export function PassportCard({ passport, onEvidence }: { passport: PassportView;
           field_key: key, label: '', public_text: 'No comparison is available yet.', verdict: null,
           conflict_locus: null, freshness: 'UNKNOWN', review_state: 'AUTO_DRAFT', checked_at: null, citations: [],
         };
-        return <FieldRow key={key} fieldKey={key} field={field} runStatus={passport.run_status} index={index} onEvidence={onEvidence} />;
+        return <FieldRow key={key} fieldKey={key} field={field} runStatus={passport.run_status} index={index} onEvidence={onEvidence} onWhy={onWhy} />;
       })}
     </div>
     <footer className="passport-footnote"><span aria-hidden="true">ⓘ</span><p>{passport.disclaimer}</p></footer>

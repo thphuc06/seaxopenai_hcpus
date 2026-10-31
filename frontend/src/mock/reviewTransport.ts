@@ -1,9 +1,10 @@
 import rawPassport from './passport.json' with { type: 'json' };
 import rawPreview from './review.json' with { type: 'json' };
 import rawScenarios from './scenarios.json' with { type: 'json' };
+import glassbox from './glassbox.json' with { type: 'json' };
 import type { Transport } from '../api/client.ts';
 import type { CaseHistory, EvidenceUpload, ReviewRecord, ReviewResult, ReviewSubmission, ReviewTask } from '../api/reviewTypes.ts';
-import type { AdmitResult, EventCatalogItem, EvidenceResponse, PassportView, PassportViewField } from '../types.ts';
+import type { AdmitResult, EventCatalogItem, EvidenceResponse, PassportView, PassportViewField, ExplanationResponse } from '../types.ts';
 import { createScenarioTransport } from './scenarioTransport.ts';
 import type { PreviewScenario } from './scenarioTransport.ts';
 
@@ -31,7 +32,7 @@ function uploadShape(value: unknown): value is EvidenceUpload {
 
 /** Browser-local preview state only. Never used by the API production build. */
 export function createReviewTransport({ preview = rawPreview as PreviewData, initial = rawPassport as PassportView,
-  base = createScenarioTransport({ scenarios: [...rawScenarios as PreviewScenario[], ...preview.scenarios] }), now = () => new Date().toISOString(),
+  base = createScenarioTransport({ scenarios: [...rawScenarios as PreviewScenario[], ...preview.scenarios, ...glassbox.scenarios as PreviewScenario[]] }), now = () => new Date().toISOString(),
 }: { preview?: PreviewData; initial?: PassportView; base?: Transport; now?: () => string } = {}): Transport {
   let revision = 1;
   let fields = structuredClone(initial.fields);
@@ -64,6 +65,22 @@ export function createReviewTransport({ preview = rawPreview as PreviewData, ini
   return async (path, init) => {
     const role = new Headers(init.headers).get('X-Demo-Role');
     const parts = path.split('/').map(decodeURIComponent);
+    const url = new URL(path, 'http://preview.local');
+    const routeParts = url.pathname.split('/').map(decodeURIComponent);
+    if (init.method === 'GET' && routeParts[2] === 'cases' && ['search', 'graph', 'chain'].includes(routeParts[4] ?? '')) {
+      if (!['REVIEWER', 'OPERATOR'].includes(role ?? '')) return new Response(null, { status: 403 });
+      if (routeParts[3] !== preview.case_id) return new Response(null, { status: 404 });
+      if (routeParts[4] === 'chain') return Response.json({ valid: true, rows: 0, head: null, broken_at: null });
+      const citations = fields.flatMap((field) => field.citations);
+      if (routeParts[4] === 'graph') {
+        const sources = [...new Map(citations.map((c) => [c.passage_id, { id: c.passage_id, kind: 'source', label: `${c.source_kind} · ${c.locator}`, status: 'ACTIVE' }])).values()];
+        return Response.json({ nodes: [...sources, ...fields.map((f) => ({ id: f.field_key, kind: 'field', label: f.field_key, status: f.freshness }))], edges: fields.flatMap((f) => f.citations.map((c) => ({ source: c.passage_id, target: f.field_key, relation: 'cites' }))) });
+      }
+      const query = url.searchParams.get('q')?.trim() ?? '';
+      if (!query) return new Response(null, { status: 422 });
+      const hits = [...new Map(citations.filter((c) => c.excerpt.toLocaleLowerCase().includes(query.toLocaleLowerCase())).map((c) => [c.passage_id, { passage_id: c.passage_id, text: c.excerpt, source_label: c.source_kind }])).values()];
+      return Response.json({ hits, stages: { bm25: hits.map((hit, i) => ({ passage_id: hit.passage_id, rank: i + 1 })), dense: [], fused: [] } });
+    }
     const reviewRoute = path === '/api/review/queue' || parts[2] === 'cases';
     if (reviewRoute) {
       if (parts[2] === 'cases' && parts[4] === 'evidence' && init.method === 'POST') {
@@ -109,7 +126,12 @@ export function createReviewTransport({ preview = rawPreview as PreviewData, ini
         history.events.push({ ...result, received_at: now(), run_id: null });
       }
     }
-    if (path === '/api/internal/events/catalog' && init.method === 'GET') return Response.json([...(await response.json() as EventCatalogItem[]), ...preview.catalog]);
+    if (path === '/api/internal/events/catalog' && init.method === 'GET') return Response.json([...(await response.json() as EventCatalogItem[]), ...preview.catalog, ...glassbox.catalog]);
+    if (parts[2] === 'products' && parts[3] === initial.product_id && parts[6] === 'explain' && init.method === 'GET') {
+      const payload = await response.json() as ExplanationResponse;
+      const field = fields.find((item) => item.field_key === parts[5]);
+      return Response.json(payload.audience === 'BUYER' ? { ...payload, public_text: field?.public_text ?? payload.public_text, summaries: [field?.public_text ?? payload.public_text, ...payload.summaries.slice(1)] } : payload);
+    }
     if (parts[2] === 'products' && parts[3] === initial.product_id && parts[4] === 'passport' && init.method === 'GET') {
       const passport = await response.json() as PassportView;
       return Response.json({ ...passport, fields: fields.map((field) => ({ ...field, ...(field.field_key === preview.claim.source_field ? { claims_under_review: closed.has(preview.claim.field_key) ? 0 : 1 } : {}) })) });
