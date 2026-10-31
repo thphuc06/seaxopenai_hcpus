@@ -34,6 +34,14 @@ class SourceVersionRef:
     version: int
 
 
+@dataclass(frozen=True)
+class SourceWriteContext:
+    """Server-pinned identity for a run that writes evidence."""
+    run_id: str
+    tenant_id: str
+    case_revision: int
+
+
 def ingest(connection: sqlite3.Connection, snapshot: dict[str, db.JSON], *, case_id: str | None,
            origin: str, raw_path: str | None = None) -> SourceVersionRef:
     source_id = str(snapshot["source_id"])
@@ -78,8 +86,22 @@ def ingest(connection: sqlite3.Connection, snapshot: dict[str, db.JSON], *, case
 
 
 def add_source_version(snapshot: dict[str, db.JSON], *, case_id: str | None, origin: str,
-                       raw_path: str | None = None, db_path: db.DBPath | None = None) -> SourceVersionRef:
+                       raw_path: str | None = None, db_path: db.DBPath | None = None,
+                       expected_context: SourceWriteContext | None = None) -> SourceVersionRef:
     with db.transaction(db_path) as connection:
+        if expected_context is not None:
+            row = connection.execute(
+                "SELECT c.tenant_id,c.product_id,c.revision,r.case_id AS run_case_id,r.case_revision "
+                "FROM cases c JOIN runs r ON r.id=? WHERE c.id=?",
+                (expected_context.run_id, case_id),
+            ).fetchone()
+            if row is None or (
+                row["tenant_id"], row["product_id"], row["revision"], row["run_case_id"], row["case_revision"]
+            ) != (
+                expected_context.tenant_id, snapshot["product_id"], expected_context.case_revision,
+                case_id, expected_context.case_revision,
+            ):
+                raise PermissionError("ACCESS_DENIED_OR_SUPERSEDED_RUN")
         previous = {row[0] for row in connection.execute("SELECT id FROM source_versions WHERE source_id=?", (snapshot["source_id"],))}
         ref = ingest(connection, snapshot, case_id=case_id, origin=origin, raw_path=raw_path)
     if ref.id not in previous:
