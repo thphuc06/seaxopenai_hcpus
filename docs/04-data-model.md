@@ -118,3 +118,35 @@ passages_fts(text, passage_id, source_version_id)                  -- FTS5 virtu
 Each `FieldResult` lists the `(source_id, source_version_id)` pairs it used. Invalidation query: on event for `source_id` → all current results whose `depends_on` contains it → `freshness = STALE`.
 
 Example for the synthetic brand: `notification_number` and `responsible_company` depend on `src_demo_notification`; `volume` depends on listing + packaging only → unaffected by revoke.
+
+## As built (contest)
+
+Phase 0, P1 (31 Oct 2026): `app/db.py` creates the core and extended tables above,
+plus `embeddings(passage_id, source_version_id, model, content_hash, vector_json, created_at)`
+and product commerce columns `price_vnd`, `shop_name`, `official_store`, `image_path`.
+SQLite connections enable foreign keys and WAL; write transactions use BEGIN IMMEDIATE.
+Source versions enforce unique `(source_id, sha256)`, unique `(source_id, version)` and
+at most one current version per source. Superseded versions retain their evidence with
+`is_current=0`; the parent source status is not changed merely by adding a version.
+Passage IDs are generated per stored version; snapshot-local IDs are not global identifiers.
+
+The digest is SHA256 of canonical UTF-8 JSON (sorted keys, compact separators, Unicode
+preserved). For an image it hashes the canonical envelope
+`{"snapshot": <snapshot>, "image_sha256": <SHA256 of image bytes>}` so transcript and
+image changes both affect identity. It is a content identity digest, not the raw image checksum.
+Blank text requires a packaging image with an existing binary file and an explanatory
+snapshot `note`. Missing visibility defaults to PRIVATE; new versions refresh source
+metadata, while duplicate old versions cannot revert it.
+
+Reset replaces all seeded data in one transaction; malformed input rolls back the replacement.
+Optional P2 indexes run after commit; missing hooks and handled failures are logged with
+source-version IDs, without exception payloads. Seed-time diagnostics have no run ID.
+Trace sequence allocation is serialized per database; offsets derive from persisted run start
+and cannot move backward. Timed failures record the exception class, not its message.
+
+After integrating P4 skeleton cd4ae69, omitted DB and fixture paths resolve from current
+`config.settings` at call time. `db.init_db()`, `seed.seed_if_empty()`, `seed.reset()`,
+`load_product_dir(path)`, store readers/writer and `TraceWriter(run_id)` support the shared
+signatures; optional explicit path overrides remain available. Type aliases use Python 3.11
+syntax. `SourceVersionRef` remains the frozen dataclass in store (id, source_id, version);
+P4 models.py currently defines no competing reference model. No policy/route/enum changed.
