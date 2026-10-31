@@ -1,5 +1,23 @@
 # Contest decisions
 
+## D011 — S2 authorized integration corrections (13:00 ICT)
+
+The user explicitly authorized fixing the combined-head failures and publishing
+the passing tag. Apply narrow P1/P2 corrections in the integrator checkout rather
+than waiting for lane handback; preserve every assertion, fixture and gold label.
+P3 passed separately, then merge the mutually dependent latest backend heads as
+one bundle, with the fresh phase1 baseline and full phase2 gate retained.
+
+Record P1's policy-v1.3 human-approved model-error PARTIAL behavior, v1.4 gift
+scope/same-source support, and v1.5 provisional regulatory-data handling. Current
+policy-v1.6 adds the integration provenance for per-passage claims scope and the
+sourced broad hyaluronate family. Provisional regulatory rows remain provisional;
+no concentration limit or verdict expectation is changed. Docs06/07 describe the
+effective behavior and versions. Gift exclusions keep their existing scope trace
+even when filtered before observation construction. Claims expansion reuses the
+existing source/version-aware scope helper instead of copying another passage's
+scope. No new shared route, function signature or environment variable.
+
 ## D010 — S2 contract checkpoint (11:49 ICT)
 Publish contract-2 early on explicit invocation, without advancing PHASE=1 or
 claiming S2 completion. P1's four typed S2 routes remain side-effect-free 501

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T04:58:17.456645+00:00",
+  "generated_at": "2026-10-31T06:08:44.097242+00:00",
   "requested_mode": "fallback",
   "mode": "fallback",
   "fallback_reason": null,
@@ -11,10 +11,11 @@
     "FALLBACK"
   ],
   "prompt_versions": [
+    "claims-v2-passage-scope",
     "extract-v1"
   ],
   "policy_versions": [
-    "policy-v1.1"
+    "policy-v1.6"
   ],
   "checkpoints": [
     {
@@ -97,10 +98,10 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 202.9999999995198
+        "latency_ms": 515.9999999996217
       },
       "run_ids": [
-        "run_ba358eb04e1a4cff8fa00a602acb3d19"
+        "run_c4dd5e242d4c4549934a077fee2eb6b4"
       ],
       "run_statuses": [
         "COMPLETED"
@@ -293,7 +294,7 @@
           "field_key": "volume",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -347,7 +348,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 4,
           "abstentions": 0,
@@ -359,13 +360,13 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 156.9999999992433
+        "latency_ms": 453.0000000013388
       },
       "run_ids": [
-        "run_b6ee1665579f47e88f89f7ce856da0ba"
+        "run_e0af5bc18d084573a9bf92b81975088e"
       ],
       "run_statuses": [
-        "COMPLETED"
+        "WAITING_REVIEW"
       ],
       "stop_reasons": []
     },
@@ -383,7 +384,7 @@
           "field_key": "volume",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -410,7 +411,7 @@
           "field_key": "notification_number",
           "expected": "INSUFFICIENT",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "INSUFFICIENT",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": false
@@ -419,7 +420,7 @@
           "field_key": "responsible_company",
           "expected": "INSUFFICIENT",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "INSUFFICIENT",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": false
@@ -437,25 +438,25 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 2,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 4,
-          "abstentions": 0,
+          "abstentions": 2,
           "expected_abstentions": 2,
-          "correct_abstentions": 0
+          "correct_abstentions": 2
         }
       },
       "usage": {
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 140.0000000012369
+        "latency_ms": 359.00000000037835
       },
       "run_ids": [
-        "run_62dfd1853a50415fac50a196c79aa6fc"
+        "run_89c9eb30335d4a14bafbb73af6b05840"
       ],
       "run_statuses": [
-        "COMPLETED"
+        "WAITING_REVIEW"
       ],
       "stop_reasons": []
     },
@@ -464,16 +465,16 @@
       "product_id": "DEMO-PROD-S1",
       "status": "DRAFT",
       "reviewed_by": null,
-      "outcome": "REJECTED",
+      "outcome": "ADMITTED",
       "expected_outcome": "ADMITTED",
-      "error": "event outcome REJECTED, expected ADMITTED",
+      "error": null,
       "preconditions": [],
       "fields": [
         {
           "field_key": "volume",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -500,7 +501,7 @@
           "field_key": "notification_number",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -527,7 +528,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 3,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 3,
           "abstentions": 0,
@@ -539,10 +540,14 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 0.0
+        "latency_ms": 468.99999999914144
       },
-      "run_ids": [],
-      "run_statuses": [],
+      "run_ids": [
+        "run_5dbf068cb2054719be48cf066755968c"
+      ],
+      "run_statuses": [
+        "WAITING_REVIEW"
+      ],
       "stop_reasons": []
     },
     {
@@ -586,7 +591,7 @@
           "field_key": "notification_number",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -613,7 +618,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 4,
           "abstentions": 0,
@@ -625,13 +630,13 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 140.0000000012369
+        "latency_ms": 452.9999999995198
       },
       "run_ids": [
-        "run_35f7814850c345729ce3256ab8b44501"
+        "run_a4605efefc1a46dba99a013f82844d72"
       ],
       "run_statuses": [
-        "COMPLETED"
+        "WAITING_REVIEW"
       ],
       "stop_reasons": []
     },
@@ -676,7 +681,7 @@
           "field_key": "notification_number",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -703,7 +708,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 4,
           "abstentions": 0,
@@ -765,7 +770,7 @@
           "field_key": "notification_number",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -792,7 +797,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 4,
           "abstentions": 0,
@@ -815,9 +820,9 @@
       "product_id": "DEMO-PROD-S1",
       "status": "DRAFT",
       "reviewed_by": null,
-      "outcome": "REJECTED",
+      "outcome": "ADMITTED",
       "expected_outcome": "ADMITTED",
-      "error": "event outcome REJECTED, expected ADMITTED",
+      "error": null,
       "preconditions": [
         "Thực hiện 01–08 theo event_order.",
         "09 đã chạy, chưa có placement agent được kiểm chứng."
@@ -854,7 +859,7 @@
           "field_key": "notification_number",
           "expected": "CONFLICTING",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "CONFLICTING",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": null
@@ -881,7 +886,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 4,
           "abstentions": 0,
@@ -893,10 +898,14 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 0.0
+        "latency_ms": 438.00000000010186
       },
-      "run_ids": [],
-      "run_statuses": [],
+      "run_ids": [
+        "run_c491539c9c5a4ec79e62266fc6d5ccbb"
+      ],
+      "run_statuses": [
+        "WAITING_REVIEW"
+      ],
       "stop_reasons": []
     },
     {
@@ -949,7 +958,7 @@
           "field_key": "responsible_company",
           "expected": "CONSISTENT",
           "b0": "SINGLE_SOURCE",
-          "candidate": "CONSISTENT",
+          "candidate": "SINGLE_SOURCE",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": false
@@ -967,7 +976,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 3,
           "false_blame": 0,
           "false_blame_eligible": 5,
           "abstentions": 1,
@@ -979,10 +988,10 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 218.99999999914144
+        "latency_ms": 515.9999999996217
       },
       "run_ids": [
-        "run_9f3ec88756ac4c598ac4bfc2b6ea061a"
+        "run_ec483a2f2be64c54882ff146efecaad0"
       ],
       "run_statuses": [
         "WAITING_REVIEW"
@@ -1071,10 +1080,10 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 172.0000000004802
+        "latency_ms": 390.99999999962165
       },
       "run_ids": [
-        "run_e2d8bd5aa66d47ca94ec3bf523703e59"
+        "run_cf47f33c72314998a10926eafc0c5b2e"
       ],
       "run_statuses": [
         "WAITING_EVIDENCE"
@@ -1104,7 +1113,7 @@
           "field_key": "skin_type",
           "expected": "SINGLE_SOURCE",
           "b0": "CONSISTENT",
-          "candidate": "CONSISTENT",
+          "candidate": "SINGLE_SOURCE",
           "b0_seller_attributable": false,
           "candidate_seller_attributable": false,
           "expected_seller_attributable": false
@@ -1149,7 +1158,7 @@
         },
         "candidate": {
           "total": 5,
-          "correct": 4,
+          "correct": 5,
           "false_blame": 0,
           "false_blame_eligible": 5,
           "abstentions": 2,
@@ -1161,13 +1170,13 @@
         "model_calls": 0,
         "tokens_in": 0,
         "tokens_out": 0,
-        "latency_ms": 172.0000000004802
+        "latency_ms": 547.0000000004802
       },
       "run_ids": [
-        "run_c9184c35c54c4c6ab2d307039eb74822"
+        "run_4ae39627d0764d9382597220a9986ce4"
       ],
       "run_statuses": [
-        "WAITING_EVIDENCE"
+        "WAITING_REVIEW"
       ],
       "stop_reasons": []
     }
@@ -1185,12 +1194,12 @@
       },
       "candidate": {
         "total": 65,
-        "correct": 51,
+        "correct": 61,
         "false_blame": 0,
         "false_blame_eligible": 57,
-        "abstentions": 5,
+        "abstentions": 7,
         "expected_abstentions": 4,
-        "correct_abstentions": 2
+        "correct_abstentions": 4
       }
     },
     "REVIEWED": {
@@ -1218,7 +1227,7 @@
     "model_calls": 0,
     "tokens_in": 0,
     "tokens_out": 0,
-    "latency_ms": 1203.0000000013388
+    "latency_ms": 4141.999999999825
   },
   "limitations": [
     "DRAFT scores are exploratory diagnostics, not human-reviewed accuracy.",

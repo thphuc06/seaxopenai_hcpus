@@ -2,13 +2,17 @@
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
-| REAL source scope inference | P1/P2 | P4-2b handoff; exposed by local merge | AC-01 returns UNCERTAIN because REAL snapshots omit inferred scope by design. Implement documented primary-size/identity/market inference in owner code; do not add scope to source fixtures or weaken tests. |
+| S2 integration regressions and claims passage scope | P1/P2, user-authorized P4 correction | Closed S2 | Source-noted family normalization, preserved gift exclusion trace, version-bound claims scope; focused99 and full phase2 1059 pass. |
+| Fresh readable image upload grounding | P1/P2 | Open limitation | Add a code-validated stored transcript path; prepared-transcript vision tests do not establish fresh upload support. |
+| Buyer pending-claim count metadata | P1/P3 | Should follow-up | Wire backend pending_claims to the buyer count; no raw claim details for buyers. |
+| Canon runtime hook and paid pass1 | P1/P2 | Should follow-up | Helper/CLI delivered; hook and capped provider execution remain unverified. |
+| REAL source scope inference | P1/P2 | Implemented S2 | Primary-size/identity/market inference delivered; AC-01 passes with integrated generic extraction/family fixes, source fixtures unchanged. |
 | R3 ingredient/concentration projection | P4/P1/P2 + human decision | Open P4-2b CCR | Both sources list the ingredient; only brand states 2%. Preserve AC-04 and DRAFT label until the shared field-versus-claim decision is made. See docs/results/p4-2b-review.md. |
 | Shared HTML cleaning helper | P2 | Open P4-2b handoff | Reuse scripts.capture_page.clean_html(html, *, section_end_markers=SECTION_END_MARKERS); P2 retains fetch, ACL, Budget and trace responsibility. No runtime integration in the local merge task. |
-| S2 replay mode storage | P1/P2 | Observed by retained phase(2) acceptance | test_record_replay_story_and_model_isolation[offline-record-model] expects REPLAY in runs.llm_mode; current storage is replay (API normalizes). Reconcile documented persistence contract in owner work; no P4 assertion change. |
-| S2 diagnostic story | P1/P2 | Owner BUILD not integrated into contract-2 | P4 eval emits execution errors for rejected events06/09/10; sync_check2 fails at revoke after17 S1 passes. Preserve 16 acceptance failures in P4 plan; implement owner lifecycle/review/vision/audit/retry before full S2 gate. |
-| B0/candidate preliminary report | P4 human | DRAFT only | Review source-grounded labels independently; report51/65 vs16/65 includes unmet story/Phase3 conditions and shared extraction. No gold changed to match output. |
-| S2 evidence-request history status | P1 | Stage B integration CCR, contract-2 review | Existing publish.py stores CLOSED; new EvidenceRequestResponse allows OPEN/FULFILLED. Reconcile explicitly in history implementation and test a closed request; 501 stubs have no current serialization failure. |
+| S2 replay mode storage | P1/P2 | Implemented S2 | Persisted provenance is uppercase; gateway execution mode remains lowercase. Retained offline record/replay assertion is unchanged. |
+| S2 diagnostic story | P1/P2 | Integrated S2 | Lifecycle/review/vision/audit/retry delivered; integrated sync_check2 reaches all 26 checks. Historical contract-2 failures remain in the original plan/report. |
+| B0/candidate preliminary report | P4 human | DRAFT only | Updated report61/65 vs16/65; full CLI retains event09 phase3 admission error and event12 unmet registry condition. First8 checkpoint diagnostic exits0 at40/40 vs8/40. No gold changed to match output. |
+| S2 evidence-request history status | P1 | Closed S2 | Publication writes FULFILLED for resolved evidence requests; history DTO retains OPEN/FULFILLED. |
 | Storage/seed integration | P1 | S0 complete | Actual S1 startup 1 product/1 case/4 sources/4 versions/14 passages |
 | Model IDs, prices and budget tuning | P2 | S0 report integrated | Keep measured recommendation/current caps; production client at S1 |
 | Initial source dataset and validator | P4-0c | Completed, checks pass | P1 checks seed integration at S0 |
@@ -21,6 +25,6 @@
 | P2 OCR environment | P2 | Before OCR | Use shared Python 3.11/3.12 instead of 3.14 |
 | Local Node selection | P4 | Checks resolved | Use Node >=24; bundled 24.22.1 passed, system 22.15.1 is too old for tests |
 | Shared admission constants | P1/P4 | Closed S1 | P1 consumes config.PRODUCER_EVENT_TYPES and NON_MATERIAL_FIELDS |
-| Reset/record/replay identity | P1/P2 | Open before stage recordings | Random source/passage IDs after reset change exact replay hashes; preserve identity without omitting model-visible input from the hash |
-| Budget exhausted before first result | P1 | Open S2 CCR from automatic S1 review | run.py status selection must return PARTIAL on BudgetExceeded even with zero published fields; retain test_run_deadline_starts_no_model_call and add zero-call-cap variant |
+| Reset/record/replay identity | P1/P2 | Implemented S2 | Content-bound source/passage identity delivered; full provider stage recording remains separate from offline replay tests. |
+| Budget exhausted before first result | P1 | Closed S2 | Zero-result budget/deadline exhaustion is PARTIAL; retained tests and cap variants pass. |
 | Frontend dependency audit | P3/P4 | Observed S1 | npm ci reports 3 moderate advisories; no forced upgrade or pin change in gate |

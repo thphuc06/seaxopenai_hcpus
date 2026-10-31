@@ -2,6 +2,18 @@
 
 Final gate status is recorded in docs/tracking/HANDOFF.md under sync-2.
 
+Final current-phase result (13:09 ICT): 1059 passed, 14 future-phase skipped,
+2 subtests passed, 0 failed/errors/deselected. Guards4, fixtures53 and S2 path26
+all pass. Node51 and API build pass on the unchanged P3 frontend. Post-fix
+phase1 suite1029/43/+2 retained every main baseline passing node.
+
+Refreshed DRAFT evaluation: first8 checkpoints exit0, candidate40/40 and B0 8/40.
+The full13-checkpoint report writes61/65 versus16/65 but exits1 at event09, whose
+catalogue admission/placement target is phase3 in test_acceptance.py and P1's
+phase3 plan; event12 also explicitly depends on phase3 registry work. Preserve
+that future-phase error and all original labels. It is not a passing full-story
+claim, nor an unexplained current-phase gate failure.
+
 ## Inputs and recovery
 
 Checked pushed heads: P4 47d3bdb (PR8), P1 4092531 (PR9), P2 07572e7

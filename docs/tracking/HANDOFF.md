@@ -1,5 +1,59 @@
 # Integration handoff
 
+## sync-2
+
+Final phase-2 gate PASSED at 13:09 ICT (T+3:09): 1059 passed, 14 skipped,
+2 passing subtests, zero failed/errors/deselected. All 14 skips are existing
+phase3/4 targets, not WAITING failures. Guards 4/4, fixtures 53/53, fallback
+sync_check2 26/26, Node 51/51 and API build pass. Status: complete for the
+current retained S2 gate; future-phase/provider checks are not claimed complete.
+All four pushed lane heads are integrated; no omitted lane or retained-feature
+scope cut. P3 was accepted via e95ee38 after a fresh phase1 baseline/post gate.
+The user-authorized backend dependency bundle and fixes are in 63480df after a
+fresh same-phase regression comparison: 1029 passed/43 skipped/+2 subtests,
+zero prior passing nodes missing/regressed. PHASE advances to 2 at this gate.
+
+- P4: integrated 47d3bdb; B0/eval and phase2 operational path, 8 REAL captures,
+  4 products/events, DRAFT real and planned blind review tables. Original gold
+  and first-run reports remain intact. Added 10 generic integration regressions;
+  no assertion/gold edits. Full receipt: docs/results/sync-2-gate.md.
+- P1: integrated 4092531; version/revoke/evidence lifecycle, dependent staleness,
+  revision-bound reviews through publication, queue/history/private uploads,
+  stable reset identities and PARTIAL/budget handling. Policy is now v1.6;
+  excluded gift quantities retain source-attributed scope_check traces even
+  when extraction removed their claims. No new route/signature/env switch.
+- P2: integrated 07572e7 (PR11); grounded vision, bounded coverage retry, claims
+  auditor, canon helper and recording CLI, generic real-source extraction fixes.
+  Integration fixes preserve each audited passage's version-bound scope and add
+  source-noted ingredient-family names. Use claims-v2-passage-scope, fallback-v4,
+  coverage-v3-ingredient-family; previous caches invalidate, recordings unchanged.
+- P3: integrated e840855; reviewer console/revision handling, evidence upload and
+  history, stale ripple and scenario stepper. Node 51 and API build pass; generated
+  contract-2 transport remains compatible with the integrated endpoints. Human
+  browser execution is separate from intercepted browser test evidence.
+
+The original combined diagnostic had 2 test regressions plus a separately proven
+claims scope defect. All three were fixed after explicit human authorization;
+focused 99 passed, including 10 new variants. Three read-only reviewers found no
+remaining blocker in the corrected implementation. Details/provenance and exact
+reproduction commands are in the gate receipt; no fixture-specific code added.
+
+Open follow-ups: canon hook and paid record pass1 remain Should; buyer claim-count
+metadata wiring and time travel remain P3 Should. Fresh readable uploads still
+need a grounded stored-transcript path; prepared-transcript vision checks do not
+prove that path. Full provider replay, browser click path and human gold approval
+remain NOT VERIFIED. No paid model call or server was started by this gate.
+All gold stays DRAFT. Merge sync-2 into lane branches before further work;
+Phase3 ends 14:15 ICT. This gate does not itself start Phase3 implementation.
+
+Evaluation: first 8 S2 story checkpoints run successfully, candidate 40/40,
+B0 8/40, all DRAFT. Refreshed full 13-checkpoint diagnostic reports candidate
+61/65 vs B0 16/65, zero candidate false blame (0/57), no reviewed rows. Its CLI
+exits 1 at event09 admission, explicitly a phase3 catalogue target in the retained
+acceptance suite/P1 plan; event12 also declares a phase3 registry precondition.
+This full future-phase diagnostic is preserved with its error, not called a
+passing end-to-end story and not used to change labels. Current S2 path passes.
+
 ## contract-2
 
 Mini-sync gate passed at 11:49 ICT, 31 Oct 2026 (T+1:49), on explicit early
