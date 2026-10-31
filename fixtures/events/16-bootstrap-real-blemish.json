@@ -1,0 +1,20 @@
+{
+  "event_id": "REAL-EVT-16",
+  "idempotency_key": "real:REAL-PROD-R3:bootstrap:v1",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "CASE",
+    "id": "REAL-CASE-R3",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "REAL-CASE-R3",
+    "product_id": "REAL-PROD-R3"
+  },
+  "occurred_at": "2026-10-31T04:43:00Z",
+  "correlation_id": "REAL-STORY-REAL-PROD-R3",
+  "expect": "Đọc số công bố và công ty; phân biệt tên thành phần với nồng độ được nêu."
+}

@@ -12,6 +12,7 @@ from app.models import (
 class PassportMetadata(ContractModel):
     llm_mode: Literal["LIVE", "REPLAY", "FALLBACK"] | None = None
     hidden_citations: dict[str, int]
+    pending_claims: int = 0
 
 
 class ProductPresentation(ContractModel):

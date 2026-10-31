@@ -1,0 +1,407 @@
+{
+  "source_id": "REAL-PROD-R3-listing-872ac1e65bf9",
+  "kind": "LISTING",
+  "product_id": "REAL-PROD-R3",
+  "version": 1,
+  "uri": "https://www.pharmacity.vn/sua-rua-mat-dang-gel-tao-bot-cho-da-dau-mun-cerave-blemish-control-cleanser-473ml.html",
+  "requested_uri": "https://www.pharmacity.vn/sua-rua-mat-dang-gel-tao-bot-cho-da-dau-mun-cerave-blemish-control-cleanser-473ml.html",
+  "captured_at": "2026-10-31T04:41:50.554884+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "seller:pharmacity.vn",
+  "raw_sha256": "ce30e7a4ef75eee1fd2bebae131717cfe79857ec2611a94dfc0e2f1bf3b32ac8",
+  "cleaned_sha256": "80bc41685647e960d9d4d4ee2d41c49c33f86a96e84f888770f17698ae2c0846",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa rửa mặt dạng gel tạo bọt cho da dầu mụn CeraVe Blemish Control Cleanser 473ml"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "Mã:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "P29287"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Yêu thích:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "79.5k"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p006",
+      "locator": "description#p5",
+      "section": "description",
+      "text": "Xem giấy công bố sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p007",
+      "locator": "description#p6",
+      "section": "description",
+      "text": "Giảm 10%"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p008",
+      "locator": "description#p7",
+      "section": "description",
+      "text": "472.500 ₫/Chai"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p009",
+      "locator": "description#p8",
+      "section": "description",
+      "text": "525.000 ₫"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p010",
+      "locator": "description#p9",
+      "section": "description",
+      "text": "Giá đã bao gồm thuế. Phí vận chuyển và các chi phí khác (nếu có) sẽ được thể hiện khi đặt hàng."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p011",
+      "locator": "description#p10",
+      "section": "description",
+      "text": "Phân loại sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p012",
+      "locator": "description#p11",
+      "section": "description",
+      "text": "Giảm 10%"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p013",
+      "locator": "description#p12",
+      "section": "description",
+      "text": "472.500 ₫/Chai"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p014",
+      "locator": "description#p13",
+      "section": "description",
+      "text": "525.000 ₫"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p015",
+      "locator": "description#p14",
+      "section": "description",
+      "text": "Giá đã bao gồm thuế. Phí vận chuyển và các chi phí khác (nếu có) sẽ được thể hiện khi đặt hàng."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p016",
+      "locator": "description#p15",
+      "section": "description",
+      "text": "Số lượng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p017",
+      "locator": "description#p16",
+      "section": "description",
+      "text": "Khuyến mãi"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p018",
+      "locator": "description#p17",
+      "section": "description",
+      "text": "Tặng 1 sữa rửa mặt Cerave dành cho da thường và da khô 20ml"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p019",
+      "locator": "description#p18",
+      "section": "description",
+      "text": "Deal Giảm 10%"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p020",
+      "locator": "specs#1",
+      "section": "specs",
+      "text": "Thông tin chi tiết"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p021",
+      "locator": "specs#2",
+      "section": "specs",
+      "text": "Tên sản phẩm:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p022",
+      "locator": "specs#3",
+      "section": "specs",
+      "text": "BLEMISH CONTROL CLEANSER"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p023",
+      "locator": "specs#4",
+      "section": "specs",
+      "text": "Danh mục:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p024",
+      "locator": "specs#5",
+      "section": "specs",
+      "text": "Nước tẩy trang & sữa rửa mặt"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p025",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Công dụng:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p026",
+      "locator": "highlights#2",
+      "section": "highlights",
+      "text": "Sữa rửa mặt dạng gel tạo bọt cho da dầu mụn giúp thông thoáng lỗ chân lông, loại bỏ dầu thừa và vết thâm sau mụn."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p027",
+      "locator": "specs#6",
+      "section": "specs",
+      "text": "Quy cách:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p028",
+      "locator": "specs#7",
+      "section": "specs",
+      "text": "473ml"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p029",
+      "locator": "specs#8",
+      "section": "specs",
+      "text": "Lưu ý:"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p030",
+      "locator": "specs#9",
+      "section": "specs",
+      "text": "Mọi thông tin trên đây chỉ mang tính chất tham khảo. Đọc kỹ hướng dẫn sử dụng trước khi dùng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p031",
+      "locator": "specs#10",
+      "section": "specs",
+      "text": "Giao hàng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p032",
+      "locator": "specs#11",
+      "section": "specs",
+      "text": "siêu tốc"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p033",
+      "locator": "specs#12",
+      "section": "specs",
+      "text": "Miễn phí"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p034",
+      "locator": "specs#13",
+      "section": "specs",
+      "text": "vận chuyển"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p035",
+      "locator": "specs#14",
+      "section": "specs",
+      "text": "Đủ thuốc"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p036",
+      "locator": "specs#15",
+      "section": "specs",
+      "text": "chuẩn"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p037",
+      "locator": "description#p19",
+      "section": "description",
+      "text": "Mô tả"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p038",
+      "locator": "ingredients#1",
+      "section": "ingredients",
+      "text": "Thành phần"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p039",
+      "locator": "highlights#3",
+      "section": "highlights",
+      "text": "Công dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p040",
+      "locator": "usage#1",
+      "section": "usage",
+      "text": "Cách Sử Dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p041",
+      "locator": "usage#2",
+      "section": "usage",
+      "text": "Lưu ý sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p042",
+      "locator": "specs#16",
+      "section": "specs",
+      "text": "Thông tin sản xuất"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p043",
+      "locator": "description#p20",
+      "section": "description",
+      "text": "Mô tả sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p044",
+      "locator": "description#p21",
+      "section": "description",
+      "text": "Mô tả"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p045",
+      "locator": "description#p22",
+      "section": "description",
+      "text": "Sữa rửa mặt dạng gel tạo bọt cho da dầu mụn giúp thông thoáng lỗ chân lông, loại bỏ dầu thừa và vết thâm sau mụn."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p046",
+      "locator": "ingredients#2",
+      "section": "ingredients",
+      "text": "Thành phần"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p047",
+      "locator": "ingredients#3",
+      "section": "ingredients",
+      "text": "Aqua / Water, Cocamidopropyl Hydroxysultaine, Glycerin, Sodium Lauroyl Sarcosinate, Niacinamide, Salicylic Acid, Sodium Methyl Cocoyl Taurate, PEG-150 Pentaerythrityl Tetrastearate, Gluconolactone, Sodium Cocoyl Isethionate, Ceramide NP, Ceramide AP, Ceramide EOP, Carbomer, Calcium Gluconate, Triethyl Citrate,Sodium Hydroxide, Sodium Benzoate, Sodium Chloride, Sodium Lauroyl Lactylate, Cholesterol, Coconut Acid, Tetrasodium EDTA, Caprylyl Glycol, Hydrolyzed Hyaluronic Acid, Trisodium Ethylenediamine Disuccinate, Hectorite, Phytosphingosine, Xanthan Gum, Acrylates Copolymer, Benzoic Acid."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p048",
+      "locator": "highlights#4",
+      "section": "highlights",
+      "text": "Công dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p049",
+      "locator": "highlights#5",
+      "section": "highlights",
+      "text": "Sữa rửa mặt dạng gel tạo bọt cho da dầu mụn giúp thông thoáng lỗ chân lông, loại bỏ dầu thừa và vết thâm sau mụn."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p050",
+      "locator": "usage#3",
+      "section": "usage",
+      "text": "Hướng dẫn sử dụng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p051",
+      "locator": "usage#4",
+      "section": "usage",
+      "text": "Hướng dẫn sử dụng: sử dụng 2 lần mỗi ngày vào sáng và tối. Lắc kĩ. Làm ướt mặt và massage kĩ. Rửa sạch lại với nước."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p052",
+      "locator": "usage#5",
+      "section": "usage",
+      "text": "Lưu ý"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p053",
+      "locator": "usage#6",
+      "section": "usage",
+      "text": "Mọi thông tin trên đây chỉ mang tính chất tham khảo. Đọc kỹ hướng dẫn sử dụng trước khi dùng. Để xa tầm tay trẻ em"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p054",
+      "locator": "usage#7",
+      "section": "usage",
+      "text": "Thận trọng"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p055",
+      "locator": "usage#8",
+      "section": "usage",
+      "text": "Tránh vùng da quanh mắt. Trong trường hợp tiếp xúc với mắt, rửa ngay bằng nước sạch. Hạn chế tiếp xúc quá lâu với ánh nắng ngay cả khi đang dùng sản phẩm chống nắng. Không sử dụng cho trẻ em dưới 12 tuổi."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p056",
+      "locator": "specs#17",
+      "section": "specs",
+      "text": "Thông tin sản xuất"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p057",
+      "locator": "specs#18",
+      "section": "specs",
+      "text": "Bảo quản: Ngày sản xuất"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p058",
+      "locator": "specs#19",
+      "section": "specs",
+      "text": "Hạn sử dụng: 3 năm từ ngày sản xuất"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p059",
+      "locator": "specs#20",
+      "section": "specs",
+      "text": "Xuất xứ thương hiệu: Trung Quốc"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p060",
+      "locator": "specs#21",
+      "section": "specs",
+      "text": "Nơi sản xuất: Trung Quốc"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p061",
+      "locator": "specs#22",
+      "section": "specs",
+      "text": "Tên Nhà sản xuất: BEAUTYCOS INTERNATIONAL CO., LTD."
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p062",
+      "locator": "specs#23",
+      "section": "specs",
+      "text": "Công ty chịu trách nhiệm đưa sản phẩm ra thị trường: Công ty TNHH L'OREAL VIỆT NAM"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p063",
+      "locator": "specs#24",
+      "section": "specs",
+      "text": "Công ty phân phối: Công ty TNHH DKSH Việt Nam"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p064",
+      "locator": "specs#25",
+      "section": "specs",
+      "text": "Số Giấy công bố: 267602/25/CBMP-QLD"
+    },
+    {
+      "id": "REAL-PROD-R3-listing-872ac1e65bf9-v1-p065",
+      "locator": "specs#26",
+      "section": "specs",
+      "text": "Số giấy XNQC: 524/2025/XNQC-YTHCM"
+    }
+  ]
+}

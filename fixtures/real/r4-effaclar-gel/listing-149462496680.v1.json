@@ -1,0 +1,437 @@
+{
+  "source_id": "REAL-PROD-R4-listing-149462496680",
+  "kind": "LISTING",
+  "product_id": "REAL-PROD-R4",
+  "version": 1,
+  "uri": "https://www.pharmacity.vn/la-roche-posay-effaclar-gel-rua-mat-cho-da-dau-nhay-cam-200mltuyp.html",
+  "requested_uri": "https://www.pharmacity.vn/la-roche-posay-effaclar-gel-rua-mat-cho-da-dau-nhay-cam-200mltuyp.html",
+  "captured_at": "2026-10-31T04:41:50.599173+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "seller:pharmacity.vn",
+  "raw_sha256": "980d7d6ce9ad1ea31cd9743ddc717d6f879f250bfdff0598d99e6c96336445e0",
+  "cleaned_sha256": "2998c1a537bfcdb8d0291f8b630b1168385da343cb4a1bcf4356b5bec4fe90ab",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Gel rửa mặt LA ROCHE POSAY Effaclar Purifying For Oily Sensitive Skin cho da dầu nhạy cảm (200ml)"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "Mã:"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "P30547"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Yêu thích:"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "31.5k"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p006",
+      "locator": "description#p5",
+      "section": "description",
+      "text": "Giảm 20%"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p007",
+      "locator": "description#p6",
+      "section": "description",
+      "text": "391.200 ₫/Chai"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p008",
+      "locator": "description#p7",
+      "section": "description",
+      "text": "489.000 ₫"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p009",
+      "locator": "description#p8",
+      "section": "description",
+      "text": "Giá đã bao gồm thuế. Phí vận chuyển và các chi phí khác (nếu có) sẽ được thể hiện khi đặt hàng."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p010",
+      "locator": "description#p9",
+      "section": "description",
+      "text": "Phân loại sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p011",
+      "locator": "description#p10",
+      "section": "description",
+      "text": "Giảm 20%"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p012",
+      "locator": "description#p11",
+      "section": "description",
+      "text": "391.200 ₫/Chai"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p013",
+      "locator": "description#p12",
+      "section": "description",
+      "text": "489.000 ₫"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p014",
+      "locator": "description#p13",
+      "section": "description",
+      "text": "Giá đã bao gồm thuế. Phí vận chuyển và các chi phí khác (nếu có) sẽ được thể hiện khi đặt hàng."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p015",
+      "locator": "description#p14",
+      "section": "description",
+      "text": "Số lượng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p016",
+      "locator": "description#p15",
+      "section": "description",
+      "text": "Khuyến mãi"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p017",
+      "locator": "description#p16",
+      "section": "description",
+      "text": "Deal giảm 20%"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p018",
+      "locator": "description#p17",
+      "section": "description",
+      "text": "Tặng 1 Gel rửa mặt LA ROCHE POSAY làm sạch da dầu & nhạy cảm (50ml)"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p019",
+      "locator": "specs#1",
+      "section": "specs",
+      "text": "Thông tin chi tiết"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p020",
+      "locator": "specs#2",
+      "section": "specs",
+      "text": "Danh mục:"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p021",
+      "locator": "specs#3",
+      "section": "specs",
+      "text": "Nước tẩy trang & sữa rửa mặt"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p022",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Công dụng:"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p023",
+      "locator": "highlights#2",
+      "section": "highlights",
+      "text": "Gel rửa mặt tạo bọt làm sạch da dành cho da dầu và da nhạy cảm"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p024",
+      "locator": "specs#4",
+      "section": "specs",
+      "text": "Quy cách:"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p025",
+      "locator": "specs#5",
+      "section": "specs",
+      "text": "200ml"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p026",
+      "locator": "specs#6",
+      "section": "specs",
+      "text": "Lưu ý:"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p027",
+      "locator": "specs#7",
+      "section": "specs",
+      "text": "Mọi thông tin trên đây chỉ mang tính chất tham khảo. Đọc kỹ hướng dẫn sử dụng trước khi dùng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p028",
+      "locator": "specs#8",
+      "section": "specs",
+      "text": "Giao hàng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p029",
+      "locator": "specs#9",
+      "section": "specs",
+      "text": "siêu tốc"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p030",
+      "locator": "specs#10",
+      "section": "specs",
+      "text": "Miễn phí"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p031",
+      "locator": "specs#11",
+      "section": "specs",
+      "text": "vận chuyển"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p032",
+      "locator": "specs#12",
+      "section": "specs",
+      "text": "Đủ thuốc"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p033",
+      "locator": "specs#13",
+      "section": "specs",
+      "text": "chuẩn"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p034",
+      "locator": "description#p18",
+      "section": "description",
+      "text": "Mô tả"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p035",
+      "locator": "ingredients#1",
+      "section": "ingredients",
+      "text": "Thành phần"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p036",
+      "locator": "highlights#3",
+      "section": "highlights",
+      "text": "Công dụng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p037",
+      "locator": "usage#1",
+      "section": "usage",
+      "text": "Cách Sử Dụng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p038",
+      "locator": "usage#2",
+      "section": "usage",
+      "text": "Thận trọng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p039",
+      "locator": "specs#14",
+      "section": "specs",
+      "text": "Thông tin sản xuất"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p040",
+      "locator": "description#p19",
+      "section": "description",
+      "text": "Mô tả sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p041",
+      "locator": "description#p20",
+      "section": "description",
+      "text": "Sản phẩm đã được thay đổi bao bì. Pharmacity vẫn còn cả hai loại bao bì mới và cũ tại các nhà thuốc. Vì vậy, đơn hàng của khách hàng có thể nhận được một trong hai loại bao bì, tùy thuộc vào tình trạng tồn kho tại nhà thuốc gần khu vực của khách hàng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p042",
+      "locator": "description#p21",
+      "section": "description",
+      "text": "Gel Rửa Mặt LA ROCHE POSAY Effaclar Purifying For Oily Sensitive Skin là gì?"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p043",
+      "locator": "description#p22",
+      "section": "description",
+      "text": "Sản phẩm là gel rửa mặt tạo bọt, dành cho da dầu và da nhạy cảm, giúp làm sạch da hiệu quả .Mang lại cảm giác tươi mát và dễ chịu cho làn da mà không gây khô da ."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p044",
+      "locator": "description#p23",
+      "section": "description",
+      "text": "Thành phần Gel Rửa Mặt LA ROCHE POSAY Effaclar Purifying For Oily Sensitive Skin"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p045",
+      "locator": "description#p24",
+      "section": "description",
+      "text": "Nước khoáng La Roche-Posay: Giúp làm dịu da và chống oxy hóa."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p046",
+      "locator": "description#p25",
+      "section": "description",
+      "text": "Kẽm PCA: Giảm bã nhờn và thanh lọc làn da."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p047",
+      "locator": "description#p26",
+      "section": "description",
+      "text": "Các thành phần Sodium Laureth Sulfate, PEG-8, Coco-Betaine, Hexylene Glycol, Sodium Chloride, Citric Acid làm sạch: Tác động hiệu quả cao trong việc loại bỏ tạp chất và bã nhờn trên da nhưng không gây khô da sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p048",
+      "locator": "description#p27",
+      "section": "description",
+      "text": "Công dụng của Gel Rửa Mặt LA ROCHE POSAY Effaclar Purifying For Oily Sensitive Skin"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p049",
+      "locator": "description#p28",
+      "section": "description",
+      "text": "Gel rửa mặt tạo bọt làm sạch dành cho da dầu nhạy cảm Effaclar Purifying Foaming Gel For Oily Sensitive Skin giúp làm sạch bụi bẩn và bã nhờn dư thừa, nguyên nhân chính gây nên mụn, mang lại cảm giác tươi mát cho làn da. Công thức sản phẩm được lựa chọn kĩ càng với các thành phần làm sạch dịu nhẹ phù hợp cho da đầu nhạy cảm."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p050",
+      "locator": "description#p29",
+      "section": "description",
+      "text": "Không chứa paraben, không xà phòng, không màu, không cồn, độ pH trung tính 5.5."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p051",
+      "locator": "description#p30",
+      "section": "description",
+      "text": "Chỉ định"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p052",
+      "locator": "description#p31",
+      "section": "description",
+      "text": "Sản phẩm phù hợp cho da dầu và nhạy cảm, giúp làm sạch sâu, giảm bã nhờn và bụi bẩn."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p053",
+      "locator": "description#p32",
+      "section": "description",
+      "text": "Cách sử dụng Gel Rửa Mặt LA ROCHE POSAY Effaclar Purifying For Oily Sensitive Skin"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p054",
+      "locator": "usage#3",
+      "section": "usage",
+      "text": "Cách dùng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p055",
+      "locator": "usage#4",
+      "section": "usage",
+      "text": "Sử dụng hàng ngày vào buổi sáng và tối. Làm ẩm da, lấy một lượng vừa đủ sản phẩm, tạo bọt và thoa lên mặt, tránh vùng mắt. Massage nhẹ nhàng, sau đó rửa sạch lại với nước."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p056",
+      "locator": "usage#5",
+      "section": "usage",
+      "text": "Liều dùng"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p057",
+      "locator": "usage#6",
+      "section": "usage",
+      "text": "Dùng 2 lần mỗi ngày vào buổi sáng và tối."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p058",
+      "locator": "usage#7",
+      "section": "usage",
+      "text": "Chưa có thông tin về tác dụng phụ của sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p059",
+      "locator": "usage#8",
+      "section": "usage",
+      "text": "Lưu ý"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p060",
+      "locator": "usage#9",
+      "section": "usage",
+      "text": "Không gây kích ứng. Phù hợp với làn da nhạy cảm. Nên dùng trong vòng 12 tháng sau khi mở nắp."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p061",
+      "locator": "usage#10",
+      "section": "usage",
+      "text": "Sản phẩm chỉ dùng ngoài da. Tránh tiếp xúc trực tiếp với mắt. Trường hợp bị dính vào mắt cần rửa ngay bằng nước sạch."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p062",
+      "locator": "usage#11",
+      "section": "usage",
+      "text": "Ngưng sử dụng và báo cho bác sĩ hoặc nhân viên y tế khi có xảy ra dị ứng với bất kỳ thành phần nào của sản phẩm."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p063",
+      "locator": "usage#12",
+      "section": "usage",
+      "text": "Đọc kỹ hướng dẫn sử dụng trước khi dùng."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p064",
+      "locator": "usage#13",
+      "section": "usage",
+      "text": "Chống chỉ định"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p065",
+      "locator": "usage#14",
+      "section": "usage",
+      "text": "Không sử dụng nếu dị ứng với bất kỳ thành phần nào của sản phẩm."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p066",
+      "locator": "specs#15",
+      "section": "specs",
+      "text": "Thông tin sản xuất"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p067",
+      "locator": "specs#16",
+      "section": "specs",
+      "text": "Bảo quản: Nơi khô ráo thoáng mát, tránh ánh nắng trực tiếp."
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p068",
+      "locator": "specs#17",
+      "section": "specs",
+      "text": "Đóng gói: Chai 200ml"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p069",
+      "locator": "specs#18",
+      "section": "specs",
+      "text": "Thương hiệu: La Roche-Posay"
+    },
+    {
+      "id": "REAL-PROD-R4-listing-149462496680-v1-p070",
+      "locator": "specs#19",
+      "section": "specs",
+      "text": "Nơi sản xuất: Pháp"
+    }
+  ]
+}

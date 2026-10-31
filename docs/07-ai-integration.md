@@ -443,3 +443,147 @@ requests: 1. Full-bootstrap model recording remains an optional Should follow-up
 the single-listing real-record/replay requirement in P2-1 DONE WHEN is satisfied.
 P4 still owns the integrated Sync-1 gate/main merge/tag; no sync-1 was available
 at this handoff. Shared fixtures/replay and gold were not edited by P2.
+
+Phase-2 P2 implementation (31 Oct; contract-2 merged, P1 BUILD still pending):
+
+- Packaging images use the existing ImagePart with high detail; JPEGs become PNG bytes
+  using Pillow. The image request uses extract-vision-v1, while text extract-v1 bytes
+  remain unchanged. Quotes must still match stored transcript passages. Null/UNREADABLE
+  signals persist; blank documented image transcripts produce signals in FALLBACK too.
+- Coverage uses fallback extraction only as a detector of skipped passage/field pairs.
+  One extract:retry/extract-retry-v1 request per source adds only validated missing
+  pairs. LLMError/BudgetExceeded retain the first validated claims and trace the stop
+  reason. The coverage-v1 cache key separates this implementation from prior cache;
+  code traces list actual claim prompt versions. No recording is overwritten.
+- claims_audit.audit retains its signature. Strict claims-v1 proposals have passage_id,
+  kind (free_from/concentration/treatment), subject, percent and quote. Grounding checks
+  stored case/source/passage identity, clean source regions and full-sentence polarity.
+  Source-noted claim_patterns.json supplies cues/family subject aliases; unknown family
+  mapping remains model provenance. Every claim:<kind>:<detail> delegates to P1
+  policy.decide with normalized={kind,value,percent,by}, plus grounded reference
+  SourceObs, case/revision-bound gaps/reviews, and ctx.product. Returned FieldDecision
+  objects are unchanged. No P2 code assigns their verdict or review state.
+- canon.learn_all(ctx, observations) batches unknown phrases from persisted validated
+  claims. Its canon-v1 proposal must match candidate passage/phrase; proposed INCI must
+  occur in this product's current in-scope reference INCI. Skin mappings use closed
+  SkinType values. Stored vocab value_json includes values, INCI names, quote, passage,
+  source version and prompt provenance. Reuse rechecks current product references.
+  Original seed observations stay separate from learned-only observations carrying
+  mapped_by=model and normalized.by=model. P1 must call this helper before public-field
+  policy and retain its asymmetric-trust rule; the hook is not yet integrated here.
+- Budget remains one object per run; provider Future timeout calls Budget.expire().
+  Only provider I/O runs in the worker. Late completions cannot persist results.
+  P1 must consume budget.stop_reason after optional failures and classify zero-result
+  exhaustion as PARTIAL. P2 does not set run status.
+- regulatory_limits.json contains limits[] with inci/max_percent/status/asean_entry
+  and optional basis, plus dated sources. Values match the specified demo subset and
+  ASEAN Annex VI 2023-1; status remains verify because current legal applicability was
+  not established. Acid-equivalent and combined-paraben conditions are preserved.
+  scope_markets.json is the exact data published in origin/p1-b2, using country_tlds
+  and generic_cctlds; P4 must integrate P1's corresponding scope consumer.
+
+scripts/record_all.py now also accepts --events for bootstrap pass 1. It is dry by
+default and prints the shared cap before work: at most 30 network attempts and USD2,
+including HTTP retries. A persisted reservation ledger is enforced through the
+additional llm.client.network_guard context manager, without changing parse/aparse.
+It creates isolated base.db, record.db and replay.db using SQLite backup, preserving
+every source/passage ID. --replay-only restores a fresh base copy, checks equal field
+semantics/citations/dependencies and zero tokens, and rejects trace errors including
+optional-step replay misses. It does not touch the active app database or gold.
+An interrupted directory is retained and cannot silently reset its allowance.
+The ledger is append-only ledger.jsonl, locked and flushed/fsynced before a
+request. Reload validates monotonic counters/cost; a partial row fails closed.
+
+Human-terminal preparation, from the repository root:
+
+```powershell
+cd backend
+$env:MODEL_EXTRACT='gpt-6.1-sol'
+$env:MODEL_CHEAP=''
+$env:LLM_MAX_OUTPUT_TOKENS='3000'
+$env:OCR_ENABLED='0'
+$env:REPLAY_FREEZE='0'
+$events=@('../fixtures/events/01-bootstrap-demo.json','../fixtures/events/11-bootstrap-hydra.json','../fixtures/events/13-bootstrap-clear-serum.json')
+.venv/Scripts/python ../scripts/record_all.py --events $events --output-dir .venv/p2-record-pass1
+# After reviewing the dry report and integrating P1 CL/canon, append --execute.
+# Replay a completed pass, without a new paid request:
+.venv/Scripts/python ../scripts/record_all.py --events $events --output-dir .venv/p2-record-pass1 --replay-only
+```
+
+The measured dry report has 11 sources: 11 extract + <=11 coverage + <=3 canon +
+<=3 claims, with all HTTP attempts still bounded by the shared30 cap. Paid calls
+made by P2-2: zero. Image token costs for the configured model are NOT VERIFIED in
+the currently accessible official docs; image execution fails before spending with
+VISION_TOKEN_COST_NOT_VERIFIED. A transcript-only pass requires the human explicitly
+setting LLM_VISION=0; it does not validate vision. No automatic downgrade occurs.
+Event10 EVIDENCE_ADDED belongs to the separate post-S2 pass after P1 admission is
+integrated; this bootstrap-only CLI rejects non-bootstrap events. Shared reset/replay
+identity still needs P1/P4 integration; do not regenerate IDs or omit them from hashes.
+After recordings are integrated with the matching database identity, P4 should run
+the documented replay pytest gate as well as the standalone --replay-only check.
+
+Validation: phase2 full suite 713 passed, 16 failed (P1/P4 WAITING node IDs and
+missing work in .agent/plans/P2.md), 18 skipped, 2 subtests passed, no deselections.
+After final review fixes, all 141 tests in the P2 extraction/claims/canon/gateway/
+budget/record suites and guards passed; no failures, skips or deselections.
+Three read-only self-review passes checked grounding, ownership, contracts,
+budgets and generalization. Live vision, paid pass1, legal applicability and the
+supported OCR runtime remain unverified; no paid request was made in P2-2.
+
+S2 REAL-source follow-up: p2 now includes published P1 007d900 and P4 47d3bdb.
+R2 scope is MATCH with that P1 consumer. Extraction uses source-noted
+product_context.json to separate explicitly offered gifts from the purchased
+product. Both fallback and model/replay validation check the full passage, even
+for cropped quotes; numeric boundaries use original source positions. Sentence,
+purchase-return and completed-offer line boundaries preserve main sizes, while
+incomplete offers can wrap across a line. Gift sets and genuine multiple-size
+statements remain eligible. Generic volume normalization used by scope is unchanged.
+Extraction caches are invalidated with fallback-v3 / coverage-v2-product-context;
+model prompts and replay request hashes are unchanged, and replay output is still
+validated. R2 volume now passes AC-01; its skin-type comparison remains a P1 R9
+CCR. The integrated P1 regulatory consumer still expects limits as a dictionary,
+so concentration auditing is not integration-ready with the documented limits[]
+schema. Canon integration and optional budget-stop propagation remain explicit
+P1 handoff items; merging the branch alone does not establish their completion.
+
+The REAL-source regression gate also exposed extraction gaps beyond R2. Fallback
+now preserves positive claims before independent negative benefit clauses, while
+code grounding keeps cropped negative claims rejected. A standalone INCI heading
+can anchor an adjacent list in the same section only when every item matches an
+exact name in source-noted inci_names.json or existing seed INCI names. Unknown
+names and ingredient-benefit prose do not create exhaustive fallback lists; the list keeps its
+own passage locator. Additional source-noted imperative cues exclude separate
+instruction-bearing sentences. Synthetic variants cover all three mechanisms;
+no fixture, acceptance assertion or P1 policy rule changed.
+Supplemental-notification caption variants are sourced in vocab_seed.json and
+verified through EVIDENCE_ADDED acceptance. The INCI name registry supplies no
+product membership, expected verdict or regulatory classification.
+
+### INCI name provenance
+
+Sync-2 integration: Hydrolyzed Hyaluronic Acid and Hydrolyzed Sodium Hyaluronate
+join the existing broad HYALURONIC_ACID family using CIR Table 1 definitions,
+checked 31 Oct 2026 at https://www.cir-safety.org/sites/default/files/SLR_HyaluronicAcid_092022.pdf.
+The source note is stored in vocab_seed.json. This groups ingredient names only;
+it does not equate concentration or performance. Cache versions are fallback-v4
+and coverage-v3-ingredient-family, so previous normalized claims are recomputed.
+Claims auditing uses claims-v2-passage-scope and recomputes source/version-bound
+passage placements before presenting passages to a model or fallback extraction.
+Original replay records remain unchanged; changed model-visible input stays in
+the full replay key.
+
+inci_names.json uses the ingredient passages captured on 31 Oct 2026 from
+https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-thuong-va-da-kho
+and https://www.cerave.com.vn/cham-soc-da/lam-sach/sua-rua-mat-danh-cho-da-dau.
+Panthenol nomenclature was checked separately in FDA SRS:
+https://precision.fda.gov/uniisearch/srs/unii/wv9cm0o67z.
+Exact brand-containing provenance URLs live here because the application guard
+prohibits fixture brand tokens anywhere in app/data; the JSON links to this section.
+No product association is encoded in the recognition rule.
+
+Follow-up validation: final P2 extraction/normalization/source-context/guards plus
+repaired Hydrating, injection and EVIDENCE_ADDED acceptance gate: 255 passed,
+0 failed/skipped/deselected. The broader Phase2 run before the last caption and
+provenance corrections was 982 passed/7 failed/14 skipped/+2 subtests; those two
+P2 failures subsequently passed. Five P1 acceptance nodes remain WAITING, listed
+with concrete CCRs in the P2 ExecPlan. No complete S2 gate is claimed.

@@ -86,6 +86,76 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+S2 integration correction: policy-v1.6 records version-bound passage scope in the
+claims auditor and the sourced broad hyaluronate ingredient-family mapping. The
+auditor calls the existing scope helper for each passage; MISMATCH is excluded,
+UNKNOWN/AGENT stays unresolved and policy retains its UNCERTAIN/review handling.
+No model chooses a verdict. Gift quantities removed at extraction still receive
+the existing scope_check exclusion reason and passage reference.
+
+Current version is policy-v1.5 after integrating P2 S2. P2's regulatory table is a list
+whose rows are explicitly provisional (status=verify) and qualified by use/market. It is
+treated as unavailable for automated concentration contradiction, rather than causing a
+mapping-shape error or silently promoting provisional limits into facts. Concentration stays
+UNCERTAIN/NEEDS_REVIEW with a verification note. The earlier numeric-map contract remains
+supported; activating the row table requires a reviewed applicability contract with P2/P4.
+CCR P1→P4: record v1.5 as the current version, preserving v1.4's R2 changes below.
+For an unreadable-only field, the IMAGE gap reason includes the replacement action (provide
+a clearer photo of the label), so the persisted seller evidence request is actionable as well
+as its needed_doc. Readable support is still retained without opening an unnecessary gap.
+
+S2 REAL follow-up advances POLICY_VERSION to policy-v1.4. Volume scope examines stored
+passage text using source-noted gift cues in data/scope_text_rules.json (explicitly approved
+P1 ownership exception). A single quantity after a cue within a clause is gift-context
+MISMATCH; multiple quantities there, or the same value appearing in both main and gift
+contexts, remain UNKNOWN. Negated, conditional purchase, gift-container and unresolved
+suffix-cue wording also remain UNKNOWN using curated indirect cues and existing negation
+rules. A page naming only gift quantities does not acquire product-level MATCH by omission.
+Main quantities before the cue or in separate clauses remain
+eligible. Source size inference excludes only unambiguous gift quantities. Unknown wording
+is not resolved by picking whichever quantity matches the case. Existing normalization,
+unit conversion and tolerance remain P2/compare helpers; no duplicate size parser is added.
+Trace scope_check records GIFT_CONTEXT/AMBIGUOUS_VOLUME_CONTEXT and policy R3 filters scope.
+
+For skin-type comparisons, a shorter source summary does not negate a fuller, compatible
+statement in the same source version. R4 still checks within-source contradictions first;
+R9 accepts the fuller code/seed evidence only from that same version, and the final citations
+include supporting passages. Another source or an unverified model mapping cannot suppress
+the disagreement. CCR P1→P4: record policy-v1.4 and the trace-debug loop in tracking docs.
+
+S2 P1 advances POLICY_VERSION to policy-v1.3 (v1.2 plus the approved MODEL_ERROR rule). Pure scope inference and stored passage
+placements feed SourceObs; R7c joins copied listing passages with their reference family.
+The run supplies stored full passage text for copy comparison, while citations retain the
+validated extracted excerpts. Revoke admission changes only dependent freshness; the next
+run preserves unaffected result versions. The first trace step records stale:mark with zero
+model calls. Budget exhaustion with zero published results is PARTIAL.
+
+Human decision at S2: a typed model error before any validated claim returns PARTIAL,
+preserves stop_reason/error, and publishes five INSUFFICIENT findings with MODEL_ERROR
+gaps and no citations. A failure after some sources preserves only code-verified findings;
+it does not invent claims for unassessed fields. The old test_run expectations were explicitly
+approved for this update; unrelated error expectations remain unchanged. The auxiliary
+pre-wiring copy assertion was also approved for SINGLE_SOURCE plus an explicit R7c trail.
+During revoke reassessment, this rule applies only to affected fields. Unaffected CURRENT
+findings are revalidated through publish.py and retain their result IDs, versions and policy
+trails, with current-revision confirmation and replacement review tasks where needed.
+Exception: a prior revision's human approval expires. Policy returns NEEDS_REVIEW and a
+REVIEW/SUPERSEDED trail; publish creates a new result version, retaining the historical
+REVIEWED row and its citations. An unrelated source event cannot carry human approval
+into the new revision without another review.
+
+Reviewer state decisions remain in policy; publish.py validates and atomically stores the
+revision-bound result, citations, rebuilt dependencies and review record. Unresolved evidence
+requests stay OPEN; only a resolved field fulfills them. Claim rules reject unreadable/empty
+INCI evidence, cap unknown scope, and use seed provenance for adverse family matches. Model
+membership alone cannot accuse. Concentration compares ordered INCI items using P2-owned
+regulatory_limits.json (flat ingredient-to-number mapping or a limits object); absent data
+leaves UNCERTAIN with a note. The <=1% ordering boundary never implies a smaller cap.
+Normalized concentration claims use ingredient plus percent (claimed_percent accepted).
+All non-consistent claim findings require review; buyers receive only a neutral pending count.
+CCR P1→P4: record policy-v1.3 in tracking/DECISIONS.md. CCR P1→P2: align normalized claim keys
+free_from/concentration/treatment and supply the sourced regulatory mapping before S2 gate.
+
 S1 P1 implements `policy-v1.1`: normalized comparison, ordered R1–R11, active notification requirement,
 family independence, value-led templates, citation dependencies and rule trails. `SourceObs` carries stored
 source/version/passage identity, kind/family/status/visibility/scope, normalized field value, quote and mapping

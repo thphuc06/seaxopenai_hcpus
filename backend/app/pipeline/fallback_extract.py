@@ -2,13 +2,96 @@
 from __future__ import annotations
 
 import re
+import unicodedata
+from functools import lru_cache
+from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.models import ClaimExtraction, ExtractedClaim
-from app.pipeline.normalize import folded, has_negation, ingredient_keys, phrase_pattern, phrase_spans, skin_types_in, vocabulary, volume_spans
+from app.pipeline.normalize import folded, has_negation, ingredient_keys, parse_inci, phrase_pattern, phrase_spans, skin_types_in, vocabulary, volume_spans
 
-FALLBACK_VERSION = "fallback-v2"
+FALLBACK_VERSION = "fallback-v4"
+
+
+class ProductContext(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    about: str = Field(alias="_about")
+    gift_cues: list[str]
+    product_cues: list[str]
+    gift_product_cues: list[str]
+    product_headers: list[str]
+    clause_boundaries: list[str]
+
+
+@lru_cache(maxsize=1)
+def _product_context() -> ProductContext:
+    return ProductContext.model_validate_json((Path(__file__).parents[1] / "data/product_context.json").read_text(encoding="utf-8"))
+
+
+class InciNames(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    about: str = Field(alias="_about")
+    sources: list[str]
+    names: list[str]
+
+
+@lru_cache(maxsize=1)
+def _inci_names() -> frozenset[str]:
+    data = InciNames.model_validate_json((Path(__file__).parents[1] / "data/inci_names.json").read_text(encoding="utf-8"))
+    names = data.names + [name for entry in vocabulary().ingredients for name in entry.inci]
+    return frozenset(" ".join(name.casefold().rstrip(".").split()) for name in names)
+
+
+def gift_spans(text: str) -> list[tuple[int, int]]:
+    """Locate explicit gift clauses without treating every different size as a gift."""
+    rules = _product_context()
+    products = [span for cue in rules.gift_product_cues for span in phrase_spans(text, cue)]
+    returns = [left for cue in rules.product_cues for left, _ in phrase_spans(text, cue)]
+    boundaries = [right for _, right in sentence_spans(text)] + [m.start() for m in re.finditer(";", text)]
+    gifts: list[tuple[int, int]] = []
+    for cue in rules.gift_cues:
+        for start, end in phrase_spans(text, cue):
+            if any(left <= start and end <= right for left, right in products):
+                continue
+            stop = len(text)
+            for boundary in sorted(boundary for boundary in boundaries if boundary >= end):
+                # A wrapped offer may put its amount on the next line. A blank
+                # line, completed amount, or new product header ends the clause.
+                prefix = text[start:boundary]
+                following = text[boundary:].lstrip().split("\n", 1)[0]
+                product_header = any(left == 0 and following[right:].lstrip().startswith(":")
+                                     for cue in rules.product_headers for left, right in phrase_spans(following, cue))
+                if (prefix.endswith("\n") and not re.search(r"\n\s*\n$", prefix)
+                        and not volume_spans(prefix) and _labelled(following) is None and not product_header):
+                    continue
+                stop = boundary
+                break
+            stop = min([position for position in returns if end <= position < stop] + [stop])
+            gifts.append((start, stop))
+    return gifts
+
+
+def product_volume_supported(text: str, raw: str, quote: str) -> bool:
+    """A quoted amount must have an occurrence outside explicit gift clauses.
+
+    Whitespace and NFC match without losing source line boundaries. A broad quote may include
+    a gift, but its raw amount must still belong to the purchased product clause.
+    """
+    if not raw.strip() or not quote.strip():
+        return False
+    text = unicodedata.normalize("NFC", text)
+    gifts = gift_spans(text)
+    quoted = r"\s+".join(re.escape(word) for word in unicodedata.normalize("NFC", quote).split())
+    amount = r"(?<![\w.,+\-])" + r"\s+".join(re.escape(word) for word in unicodedata.normalize("NFC", raw).split()) + r"(?!\w)"
+    for cited in re.finditer(quoted, text):
+        for match in re.finditer(amount, text):
+            left, right = match.span()
+            if not cited.start() <= left < right <= cited.end():
+                continue
+            if not any(begin < right and left < end for begin, end in gifts):
+                return True
+    return False
 
 
 class Passage(BaseModel):
@@ -32,6 +115,15 @@ def sentence_spans(text: str) -> list[tuple[int, int]]:
     if start < len(text):
         spans.append((start, len(text)))
     return spans
+
+
+def claim_context_spans(text: str) -> list[tuple[int, int]]:
+    """Keep negation in its clause, including the conjunction that introduces it."""
+    boundaries = {0, len(text)}
+    boundaries.update(right for _, right in sentence_spans(text))
+    boundaries.update(left for cue in _product_context().clause_boundaries for left, _ in phrase_spans(text, cue))
+    ordered = sorted(boundaries)
+    return list(zip(ordered, ordered[1:]))
 
 
 def injection_spans(text: str) -> list[tuple[int, int]]:
@@ -97,7 +189,7 @@ def _label_chunks(line: str) -> list[str]:
 
 def _extraction_chunks(text: str) -> list[str]:
     """Keep wrapped INCI text contiguous; headers and paragraphs end a list."""
-    spans = sentence_spans(text)
+    spans = claim_context_spans(text)
     chunks: list[str] = []
     index = 0
     while index < len(spans):
@@ -124,7 +216,15 @@ def _extraction_chunks(text: str) -> list[str]:
 def extract(sv_id: str, passages: list[Passage]) -> ClaimExtraction:
     claims: list[ExtractedClaim] = []
     ignored = any(injection_spans(passage.text) for passage in passages)
+    previous: Passage | None = None
     for passage in passages:
+        # Captures can store an INCI heading separately from its value. Preserve
+        # the list's own locator, and require adjacent matching source sections.
+        inci_heading = previous is not None and previous.section == passage.section and folded(previous.text.strip().rstrip(":")) in {
+            folded(label) for label in vocabulary().field_labels["inci_list"]}
+        if inci_heading and _structured_inci(passage.text):
+            claims.append(_claim("inci_list", passage.text, passage))
+        previous = passage
         for region in clean_regions(passage.text):
             lines = _extraction_chunks(region)
             for line in lines:
@@ -138,9 +238,18 @@ def extract(sv_id: str, passages: list[Passage]) -> ClaimExtraction:
                     if field in {"inci_list", "notification_number", "responsible_company", "key_ingredients"}:
                         continue
                 for raw, _ in volume_spans(line):
-                    claims.append(_claim("volume", raw, passage))
+                    if product_volume_supported(region, raw, raw):
+                        claims.append(_claim("volume", raw, passage))
                 if skin_types_in(line):
                     claims.append(_claim("skin_type", line, passage))
                 if ingredient_keys(line)[0]:
                     claims.append(_claim("key_ingredients", line, passage))
     return ClaimExtraction(source_version_id=sv_id, claims=claims, ignored_instructions_detected=ignored)
+
+
+def _structured_inci(text: str) -> bool:
+    """A heading alone cannot turn ingredient-benefit prose into a full list."""
+    items = parse_inci(text)
+    if len(items) < 3 or injection_spans(text) or has_negation(text):
+        return False
+    return all(" ".join(item.casefold().rstrip(".").split()) in _inci_names() for item in items)

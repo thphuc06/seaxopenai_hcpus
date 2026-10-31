@@ -1,0 +1,5 @@
+{
+  "_about": "P1 scope conventions, user-approved 2026-10-31. Vietnamese gift cues come from the explicit promotional sentence in a P4 captured retailer listing; the captured-page URL and locator are recorded in .agent/plans/P1.md, contextual volume follow-up. English equivalents and the Vietnamese noun phrase are conservative manually curated language conventions, tested on independent synthetic quantities. These cues identify contextual scope only, never a verdict or product identity. Only a single quantity after a cue within a clause is excluded; ambiguous quantities remain UNKNOWN.",
+  "gift_markers": ["tặng", "quà tặng", "gift", "free sample", "complimentary", "bonus sample"],
+  "indirect_markers": ["with", "for", "when", "if", "purchase", "buy", "buying", "included", "wrapping", "set", "kit", "box", "bag", "khi", "mua", "nếu", "với", "cùng", "bộ", "hộp", "túi"]
+}

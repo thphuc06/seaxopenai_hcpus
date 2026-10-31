@@ -113,9 +113,12 @@ def test_typed_model_errors_finish_run_with_sanitized_diagnostics(core_db: CoreD
 
     submit(core_db,failed)
     run = core_db.rows("SELECT * FROM runs")[0]
-    assert run["status"] == "FAILED" and run["stop_reason"] == code
+    assert run["status"] == "PARTIAL" and run["stop_reason"] == code
     assert run["error"] == "LLMError"
-    assert not core_db.rows("SELECT * FROM field_results")
+    results = core_db.rows("SELECT * FROM field_results")
+    assert len(results) == 5
+    assert all(row["verdict"] == "INSUFFICIENT" and db.loads(row["citations_json"]) == [] for row in results)
+    assert {row["missing_kind"] for row in core_db.rows("SELECT * FROM gaps")} == {"MODEL_ERROR"}
     assert "private external error detail" not in str(core_db.dump())
     assert core_db.rows("SELECT status FROM jobs")[0]["status"] == "FINISHED"
 
@@ -137,3 +140,29 @@ def test_model_error_after_one_source_keeps_only_assessed_fields(core_db: CoreDB
     assert run["status"] == "PARTIAL" and run["stop_reason"] == "REPLAY_MISS"
     assert {r["field_key"] for r in core_db.rows("SELECT * FROM field_results")} == {"volume"}
     assert not core_db.rows("SELECT * FROM evidence_requests")
+
+
+@pytest.mark.parametrize("code", ["API_ERROR", "INCOMPLETE"])
+def test_mid_run_error_keeps_exact_verified_citation(core_db: CoreDB, code: ErrorCode) -> None:
+    core_db.source("readable")
+    core_db.source("later",kind="BRAND_PAGE")
+    verified: list[Claim] = []
+
+    def interrupted(sv_id: str, ctx: RunContext) -> Extraction:
+        if verified:
+            raise LLMError(code,"private upstream detail")
+        result = extraction(sv_id,ctx)
+        verified.extend(result.claims)
+        return result
+
+    submit(core_db,interrupted)
+    results = core_db.rows("SELECT * FROM field_results")
+    assert len(results) == 1 and results[0]["field_key"] == "volume"
+    assert results[0]["verdict"] == "SINGLE_SOURCE"
+    citations = db.loads(results[0]["citations_json"])
+    assert len(citations) == 1
+    assert citations[0]["passage_id"] == verified[0].passage_id
+    assert citations[0]["excerpt"] == verified[0].quote
+    run = core_db.rows("SELECT * FROM runs")[0]
+    assert run["status"] == "PARTIAL" and run["stop_reason"] == code and run["error"] == "LLMError"
+    assert "private upstream detail" not in str(core_db.dump())

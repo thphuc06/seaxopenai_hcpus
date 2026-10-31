@@ -223,15 +223,22 @@ number before coding.
 
 ## As built (contest)
 
-S2 P1 Stage A exposes four typed routes in the existing cases router. All authorized,
-schema-valid requests currently return 501 without persistence; business behavior is Stage B.
+S2 P1 Stage B implements the four typed routes in the existing cases router. Reviewer
+queue/history read stored state; reviews bind to the current revision under the publication
+writer transaction. Evidence uploads are private and use idempotent admission. Missing
+cases return 404, outdated reviews 409, invalid publication evidence/text 422.
 GET `/review/queue` (REVIEWER) returns `ReviewQueueItem[]` with task id, case_id,
 field_key, result_id, case_revision, reason_code and verdict. POST `/cases/{case_id}/reviews`
 (REVIEWER) accepts result_id, integer case_revision, APPROVE/OVERRIDE/REJECT, reason,
 and optional override `{verdict, citations: Citation[], public_text}`. Its response is
 `ReviewResponse` with reviewer identity, timestamp and review state. The server owns identity
 and state; these cannot be supplied as request fields. Revision/citation/publication checks
-remain Stage B and will use the shared policy/publish path.
+use shared policy and publish validation. Reconfirmed findings bind to the confirmation
+run's revision; their original result revision remains historical.
+On revoke, unaffected CURRENT findings retain their result versions and get a validated
+confirmation at the current revision; pending review tasks remain actionable.
+Expired human approvals become new NEEDS_REVIEW versions; prior review records remain
+bound to their original revision and are reported as SUPERSEDED.
 
 GET `/cases/{case_id}/history` (REVIEWER) returns case_id, case_revision and typed arrays
 `results`, `events`, `reviews`, `requests`. Result rows include stored version IDs plus
@@ -239,10 +246,16 @@ PassportField fields; request rows include gap_id, reason, requested_from and OP
 POST `/cases/{case_id}/evidence` (SELLER/REVIEWER) accepts JSON
 `{idempotency_key, field_keys, content}` and returns the existing AdmitResult. Content is
 `{kind: "TEXT", text}` or `{kind: "IMAGE", media_type: "image/png"|"image/jpeg", data_base64}`.
-This transport adds no multipart dependency. Stage B validates/decodes image bytes, stores
+This transport adds no multipart dependency. The handler validates/decodes image bytes, stores
 the upload, sets origin/family/private visibility server-side and admits EVIDENCE_ADDED.
+Blank text returns 422 before file or database writes. Idempotency identity hashes a JSON
+array of case, actor and key, preserving component boundaries; retries create no new artifacts.
 Request objects reject extra fields. P3 can generate these DTOs from OpenAPI now.
-No shared model, policy, trace vocabulary or environment variable changes at this checkpoint.
+PassportMetadata adds defaulted pending_claims (neutral count). Passport field arrays stay
+limited to the five public fields; buyer/seller cannot retrieve claim evidence directly.
+New code uses existing trace vocabulary and environment settings. Review publication creates
+a HUMAN/FALLBACK trace with pin_revision, publish and run:stop. Upload serialization uses the
+same single-process deployment assumption as the existing worker.
 
 ### S1 P1 contract checkpoint
 

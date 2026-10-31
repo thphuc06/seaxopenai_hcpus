@@ -2,6 +2,12 @@
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
+| REAL source scope inference | P1/P2 | P4-2b handoff; exposed by local merge | AC-01 returns UNCERTAIN because REAL snapshots omit inferred scope by design. Implement documented primary-size/identity/market inference in owner code; do not add scope to source fixtures or weaken tests. |
+| R3 ingredient/concentration projection | P4/P1/P2 + human decision | Open P4-2b CCR | Both sources list the ingredient; only brand states 2%. Preserve AC-04 and DRAFT label until the shared field-versus-claim decision is made. See docs/results/p4-2b-review.md. |
+| Shared HTML cleaning helper | P2 | Open P4-2b handoff | Reuse scripts.capture_page.clean_html(html, *, section_end_markers=SECTION_END_MARKERS); P2 retains fetch, ACL, Budget and trace responsibility. No runtime integration in the local merge task. |
+| S2 replay mode storage | P1/P2 | Observed by retained phase(2) acceptance | test_record_replay_story_and_model_isolation[offline-record-model] expects REPLAY in runs.llm_mode; current storage is replay (API normalizes). Reconcile documented persistence contract in owner work; no P4 assertion change. |
+| S2 diagnostic story | P1/P2 | Owner BUILD not integrated into contract-2 | P4 eval emits execution errors for rejected events06/09/10; sync_check2 fails at revoke after17 S1 passes. Preserve 16 acceptance failures in P4 plan; implement owner lifecycle/review/vision/audit/retry before full S2 gate. |
+| B0/candidate preliminary report | P4 human | DRAFT only | Review source-grounded labels independently; report51/65 vs16/65 includes unmet story/Phase3 conditions and shared extraction. No gold changed to match output. |
 | S2 evidence-request history status | P1 | Stage B integration CCR, contract-2 review | Existing publish.py stores CLOSED; new EvidenceRequestResponse allows OPEN/FULFILLED. Reconcile explicitly in history implementation and test a closed request; 501 stubs have no current serialization failure. |
 | Storage/seed integration | P1 | S0 complete | Actual S1 startup 1 product/1 case/4 sources/4 versions/14 passages |
 | Model IDs, prices and budget tuning | P2 | S0 report integrated | Keep measured recommendation/current caps; production client at S1 |

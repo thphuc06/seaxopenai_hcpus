@@ -43,6 +43,53 @@ status, never a candidate-derived expected score.
 
 ## Dev / holdout
 
+### Implemented P4 evaluator (Phase 2)
+
+Run `backend/.venv/Scripts/python scripts/eval.py --mode fallback` from the root.
+`--gold <path>` selects a dev story; `--limit-checkpoints N` runs a positive prefix
+in the declared checkpoint/event order; `--output-dir <path>` changes the report
+destination. Mode is explicit `--mode`, otherwise process `LLM_MODE`, otherwise
+`replay`; record/live are rejected. No server or provider network call is allowed.
+The evaluator uses a fresh temporary database and restores process settings.
+
+It writes `eval-latest.md`/`.json` plus timestamped immutable run artifacts. A
+`REPLAY_MISS` retains the attempted replay in the JSON, restarts the entire selected
+story in another fresh DB, and labels the report FALLBACK. Other errors do not
+silently select fallback. A fallback report does not prove successful replay.
+
+B0 version `b0-v1` compares readable listing/brand claims using the existing
+directional normalized comparator. Any disagreeing cross-source pair gives
+CONFLICTING; all pairs agreeing gives CONSISTENT; one available side gives
+SINGLE_SOURCE; neither gives INSUFFICIENT. B0 has no source-family, scope,
+self-conflict, notification-document or agent rule and never publishes findings.
+Only current active source claims are supplied. B0 shares candidate-stored
+extraction, which can already exclude a mismatched-scope source; this is a
+comparison ablation, not an independent end-to-end extraction baseline. Do not
+claim the historically expected B0 disadvantage on an excluded source was measured.
+
+Scores cover the five public fields, not expert claims or isolated-image setups.
+Literal expected labels stay unchanged; gold preconditions/variants are disclosed,
+never selected by examining the candidate answer. Missing candidate fields count
+as incorrect, not as abstentions. False blame means CONFLICTING with seller
+attribution where an explicit invariant says false, or the expected verdict is
+not CONFLICTING. Attribution for expected conflicts without that invariant is
+unscored. Abstentions count INSUFFICIENT/UNCERTAIN; expected abstentions and their
+correctly abstained subset are separate counts.
+
+DRAFT/REVIEWED totals remain separate (zero reviewed denominator is not an accuracy
+claim). File status is the default; explicit checkpoint status overrides it.
+REVIEWED entries need a named reviewer. Candidate usage is summed only over newly
+observed run IDs, so NOOP/DUPLICATE do not count a prior run twice. Calls and tokens
+come from stored run budget usage; latency is the stored elapsed run time in ms.
+B0 adds no calls or tokens. Reports include gold hash, model/prompt/policy versions,
+per-checkpoint outcomes, stops, preconditions and disagreements for human review.
+Model/prompt metadata unions run columns with trace-step provenance, including
+auxiliary calls. An unexpected declared gold event outcome is an execution error,
+even when HTTP is 200. Reports still retain observations and diagnostic scores;
+CLI exits 1 for execution errors, stopped or unfinished runs. Score disagreement
+alone is a measured result, not a command failure. UTF-8 console output supports
+Vietnamese gold notes on Windows without changing the stored text.
+
 - **Dev**: AC-01…AC-12 (tune prompts on these).
 - **Holdout** (aim for 5 if time permits, coordinated by P4 and drafted by Codex before tuning on those cases, stored in `fixtures/gold/holdout/`, kept from prompt writers until evaluated): variants of synthetic cases with a different fictional brand template, e.g. g ↔ ml mix, Vietnamese-only skin-type phrasing, copied brand text on seller page (same family), two valid sources disagreeing, missing notification doc. Smaller sets are usable with honest counts.
 - Report holdout separately; report failures.

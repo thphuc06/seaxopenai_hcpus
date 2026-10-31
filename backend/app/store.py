@@ -6,7 +6,6 @@ import importlib
 import logging
 from pathlib import Path
 import sqlite3
-from uuid import uuid4
 from . import db
 
 logger = logging.getLogger(__name__)
@@ -59,12 +58,12 @@ def ingest(connection: sqlite3.Connection, snapshot: dict[str, db.JSON], *, case
     connection.execute("INSERT INTO sources(id,case_id,product_id,kind,uri,owner,visibility,family,status,dataset_origin) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET kind=excluded.kind,uri=excluded.uri,owner=excluded.owner,visibility=excluded.visibility,family=excluded.family",
                        (source_id, case_id, snapshot["product_id"], snapshot["kind"], snapshot.get("uri"), snapshot.get("owner"), visibility, snapshot.get("family"), "ACTIVE", origin))
     connection.execute("UPDATE source_versions SET is_current=0 WHERE source_id=?", (source_id,))
-    sv_id = "sv_" + uuid4().hex
+    sv_id = "sv_" + hashlib.sha256((str(case_id) + ":" + source_id + ":" + sha).encode("utf-8")).hexdigest()
     connection.execute("INSERT INTO source_versions VALUES(?,?,?,?,?,?,?,?)", (sv_id, source_id, version, snapshot.get("captured_at"), sha, raw_path, 1, db.dumps(snapshot.get("scope") or {})))
     passages = snapshot.get("passages", [])
     if not isinstance(passages, list) or not passages:
         raise ValueError("passages must be a nonempty list")
-    for passage in passages:
+    for index, passage in enumerate(passages):
         if not isinstance(passage, dict):
             raise ValueError("passage must be an object")
         text = passage.get("text")
@@ -72,7 +71,7 @@ def ingest(connection: sqlite3.Connection, snapshot: dict[str, db.JSON], *, case
             raise ValueError("Passage text must be a string")
         if not text.strip() and not (snapshot["kind"] == "PACKAGING_IMAGE" and raw_path and snapshot.get("note")):
             raise ValueError("Blank text requires a documented unreadable image")
-        passage_id = "psg_" + uuid4().hex
+        passage_id = "psg_" + hashlib.sha256((sv_id + ":" + str(index)).encode("utf-8")).hexdigest()
         connection.execute("INSERT INTO passages VALUES(?,?,?,?,?)", (passage_id, sv_id, passage["locator"], passage.get("section"), passage["text"]))
         connection.execute("INSERT INTO passages_fts VALUES(?,?,?)", (passage["text"], passage_id, sv_id))
     return SourceVersionRef(sv_id, source_id, version)

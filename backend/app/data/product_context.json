@@ -1,0 +1,8 @@
+{
+  "_about": "Source-context extraction vocabulary, 2026-10-31. DATASET-SPEC section 3 R2 requires treating gift size separately from the purchased item; R1 requires preserving positive skin statements alongside unrelated negative benefits. Generic Vietnamese/English promotion, header and independent-clause cues were reviewed against stored source text and synthetic variants. Purchase-return cues end a gift clause; marketed gift sets remain products. Clause boundaries retain the negative cue in its clause. Lexical volumes_in is unchanged for scope consumers.",
+  "gift_cues": ["tặng kèm", "tặng", "quà tặng", "free gift", "free sample", "complimentary sample", "bonus sample"],
+  "product_cues": ["khi mua", "với đơn mua", "with purchase of", "when buying", "when you buy"],
+  "gift_product_cues": ["bộ quà tặng", "hộp quà tặng", "gift set", "gift box"],
+  "product_headers": ["dung tích", "dung tích sản phẩm", "volume", "capacity", "product size"],
+  "clause_boundaries": ["mà không", "nhưng", "but", "without"]
+}
