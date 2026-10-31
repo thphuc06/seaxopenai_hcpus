@@ -1,0 +1,287 @@
+{
+  "source_id": "REAL-PROD-R1-listing-09bc033ec583",
+  "kind": "LISTING",
+  "product_id": "REAL-PROD-R1",
+  "version": 1,
+  "uri": "https://picare.vn/san-pham/sua-rua-mat-danh-cho-da-thuong-den-da-kho-cerave-hydrating-cleanser-236ml",
+  "requested_uri": "https://picare.vn/san-pham/sua-rua-mat-danh-cho-da-thuong-den-da-kho-cerave-hydrating-cleanser-236ml",
+  "captured_at": "2026-10-31T08:08:23.445420+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "seller:picare.vn",
+  "raw_sha256": "4b6075c896a448b1cba5d06657a7316a888674614d9979c864541342c70426e4",
+  "cleaned_sha256": "953a08d1bdee9d4accf202e86cc40adb516d75500d961326ac1a530dbe0e3d32",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa rửa mặt làm sạch dành cho da thường đến da khô CeraVe Hydrating Cleanser 236ml"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "Giá gốc là: 330,000₫.Giá hiện tại là: 264,000₫."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "Dung tích: 236ml"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "Xuất xứ thương hiệu: Mỹ"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "Sản xuất tại: Pháp"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p006",
+      "locator": "description#p5",
+      "section": "description",
+      "text": "Chịu trách nhiệm phân phối ra thị trường: Công ty L’Oréal Việt Nam."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p007",
+      "locator": "description#p6",
+      "section": "description",
+      "text": "Phân phối chính hãng: Công ty Picare Việt Nam."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p008",
+      "locator": "description#p7",
+      "section": "description",
+      "text": "Hết hàng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p009",
+      "locator": "description#p8",
+      "section": "description",
+      "text": "SKU: CER011 Danh mục: Các Bước Chăm Sóc Da, Các Vấn Đề Về Da, Chăm Sóc Da Mặt, Da Khô, Da Khô – Mất Nước, Sữa Rửa Mặt Thẻ: cerave, cerave việt nam, da khô, da nhạy cảm, dược mỹ phẩm, picare, sữa rửa mặt, sữa rửa mặt cerave"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p010",
+      "locator": "description#p9",
+      "section": "description",
+      "text": "CAM KẾT TỪ PICARE"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p011",
+      "locator": "description#p10",
+      "section": "description",
+      "text": "DƯỢC MỸ PHẨM"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p012",
+      "locator": "description#p11",
+      "section": "description",
+      "text": "⇒ CHÍNH HÃNG"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p013",
+      "locator": "description#p12",
+      "section": "description",
+      "text": "GIAO HÀNG"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p014",
+      "locator": "description#p13",
+      "section": "description",
+      "text": "⇒ TRONG 24H"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p015",
+      "locator": "description#p14",
+      "section": "description",
+      "text": "HOÀN TIỀN 100%"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p016",
+      "locator": "description#p15",
+      "section": "description",
+      "text": "⇒ SẢN PHẨM LỖI"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p017",
+      "locator": "description#p16",
+      "section": "description",
+      "text": "HOTLINE: 0918.088.123"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p018",
+      "locator": "description#p17",
+      "section": "description",
+      "text": "Công thức chứa Ceramides và công nghệ MVE là nền tảng cho sự ra đời của CeraVe. Tập trung vào dòng sản phẩm chăm sóc da với sự kết hợp độc đáo của ba loại ceramide thiết yếu, cùng công nghệ MVE với sự bổ sung của các Ceramides tương tự như Ceramides tự nhiên của da, giúp làm dịu da khô, cung cấp cường độ ẩm và khôi phục hàng rào độ ẩm tự nhiên của da – Cerave hiện đã có mặt tại Picare"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p019",
+      "locator": "description#p18",
+      "section": "description",
+      "text": "1. Công dụng:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p020",
+      "locator": "description#p19",
+      "section": "description",
+      "text": "– Sữa rửa mặt có dạng gel đặc , không tạo nhiều bọt giúp giữ ẩm, duy trì lớp màng bảo vệ da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p021",
+      "locator": "description#p20",
+      "section": "description",
+      "text": "– Sữa rửa mặt Cerave Hydrating Cleanser độ pH5.5 lý tưởng có thể làm sạch nhẹ nhàng mà không làm tổn hại đến lớp màng ẩm của da"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p022",
+      "locator": "description#p21",
+      "section": "description",
+      "text": "– Công nghệ MVE khóa ẩm suốt 24h"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p023",
+      "locator": "description#p22",
+      "section": "description",
+      "text": "– Được khuyên dùng bởi các bác sĩ da liễu."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p024",
+      "locator": "description#p23",
+      "section": "description",
+      "text": "– Sản phẩm dành cho da thường đến da khô và cả da nhạy cảm."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p025",
+      "locator": "description#p24",
+      "section": "description",
+      "text": "– Thành phần chiết xuất chính từ trà xanh, không chứa cồn, không hương liệu và các loại tinh dầu dễ gây kích ứng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p026",
+      "locator": "description#p25",
+      "section": "description",
+      "text": "2. Thành phần:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p027",
+      "locator": "description#p26",
+      "section": "description",
+      "text": "– Nước, Glycerin, Behentrimonium, Methosulfate And Cetearyl Alcohol, Ceramide 3, Ceramide 6 -II, Ceramide 1, Hyaluronic Acid, Cholesterol, Polyoxyl 40 Stearate, Glyceryl Monostearate, Stearyl Alcohol, Polysorbate 20, Potassium Phophate,…"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p028",
+      "locator": "description#p27",
+      "section": "description",
+      "text": "+ Ceramides giúp phục hồi hàng rào bảo vệ da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p029",
+      "locator": "description#p28",
+      "section": "description",
+      "text": "+ Hyaluronic Acid giúp giữ lại độ ẩm cần thiết cho da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p030",
+      "locator": "description#p29",
+      "section": "description",
+      "text": "+ Bổ sung chất làm mềm làm ẩm để da khô trở nên mềm mịn, căng mướt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p031",
+      "locator": "description#p30",
+      "section": "description",
+      "text": "3. Hướng dẫn sử dụng:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p032",
+      "locator": "description#p31",
+      "section": "description",
+      "text": "– Sử dụng sau khi thực hiện bước tẩy trang."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p033",
+      "locator": "description#p32",
+      "section": "description",
+      "text": "– Vệ sinh tay thật sạch sau đó làm ướt mặt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p034",
+      "locator": "description#p33",
+      "section": "description",
+      "text": "– Lấy 1 lượng sữa rửa mặt vừa đủ, cỡ bằng hạt đậu vào lòng bàn tay, hòa với ít nước massage nhẹ lên bề măt da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p035",
+      "locator": "description#p34",
+      "section": "description",
+      "text": "– Sau đó rửa sạch lại với nước, dùng bông tẩy trang hoặc khăn bông sạch lau lượng nước đọng trên mặt và tiếp tục các bước dưỡng tiếp theo."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p036",
+      "locator": "description#p35",
+      "section": "description",
+      "text": "– Sử dụng sản phẩm 2 lần sáng và tối mỗi ngày."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p037",
+      "locator": "description#p36",
+      "section": "description",
+      "text": "4. Bảo quản sản phẩm:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p038",
+      "locator": "description#p37",
+      "section": "description",
+      "text": "– Đậy kín nắp sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p039",
+      "locator": "description#p38",
+      "section": "description",
+      "text": "– Để nơi khô ráo thoáng mát trán ánh nắng trực tiếp."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p040",
+      "locator": "description#p39",
+      "section": "description",
+      "text": "**Mẫu mã bao bì có thể thay đổi theo quy định của nhãn hàng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p041",
+      "locator": "description#p40",
+      "section": "description",
+      "text": "#picare #cerave #duocmypham #chinhhang #srm #dakho #suaruamatdakho"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p042",
+      "locator": "description#p41",
+      "section": "description",
+      "text": "Cân nặng 300 kg"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p043",
+      "locator": "description#p42",
+      "section": "description",
+      "text": "Kích thước 18 × 10 × 9 cm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p044",
+      "locator": "description#p43",
+      "section": "description",
+      "text": "Brand"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-09bc033ec583-v1-p045",
+      "locator": "description#p44",
+      "section": "description",
+      "text": "Cerave"
+    }
+  ]
+}

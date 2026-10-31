@@ -26,7 +26,7 @@ SECTION_END_MARKERS = (
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 DROP = {"script", "style", "nav", "footer", "noscript", "svg", "form", "button", "template"}
 BLOCK = {"h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "div", "section", "article", "tr", "dt", "dd", "br"}
-CHROME = re.compile(r"(?:^|[\s_-])(?:menu|breadcrumb|related|recommendations?|product-card|link-card|cookie|social|newsletter)(?:$|[\s_-])", re.I)
+CHROME = re.compile(r"(?:^|[\s_-])(?:menu|breadcrumb|related|recommendations?|product-card|link-card|cookie|social|newsletter|reviews?|comments?|commentlist)(?:$|[\s_-])", re.I)
 
 
 class CaptureError(ValueError):
@@ -196,7 +196,8 @@ def fetch_page(url: str, *, client: httpx.Client) -> tuple[str, bytes, str]:
 
 
 def capture_page(url: str, *, product: str, kind: Kind, folder: Path,
-                 client: httpx.Client, family: str | None = None, version: int = 1) -> Path:
+                 client: httpx.Client, family: str | None = None, version: int = 1,
+                 output_folder: Path | None = None) -> Path:
     """Capture one source. Product metadata must exist; existing versions are immutable."""
     metadata = json.loads((folder / "product.json").read_text(encoding="utf-8"))
     if metadata.get("product_id") != product or metadata.get("dataset_origin") != "REAL":
@@ -205,7 +206,7 @@ def capture_page(url: str, *, product: str, kind: Kind, folder: Path,
         raise CaptureError("INVALID_VERSION")
     identity = hashlib.sha256(url.encode("utf-8")).hexdigest()[:12]
     source_id = f"{product}-{kind.lower()}-{identity}"
-    path = folder / f"{kind.lower()}-{identity}.v{version}.json"
+    path = (output_folder or folder) / f"{kind.lower()}-{identity}.v{version}.json"
     if path.exists():
         raise FileExistsError(f"Snapshot exists; use a new --version: {path}")
     final_url, raw, html = fetch_page(url, client=client)
@@ -222,8 +223,9 @@ def capture_page(url: str, *, product: str, kind: Kind, folder: Path,
         "visibility": "PUBLIC", "family": family or f"{'brand' if kind == 'BRAND_PAGE' else 'seller'}:{domain}",
         "raw_sha256": hashlib.sha256(raw).hexdigest(),
         "cleaned_sha256": hashlib.sha256(cleaned.encode("utf-8")).hexdigest(),
-        "cleaner_version": "html-parser-v1", "passages": split_passages(cleaned, f"{source_id}-v{version}"),
+        "cleaner_version": "html-parser-v2", "passages": split_passages(cleaned, f"{source_id}-v{version}"),
     }
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("x", encoding="utf-8") as output:
         output.write(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n")
     return path
@@ -236,6 +238,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--kind", required=True, choices=["LISTING", "BRAND_PAGE", "WEB_PAGE"])
     parser.add_argument("--family")
     parser.add_argument("--version", type=int, default=1)
+    parser.add_argument("--output-dir", type=Path, help="Snapshot destination, e.g. fixtures/marketplace/<product_id>")
     args = parser.parse_args(argv)
     folders = [p.parent for p in (ROOT / "fixtures/real").rglob("product.json")
                if json.loads(p.read_text(encoding="utf-8")).get("product_id") == args.product]
@@ -245,7 +248,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         with httpx.Client() as client:
             path = capture_page(args.url, product=args.product, kind=args.kind, folder=folders[0],
-                                client=client, family=args.family, version=args.version)
+                                client=client, family=args.family, version=args.version, output_folder=args.output_dir)
     except (httpx.HTTPError, CaptureError, OSError, UnicodeError) as exc:
         print(f"SKIP {args.url}: {type(exc).__name__}: {exc}")
         return 1

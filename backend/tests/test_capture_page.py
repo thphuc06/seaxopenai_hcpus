@@ -37,6 +37,42 @@ def test_cleaner_removes_chrome_preserves_inline_words_and_instructions() -> Non
     ]
 
 
+def test_capture_separate_destination_retains_identity_and_prevents_repeat(folder: Path, tmp_path: Path) -> None:
+    destination = tmp_path / "marketplace" / "other"
+    transport = httpx.MockTransport(lambda request: httpx.Response(200, text=HTML,
+                                    headers={"content-type": "text/html"}))
+    with httpx.Client(transport=transport) as client:
+        path = capture_page("https://retailer.example/item", product="OTHER-85", kind="LISTING",
+                            folder=folder, client=client, output_folder=destination)
+        original = path.read_bytes()
+        assert path.parent == destination
+        assert not list(folder.glob("listing-*.json"))
+        snapshot = json.loads(original)
+        assert snapshot["kind"] == "LISTING" and snapshot["dataset_origin"] == "REAL"
+        assert snapshot["family"] == "seller:retailer.example"
+        assert snapshot["passages"][0]["text"] == "Orchard wash 85 ml"
+        with pytest.raises(FileExistsError):
+            capture_page("https://retailer.example/item", product="OTHER-85", kind="LISTING",
+                         folder=folder, client=client, output_folder=destination)
+        assert path.read_bytes() == original
+
+
+def test_separate_destination_does_not_bypass_product_identity(folder: Path, tmp_path: Path) -> None:
+    transport = httpx.MockTransport(lambda request: httpx.Response(200,
+        text=HTML.replace("Orchard wash 85 ml", "Different toner 210 ml"), headers={"content-type": "text/html"}))
+    destination = tmp_path / "marketplace-not-created"
+    with httpx.Client(transport=transport) as client, pytest.raises(CaptureError, match="IDENTITY_MISMATCH"):
+        capture_page("https://retailer.example/other", product="OTHER-85", kind="LISTING", folder=folder,
+                     client=client, output_folder=destination)
+    assert not destination.exists()
+
+
+@pytest.mark.parametrize("attributes", ['id="reviews"', 'class="woocommerce-Reviews"', 'class="commentlist"'])
+def test_customer_reviews_are_not_seller_product_passages(attributes: str) -> None:
+    html = HTML.replace("</body>", f'<section {attributes}><h2>Customer opinions</h2><p>My unrelated skin type and a different size 912 ml.</p></section></body>')
+    assert clean_html(html) == clean_html(HTML)
+
+
 @pytest.mark.parametrize("marker", ["Sản phẩm liên quan", "Có thể bạn cũng thích", "Có thể bạn sẽ thích", "Xem thêm", "Đánh giá từ người mua", "Hỏi đáp", "You may also like"])
 def test_section_end_markers_stop_unrelated_text(marker: str) -> None:
     text = clean_html(HTML.replace("</body>", f"<h2>{marker}</h2><p>Other size 999ml</p></body>"))

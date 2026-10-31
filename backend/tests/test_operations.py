@@ -98,7 +98,7 @@ def test_sync_rejects_network_modes_before_creating_state(mode: str, monkeypatch
 
 def test_sync_refuses_unimplemented_phase_instead_of_reporting_pass() -> None:
     with pytest.raises(SystemExit) as error:
-        sync_check.main(["4", "--mode", "fallback"])
+        sync_check.main(["5", "--mode", "fallback"])
     assert error.value.code == 2
 
 

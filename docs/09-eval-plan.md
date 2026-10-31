@@ -202,6 +202,26 @@ latency (median/max), model calls, input/output tokens, estimated cost, stop_rea
 
 ## FR coverage (cross-check)
 
+### Phase4 operational path (P4)
+
+`scripts/sync_check.py 4 --mode fallback|replay` now retains S1–S3 checks and adds
+real source cases14–17 plus a separate fresh database for S4. The receipt scenario
+resets before bootstrap, purchases before the first revoke, checks immutable
+public purchase data, hash-validity/chain metadata, exact then/now diff on the two
+notification fields, list/read-only behavior and duplicate revoke. Marketplace
+uses its own reset/bootstrap and the stored R5 captures, checks mode, unchanged
+passport and closed buyer/expert projections, and recomputes cluster tallies from
+expert findings. It does not impose the synthetic five-seller pattern on REAL R5.
+
+Web audit reads validate typed provenance, expert ACL and no stored work. With
+WEB_SEARCH=off they do not prove discovery, even if the query list is empty; the
+output says discovery NOT VERIFIED. Existing offline provider-seam acceptance
+tests retain query/fetch bounds, identity and no retailer blame requirements.
+Missing capture is SKIP/incomplete; route501 and incomplete/mismatched runs are
+FAIL. No fallback conversion on replay miss. Runtime gold/first-run reports are
+unchanged. The existing unsupported-phase test now invokes phase5, retaining its
+exit-code2 assertion under explicit user approval during P4 Phase4 continuation.
+
 | FR (D in solution.md) | Milestone | Acceptance |
 |---|---|---|
 | FR-01 case from event | M1 | AC-05, AC-07, AC-08 |
