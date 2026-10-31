@@ -155,6 +155,21 @@ P4 owns supporting `scripts/baseline_eval.py` and the diagnostic tests
 `test_baseline_b1.py`, `test_blind_evaluation.py`, `test_sync_phase_three.py`.
 No candidate rule, model gateway contract, source vocabulary or public API changes.
 
+Self-review corrections: B1 execution errors in any retained attempt still make
+the CLI fail, even if candidate replay fallback later exhausts the B1 cap. Blind
+FAILED/PARTIAL/unfinished cases retain their raw findings but are excluded from
+successful accuracy/abstention totals; their claims are marked unscored. A crash
+with uncertain call accounting preserves its report and stops all selected sets.
+
+Blind record mode validates prices for configured extract, cheap, agent and embed
+models before execution. One shared gateway guard reserves actual request-model
+costs and network attempts across sets, including failures. It rejects unpriced
+models, images whose token accounting is unverified, tool-bearing requests and
+long-context requests outside the checked price tier. The per-run Budget still
+counts every call/replay; this separate pool prevents lost report accounting from
+creating a new spending allowance. No previously frozen result is rewritten by
+these evaluator corrections.
+
 The phase3 operational probe reads the existing passage_scopes schema, which has
 no anchor column. Its local adapter recognizes a current-run code `scope:validate`
 detail carrying the typed PassageScope keys (`passage_id`, `sv_id`, `scope_match`,

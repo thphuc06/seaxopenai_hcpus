@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping
 from contextlib import nullcontext
 from datetime import datetime, timezone
 import hashlib
@@ -12,6 +13,7 @@ from pathlib import Path
 import sqlite3
 import sys
 from tempfile import TemporaryDirectory
+from threading import Lock
 from typing import Literal
 from unittest.mock import patch
 from uuid import uuid4
@@ -24,10 +26,60 @@ from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field, JsonValue, model_validator
 
 from app import config, seed
+from app.budget import BudgetExceeded
+from app.llm.client import network_guard
 from app.models import AdmitResult, EventEnvelope, PUBLIC_FIELDS, PassportResponse, Verdict
 from scripts import eval as evaluator
 from scripts.check_fixtures import Product, Snapshot, check_fixtures
 from scripts.sync_check import HEADERS, isolated_settings
+from scripts.smoke import PriceBook, TokenUsage, request_bound
+
+
+class BlindRecordBudget:
+    """One pre-request reservation pool across every set, even if a run crashes."""
+    def __init__(self, prices: PriceBook, models: set[str], max_calls: int) -> None:
+        if not models or not models <= prices.models.keys():
+            raise ValueError("Unknown active model price; record is not permitted")
+        self.prices, self.models, self.max_calls = prices, models, max_calls
+        self.calls = 0
+        self.reserved_usd = 0.0
+        self.aborted = False
+        self.lock = Lock()
+
+    @classmethod
+    def from_settings(cls, max_calls: int) -> BlindRecordBudget:
+        settings = config.settings
+        if not settings.model_extract:
+            raise ValueError("MODEL_EXTRACT must be configured for record")
+        models = {value for value in (settings.model_extract, settings.model_cheap,
+                                      settings.model_agent, settings.embed_model) if value}
+        prices = PriceBook.model_validate_json((ROOT / "backend/app/data/model_prices.json").read_text(encoding="utf-8"))
+        return cls(prices, models, max_calls)
+
+    def reserve(self, request: Mapping[str, object]) -> None:
+        with self.lock:
+            if self.aborted:
+                raise BudgetExceeded("RECORD_ACCOUNTING_UNKNOWN")
+            if str(request.get("model")) not in self.models:
+                raise BudgetExceeded("MODEL_PRICE_NOT_REVIEWED")
+            messages = request.get("input", [])
+            if isinstance(messages, list) and any(isinstance(message, dict) and any(
+                    isinstance(part, dict) and part.get("type") == "input_image"
+                    for part in message.get("content", [])) for message in messages):
+                raise BudgetExceeded("VISION_TOKEN_COST_NOT_VERIFIED")
+            bound = request_bound(request)
+            if bound > 272_000 or request.get("tools"):
+                raise BudgetExceeded("REQUEST_COST_NOT_VERIFIED")
+            estimate = self.prices.cost(str(request["model"]), TokenUsage(input_tokens=bound,
+                output_tokens=int(str(request["max_output_tokens"]))))
+            if self.calls >= self.max_calls or self.reserved_usd + estimate > 3:
+                raise BudgetExceeded("RECORD_SESSION_CAP")
+            self.calls += 1
+            self.reserved_usd += estimate
+
+    def abort(self) -> None:
+        with self.lock:
+            self.aborted = True
 
 
 class Evidence(BaseModel):
@@ -128,6 +180,7 @@ class BlindReport(BaseModel):
     totals: dict[str, dict[str, evaluator.Score]]
     usage: evaluator.Usage
     limitations: list[str]
+    accounting_complete: bool = True
 
 
 def contained(root: Path, relative: str) -> Path:
@@ -237,13 +290,21 @@ def evaluate_case(client: TestClient, database: Path, case: BlindCase, remaining
             result.stops.append(str(row["stop_reason"]))
         if row["status"] in {"FAILED", "PARTIAL", "QUEUED", "RUNNING"}:
             result.error = str(row["status"]) + ":" + str(row["stop_reason"])
+    if result.error:
+        result.scores = {}  # Retain raw and code-verified partial findings without scoring incomplete cases.
+        for claim in result.claims:
+            claim.scored = False
     return result
 
 
-def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, root: Path = ROOT) -> BlindReport:
+def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, root: Path = ROOT,
+            record_budget: BlindRecordBudget | None = None) -> BlindReport:
     from app.main import create_app
     results: list[BlindResult] = []
     usage = evaluator.Usage()
+    accounting_complete = True
+    if mode == "record" and max_calls > 0 and record_budget is None:
+        record_budget = BlindRecordBudget.from_settings(max_calls)
 
     def deny_network(**request: object) -> None:
         raise RuntimeError("Offline blind evaluation attempted a provider call")
@@ -253,7 +314,8 @@ def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, roo
         empty = Path(directory) / "empty-fixtures"
         empty.mkdir()
         with isolated_settings(mode, database, replay_freeze=False), patch.dict(os.environ, {"FIXTURES_DIR": str(empty)}), \
-                (patch("app.llm.client._call_api", deny_network) if mode != "record" else nullcontext()):
+                (patch("app.llm.client._call_api", deny_network) if mode != "record" else nullcontext()), \
+                (network_guard(record_budget.reserve) if record_budget is not None else nullcontext()):
             config.reload_settings()
             with TestClient(create_app()) as client:
                 for case in dataset.cases:
@@ -261,9 +323,12 @@ def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, roo
                         result = evaluate_case(client, database, case, max_calls - usage.model_calls, mode, root)
                     except (RuntimeError, ValueError, OSError, sqlite3.Error) as error:
                         result = BlindResult(product_id=case.product_id, status=case.status, reviewed_by=case.reviewed_by,
-                            error=f"{type(error).__name__}: {error}", probes=case.probes,
+                            error=f"{type(error).__name__}: accounting unknown", probes=case.probes,
                             unmet_preconditions=case.unmet_preconditions)
                         results.append(result)
+                        accounting_complete = False
+                        if record_budget is not None:
+                            record_budget.abort()
                         break  # Preserve partial results; never continue with unknown call accounting.
                     results.append(result)
                     usage.add(result.usage)
@@ -273,13 +338,16 @@ def run_set(dataset: BlindSet, frozen: Freeze, mode: str, max_calls: int, *, roo
             totals[result.status][system].add(score)
     return BlindReport(set_number=dataset.set_number, run_id=uuid4().hex,
         generated_at=datetime.now(timezone.utc).isoformat(), mode=mode.upper(), attempt="UNASSIGNED",
-        freeze=frozen, results=results, totals=totals, usage=usage, limitations=dataset.limitations)
+        freeze=frozen, results=results, totals=totals, usage=usage, limitations=dataset.limitations,
+        accounting_complete=accounting_complete)
 
 
 def markdown(report: BlindReport) -> str:
     lines = [f"# Blind set {report.set_number} — {report.attempt}", "",
         f"Run: {report.run_id}; {report.generated_at}; mode {report.mode}",
-        "Codex-assisted DRAFT labels are preliminary diagnostics; human-reviewed scores are separate.", "",
+        "Codex-assisted DRAFT labels are preliminary diagnostics; human-reviewed scores are separate.",
+        "Incomplete cases retain raw findings but are excluded from successful accuracy and abstention totals.",
+        f"Call accounting complete: {report.accounting_complete}", "",
         "| Gold | System | Correct/total | False seller blame/eligible | Abstentions |", "|---|---|---:|---:|---:|"]
     for status, systems in report.totals.items():
         for name, score in systems.items():
@@ -343,6 +411,7 @@ def main(argv: list[str] | None = None) -> int:
     record_bound = 0.0
     failed = False
     try:
+        record_budget = BlindRecordBudget.from_settings(remaining) if args.mode == "record" and not args.freeze else None
         for manifest in manifests:
             dataset = BlindSet.model_validate_json(manifest.read_text(encoding="utf-8"))
             freeze_path = ROOT / f"docs/results/blind-freeze-set{dataset.set_number}.json"
@@ -355,22 +424,23 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             frozen = verify_freeze(ROOT, manifest, dataset, freeze_path)
             if args.mode == "record":
-                prices = json.loads((ROOT / "backend/app/data/model_prices.json").read_text(encoding="utf-8"))
-                rate = prices["models"].get(config.settings.model_extract)
-                if rate is None:
-                    raise ValueError("Unknown model price; record estimate unavailable")
+                assert record_budget is not None
+                rates = [record_budget.prices.models[model] for model in record_budget.models]
                 source_bytes = sum(contained(ROOT, name).stat().st_size for name in frozen.hashes)
-                estimate = remaining * ((source_bytes + 16384) * rate["input_per_million"] +
-                    config.settings.llm_max_output_tokens * rate["output_per_million"]) / 1_000_000
+                estimate = remaining * ((source_bytes + 16384) * max(rate.input_per_million for rate in rates) +
+                    config.settings.llm_max_output_tokens * max(rate.output_per_million for rate in rates)) / 1_000_000
                 print(f"Record conservative estimate ${estimate:.4f}, cap {remaining} calls", flush=True)
                 if record_bound + estimate > 3:
                     raise ValueError("Estimate exceeds $3; lower --max-calls or request human approval before recording")
                 record_bound += estimate
-            report = run_set(dataset, frozen, args.mode, remaining)
+            report = run_set(dataset, frozen, args.mode, remaining, record_budget=record_budget)
             remaining -= report.usage.model_calls
             write_report(report, args.output_dir)
             print(markdown(report))
             failed |= any(result.error for result in report.results)
+            if not report.accounting_complete:
+                failed = True
+                break
     except (OSError, ValueError, RuntimeError) as error:
         print(f"Blind evaluation error: {error}", file=sys.stderr)
         return 1

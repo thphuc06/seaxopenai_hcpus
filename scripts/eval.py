@@ -391,6 +391,12 @@ def write_report(report: EvaluationReport, directory: Path) -> None:
         (directory / f"{stem}.md").write_text(text, encoding="utf-8")
 
 
+def b1_execution_failed(report: EvaluationReport) -> bool:
+    if any(point.b1.status not in {"NOT_RUN", "CALL_CAP", "REPLAY", "RECORDED"} for point in report.checkpoints):
+        return True
+    return report.previous_attempt is not None and b1_execution_failed(report.previous_attempt)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gold", type=Path, default=ROOT / "fixtures/gold/dev/demo-story.json")
@@ -421,8 +427,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if isinstance(sys.stdout, TextIOWrapper):
         sys.stdout.reconfigure(encoding="utf-8")
     print(markdown(report))
-    return int(any(point.error or point.stop_reasons or point.b1.status not in {
-        "NOT_RUN", "CALL_CAP", "REPLAY", "RECORDED"} or any(status not in {
+    return int(b1_execution_failed(report) or any(point.error or point.stop_reasons or any(status not in {
         "COMPLETED", "WAITING_REVIEW", "WAITING_EVIDENCE"} for status in point.run_statuses)
         for point in report.checkpoints))
 

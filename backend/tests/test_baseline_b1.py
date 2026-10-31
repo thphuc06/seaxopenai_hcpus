@@ -113,3 +113,18 @@ def test_b1_session_separates_usage_and_caps_across_checkpoints(tmp_path: Path, 
         assert report.checkpoints[0].b1.trace
         assert all(isinstance(field.b1, Verdict) for field in report.checkpoints[0].fields)
     config.reload_settings()
+
+
+def test_b1_replay_failure_survives_candidate_fallback(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    with monkeypatch.context() as env:
+        env.setenv("MODEL_EXTRACT", "unrecorded-test-model")
+        env.setenv("REPLAY_DIR", str(tmp_path / "empty"))
+        config.reload_settings()
+        code = evaluator.main(["--mode", "replay", "--b1-mode", "replay", "--max-calls", "1",
+                               "--limit-checkpoints", "1", "--output-dir", str(tmp_path / "out")])
+        report = evaluator.EvaluationReport.model_validate_json((tmp_path / "out/eval-latest.json").read_bytes())
+        assert report.mode == "fallback"
+        assert report.previous_attempt.checkpoints[0].b1.status == "REPLAY_MISS"
+        assert report.checkpoints[0].b1.status == "CALL_CAP"
+        assert code == 1
+    config.reload_settings()
