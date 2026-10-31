@@ -1,0 +1,25 @@
+{
+  "checked_on": "2026-10-31",
+  "currency": "USD",
+  "tier": "standard",
+  "source_url": "https://developers.openai.com/api/docs/pricing",
+  "note": "Standard processing, short-context token rates. Cached input is conservatively charged at the full input rate in smoke estimates. Account access requires smoke measurement.",
+  "models": {
+    "gpt-6.1-sol": {
+      "input_per_million": 2.0,
+      "output_per_million": 10.0,
+      "cached_input_per_million": 0.1,
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+    },
+    "text-embedding-3-small": {
+      "input_per_million": 0.02,
+      "output_per_million": 0.0,
+      "source_url": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+    }
+  },
+  "tools": {
+    "web_search_per_call": 0.01,
+    "search_context_token_limit": 128000,
+    "source_url": "https://developers.openai.com/api/docs/guides/tools-web-search"
+  }
+}
