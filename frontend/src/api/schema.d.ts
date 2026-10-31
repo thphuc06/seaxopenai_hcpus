@@ -242,6 +242,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/products/{product_id}/fields/{field_key}/explain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Explain */
+        get: operations["explain_api_products__product_id__fields__field_key__explain_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/internal/observability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Observability */
+        get: operations["observability_api_internal_observability_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/chain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chain */
+        get: operations["chain_api_cases__case_id__chain_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/graph": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Graph */
+        get: operations["graph_api_cases__case_id__graph_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cases/{case_id}/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search */
+        get: operations["search_api_cases__case_id__search_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/internal/runs/{run_id}/otel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Otel */
+        get: operations["otel_api_internal_runs__run_id__otel_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/internal/metrics": {
         parameters: {
             query?: never;
@@ -292,6 +394,27 @@ export interface components {
             /** Stale Fields */
             stale_fields: string[];
         };
+        /** BuyerExplanation */
+        BuyerExplanation: {
+            /**
+             * Audience
+             * @default BUYER
+             * @constant
+             */
+            audience: "BUYER";
+            /** Product Id */
+            product_id: string;
+            /** Field Key */
+            field_key: string;
+            /** Public Text */
+            public_text: string;
+            /** Summaries */
+            summaries: string[];
+            /** Citations */
+            citations: components["schemas"]["EvidencePassage"][];
+            /** Hidden Citations */
+            hidden_citations: number;
+        };
         /** CaseHistoryResponse */
         CaseHistoryResponse: {
             /** Case Id */
@@ -306,6 +429,17 @@ export interface components {
             reviews: components["schemas"]["ReviewResponse"][];
             /** Requests */
             requests: components["schemas"]["EvidenceRequestResponse"][];
+        };
+        /** ChainResponse */
+        ChainResponse: {
+            /** Valid */
+            valid: boolean;
+            /** Rows */
+            rows: number;
+            /** Head */
+            head?: string | null;
+            /** Broken At */
+            broken_at?: number | null;
         };
         /** Citation */
         Citation: {
@@ -481,11 +615,99 @@ export interface components {
             /** Content */
             content: components["schemas"]["TextEvidence"] | components["schemas"]["ImageEvidence"];
         };
+        /** ExpertExplanation */
+        ExpertExplanation: {
+            /**
+             * Audience
+             * @default EXPERT
+             * @constant
+             */
+            audience: "EXPERT";
+            /** Product Id */
+            product_id: string;
+            /** Field Key */
+            field_key: string;
+            /** Result Id */
+            result_id: string;
+            /** Trigger Event Id */
+            trigger_event_id: string;
+            /** Sources */
+            sources: components["schemas"]["ExplainSource"][];
+            /** Claims */
+            claims: components["schemas"]["ExplainClaim"][];
+            /** Rules */
+            rules: components["schemas"]["RuleStep"][];
+            /** Publish Checks */
+            publish_checks: string[];
+            /** Chain Head */
+            chain_head: string | null;
+            /** Reviews */
+            reviews: components["schemas"]["ReviewResponse"][];
+        };
+        /** ExplainClaim */
+        ExplainClaim: {
+            /** Source Version Id */
+            source_version_id: string;
+            /** Passage Id */
+            passage_id: string;
+            /** Quote */
+            quote: string | null;
+            /** Extractor */
+            extractor: string;
+            /** Prompt Version */
+            prompt_version: string;
+            /** Mapped By */
+            mapped_by: string | null;
+        };
+        /** ExplainSource */
+        ExplainSource: {
+            /** Source Version Id */
+            source_version_id: string;
+            /** Sha256 */
+            sha256: string;
+            /** Captured At */
+            captured_at: string;
+            /** Origin */
+            origin: string;
+        };
         /**
          * Freshness
          * @enum {string}
          */
         Freshness: "CURRENT" | "STALE" | "UNKNOWN";
+        /** GraphEdge */
+        GraphEdge: {
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+            /**
+             * Relation
+             * @enum {string}
+             */
+            relation: "depends_on" | "cites";
+        };
+        /** GraphNode */
+        GraphNode: {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "source" | "field";
+            /** Label */
+            label: string;
+            /** Status */
+            status: string;
+        };
+        /** GraphResponse */
+        GraphResponse: {
+            /** Nodes */
+            nodes: components["schemas"]["GraphNode"][];
+            /** Edges */
+            edges: components["schemas"]["GraphEdge"][];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -541,6 +763,45 @@ export interface components {
             replayed: number;
             /** Avoided */
             avoided: number;
+        };
+        /** ObservabilityResponse */
+        ObservabilityResponse: {
+            /** Verdicts */
+            verdicts: {
+                [key: string]: number;
+            };
+            model_calls: components["schemas"]["ModelCallCounts"];
+            /** Calls By Step */
+            calls_by_step: {
+                [key: string]: components["schemas"]["ModelCallCounts"];
+            };
+            /** Publish Passed */
+            publish_passed: number;
+            /** Publish Blocked */
+            publish_blocked: number;
+            /** Agent Stops */
+            agent_stops: {
+                [key: string]: number;
+            };
+            /** Gap Stops */
+            gap_stops: {
+                [key: string]: number;
+            };
+            /** Vocabulary */
+            vocabulary: {
+                [key: string]: number;
+            };
+            /** Review Queue Size */
+            review_queue_size: number;
+            /** Oldest Review Age S */
+            oldest_review_age_s: number | null;
+        };
+        /** OtelResponse */
+        OtelResponse: {
+            /** Resourcespans */
+            resourceSpans: {
+                [key: string]: components["schemas"]["JsonValue"];
+            }[];
         };
         /** PassportField */
         PassportField: {
@@ -721,6 +982,15 @@ export interface components {
          * @enum {string}
          */
         ReviewState: "AUTO_DRAFT" | "NEEDS_REVIEW" | "REVIEWED" | "SUPERSEDED";
+        /** RuleStep */
+        RuleStep: {
+            /** Rule */
+            rule: string;
+            /** Outcome */
+            outcome: string;
+            /** Detail */
+            detail: string;
+        };
         /** RunDetailResponse */
         RunDetailResponse: {
             run: components["schemas"]["RunResponse"];
@@ -764,6 +1034,19 @@ export interface components {
             tokens_in: number;
             /** Tokens Out */
             tokens_out: number;
+        };
+        /** SearchResponse */
+        SearchResponse: {
+            /** Hits */
+            hits: {
+                [key: string]: components["schemas"]["JsonValue"];
+            }[];
+            /** Stages */
+            stages: {
+                [key: string]: {
+                    [key: string]: components["schemas"]["JsonValue"];
+                }[];
+            };
         };
         /**
          * SourceKind
@@ -1305,6 +1588,212 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdmitResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    explain_api_products__product_id__fields__field_key__explain_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                product_id: string;
+                field_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuyerExplanation"] | components["schemas"]["ExpertExplanation"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    observability_api_internal_observability_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObservabilityResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chain_api_cases__case_id__chain_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChainResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    graph_api_cases__case_id__graph_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GraphResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    search_api_cases__case_id__search_get: {
+        parameters: {
+            query: {
+                q: string;
+                mode?: "auto" | "bm25" | "hybrid";
+            };
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SearchResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    otel_api_internal_runs__run_id__otel_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-role"?: string | null;
+                "x-demo-actor"?: string | null;
+            };
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OtelResponse"];
                 };
             };
             /** @description Validation Error */

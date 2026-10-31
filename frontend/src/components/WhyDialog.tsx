@@ -10,7 +10,7 @@ import { ErrorNotice, LoadingNotice } from './Feedback.tsx';
 export function ExplanationView({ data, expert }: { data: Explanation; expert: boolean }) {
   return <div className="explanation-view">
     {data.summary.slice(0, 3).map((sentence, index) => <p key={index}>{sentence}</p>)}
-    {!data.summary.length && <p>No explanation has been recorded yet.</p>}
+    {!data.summary.length && !expert && <p>No explanation has been recorded yet.</p>}
     {expert && <><h3>Decision trail</h3><ol className="decision-trail">{data.trail?.map((item, index) => <li key={index}><span className="eyebrow">{item.stage}</span><h4>{item.title}</h4>{item.facts.map((fact, i) => <p key={i}>{fact}</p>)}</li>)}</ol>{!data.trail?.length && <p>The detailed trail is unavailable.</p>}</>}
   </div>;
 }

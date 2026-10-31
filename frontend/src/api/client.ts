@@ -5,6 +5,7 @@ import type {
 import type { CaseHistory, EvidenceUpload, ReviewQueueItem, ReviewRecord, ReviewSubmission, ReviewTask } from './reviewTypes.ts';
 import { matchingReviewEvidence } from './reviewEvidence.ts';
 import { explanation } from '../glassbox.ts';
+import type { ChainResponse, GraphResponse, SearchResponse, ExplanationResponse, ObservabilityResponse, OtelResponse } from '../types.ts';
 
 export interface ReviewErrorDetail { code?: string; current_revision?: number }
 
@@ -67,7 +68,12 @@ export function createApiClient({ getSession, transport = (path, init) => fetch(
   }
   const segment = encodeURIComponent;
   return {
-    getExplanation: async (id: string, field: FieldKey, signal?: AbortSignal) => explanation(await request<unknown>(`/products/${segment(id)}/fields/${segment(field)}/explain`, 'GET', undefined, signal)),
+    getExplanation: async (id: string, field: FieldKey, signal?: AbortSignal) => explanation(await request<ExplanationResponse>(`/products/${segment(id)}/fields/${segment(field)}/explain`, 'GET', undefined, signal)),
+    getGraph: (id: string, signal?: AbortSignal) => request<GraphResponse>(`/cases/${segment(id)}/graph`, 'GET', undefined, signal),
+    getChain: (id: string, signal?: AbortSignal) => request<ChainResponse>(`/cases/${segment(id)}/chain`, 'GET', undefined, signal),
+    searchEvidence: (id: string, query: string, mode: 'auto' | 'bm25' | 'hybrid' = 'auto', signal?: AbortSignal) => request<SearchResponse>(`/cases/${segment(id)}/search?${new URLSearchParams({ q: query, mode })}`, 'GET', undefined, signal),
+    getObservability: (signal?: AbortSignal) => request<ObservabilityResponse>('/internal/observability', 'GET', undefined, signal),
+    getOtel: (id: string, signal?: AbortSignal) => request<OtelResponse>(`/internal/runs/${segment(id)}/otel`, 'GET', undefined, signal),
     getProducts: (signal?: AbortSignal) => request<Product[]>('/products', 'GET', undefined, signal),
     getPassport: (id: string, signal?: AbortSignal) => request<PassportResponse>(`/products/${segment(id)}/passport`, 'GET', undefined, signal),
     getEvidence: (id: string, field: FieldKey | `claim:${string}`, signal?: AbortSignal) => request<EvidenceResponse>(`/products/${segment(id)}/fields/${segment(field)}/evidence`, 'GET', undefined, signal),

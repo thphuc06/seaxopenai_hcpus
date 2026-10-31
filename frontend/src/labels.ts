@@ -8,6 +8,13 @@ export const FIELD_TITLES: Record<FieldKey, string> = {
   responsible_company: 'Responsible company',
 };
 export const FIELD_KEYS = Object.keys(FIELD_TITLES) as FieldKey[];
+
+export function reviewFindingTitle(fieldKey: string): string {
+  if (fieldKey.startsWith('claim:ingredient:')) return 'Ingredient claim';
+  if (fieldKey.startsWith('claim:')) return 'Claim — Phát biểu cần duyệt';
+  return FIELD_TITLES[fieldKey as FieldKey] ?? fieldKey;
+}
+
 export type LabelTone = 'consistent' | 'single' | 'source-conflict' | 'conflicting' | 'unverified' | 'stale' | 'pending' | 'failed';
 export interface BuyerLabel { text: string; tone: LabelTone }
 

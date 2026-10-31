@@ -7,7 +7,8 @@ import { usePoll } from '../usePoll.ts';
 import { EvidenceContent } from '../components/EvidenceDrawer.tsx';
 import { EmptyPanel, ErrorNotice, LoadingNotice } from '../components/Feedback.tsx';
 import { formatTime } from '../components/PassportCard.tsx';
-import { FIELD_TITLES } from '../labels.ts';
+import { reviewFindingTitle } from '../labels.ts';
+import { CaseExplorer } from '../components/CaseExplorer.tsx';
 
 export function DecisionHistory({ history }: { history: CaseHistory }) {
   return <>
@@ -25,6 +26,7 @@ export function DecisionHistory({ history }: { history: CaseHistory }) {
 
 function ReviewCase({ api, task, onReload, onPendingChange }: { api: ApiClient; task: ReviewTask; onReload: () => void; onPendingChange: (pending: boolean) => void }) {
   const [refresh, setRefresh] = useState(0);
+  const [explore, setExplore] = useState(false);
   const load = useCallback((signal: AbortSignal) => api.getCaseHistory(task.case_id, signal), [api, task.case_id, refresh]);
   const history = usePoll(load, 5_000);
   const [reason, setReason] = useState('');
@@ -58,7 +60,8 @@ function ReviewCase({ api, task, onReload, onPendingChange }: { api: ApiClient; 
   }
   const result = task.result;
   return <article className="review-case" aria-label="Selected review case">
-    <header><p className="eyebrow">{result.field_key.startsWith('claim:') ? 'Claim finding' : 'Field finding'} · Revision {task.case_revision}</p><h2>{FIELD_TITLES[result.field_key as keyof typeof FIELD_TITLES] ?? result.field_key}</h2>
+    <header><p className="eyebrow">{result.field_key.startsWith('claim:') ? 'Claim finding' : 'Field finding'} · Revision {task.case_revision}</p><h2>{reviewFindingTitle(result.field_key)}</h2>
+      {result.field_key.startsWith('claim:') && <p>Claim reference: <code>{result.field_key}</code></p>}
       <dl className="review-facts"><div><dt>Verdict</dt><dd>{result.verdict}</dd></div><div><dt>Conflict locus</dt><dd>{result.conflict_locus ?? 'None'}</dd></div><div><dt>Seller attribution</dt><dd>{task.seller_attributable === undefined ? 'Not supplied' : task.seller_attributable ? 'Yes' : 'No'}</dd></div><div><dt>Review state</dt><dd>{result.review_state}</dd></div><div><dt>Case revision</dt><dd>{task.case_revision}</dd></div></dl>
       <p>Review reason: {task.reason_code}</p>
       <p>{result.public_text}</p>
@@ -86,6 +89,8 @@ function ReviewCase({ api, task, onReload, onPendingChange }: { api: ApiClient; 
     {history.error && <><ErrorNotice error={history.error} technical /><button type="button" onClick={() => setRefresh((value) => value + 1)}>Retry history</button></>}
     {history.loading && <LoadingNotice />}
     {history.data && <DecisionHistory history={history.data} />}
+    <button type="button" aria-expanded={explore} onClick={() => setExplore((value) => !value)}>{explore ? 'Close evidence explorer' : 'Explore evidence and dependencies'}</button>
+    {explore && <CaseExplorer key={task.case_id} api={api} caseId={task.case_id} />}
   </article>;
 }
 
@@ -117,7 +122,7 @@ function ReviewWorkspace({ api }: { api: ApiClient }) {
     {queue.loading && <LoadingNotice />}
     <div className="review-layout"><aside className="review-queue" aria-label="Review queue"><h2>Open tasks</h2>
       {queue.data?.length === 0 && <p>No open review tasks.</p>}
-      {queue.data?.map((task) => <button type="button" key={task.id} data-testid={`review-task-${task.result.field_key}`} aria-pressed={selected?.id === task.id} disabled={reloading || reviewPending} onClick={() => { if (pendingReview.current) return; setSelected(task); setOpenVersion((value) => value + 1); }}><strong>{FIELD_TITLES[task.result.field_key as keyof typeof FIELD_TITLES] ?? task.result.field_key}</strong><span>{task.result.verdict} · Revision {task.case_revision}</span></button>)}
+      {queue.data?.map((task) => <button type="button" key={task.id} data-testid={`review-task-${task.result.field_key}`} aria-pressed={selected?.id === task.id} disabled={reloading || reviewPending} onClick={() => { if (pendingReview.current) return; setSelected(task); setOpenVersion((value) => value + 1); }}><strong>{reviewFindingTitle(task.result.field_key)}</strong><span>{task.result.verdict} · Revision {task.case_revision}</span></button>)}
     </aside>{selected ? <ReviewCase key={`${selected.id}:${openVersion}`} api={api} task={selected} onPendingChange={pendingChanged} onReload={() => { void reload(); }} /> : <p className="empty-state">Select a task to inspect its evidence and revision.</p>}</div>
   </>;
 }

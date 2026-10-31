@@ -1,6 +1,14 @@
 import type { components } from './api/schema.d.ts';
 
 type Schema = components['schemas'];
+export type ExplanationResponse = Schema['BuyerExplanation'] | Schema['ExpertExplanation'];
+export type BuyerExplanation = Schema['BuyerExplanation'];
+export type ExpertExplanation = Schema['ExpertExplanation'];
+export type SearchResponse = Schema['SearchResponse'];
+export type GraphResponse = Schema['GraphResponse'];
+export type ChainResponse = Schema['ChainResponse'];
+export type ObservabilityResponse = Schema['ObservabilityResponse'];
+export type OtelResponse = Schema['OtelResponse'];
 // Wire DTOs come from the checked-out backend, including nullable metadata.
 export type Citation = Schema['Citation'];
 export type PassportField = Schema['PassportField'];

@@ -33,3 +33,22 @@ def test_agent_preview_anchor_effect_and_budgets(page: Page) -> None:
     panel.scroll_into_view_if_needed()
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     page.screenshot(path=str(ARTIFACTS / "agent-1280x720.png"))
+
+
+def test_reviewer_search_graph_and_chain_preview(page: Page) -> None:
+    page.goto(f"{BASE}/reviewer")
+    page.get_by_label("Demo role").select_option("REVIEWER")
+    page.get_by_test_id("review-task-volume").click()
+    page.get_by_role("button", name="Explore evidence and dependencies").click()
+    explorer = page.locator(".case-explorer")
+    expect(explorer.get_by_text("Chain valid", exact=False)).to_be_visible()
+    expect(explorer.locator(".dependency-edge").first).to_be_visible()
+    explorer.get_by_label("Search stored passages").fill("ml")
+    explorer.get_by_role("button", name="Search", exact=True).click()
+    expect(explorer.get_by_text("ranking only — no answer generated", exact=True)).to_be_visible()
+    expect(explorer.locator(".search-hit").first).to_be_visible()
+    expect(explorer.locator("mark").first).to_have_text("ml")
+    explorer.get_by_text("Ranking stages", exact=True).click()
+    expect(explorer.get_by_role("heading", name="bm25", exact=True)).to_be_visible()
+    explorer.scroll_into_view_if_needed()
+    page.screenshot(path=str(ARTIFACTS / "case-explorer-1280x720.png"))

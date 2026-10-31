@@ -115,8 +115,8 @@ function OperatorDashboard({ api, productId, product }: { api: ApiClient; produc
     {catalog.error && <ErrorNotice error={catalog.error} technical />}
     {catalog.loading && <LoadingNotice />}
     {catalog.data?.length === 0 && <p className="empty-state">No events are available.</p>}
-    <div className="event-grid">{catalog.data?.map((event, index) => <article className="event-card" key={event.name}>
-      <span className="eyebrow">Event {String(index + 1).padStart(2, '0')}</span><h3>{event.title}</h3><p>{event.expect}</p>
+    <div className="event-grid">{[...(catalog.data ?? [])].sort((a, b) => a.name.localeCompare(b.name, 'en', { numeric: true })).map((event) => <article className="event-card" key={event.name}>
+      <span className="eyebrow">Event {event.name}</span><h3>{event.title}</h3><p>{event.expect}</p>
       <button type="button" data-testid={`event-btn-${event.name}`} disabled={pending !== null} onClick={() => { void act(event.name); }}>{pending === event.name ? 'Sending…' : 'Run event'} <span aria-hidden="true">↗</span></button>
     </article>)}</div>
     <section className="runs-panel"><div className="section-heading"><div><p className="eyebrow">Decision activity</p><h2>Runs &amp; trace</h2></div></div>
