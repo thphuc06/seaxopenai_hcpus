@@ -1,0 +1,23 @@
+{
+  "event_id": "DEMO-EVT-05",
+  "idempotency_key": "demo:s1:event:05",
+  "type": "SOURCE_REVOKED",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "SOURCE",
+    "id": "DEMO-SRC-S1-NOTIFICATION",
+    "version": 2
+  },
+  "changed_fields": [
+    "status"
+  ],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1",
+    "snapshot": "synthetic/s1-gentle-cleanser/notification_doc.v2.json"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Thu hồi hồ sơ 00042: chỉ hai trường công bố mất tính cập nhật, sau đối chiếu cần hồ sơ mới; dung tích giữ kết quả trước đó."
+}

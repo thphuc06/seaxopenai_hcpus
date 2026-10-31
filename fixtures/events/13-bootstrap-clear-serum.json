@@ -1,0 +1,20 @@
+{
+  "event_id": "DEMO-EVT-13",
+  "idempotency_key": "demo:s4:event:13",
+  "type": "BOOTSTRAP",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "CASE",
+    "id": "DEMO-CASE-S4",
+    "version": 1
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "DEMO-CASE-S4",
+    "product_id": "DEMO-PROD-S4"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S4",
+  "expect": "Kiểm tra các tuyên bố với INCI, phát hiện bản sao mô tả loại da; người mua chỉ thấy số mục cần xem xét."
+}

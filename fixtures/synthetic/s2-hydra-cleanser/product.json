@@ -1,0 +1,17 @@
+{
+  "product_id": "DEMO-PROD-S2",
+  "name": "Hydra Cream Cleanser",
+  "brand": "Lumivy Lab (fictional)",
+  "variant": "236ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "DEMO-CASE-S2",
+  "tenant_id": "demo-tenant",
+  "listing_id": "DEMO-LISTING-S2",
+  "web": {
+    "enabled": false,
+    "brand_domains": [],
+    "aliases": []
+  },
+  "note": "SYNTHETIC — sản phẩm hư cấu, dữ liệu theo DATASET-SPEC §4."
+}

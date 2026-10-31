@@ -1,0 +1,51 @@
+{
+  "source_id": "DEMO-SRC-S1-CATALOGUE",
+  "kind": "BRAND_PAGE",
+  "product_id": "DEMO-PROD-S1",
+  "version": 2,
+  "uri": "demo://s1/catalogue",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "brand:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "MULTI",
+    "market": "VN",
+    "version": "2"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-CATALOGUE-V2-01",
+      "locator": "title",
+      "section": "catalogue",
+      "text": "Lumivy Lab — Danh mục Gentle Niacinamide Cleanser 2026"
+    },
+    {
+      "id": "DEMO-PSG-S1-CATALOGUE-V2-02",
+      "locator": "catalogue#100ml",
+      "section": "catalogue",
+      "text": "Gentle Niacinamide Cleanser 100 ml: dành cho da dầu và da hỗn hợp."
+    },
+    {
+      "id": "DEMO-PSG-S1-CATALOGUE-V2-03",
+      "locator": "catalogue#50ml",
+      "section": "catalogue",
+      "text": "Gentle Niacinamide Cleanser — 50 ml"
+    },
+    {
+      "id": "DEMO-PSG-S1-CATALOGUE-V2-04",
+      "locator": "catalogue#50ml-skin",
+      "section": "catalogue",
+      "text": "Phù hợp với mọi loại da, bao gồm da nhạy cảm."
+    },
+    {
+      "id": "DEMO-PSG-S1-CATALOGUE-V2-05",
+      "locator": "catalogue#30ml",
+      "section": "catalogue",
+      "text": "Gentle Niacinamide Cleanser bản du lịch 30 ml: dành cho da dầu."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

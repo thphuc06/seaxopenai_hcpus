@@ -1,0 +1,31 @@
+{
+  "registry": "MOCK notification registry",
+  "warning": "SYNTHETIC — fictional numbers",
+  "records": {
+    "DEMO-CBMP-00042": {
+      "product_name": "Gentle Niacinamide Cleanser",
+      "holder": "Công ty TNHH Lumivy Demo",
+      "status": "REVOKED",
+      "issued": "2026-10-31",
+      "revoked": "2026-10-31"
+    },
+    "DEMO-CBMP-00077": {
+      "product_name": "Gentle Niacinamide Cleanser",
+      "holder": "Công ty TNHH Lumivy Demo",
+      "status": "ACTIVE",
+      "issued": "2026-10-31"
+    },
+    "DEMO-CBMP-00088": {
+      "product_name": "Hydra Cream Cleanser",
+      "holder": "Công ty TNHH Lumivy Demo",
+      "status": "ACTIVE",
+      "issued": "2026-10-31"
+    },
+    "DEMO-CBMP-00123": {
+      "product_name": "Daily Sun Fluid SPF50",
+      "holder": "Công ty TNHH Lumivy Demo",
+      "status": "ACTIVE",
+      "issued": "2026-10-31"
+    }
+  }
+}

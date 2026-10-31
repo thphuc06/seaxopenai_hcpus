@@ -1,0 +1,57 @@
+{
+  "source_id": "DEMO-SRC-S4-LISTING",
+  "kind": "LISTING",
+  "product_id": "DEMO-PROD-S4",
+  "version": 1,
+  "uri": "demo://s4/listing",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "seller:demo-shop",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S4",
+    "variant": "30ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S4-LISTING-V1-01",
+      "locator": "title",
+      "section": "overview",
+      "text": "Clear Skin Serum — lọ 30 ml"
+    },
+    {
+      "id": "DEMO-PSG-S4-LISTING-V1-02",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Thông tin loại da: Clear Skin Serum dành cho da dầu và da hỗn hợp."
+    },
+    {
+      "id": "DEMO-PSG-S4-LISTING-V1-03",
+      "locator": "highlights#free-from",
+      "section": "highlights",
+      "text": "Serum không chứa cồn, không hương liệu."
+    },
+    {
+      "id": "DEMO-PSG-S4-LISTING-V1-04",
+      "locator": "highlights#concentration",
+      "section": "highlights",
+      "text": "Giới thiệu công thức với 2% Niacinamide."
+    },
+    {
+      "id": "DEMO-PSG-S4-LISTING-V1-05",
+      "locator": "description#treatment",
+      "section": "description",
+      "text": "Mô tả của gian hàng: đặc trị mụn."
+    },
+    {
+      "id": "DEMO-PSG-S4-LISTING-V1-06",
+      "locator": "specs#company",
+      "section": "specifications",
+      "text": "Đơn vị chịu trách nhiệm: Công ty TNHH Lumivy Demo."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

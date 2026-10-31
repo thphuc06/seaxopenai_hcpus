@@ -1,0 +1,45 @@
+{
+  "source_id": "DEMO-SRC-S3-LISTING",
+  "kind": "LISTING",
+  "product_id": "DEMO-PROD-S3",
+  "version": 1,
+  "uri": "demo://s3/listing",
+  "captured_at": "2026-10-31T03:48:13Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "seller:demo-shop",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S3",
+    "variant": "40ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S3-LISTING-V1-01",
+      "locator": "title",
+      "section": "overview",
+      "text": "Daily Sun Fluid SPF50 — chai 40 ml"
+    },
+    {
+      "id": "DEMO-PSG-S3-LISTING-V1-02",
+      "locator": "usage#skin",
+      "section": "usage",
+      "text": "Mô tả loại da trên gian hàng: mọi loại da."
+    },
+    {
+      "id": "DEMO-PSG-S3-LISTING-V1-03",
+      "locator": "highlights#1",
+      "section": "highlights",
+      "text": "Thành phần được giới thiệu: Glycerin."
+    },
+    {
+      "id": "DEMO-PSG-S3-LISTING-V1-04",
+      "locator": "specs#company",
+      "section": "specifications",
+      "text": "Đơn vị chịu trách nhiệm: Công ty TNHH Lumivy Demo."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

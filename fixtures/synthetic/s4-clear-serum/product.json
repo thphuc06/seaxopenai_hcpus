@@ -1,0 +1,17 @@
+{
+  "product_id": "DEMO-PROD-S4",
+  "name": "Clear Skin Serum",
+  "brand": "Lumivy Lab (fictional)",
+  "variant": "30ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "DEMO-CASE-S4",
+  "tenant_id": "demo-tenant",
+  "listing_id": "DEMO-LISTING-S4",
+  "web": {
+    "enabled": false,
+    "brand_domains": [],
+    "aliases": []
+  },
+  "note": "SYNTHETIC — sản phẩm hư cấu, dữ liệu theo DATASET-SPEC §4."
+}

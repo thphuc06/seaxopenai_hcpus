@@ -1,0 +1,21 @@
+{
+  "event_id": "DEMO-EVT-10",
+  "idempotency_key": "demo:s1:event:10",
+  "type": "EVIDENCE_ADDED",
+  "schema_version": "1",
+  "producer": "publisher-panel",
+  "resource": {
+    "kind": "SOURCE",
+    "id": "DEMO-SRC-S1-BLURRED-LABEL",
+    "version": 2
+  },
+  "changed_fields": [],
+  "payload": {
+    "case_id": "DEMO-CASE-S1",
+    "product_id": "DEMO-PROD-S1",
+    "snapshot": "synthetic/s1-gentle-cleanser/blurred_label.v2.json"
+  },
+  "occurred_at": "2026-10-31T03:48:13Z",
+  "correlation_id": "DEMO-STORY-S1",
+  "expect": "Ảnh người bán nộp không đọc được; bằng chứng rõ trước đó vẫn giữ hiệu lực, case riêng chỉ có ảnh mờ cần ảnh rõ hơn."
+}
