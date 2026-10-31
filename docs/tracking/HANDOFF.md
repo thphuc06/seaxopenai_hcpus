@@ -1,5 +1,58 @@
 # Integration handoff
 
+## sync-4
+
+Incremental gate passed at16:08 ICT,31 Oct2026 (T+6:08). PHASE=4. All four
+lanes integrated; no WAITING, omitted lane or retained-feature failure. User
+explicitly requested reuse of completed checks and focused repair reruns. This
+is not a new full-suite invocation or a replay/recordings freeze. Phase5's planned
+deadline16:00 has already elapsed; prioritize recording the working scenes.
+
+### P4
+- Integrated0ffba2d via8604fd5: three REAL retailer captures, S4 operational
+  checker, silent storyboard, separate blind rerun and Codex usage evidence.
+- Human-approved checker corrections permit conservative marketplace abstention
+  and timestamp-only receipt updates; all count/content/read-only checks remain.
+- Original DRAFT gold, blind first-run evidence and replay files unchanged.
+  Blind diagnostic remains54/55 DRAFT fields; no human gold approval implied.
+- R3 notification and R4 alcohol-free extraction CCRs now pass actual sync4 paths.
+
+### P1
+- Integrated048f7c7 via134b51d: immutable actor-owned receipts, independent
+  marketplace scan/projections and code-only web policy/lifecycle.
+- Corrected web audit adapter to project query-envelope decisions and omit
+  internal terminal receipts. Existing DTOs, routes and ACL retained.
+- policy-v2.1 retains identity-matched retailer size disagreement for review;
+  explicit product/variant/market mismatches remain excluded. No seller blame.
+- Marketplace review-action/scan-trace UI and image/OCR are deferred scope.
+
+### P2
+- Integratedddcf7ed via601567f: bounded Web Scout, immutable search/fetch replay,
+  shared story recording ledger and --web switch; R3/R4 extraction corrections.
+- Story status requires query activity, not merely a terminal preflight receipt;
+  underlying stop reasons remain visible. No new recording or paid call here.
+- Atomic expected-revision source-ingest CCR remains follow-up. Provider whole
+  story/web replay and OCR execution are NOT VERIFIED by this offline gate.
+
+### P3
+- Integratedc0800da viaf79908d: receipt, web audit and Observe UI; actor-scoped
+  preview receipts, operator refresh, E2E/recorder scaffolding.
+- buy-button, receipt-diff, web-audit and review-reason selectors are present.
+  Marketplace UI/OCR/time travel remain deferred; no browser scene was run here.
+- API build and93 Node tests pass; backend/frontend wire plus guards9 pass.
+
+### Gate evidence and next step
+Case-sensitive JUnit union covers all1626 currently collected backend nodes:
+1626 passed,0 failed/errors/skipped/deselected, plus2 historical passing subtests.
+Reused P4 full/repair receipts; fresh sets91,72,62,245 (initial242 pass/3 fail),
+214 repair passes and9 wire/guards overlap and must not be added. All three
+failures were superseded by passing affected tests. Fixture validator101/101.
+sync_check4 initially35 PASS/1 receipt FAIL; affected real receipt recheck PASS
+after approved checker correction gives36/36 incremental path checks. Node93
+and API build pass. Three read-only reviews plus focused repair review clear.
+Details: docs/results/sync-4-gate.md. Human starts Local backend/frontend Actions
+for browser/replay rehearsal. No server, model spend, scope cut or freeze claim.
+
 ## contract-4
 
 Phase3 incremental gate passed15:20 ICT,31 Oct2026 (T+5:20). PHASE stays3;
