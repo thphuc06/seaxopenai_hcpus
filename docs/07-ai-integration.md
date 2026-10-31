@@ -387,9 +387,8 @@ references: [Python SDK raw responses, retries and timeouts](https://developers.
 [Pydantic models](https://docs.pydantic.dev/latest/concepts/models/),
 [async worker threads](https://docs.python.org/3/library/asyncio-task.html#asyncio.to_thread).
 No dependency was added. contract-1 a558fc9 was fetched and merged during Stage B.
-Its P1 business endpoints remain 501 stubs; a full P1 bootstrap is not claimed.
-No paid record pass is claimed here.
-The human-terminal record pass remains a Should follow-up, capped by P2-1.
+At that initial handoff P1 business endpoints were still 501 stubs and the real
+record pass was pending. The completion results below supersede those blockers.
 
 Independent Phase-1 validation after review: 122 focused tests passed (gateway,
 normalization, extraction, budget and guards), with zero failed/skipped/deselected.
@@ -398,3 +397,49 @@ immutable recording files, malformed replay, tenant boundaries, Unicode/company
 identity, mixed unknown ingredients, source injection and cropped/negated quotes.
 No paid call or new recording was used in validation. The complete integration
 gate and exact P1 WAITING nodes are recorded in .agent/plans/P2.md.
+
+Phase-1 follow-up: generated metamorphic tests in test_normalize_props.py cover
+unit/spacing/case variations, Vietnamese diacritics, bilingual skin phrases, all
+legal forms, INCI abbreviations/line breaks and field boundaries. Wrapped INCI
+continues across soft line breaks but not a new header, paragraph, sentence or
+excluded instruction; recognized colonless volume/skin fields also end a list.
+Quotes retain their original contiguous source text. Fallback cache identity now
+uses `FALLBACK:fallback-v2`, invalidating pre-fix cached extractions without
+changing the model prompt, replay keys or public FALLBACK provenance.
+
+scripts/record_all.py is a single-LISTING diagnostic scaffold, dry by default.
+It shares the exact extract-v1 input builder (unchanged prompt bytes/version),
+the production gateway/validator and the dated model_prices table. --execute is
+for the human terminal: one record extraction (maximum two provider requests
+including retry, estimated upper bound at most USD 0.50), a separate replay run
+with zero token usage, and fallback observations. It prints the estimate before
+calling. Each output directory admits one attempt, retains an isolated database,
+trace and immutable replay, and refuses a new paid attempt after interruption.
+A completed identical rerun reads its report without calls. The comparison is
+diagnostic, never a gold label or a published verdict. It does not exercise P1's
+bootstrap or write shared fixtures/replay. No new env switch or dependency.
+
+Completion follow-up (31 Oct, 11:27 ICT): merged P4 b7d9931 and P1 BUILD 3bce796
+into p2. Phase-1 full suite: 625 passed plus 2 subtests, 44 skipped, 0 failures
+or deselections. Skips are 43 later-phase cases and P4's missing real R2 capture
+due at S2. The final CLI/normalization/guard regression suite then passed 135
+tests, including the extra Windows cp1252 output regression (124 metamorphic,
+7 diagnostic CLI and 4 guards). P4's sync_check phase 1 fallback path passed all
+17 checks, including a completed bootstrap and buyer-read isolation.
+
+The user explicitly authorized agent execution of the capped record command,
+overriding the lane's human-terminal workflow for this check. One real extraction
+of the DEMO listing returned 6 validated claims using 910 input / 567 output /
+0 reasoning tokens, estimated USD 0.00749. Its separate replay returned the same
+6 claims with 0 tokens and no network request. Fallback returned 7 claims: it
+also recognized a seed ingredient in the title and retained the remaining title
+text as unknown; the other canonical observations matched. This is a measured
+diagnostic difference, not an expected-label change or model-derived verdict.
+The isolated report/DB/replay remain under backend/.venv/p2-record-checkpoint.
+The original CLI failed only when printing Unicode on a cp1252 console after
+saving its completed report; ASCII-escaped terminal JSON fixes that output path.
+Re-reading the saved report succeeded without another API request. Total paid
+requests: 1. Full-bootstrap model recording remains an optional Should follow-up;
+the single-listing real-record/replay requirement in P2-1 DONE WHEN is satisfied.
+P4 still owns the integrated Sync-1 gate/main merge/tag; no sync-1 was available
+at this handoff. Shared fixtures/replay and gold were not edited by P2.
