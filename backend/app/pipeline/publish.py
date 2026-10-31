@@ -38,12 +38,12 @@ def marketplace_gate(findings: list[MarketplacePublication]) -> bool:
         for finding in findings:
             run = connection.execute("SELECT case_id,status FROM runs WHERE id=?", (finding.scan_id,)).fetchone()
             source = connection.execute(
-                "SELECT s.*,v.version,p.text,p.locator FROM sources s JOIN source_versions v ON v.source_id=s.id "
+                "SELECT s.*,v.version,v.is_current,p.text,p.locator FROM sources s JOIN source_versions v ON v.source_id=s.id "
                 "JOIN passages p ON p.source_version_id=v.id WHERE p.id=? AND s.id=?",
                 (finding.citation.passage_id, finding.seller_source_id)).fetchone()
             if (run is None or run["case_id"] is not None or run["status"] != "RUNNING"
                     or source is None or source["case_id"] is not None or source["product_id"] != finding.product_id
-                    or source["visibility"] != "PUBLIC" or source["status"] != "ACTIVE"
+                    or source["visibility"] != "PUBLIC" or source["status"] != "ACTIVE" or not source["is_current"]
                     or source["kind"] != "LISTING" or source["kind"] != finding.citation.source_kind.value
                     or source["version"] != finding.citation.source_version or source["locator"] != finding.citation.locator
                     or not quote_text(finding.citation.excerpt)

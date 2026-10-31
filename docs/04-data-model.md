@@ -121,6 +121,28 @@ Example for the synthetic brand: `notification_number` and `responsible_company`
 
 ## As built (contest)
 
+### S5 enum and S4 persistence reconciliation
+
+The implemented enums in `app/models.py` include `ScopeMatch.AGENT` alongside
+MATCH/MISMATCH/UNKNOWN. EventType is BOOTSTRAP, LISTING_CHANGED, SOURCE_CHANGED,
+EVIDENCE_ADDED, SOURCE_REVOKED, WEB_SEARCH_REQUESTED; EventOutcome is
+ADMITTED/NOOP/DUPLICATE/REJECTED. Stored execution labels include
+LIVE/REPLAY/FALLBACK (configuration also accepts record for new live recordings).
+
+Marketplace runs use `runs.case_id=NULL` and carry the pinned context revision;
+they are excluded from case-run DTOs. Marketplace outlier tasks use
+`review_tasks.case_id=NULL`, `result_id=NULL`, reason MARKETPLACE_OUTLIER and
+status OPEN. Each `marketplace_findings` row stores product/scan/seller IDs,
+shop, field_key, value_json, display, cluster, outlier, citation_json, created_at.
+The latest public tallies are stored in `trace_steps.detail` on a publish step,
+not a separate tally table. A blocked publication writes an empty tally trace
+without findings or tasks. Orders retain immutable snapshot_json/snapshot_hash,
+case_revision and chain_head, with actor ownership in buyer_id.
+
+No schema migration is introduced by P5. Superseded versions remain immutable
+historical evidence; publication checks `source_versions.is_current` under the
+writer transaction before admitting marketplace citations.
+
 Phase 0, P1 (31 Oct 2026): `app/db.py` creates the core and extended tables above,
 plus `embeddings(passage_id, source_version_id, model, content_hash, vector_json, created_at)`
 and product commerce columns `price_vnd`, `shop_name`, `official_store`, `image_path`.
