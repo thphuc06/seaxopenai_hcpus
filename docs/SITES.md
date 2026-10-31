@@ -70,7 +70,27 @@ The demo role headers remain the application's existing simulated-auth mechanism
 - https://developers.cloudflare.com/workers/runtime-apis/fetch/
 - https://github.com/cloudflare/vinext
 
-## Publication receipt
+## Current publication — 31 Oct 2026, 16:31 ICT
+
+The user requested syncing the latest accepted main frontend to the existing Site.
+Native get_site confirmed the audience was already public; this refresh preserved it.
+This receipt supersedes the initial private/access and sync2 UI status below.
+
+- URL: https://product-truth-passport-vn.pointykayak.chatgpt.site
+- Contest source: main2de7c1d25919a9965c19acad42585bd0c654b7f2 (includes sync-4).
+- Sites source: adb410f9175d0b811f8d9d0d9332c61ee1126116.
+- Version2: appgprj_6ae586d8cc7081918726e8abf69368a2~appgver_1a1afc1d9cf48191b97456de753ec1e4.
+- Deployment: appgdep_6ae5b543aed88191b4dcf8e968fcac2a; succeeded16:31:04 ICT.
+- Matching archive: SHA256 9f31332521b5272c2a76491c2b7e5aff3eb30642b4592a16b77d0c4369570f51,
+  1,372,160 bytes,31 files. Source helper owns commit/push/package; credentials stayed in hidden stdin/memory.
+- Validation: Node24 frontend93 tests, proxy9 tests, TypeScript, frontend API build
+  and Sites build passed. Existing lockfiles/dependencies reused.
+- Hosted asset now index-DFqCMqrn.js, matching Render and containing web-audit,
+  receipt-diff and agent-panel. Public /api/health returns live,phase4,policy-v2.1.
+- No new model request or reset. Existing hosted run remains PARTIAL/WEB_CAPTUREERROR;
+  updating the UI does not make the earlier incomplete data run complete.
+
+## Publication receipt (initial deployment)
 
 Published successfully at 13:30:56 ICT on 31 Oct 2026.
 
