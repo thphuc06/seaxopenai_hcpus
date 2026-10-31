@@ -21,7 +21,7 @@ from app.pipeline.fallback_extract import Passage, clean_regions, injection_span
 from app.pipeline.normalize import has_negation, normalize
 
 PROMPT_VERSION = "extract-v1"
-CACHE_VERSION = "coverage-v3-ingredient-family"
+CACHE_VERSION = "coverage-v4-notification-header"
 VISION_VERSION = "extract-vision-v1"
 RETRY_VERSION = "extract-retry-v1"
 INSTRUCTIONS = """Extract product claims from every passage, including titles and tables.

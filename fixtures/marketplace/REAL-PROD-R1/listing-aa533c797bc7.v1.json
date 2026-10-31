@@ -1,0 +1,335 @@
+{
+  "source_id": "REAL-PROD-R1-listing-aa533c797bc7",
+  "kind": "LISTING",
+  "product_id": "REAL-PROD-R1",
+  "version": 1,
+  "uri": "https://insidefresh.net/products/sua-rua-mat-cerave-cho-da-kho-den-da-thuong-cerave-hydrating-facial-cleanser-236ml",
+  "requested_uri": "https://insidefresh.net/products/sua-rua-mat-cerave-cho-da-kho-den-da-thuong-cerave-hydrating-facial-cleanser-236ml",
+  "captured_at": "2026-10-31T08:09:44.210541+00:00",
+  "dataset_origin": "REAL",
+  "visibility": "PUBLIC",
+  "family": "seller:insidefresh.net",
+  "raw_sha256": "69dfb6a33e1e0afa0ebfe9fc2e2cc9f5ac02c18190b31e0110dad8dcb3ed186b",
+  "cleaned_sha256": "33fcfe789628fb34a7377f03f7f9a59de286c9ed456f6dcada93b7523594d54d",
+  "cleaner_version": "html-parser-v1",
+  "passages": [
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p001",
+      "locator": "title",
+      "section": "title",
+      "text": "Sữa Rửa Mặt CeraVe Hydrating Facial Cleanser Màu Xanh Lá 236ml (da khô, da thường)"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p002",
+      "locator": "description#p1",
+      "section": "description",
+      "text": "Mã sản phẩm: 3337875597180"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p003",
+      "locator": "description#p2",
+      "section": "description",
+      "text": "Thương hiệu:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p004",
+      "locator": "description#p3",
+      "section": "description",
+      "text": "CeraVe"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p005",
+      "locator": "description#p4",
+      "section": "description",
+      "text": "Tình trạng:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p006",
+      "locator": "description#p5",
+      "section": "description",
+      "text": "Tạm hết hàng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p007",
+      "locator": "description#p6",
+      "section": "description",
+      "text": "295,000₫"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p008",
+      "locator": "description#p7",
+      "section": "description",
+      "text": "Đã bán hết"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p009",
+      "locator": "specs#1",
+      "section": "specs",
+      "text": "THông tin sản phẩm"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p010",
+      "locator": "specs#2",
+      "section": "specs",
+      "text": "Sữa Rửa Mặt Cerave Sạch Sâu là sản phẩm sữa rửa mặt đến từ thương hiệu mỹ phẩm Cerave của Mỹ, với sự kết hợp của ba Ceramides thiết yếu, Hyaluronic Acid sản phẩm giúp làm sạch và giữ ẩm cho làn da mà không ảnh hưởng đến hàng rào bảo vệ da mặt và cơ thể."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p011",
+      "locator": "specs#3",
+      "section": "specs",
+      "text": "Hiện sản phẩm Sữa Rửa Mặt Cerave Sạch Sâu đã có mặt tại Insidefresh với 2 loại và 3 dung tích (88ml; 236ml; 473ml):"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p012",
+      "locator": "specs#4",
+      "section": "specs",
+      "text": "Sữa Rửa Mặt Cerave Sạch Sâu Cho Da Thường Đến Da Dầu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p013",
+      "locator": "specs#5",
+      "section": "specs",
+      "text": "Sữa Rửa Mặt Cerave Sạch Sâu Cho Da Thường Đến Da Khô"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p014",
+      "locator": "specs#6",
+      "section": "specs",
+      "text": "1. Sữa Rửa Mặt Cerave Sạch Sâu Cho Da Thường Đến Da Dầu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p015",
+      "locator": "specs#7",
+      "section": "specs",
+      "text": "Sữa Rửa Mặt Cerave Foaming Cleanser kết cấu dạng gel tạo bọt rất lý tưởng để loại bỏ dầu thừa, bụi bẩn và lớp trang điểm với công thức nhẹ nhàng, không phá vỡ hàng rào bảo vệ tự nhiên của da và chứa các thành phần giúp duy trì độ ẩm cân bằng da. Cerave Foaming Cleanser chứa Ceramides, Axit Hyaluronic và Niacinamide giúp duy trì hàng rào bảo vệ da, khóa ẩm và làm dịu làn da của bạn."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p016",
+      "locator": "specs#8",
+      "section": "specs",
+      "text": "Loại da phù hợp:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p017",
+      "locator": "specs#9",
+      "section": "specs",
+      "text": "Sản phẩm thích hợp cho da thường đến dầu."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p018",
+      "locator": "specs#10",
+      "section": "specs",
+      "text": "Có thể sử dụng cho mặt và toàn thân."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p019",
+      "locator": "specs#11",
+      "section": "specs",
+      "text": "Giải pháp cho tình trạng da:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p020",
+      "locator": "specs#12",
+      "section": "specs",
+      "text": "Da thường tiết bã nhờn, dầu thừa, lỗ chân lông to."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p021",
+      "locator": "specs#13",
+      "section": "specs",
+      "text": "Ưu thế nổi bật:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p022",
+      "locator": "specs#14",
+      "section": "specs",
+      "text": "3 loại Ceramides (1, 3, 6-II) thiết yếu giúp khôi phục hàng rào độ ẩm da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p023",
+      "locator": "specs#15",
+      "section": "specs",
+      "text": "Hyaluronic Acid giúp duy trì độ ẩm tự nhiên của da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p024",
+      "locator": "specs#16",
+      "section": "specs",
+      "text": "Niacinamide giúp làm dịu, nuôi dưỡng, củng cố hàng rào da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p025",
+      "locator": "specs#17",
+      "section": "specs",
+      "text": "Kết cấu dạng gel tạo bọt giúp làm sạch sâu, loại bỏ dầu thừa, thông thoáng lỗ chân lông nhưng vẫn duy trì độ ẩm tự nhiên của da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p026",
+      "locator": "specs#18",
+      "section": "specs",
+      "text": "2. Sữa Rửa Mặt Cerave Cho Da Thường Đến Khô"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p027",
+      "locator": "specs#19",
+      "section": "specs",
+      "text": "Sữa Rửa Mặt Cerave Hydrating Cleanser giúp loại bỏ bụi bẩn, dầu thừa, nhẹ nhàng lấy đi lớp kem chống nắng, trang điểm nhưng vẫn giữ hàng rào bảo vệ da và không làm mất đi độ ẩm tự nhiên. Sữa rửa mặt dịu nhẹ với các thành phần như Ceramides và Axit Hyaluronic có tác dụng khôi phục hàng rào tự nhiên của da và dưỡng da ẩm mịn."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p028",
+      "locator": "specs#20",
+      "section": "specs",
+      "text": "Loại da phù hợp:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p029",
+      "locator": "specs#21",
+      "section": "specs",
+      "text": "Sản phẩm thích hợp cho da thường đến khô."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p030",
+      "locator": "specs#22",
+      "section": "specs",
+      "text": "Có thể sử dụng cho mặt và toàn thân."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p031",
+      "locator": "specs#23",
+      "section": "specs",
+      "text": "Sản phẩm thích hợp cho cả người lớn và trẻ em."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p032",
+      "locator": "specs#24",
+      "section": "specs",
+      "text": "Giải pháp cho tình trạng da:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p033",
+      "locator": "specs#25",
+      "section": "specs",
+      "text": "Da thiếu nước, thiếu ẩm."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p034",
+      "locator": "specs#26",
+      "section": "specs",
+      "text": "Da khô ráp, sần sùi, bong tróc."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p035",
+      "locator": "specs#27",
+      "section": "specs",
+      "text": "Ưu thế nổi bật:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p036",
+      "locator": "specs#28",
+      "section": "specs",
+      "text": "Sản phẩm giúp làm sạch bụi bẩn, dầu thừa, lấy đi cặn bã lớp trang điểm còn sót trên da và làm thông thoáng lỗ chân lông nhưng vẫn duy trì độ ẩm cho da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p037",
+      "locator": "specs#29",
+      "section": "specs",
+      "text": "3 loại Ceramides (1, 3, 6-II) thiết yếu giúp khôi phục hàng rào độ ẩm da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p038",
+      "locator": "specs#30",
+      "section": "specs",
+      "text": "Công nghệ MVE độc quyền khoá ẩm cho da suốt 24 giờ."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p039",
+      "locator": "specs#31",
+      "section": "specs",
+      "text": "Hyaluronic Acid giúp duy trì độ ẩm tự nhiên của da."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p040",
+      "locator": "specs#32",
+      "section": "specs",
+      "text": "Độ an toàn:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p041",
+      "locator": "specs#33",
+      "section": "specs",
+      "text": "Không xà phòng"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p042",
+      "locator": "specs#34",
+      "section": "specs",
+      "text": "Không hương liệu"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p043",
+      "locator": "specs#35",
+      "section": "specs",
+      "text": "Không chứa paraben"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p044",
+      "locator": "specs#36",
+      "section": "specs",
+      "text": "Không bít tắc lỗ chân lông"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p045",
+      "locator": "specs#37",
+      "section": "specs",
+      "text": "Đã được kiểm nghiệm không gây kích ứng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p046",
+      "locator": "specs#38",
+      "section": "specs",
+      "text": "Bảo quản:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p047",
+      "locator": "specs#39",
+      "section": "specs",
+      "text": "Nơi khô ráo thoáng mát."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p048",
+      "locator": "specs#40",
+      "section": "specs",
+      "text": "Tránh ánh nắng trực tiếp, nơi có nhiệt độ cao hoặc ẩm ướt."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p049",
+      "locator": "specs#41",
+      "section": "specs",
+      "text": "Đậy nắp kín sau khi sử dụng."
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p050",
+      "locator": "specs#42",
+      "section": "specs",
+      "text": "Thông số sản phẩm:"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p051",
+      "locator": "specs#43",
+      "section": "specs",
+      "text": "Dung tích: 88ml; 236ml; 473ml"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p052",
+      "locator": "specs#44",
+      "section": "specs",
+      "text": "Thương hiệu: Cerave"
+    },
+    {
+      "id": "REAL-PROD-R1-listing-aa533c797bc7-v1-p053",
+      "locator": "specs#45",
+      "section": "specs",
+      "text": "Xuất xứ thương hiệu: Mỹ."
+    }
+  ]
+}

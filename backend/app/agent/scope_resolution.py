@@ -150,7 +150,7 @@ def resolve_all(ctx: RunContext, observations: list[SourceObs], fields: list[str
                            "mode": "FALLBACK" if ctx.mode == "fallback" else ctx.mode.upper(),
                            "ignored_instructions_detected": any(p.injected for p in passages.values())})
     stop_reason = prepared.stop_reason
-    trace_stop = "NO_PENDING"
+    trace_stop = "FALLBACK_PENDING" if ctx.mode == "fallback" and any(p.pending for p in passages.values()) else "NO_PENDING"
     caches: list[tuple[ScopeSource, CachedProposals]] = []
     if not stop_reason and ctx.mode != "fallback":
         try:
@@ -200,6 +200,7 @@ def resolve_all(ctx: RunContext, observations: list[SourceObs], fields: list[str
             _save_cache(ctx, source, cached)
     ctx.trace.step("agent:stop", detail={"stop_reason": stop_reason or trace_stop,
                    "mode": "FALLBACK" if ctx.mode == "fallback" else ctx.mode.upper(),
+                   "unresolved_placements": sum(d.scope_match in {ScopeMatch.UNKNOWN, ScopeMatch.AGENT} for d in decisions.values()),
                    "budget": ctx.budget.usage()})
     return ScopeOutcome(list(decisions.values()),
                         any(d.scope_match != ScopeMatch.UNKNOWN for d in decisions.values()), stop_reason,

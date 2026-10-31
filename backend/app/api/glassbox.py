@@ -74,8 +74,7 @@ def observability() -> ObservabilityResponse:
                 counts.replayed += 1
             else:
                 counts.live += 1
-    runs = [read.run_response(r) for r in read.rows("SELECT * FROM runs")]
     queue = read.one("SELECT COUNT(*) n,MIN(f.created_at) oldest FROM review_tasks t JOIN field_results f ON f.id=t.result_id WHERE t.status='OPEN'")
     age = max(0.0, (datetime.now(timezone.utc)-datetime.fromisoformat(str(queue["oldest"]).replace("Z", "+00:00"))).total_seconds()) if queue["oldest"] else None
     vocabulary = {str(r["by"]): int(r["n"]) for r in read.rows('SELECT "by",COUNT(*) n FROM vocab GROUP BY "by"')}
-    return ObservabilityResponse(verdicts=verdicts, model_calls=ModelCallCounts(live=sum(r.usage.model_calls for r in runs if r.llm_mode == "LIVE"), replayed=sum(r.usage.model_calls for r in runs if r.llm_mode == "REPLAY"), avoided=avoided), calls_by_step=by_step, publish_passed=passed, publish_blocked=blocked, agent_stops=dict(agent_stops), gap_stops=dict(gap_stops), vocabulary=vocabulary, review_queue_size=int(queue["n"]), oldest_review_age_s=age)
+    return ObservabilityResponse(verdicts=verdicts, model_calls=read.model_call_counts(avoided=avoided), calls_by_step=by_step, publish_passed=passed, publish_blocked=blocked, agent_stops=dict(agent_stops), gap_stops=dict(gap_stops), vocabulary=vocabulary, review_queue_size=int(queue["n"]), oldest_review_age_s=age)

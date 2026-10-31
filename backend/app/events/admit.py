@@ -49,6 +49,8 @@ def admit(event: EventEnvelope, *, role: Role, actor_id: str, rules: AdmissionRu
         reason = "Producer or role not allowed" if not accepted else "Resource does not match a case"
         if case:
             outcome, reason = EventOutcome.ADMITTED, "Material event admitted"
+            if event.type == EventType.WEB_SEARCH_REQUESTED and event.resource.version != case["revision"] + 1:
+                outcome, reason = EventOutcome.NOOP, "Case revision changed before web request admission"
             if event.type == EventType.LISTING_CHANGED and set(event.changed_fields) <= rules.non_material:
                 outcome, reason = EventOutcome.NOOP, "Only non-material fields changed"
         if case and outcome == EventOutcome.ADMITTED and event.payload.get("snapshot"):

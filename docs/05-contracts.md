@@ -1,5 +1,10 @@
 # 05 — Contracts (code against these)
 
+S4 integration: web audit GET projects the six declared WebAuditResult fields
+from stored query-envelope decisions, omits internal outcome receipts, and retains
+legacy flat-list reads. No DTO/route/ACL change. Receipt `changed` includes
+checked_at; a recheck timestamp alone is distinct from a substantive field change.
+
 Paste this file into the first Codex task on contest day. Names here are binding; see [04-data-model.md](04-data-model.md) for enums.
 
 ## 1. Event envelope — `POST /internal/events`
@@ -309,6 +314,93 @@ expose closed-set configuration for Phase 1 admission · why: config.py is P4-ow
 Stage A adds route contracts only, not an alternative admission policy.
 
 ### S4 P1 contract checkpoint
+
+#### Post-contract-4 P1 wiring (local, not a Sync)
+
+Tag contract-4 at9f55d9e is merged into p1 at87fec8d. Existing4A DTOs stay unchanged.
+POST marketplace scan now ingests PUBLIC listing snapshots for the requested product
+from fixtures/marketplace/<product_id>/*.json, outside the case. It invokes the
+existing P2 extraction interface with server case/tenant and one scan Budget.
+Unreadable files or failed sellers are traced and skipped; ambiguous multi-value
+fields abstain. Empty normalized fields cannot vote. Publication of the entire
+scan is atomic through publish.marketplace_gate: stored quote/locator/version,
+PUBLIC listing, product ownership, ACTIVE status and a standalone RUNNING scan
+are checked before any finding or review task is inserted.
+
+GET marketplace reads the latest published scan only. BUYER/SELLER/SYSTEM receive
+tallies; REVIEWER/OPERATOR additionally receive shops, citations, origins and
+outlier flags. Reads cause no work. Scan runs have case_id=NULL and do not change
+case revision, jobs/events, passport findings, chain or the passport's latest run.
+Existing case-run DTOs require case_id, so standalone scans are excluded from the
+case-run list/detail; metrics and observability still count their usage. Their
+stored trace remains available for later scan-trace UI integration.
+
+Outliers create OPEN review_tasks with nullable case/result and reason
+MARKETPLACE_OUTLIER. Task id is marketplace_ plus SHA256(canonical JSON of
+[scan_id,seller_source_id,field_key]), linking each task to its finding without a
+passport result. The existing passport-review queue intentionally excludes these
+tasks. Expert marketplace findings expose candidates, but a separate review-action
+contract/queue UI remains a CCR; no reviewer action can publish them to a passport.
+
+POST web-search admits WEB_SEARCH_REQUESTED under publisher-panel/OPERATOR. The
+key contains case plus admitted target revision. Repeated clicks at that revision
+return DUPLICATE without writes; a later material revision permits another request.
+A stale revision at admission returns NOOP. There is no request body or client
+identity. P1 invokes discover before extraction for explicit requests; automatic
+discovery requires WEB_SEARCH=on, product.web.enabled=true, incomplete CURRENT
+public results, and no earlier automatic/explicit attempt for the case. All steps
+share the run Budget. The stub's empty outcome becomes WEB_DISCOVERY_NO_ACTIVITY;
+disabled web becomes WEB_DISABLED. Optional provider errors produce PARTIAL while
+retaining code-checked evidence, with an explicit stop reason.
+
+GET web-search projects only that case's stored web_searches and web snapshots,
+including passages, hash, capture time and identity flag, for REVIEWER/OPERATOR.
+It performs no discovery. P2 owns provider/search persistence schemas behind the
+existing WebOutcome interface; tests use that seam, not a real provider. Web Scout
+and OCR remain stubs. P4 delivery fd4c771 subsequently supplied three REAL snapshots
+and the S4 checker; fallback scans of those snapshots abstain on every field because
+each has multiple distinct normalized values. This outcome and the corrected new
+diagnostic expectation were explicitly accepted by the user. No fixtures changed.
+Image transport and eval metrics remain501. This is not S4 completion.
+
+#### Bounded Stage B: receipts and independent marketplace core
+
+POST /orders and GET /orders[/{id}] now implement the unchanged4A DTOs. Every
+authenticated demo role purchases/reads only under its own actor_id; another actor's
+receipt is404 and is absent from the list, including for expert roles. Creation
+uses the same public passport projection as the BUYER GET, within BEGIN IMMEDIATE
+with its case revision and validated chain head. It writes one order only; an
+invalid/unlinked result chain returns409 without an order or history repair.
+
+snapshot_hash is SHA256 of the exact UTF-8 snapshot_json bytes stored at purchase.
+Reads check it before parsing and return409 on mismatch or unreadable content;
+hash_valid is true only on a successful response. snapshot, revision and chain_head
+remain immutable. Diff compares the full visible PassportField state, including
+freshness, review state, citations and checked_at. Missing before/after fields are
+null; changed_since_purchase is true if any field differs. Reads share one SQLite
+read transaction and create no work, storage changes or passport-read counter tick.
+The hash detects snapshot changes relative to its stored digest, not coordinated
+replacement of both by a database administrator; it is not an external signature.
+
+pipeline/marketplace.py exposes pure SellerListing, cluster_copies and consensus
+helpers only; API scan/persistence wiring is described above. Copy components use shared NFC,
+casefold/whitespace normalization and5-character shingle Jaccard>=0.8, with
+union-find and deterministic cluster IDs. Shared union-find also resolves code-checked
+web/reference copy links; per-passage coverage permits extra reference passages.
+Text shorter than5 characters supplies
+no copy signal. Values group by exact normalized equality; compatibility is used
+only after choosing the majority to identify review candidates. One unambiguous
+copy cluster contributes one vote per field. A cluster containing conflicting
+values abstains and stays in that field's denominator; missing/null values do not
+vote. A majority requires strictly more than half of participating clusters.
+Tie/plurality without a majority yields no outliers; ambiguous clusters are never
+flagged as seller outliers. This core publishes no verdict and changes no passport.
+
+At the bounded4B checkpoint15:06, contract-4 was absent and policy stayedv1.8.
+The subsequent wiring above uses policy-v2; provider/OCR delivery and real fixture
+validation remain pending. The pure clustering/value interfaces are unchanged.
+
+#### Published Stage A schemas
 
 All nine S4 operations from team README7.2 are registered on existing P1 routers.
 Authorized calls return501 until Stage B; stubs do not read/write application state

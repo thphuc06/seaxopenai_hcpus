@@ -4,7 +4,7 @@ from fastapi import APIRouter, Query
 from pydantic import JsonValue
 from app import chain, db
 from app.api import read, glassbox
-from app.api.contracts import EventCounts, MetricsResponse, ModelCallCounts
+from app.api.contracts import EventCounts, MetricsResponse
 from app.api.dependencies import Actor, OperatorActor, RunActor, not_implemented
 from app.api.glassbox_contracts import (BuyerExplanation, ExpertExplanation, ChainResponse,
     GraphResponse, GraphNode, GraphEdge, ObservabilityResponse, OtelResponse, SearchResponse)
@@ -74,5 +74,4 @@ def otel(run_id: str, actor: RunActor) -> OtelResponse:
 @router.get("/internal/metrics", response_model=MetricsResponse)
 def metrics(actor: OperatorActor) -> MetricsResponse:
     outcomes = {str(row["outcome"]): int(row["n"]) for row in read.rows("SELECT outcome,COUNT(*) AS n FROM events GROUP BY outcome")}
-    runs = [read.run_response(row) for row in read.rows("SELECT * FROM runs")]
-    return MetricsResponse(events=EventCounts(**{key: outcomes.get(key,0) for key in EventCounts.model_fields}), runs=len(runs), jobs=read.one("SELECT COUNT(*) AS n FROM jobs")["n"], model_calls=ModelCallCounts(live=sum(r.usage.model_calls for r in runs if r.llm_mode == "LIVE"), replayed=sum(r.usage.model_calls for r in runs if r.llm_mode == "REPLAY"), avoided=0), passport_reads=read.passport_reads())
+    return MetricsResponse(events=EventCounts(**{key: outcomes.get(key,0) for key in EventCounts.model_fields}), runs=read.one("SELECT COUNT(*) AS n FROM runs")["n"], jobs=read.one("SELECT COUNT(*) AS n FROM jobs")["n"], model_calls=read.model_call_counts(), passport_reads=read.passport_reads())

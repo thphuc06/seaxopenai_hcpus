@@ -280,6 +280,39 @@ def test_generic_notification_label_variants(context: RunContext, label: str) ->
     assert claim.field_key == "notification_number" and claim.normalized["value"] == "XX318/2026"
 
 
+@pytest.mark.parametrize("label,value", [("Số Giấy công bố", "AZ-719/26/CBMP"), ("SỐ GIẤY CÔNG BỐ", "BX-428/25/CBMP")])
+def test_notification_document_header_does_not_pick_other_number(context: RunContext, label: str, value: str) -> None:
+    sv = source([f"Mã lô: 123456. {label}: {value}."])
+    claims = extract_source_version(sv, context).claims
+    assert len(claims) == 1 and claims[0].field_key == "notification_number"
+    assert claims[0].raw_value == value and value in claims[0].quote
+
+
+@pytest.mark.parametrize("mode", ["fallback", "live"])
+def test_notification_header_reprocesses_old_cache(context: RunContext, monkeypatch: pytest.MonkeyPatch, mode: str) -> None:
+    text = "Số Giấy công bố: XY-842/27."
+    sv = source([text])
+    context.mode = mode
+    previous = ("FALLBACK:fallback-v4:image-v1" if mode == "fallback" else
+                f"live:{config.settings.model_extract}:coverage-v3-ingredient-family:vision={config.settings.llm_vision}")
+    old = json.dumps({"claims": [], "ignored_instructions": False, "extractor": "FALLBACK", "cached": False})
+    with db.transaction() as connection:
+        connection.execute("INSERT INTO extraction_cache(source_version_id,prompt_version,extractor,extraction_json,ignored_instructions,created_at) VALUES(?,?,?,?,?,?)",
+                           (sv, "extract-v1", previous, old, 0, db.now_iso()))
+    calls: list[dict[str, object]] = []
+    def provider(**request: object) -> Response:
+        calls.append(request)
+        claims = [] if len(calls) == 1 else [raw_claim(store.passages(sv)[0]["id"], "XY-842/27", text, field="notification_number")]
+        return provider_output(sv, claims)
+    monkeypatch.setattr(client, "_call_api", provider)
+    fresh = extract_source_version(sv, context)
+    assert not fresh.cached and len(fresh.claims) == 1 and fresh.claims[0].field_key == "notification_number"
+    assert len(calls) == (0 if mode == "fallback" else 2)
+    assert extract_source_version(sv, context).cached
+    with db.transaction() as connection:
+        assert connection.execute("SELECT extraction_json FROM extraction_cache WHERE source_version_id=? AND extractor=?", (sv, previous)).fetchone()[0] == old
+
+
 def test_multiline_label_company_phrase(context: RunContext) -> None:
     sv = source(["Dung tích: 21 ml.\nChịu trách nhiệm đưa sản phẩm ra thị trường: Cty TNHH Ánh Sao."])
     result = extract_source_version(sv, context)

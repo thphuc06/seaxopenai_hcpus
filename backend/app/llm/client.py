@@ -51,6 +51,13 @@ class LLMError(Exception):
         super().__init__(code if reason is None else f"{code}:{reason}")
 
 
+def reserve_network(request: Mapping[str, object]) -> None:
+    """Apply the bound session ledger before a model or HTTP provider attempt."""
+    guard = _network_guard.get()
+    if guard is not None:
+        guard(request)
+
+
 @dataclass(frozen=True)
 class LLMResult(Generic[SchemaT]):
     parsed: SchemaT
@@ -112,9 +119,7 @@ def _request(ctx: RunContext, **request: object) -> Response:
     The worker performs only the provider request. Usage, traces and recordings
     remain on the calling thread, so a late result cannot publish side effects.
     """
-    guard = _network_guard.get()
-    if guard is not None:
-        guard(request)
+    reserve_network(request)
     _active(ctx)
     wait_deadline = perf_counter() + ctx.budget.remaining_s()
     pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="llm-request")

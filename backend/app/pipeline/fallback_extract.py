@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.models import ClaimExtraction, ExtractedClaim
 from app.pipeline.normalize import folded, has_negation, ingredient_keys, parse_inci, phrase_pattern, phrase_spans, skin_types_in, vocabulary, volume_spans
 
-FALLBACK_VERSION = "fallback-v4"
+FALLBACK_VERSION = "fallback-v5-notification-header"
 
 
 class ProductContext(BaseModel):

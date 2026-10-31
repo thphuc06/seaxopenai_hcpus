@@ -5,6 +5,7 @@ import argparse
 from collections.abc import Callable, Iterator, Sequence
 from contextlib import closing, contextmanager
 from dataclasses import dataclass
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -21,6 +22,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 from app.models import AdmitResult, PassportResponse, PUBLIC_FIELDS
 from app.api.contracts import CaseHistoryResponse, EventLogItem, ReviewResponse, RunResponse
+from app.api.s4_contracts import (BuyerMarketplaceResponse, ExpertMarketplaceResponse,
+                                MarketplaceScanResponse, ReceiptResponse, WebAuditResponse)
 
 HEADERS = {role: {"X-Demo-Role": role, "X-Demo-Actor": "sync-check"}
            for role in ("BUYER", "REVIEWER", "OPERATOR")}
@@ -496,6 +499,201 @@ def run_phase_three(client: httpx.Client, state: Callable[[str], CaseState], cou
     return checks
 
 
+def s4_fire(client: httpx.Client, name: str, case_id: str, mode: str) -> None:
+    before = {row["id"] for row in successful(client.get("/api/internal/runs", headers=HEADERS["OPERATOR"])).json()}
+    admission = AdmitResult.model_validate(successful(client.post(
+        f"/api/internal/demo/fire/{name}", headers=HEADERS["OPERATOR"])).json())
+    require(admission.outcome == "ADMITTED" and admission.job_id is not None, f"{name}: no admitted job")
+    runs = [RunResponse.model_validate(row) for row in successful(client.get(
+        "/api/internal/runs", headers=HEADERS["OPERATOR"])).json() if row["id"] not in before]
+    require(len(runs) == 1 and runs[0].case_id == case_id, "event must produce exactly one case run")
+    run = runs[0]
+    require(run.llm_mode == mode.upper() and run.stop_reason is None and
+            run.status in {"COMPLETED", "WAITING_REVIEW", "WAITING_EVIDENCE"}, "run mode/status/stop mismatch")
+    events = [EventLogItem.model_validate(row) for row in successful(client.get(
+        "/api/internal/events/log", headers=HEADERS["OPERATOR"])).json()]
+    require(any(row.event_id == admission.event_id and row.job_id == admission.job_id and row.run_id == run.id
+                for row in events), "event/job/run linkage missing")
+
+
+def s4_passport(client: httpx.Client, product: str) -> PassportResponse:
+    passport = PassportResponse.model_validate(successful(client.get(
+        f"/api/products/{product}/passport", headers=HEADERS["BUYER"])).json())
+    require(passport.product_id == product, "passport belongs to another product")
+    return passport
+
+
+def stored_receipt(database: Path, receipt_id: str) -> tuple[str, str]:
+    with closing(sqlite3.connect(f"file:{database.as_posix()}?mode=ro", uri=True)) as connection:
+        row = connection.execute("SELECT snapshot_json,snapshot_hash FROM orders WHERE id=?", (receipt_id,)).fetchone()
+    require(row is not None, "receipt is not stored")
+    return str(row[0]), str(row[1])
+
+
+def check_receipt(client: httpx.Client, counts: Callable[[], dict[str, int]],
+                  product: str, case: str, mode: str, stored: Callable[[str], tuple[str, str]]) -> None:
+    successful(client.post("/api/internal/demo/reset", headers=HEADERS["OPERATOR"]))
+    require(all(counts().get(table, 0) == 0 for table in ("orders", "events", "runs")), "receipt scenario is not fresh")
+    s4_fire(client, "01-bootstrap-demo", case, mode)
+    purchased = s4_passport(client, product)
+    receipt = ReceiptResponse.model_validate(successful(client.post(
+        "/api/orders", headers=HEADERS["BUYER"], json={"product_id": product})).json())
+    require(receipt.product_id == product and receipt.case_id == case and receipt.snapshot == purchased,
+            "receipt does not freeze the public purchase passport")
+    require(receipt.hash_valid and bool(receipt.snapshot_hash) and bool(receipt.chain_head), "receipt hash/chain absent or invalid")
+    original_row = stored(receipt.id)
+    raw_snapshot, stored_hash = original_row
+    require(hashlib.sha256(raw_snapshot.encode("utf-8")).hexdigest() == stored_hash == receipt.snapshot_hash,
+            "receipt hash does not cover stored snapshot bytes")
+    require(PassportResponse.model_validate_json(raw_snapshot) == purchased, "stored receipt differs from buyer snapshot")
+    require(not receipt.changed_since_purchase and not any(row.changed for row in receipt.diff), "new receipt reports a change")
+    s4_fire(client, "05-revoke-notification", case, mode)
+    current = s4_passport(client, product)
+    before_reads = counts()
+    after = ReceiptResponse.model_validate(successful(client.get(f"/api/orders/{receipt.id}", headers=HEADERS["BUYER"])).json())
+    immutable = ("id", "product_id", "case_id", "placed_at", "case_revision", "snapshot", "snapshot_hash", "chain_head")
+    require(all(getattr(after, key) == getattr(receipt, key) for key in immutable), "purchase evidence was rewritten")
+    require(after.hash_valid and after.changed_since_purchase, "receipt hash/diff invalid after revoke")
+    require(stored(receipt.id) == original_row, "stored purchase evidence was rewritten")
+    require(len(after.diff) == len(PUBLIC_FIELDS) and {row.field_key for row in after.diff} == set(PUBLIC_FIELDS), "receipt diff omits/duplicates fields")
+    require(all(row.changed == (row.then != row.now) for row in after.diff), "receipt change flags disagree with full field diff")
+    require({row.field_key for row in after.diff
+             if (row.then.model_dump(exclude={"checked_at"}) if row.then else None) !=
+                (row.now.model_dump(exclude={"checked_at"}) if row.now else None)} ==
+            {"notification_number", "responsible_company"}, "receipt must change only the two dependent fields' content")
+    original_fields = {row.field_key: row for row in purchased.fields}
+    current_fields = {row.field_key: row for row in current.fields}
+    require(all(row.then == original_fields[row.field_key] and row.now == current_fields[row.field_key]
+                for row in after.diff), "receipt diff values disagree with then/now passports")
+    listing = [ReceiptResponse.model_validate(row) for row in successful(client.get("/api/orders", headers=HEADERS["BUYER"])).json()]
+    require(any(row.id == receipt.id and row.snapshot == purchased for row in listing), "receipt absent from buyer list")
+    require(counts() == before_reads, "receipt GET created work")
+    duplicate = AdmitResult.model_validate(successful(client.post(
+        "/api/internal/demo/fire/05-revoke-notification", headers=HEADERS["OPERATOR"])).json())
+    require(duplicate.outcome == "DUPLICATE" and counts() == before_reads, "second revoke created new work")
+
+
+def check_marketplace(client: httpx.Client, counts: Callable[[], dict[str, int]],
+                      product: str, case: str, bootstrap: str, mode: str) -> None:
+    successful(client.post("/api/internal/demo/reset", headers=HEADERS["OPERATOR"]))
+    s4_fire(client, bootstrap, case, mode)
+    passport = s4_passport(client, product)
+    scan = MarketplaceScanResponse.model_validate(successful(client.post(
+        f"/api/internal/marketplace/{product}/scan", headers=HEADERS["OPERATOR"])).json())
+    require(scan.product_id == product and scan.llm_mode == mode.upper() and scan.stop_reason is None,
+            "marketplace scan mode/identity/stop mismatch")
+    require(scan.sellers_processed > 0 and bool(scan.scan_id), "marketplace scan processed no seller")
+    require(s4_passport(client, product) == passport, "marketplace scan changed the case passport")
+    before = counts()
+    buyer = BuyerMarketplaceResponse.model_validate(successful(client.get(
+        f"/api/products/{product}/marketplace", headers=HEADERS["BUYER"])).json())
+    expert = ExpertMarketplaceResponse.model_validate(successful(client.get(
+        f"/api/products/{product}/marketplace", headers=HEADERS["REVIEWER"])).json())
+    require(buyer.audience == "BUYER" and expert.audience == "EXPERT" and
+            buyer.product_id == expert.product_id == product and buyer.scan_id == expert.scan_id == scan.scan_id,
+            "marketplace projection identity mismatch")
+    require(buyer.fields == expert.fields, "marketplace tallies are inconsistent")
+    require(scan.findings == len(expert.findings), "marketplace scan/findings count differs")
+    require(len(buyer.fields) == len({row.field_key for row in buyer.fields}) and
+            {row.field_key for row in expert.findings} <= {row.field_key for row in buyer.fields},
+            "marketplace tally fields omit/duplicate expert evidence")
+    for tally in buyer.fields:
+        clusters = {row.cluster for row in expert.findings if row.field_key == tally.field_key}
+        require(tally.independent_clusters == len(clusters), "copied seller evidence counted independently")
+        value_keys = [json.dumps(row.value, sort_keys=True, ensure_ascii=False) for row in tally.values]
+        expected_keys = {json.dumps(row.value, sort_keys=True, ensure_ascii=False) for row in expert.findings
+                         if row.field_key == tally.field_key}
+        require(len(value_keys) == len(set(value_keys)) and set(value_keys) == expected_keys,
+                "marketplace value tallies omit/duplicate expert evidence")
+        require(tally.majority is None or json.dumps(tally.majority, sort_keys=True, ensure_ascii=False) in expected_keys,
+                "marketplace majority has no supporting value")
+        for value in tally.values:
+            expected = {row.cluster for row in expert.findings if row.field_key == tally.field_key and row.value == value.value}
+            require(value.independent_clusters == len(expected), "value cluster tally differs from expert evidence")
+    require(counts() == before, "marketplace GET created work")
+
+
+def check_web_audit(client: httpx.Client, counts: Callable[[], dict[str, int]], case: str, mode: str) -> None:
+    before = counts()
+    response = successful(client.get(f"/api/cases/{case}/web-search", headers=HEADERS["REVIEWER"]))
+    audit = WebAuditResponse.model_validate(response.json())
+    require(audit.case_id == case, "web audit belongs to another case")
+    require(all(row.mode == mode.upper() for row in audit.queries), "web audit mode mismatch")
+    require(all(result.reason.strip() for row in audit.queries for result in row.results), "web decision lacks a reason")
+    require(all(len(row.sha256) == 64 and row.passages and row.captured_at and row.url.startswith("https://")
+                for row in audit.snapshots), "web snapshot lacks stored provenance")
+    require(client.get(f"/api/cases/{case}/web-search", headers=HEADERS["BUYER"]).status_code == 403,
+            "buyer can read expert web audit")
+    require(counts() == before, "web audit GET created work")
+    # Discovery quality, bounds and confirm-only policy are exercised by the
+    # retained offline provider-seam acceptance tests, not by WEB_SEARCH=off.
+
+
+def check_real_case(client: httpx.Client, database: Path, event: str, product: str, case: str, mode: str) -> None:
+    successful(client.post("/api/internal/demo/reset", headers=HEADERS["OPERATOR"]))
+    s4_fire(client, event, case, mode)
+    passport = s4_passport(client, product)
+    require(passport.dataset_origin == "REAL" and {row.field_key for row in passport.fields} == set(PUBLIC_FIELDS), "real passport identity/fields")
+    observed = case_state(database, case).fields
+    if event == "14-bootstrap-real-hydrating":
+        require(all(observed[key].verdict == "CONFLICTING" and observed[key].conflict_locus == "WITHIN_SOURCE"
+                    and not observed[key].seller_attributable for key in ("skin_type", "key_ingredients")), "R1 source conflict/attribution differs")
+    elif event == "15-bootstrap-real-foaming":
+        require(all(observed[key].verdict in {"CONSISTENT", "SINGLE_SOURCE"} for key in ("volume", "skin_type", "key_ingredients"))
+                and all(row.verdict != "CONFLICTING" for row in observed.values()), "R2 harmless wording became conflict")
+    elif event == "16-bootstrap-real-blemish":
+        with closing(sqlite3.connect(f"file:{database.as_posix()}?mode=ro", uri=True)) as connection:
+            keys = {row[0] for row in connection.execute("SELECT DISTINCT c.field_key FROM claims c JOIN source_versions v "
+                "ON v.id=c.source_version_id JOIN sources s ON s.id=v.source_id WHERE s.case_id=? "
+                "AND c.field_key IN ('notification_number','responsible_company') AND length(c.raw_value)>0", (case,))}
+        require(keys == {"notification_number", "responsible_company"}, "R3 identifiers were not read from sources")
+    else:
+        alcohol = [row for key, row in observed.items() if key.startswith("claim:free_from:") and "alcohol" in key]
+        require(bool(alcohol) and all(row.verdict != "CONFLICTING" and not row.seller_attributable for row in alcohol),
+                "R4 alcohol-free audit absent or false conflict")
+
+
+def run_phase_four(client: httpx.Client, database: Path, fixtures: Path, mode: str) -> list[Check]:
+    checks: list[Check] = []
+    scenarios: dict[str, tuple[str, str]] = {}
+    counts = lambda: table_counts(database)
+    for name in ("14-bootstrap-real-hydrating", "15-bootstrap-real-foaming", "16-bootstrap-real-blemish", "17-bootstrap-real-effaclar"):
+        path = fixtures / "events" / (name + ".json")
+        if not path.exists():
+            checks.append(Check(name, "SKIP", "captured real fixture missing; incomplete gate"))
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))["payload"]
+        product, case = str(payload["product_id"]), str(payload["case_id"])
+        scenarios[name] = product, case
+        try:
+            check_real_case(client, database, name, product, case, mode)
+            checks.append(Check(name, "PASS", "captured REAL case; existing source-grounded expectations"))
+        except (CheckFailure, ValidationError, KeyError, ValueError) as error:
+            checks.append(Check(name, "FAIL", str(error)))
+    demo = json.loads((fixtures / "events/01-bootstrap-demo.json").read_text(encoding="utf-8"))["payload"]
+    try:
+        check_receipt(client, counts, str(demo["product_id"]), str(demo["case_id"]), mode,
+                      lambda receipt_id: stored_receipt(database, receipt_id))
+        checks.append(Check("receipt before first revoke", "PASS", "immutable public purchase; two-field diff; duplicate/read-only checks"))
+    except (CheckFailure, ValidationError, KeyError, ValueError) as error:
+        checks.append(Check("receipt before first revoke", "FAIL", str(error)))
+    real = scenarios.get("14-bootstrap-real-hydrating")
+    if real is not None:
+        product, case = real
+        try:
+            require(any((fixtures / "marketplace" / product).glob("*.json")), "no marketplace captures")
+            check_marketplace(client, counts, product, case, "14-bootstrap-real-hydrating", mode)
+            checks.append(Check("marketplace", "PASS", "stored retailer tallies; public passport unchanged; buyer filtering"))
+        except (CheckFailure, ValidationError, KeyError, ValueError) as error:
+            checks.append(Check("marketplace", "FAIL", str(error)))
+        try:
+            check_web_audit(client, counts, case, mode)
+            checks.append(Check("web audit read", "PASS", "typed role-filtered read only; WEB_SEARCH=off, discovery NOT VERIFIED"))
+        except (CheckFailure, ValidationError, KeyError, ValueError) as error:
+            checks.append(Check("web audit read", "FAIL", str(error)))
+    return checks
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", type=int, choices=(1, 2, 3, 4))
@@ -504,8 +702,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     mode = args.mode if args.mode is not None else os.getenv("LLM_MODE", "fallback")
     if mode not in {"fallback", "replay"}:
         parser.error("select fallback or replay; record/live are not supported by the offline gate")
-    if args.phase not in {1, 2, 3}:
-        parser.error("only phase-1/2/3 paths are implemented; later phases must extend this gate before use")
     print(f"phase={args.phase} mode={mode}")
     from app import config
     from app.main import create_app
@@ -548,7 +744,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                         checks.extend(run_phase_two(client, lambda case: case_state(database, case),
                             lambda: table_counts(database), product_id, case_id, hydra_product, hydra_case,
                             claims_product, claims_case, expected_mode=mode))
-                        if args.phase == 3 and all(check.status == "PASS" for check in checks):
+                        if args.phase >= 3 and all(check.status == "PASS" for check in checks):
                             missing = [name for name in ("09-catalogue-published", "12-bootstrap-sun-fluid")
                                        if not (config.settings.fixtures_dir / "events" / (name + ".json")).exists()]
                             if missing:
@@ -559,6 +755,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 checks.extend(run_phase_three(client, lambda case: case_state(database, case),
                                     lambda: table_counts(database), lambda case: phase_three_probe(database, case),
                                     product_id, case_id, sun_product, sun_case, expected_mode=mode))
+            if args.phase == 4 and all(check.status == "PASS" for check in checks):
+                with isolated_settings(mode, Path(directory) / "phase4-fresh.db"):
+                    with TestClient(create_app()) as client:
+                        checks.extend(run_phase_four(client, Path(directory) / "phase4-fresh.db", config.settings.fixtures_dir, mode))
             if network_attempts:
                 checks.append(Check("network", "FAIL", "model network call attempted"))
     print("check | status | detail")
