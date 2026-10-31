@@ -1,5 +1,6 @@
 """Comparison of normalized values only; raw text belongs to P2 normalization."""
 import math
+from collections.abc import Sequence
 from pydantic import JsonValue
 
 
@@ -17,6 +18,12 @@ def scalar(value: JsonValue) -> JsonValue:
     return value.get("value") if isinstance(value, dict) else value
 
 
+def has_value(field: str, value: JsonValue) -> bool:
+    """Unknown/empty normalized values cannot contribute evidence or votes."""
+    return bool(value) and (bool(members(value)) if field in {"skin_type", "key_ingredients"}
+                            else scalar(value) not in (None, ""))
+
+
 def compatible(field: str, claim_value: JsonValue, ref_value: JsonValue) -> bool:
     """Directional: reference must support every element of the listing claim."""
     if field == "volume":
@@ -31,6 +38,13 @@ def compatible(field: str, claim_value: JsonValue, ref_value: JsonValue) -> bool
 def agree(field: str, a: JsonValue, b: JsonValue) -> bool:
     """Symmetric agreement between two reference statements."""
     return compatible(field, a, b) or compatible(field, b, a)
+
+
+def source_values(field: str, values: Sequence[JsonValue]) -> list[JsonValue]:
+    """Positive ingredient highlights combine; other values keep their statements."""
+    if field == "key_ingredients":
+        return [{"value": sorted(set().union(*(members(value) for value in values)))}]
+    return list(values)
 
 
 def same_volume(a: JsonValue, b: JsonValue, tol: float = 0.01) -> bool:

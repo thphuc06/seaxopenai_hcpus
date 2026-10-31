@@ -11,7 +11,7 @@ from app.budget import Budget, BudgetExceeded
 from app.context import RunContext
 from app.llm.client import LLMError
 from app.models import PUBLIC_FIELDS, FieldDecision, Readability, ReviewState, ScopeMatch, SourceKind, SourceStatus
-from app.pipeline import claims_audit, compare, extract, gaps, normalize, policy, publish
+from app.pipeline import claims_audit, compare, extract, gaps, normalize, policy, publish, web_sources
 from app.agent import scope_resolution
 from app.pipeline.scope import ScopeDecision, infer_scope, volume_claim_scope
 from app.trace import TraceWriter
@@ -27,12 +27,16 @@ class Job:
     trigger_event_id: str
 
 
-def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], ctx: RunContext,
+def observe_source(source: dict[str, JsonValue], product: dict[str, JsonValue], ctx: RunContext,
                   extractor: Extractor) -> list[policy.SourceObs]:
     sv_id = str(source["source_version_id"])
     if source["kind"] == "REGISTRY_RECORD":
         return gaps.registry_observations(source, ctx)
     source = dict(source)
+    metadata = db.loads(str(source.get("scope_json") or "{}"))
+    if source["kind"] == "BRAND_PAGE" and isinstance(metadata, dict) and metadata.get("identity_verified") is False:
+        ctx.trace.step("web:skip", input_refs=[sv_id], detail={"reason": "UNCONFIRMED_BRAND_IDENTITY"})
+        return []
     source["passages"] = store.passages(sv_id)
     with db.transaction() as connection:
         source["passage_scopes"] = [dict(row) for row in connection.execute("SELECT * FROM passage_scopes WHERE source_version_id=?",(sv_id,))]
@@ -88,6 +92,39 @@ def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], c
     return observations
 
 
+def _discover_web(ctx: RunContext, *, explicit: bool) -> str | None:
+    """Attempt discovery once automatically; explicit requests remain revision-bound."""
+    web = ctx.product.get("web")
+    if not explicit and (config.settings.web_search == "off" or not isinstance(web, dict) or web.get("enabled") is not True):
+        return None
+    if not explicit:
+        with db.transaction() as connection:
+            attempted = connection.execute("SELECT 1 FROM trace_steps t JOIN runs r ON r.id=t.run_id "
+                "WHERE r.case_id=? AND t.step='agent:web_scout' LIMIT 1", (ctx.case_id,)).fetchone()
+            consistent = {row[0] for row in connection.execute("SELECT field_key FROM field_results WHERE case_id=? "
+                "AND superseded_by IS NULL AND freshness='CURRENT' AND verdict='CONSISTENT'", (ctx.case_id,))}
+        if attempted or set(PUBLIC_FIELDS) <= consistent:
+            return None
+    ctx.trace.step("agent:web_scout", detail={"request": "EXPLICIT" if explicit else "AUTOMATIC", "case_revision": ctx.case_revision})
+    stop: str | None = None
+    if config.settings.web_search == "off":
+        stop = "WEB_DISABLED"
+    else:
+        try:
+            ctx.budget.take_tool("web:discover")
+            outcome = web_sources.discover(ctx)
+            stop = outcome.stop_reason or ("WEB_DISCOVERY_NO_ACTIVITY" if not outcome.searches and not outcome.new_sv_ids else None)
+        except BudgetExceeded as failure:
+            stop = failure.reason
+        except LLMError as failure:
+            stop = failure.code
+        except (ValueError, RuntimeError, OSError, sqlite3.Error) as failure:
+            stop = "WEB_DISCOVERY_ERROR"
+            ctx.trace.step("web:stop", detail={"stop_reason": stop}, error=type(failure).__name__)
+    ctx.trace.step("web:stop", detail={"stop_reason": stop, "case_revision": ctx.case_revision})
+    return stop
+
+
 def run(job: Job, *, extractor: Extractor | None = None) -> str:
     """P2's extract_source_version is the default; tests can inject an external extractor."""
     run_id, now = "run_" + uuid4().hex, db.now_iso()
@@ -126,9 +163,10 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
             stop_reason = "SUPERSEDED_RUN"
             status = "CANCELLED"
         else:
+            stop_reason = _discover_web(ctx, explicit=bool(event and event["type"] == "WEB_SEARCH_REQUESTED"))
             for source in store.current_sources(job.case_id):
                 try:
-                    observations.extend(_observations(source, product, ctx, extractor or extract.extract_source_version))
+                    observations.extend(observe_source(source, product, ctx, extractor or extract.extract_source_version))
                     if budget.stop_reason:
                         # Optional retries may retain valid claims after exhausting the budget.
                         raise BudgetExceeded(budget.stop_reason)

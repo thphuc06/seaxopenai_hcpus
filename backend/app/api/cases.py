@@ -13,8 +13,8 @@ from app.api.contracts import (
     CaseHistoryResponse, EvidenceUploadRequest, ReviewQueueItem,
     ReviewRequest, ReviewResponse, ResultVersionResponse, EvidenceRequestResponse, EventLogItem,
 )
-from app.api.dependencies import EvidenceActor, ReviewerActor, OperatorActor, RunActor, not_implemented
-from app.api.s4_contracts import WebAuditResponse
+from app.api.dependencies import EvidenceActor, ReviewerActor, OperatorActor, RunActor
+from app.api.s4_contracts import WebAuditResponse, WebAuditQuery, WebAuditSnapshot, WebSnapshotPassage
 from app.models import AdmitResult, EventEnvelope
 
 router = APIRouter()
@@ -22,13 +22,43 @@ _uploads = Lock()
 
 
 @router.post("/cases/{case_id}/web-search", response_model=AdmitResult)
-def request_web_search(case_id: str, actor: OperatorActor) -> AdmitResult:
-    not_implemented()
+def request_web_search(case_id: str, actor: OperatorActor, background_tasks: BackgroundTasks) -> AdmitResult:
+    case = read.one("SELECT * FROM cases WHERE id=?", (case_id,))
+    revision = int(str(case["revision"]))
+    # Repeated clicks reuse the revision admitted by the previous click. A later
+    # material event increments the revision and permits a new explicit request.
+    previous = read.rows("SELECT event_id FROM events WHERE idempotency_key=? AND type='WEB_SEARCH_REQUESTED' AND outcome='ADMITTED'",
+                         (f"web:{case_id}:{revision}",))
+    if previous:
+        return AdmitResult(event_id=str(previous[0]["event_id"]), outcome="DUPLICATE",
+                           reason="Web search already requested for this revision", job_id=None, stale_fields=[])
+    key = f"web:{case_id}:{revision + 1}"
+    event = EventEnvelope(event_id=key, idempotency_key=key, type="WEB_SEARCH_REQUESTED", schema_version="1",
+        producer="publisher-panel", resource={"kind": "CASE", "id": case_id, "version": revision + 1},
+        changed_fields=[], payload={"case_id": case_id, "product_id": case["product_id"]},
+        occurred_at=db.now_iso(), correlation_id=key)
+    return dispatch(event, actor, background_tasks)
 
 
 @router.get("/cases/{case_id}/web-search", response_model=WebAuditResponse)
 def web_search_audit(case_id: str, actor: RunActor) -> WebAuditResponse:
-    not_implemented()
+    read.one("SELECT id FROM cases WHERE id=?", (case_id,))
+    queries = [WebAuditQuery(id=row["id"], run_id=row["run_id"], query=row["query"], provider=row["provider"],
+        mode=row["mode"], results=db.loads(str(row["results_json"])), created_at=row["created_at"])
+        for row in read.rows("SELECT * FROM web_searches WHERE case_id=? ORDER BY created_at,id", (case_id,))]
+    snapshots: list[WebAuditSnapshot] = []
+    for row in read.rows("SELECT v.*,s.uri,s.kind,s.dataset_origin FROM source_versions v JOIN sources s ON s.id=v.source_id "
+                         "WHERE s.case_id=? AND s.kind IN ('WEB_PAGE','BRAND_PAGE') ORDER BY v.captured_at,v.id", (case_id,)):
+        scope = db.loads(str(row["scope_json"]))
+        if row["kind"] != "WEB_PAGE" and "identity_verified" not in scope:
+            continue
+        if not row["uri"] or not row["captured_at"]:
+            raise HTTPException(409, "Web snapshot metadata is incomplete")
+        snapshots.append(WebAuditSnapshot(source_version_id=row["id"], url=row["uri"], sha256=row["sha256"],
+            captured_at=row["captured_at"], dataset_origin=row["dataset_origin"], identity_verified=scope.get("identity_verified") is True,
+            passages=[WebSnapshotPassage.model_validate(item) for item in read.rows(
+                "SELECT id,locator,text FROM passages WHERE source_version_id=? ORDER BY rowid", (row["id"],))]))
+    return WebAuditResponse(case_id=case_id, queries=queries, snapshots=snapshots)
 
 
 @router.get("/review/queue", response_model=list[ReviewQueueItem])

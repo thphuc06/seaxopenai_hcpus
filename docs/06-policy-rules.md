@@ -86,6 +86,39 @@ Forbidden words test: `genuine|authentic|fake|counterfeit|safe|certified|verifie
 
 ## As built (contest)
 
+### S4 local policy-v2
+
+R4w removes a retailer version's ambiguous field values before general conflict
+rules; its highlight/own-INCI mismatch becomes a note. R9w excludes retailer
+disagreement from adverse comparisons. A listing disagreement requests review;
+independently supported consistency is retained, otherwise a cited usable result
+is UNCERTAIN. The excluded disagreeing page remains a dependency for the review
+signal. Other authoritative-source conflicts retain their existing classification.
+Retailer-only disagreements between references are dropped with a note.
+
+R7w uses the shared5-character Jaccard/union-find core on the field's stored
+reference passages, merging copied WEB_PAGE support into a deterministic reference
+family. Coverage compares each web passage with individual reference passages;
+extra reference passages do not conceal copying. Family reassignment includes a
+listing that already copied the web family. R9w preserves same-source positive
+ingredient unions and fuller skin statements; partial highlights are not negations.
+No normalization or open vocabulary is duplicated. An explicitly
+identity_verified=false page incorrectly labelled BRAND_PAGE is excluded at the
+observation boundary; it cannot gain reference authority. WEB_PAGE remains
+confirm-only. Retailer observations cannot trigger claim-audit conflicts.
+
+Marketplace value equality, strict independent-cluster majority, abstention and
+tie/no-majority behavior are separate from passport verdicts. Findings never
+enter field_results. Empty/unknown values use the same has_value comparison helper
+as passport policy. No existing non-web rule or claim template was changed.
+Marketplace votes require MATCH scope and code/seed mappings, reusing the normal
+observation/locator/quantity-scope pipeline; unresolved or model-mapped values
+abstain. A failed publication gate suppresses tallies even if a prior budget stop
+already exists. P2 web provider behavior remains NOT VERIFIED. P4's three delivered
+REAL snapshots produce zero eligible findings under fallback because their field
+values are ambiguous; this conservative abstention was explicitly accepted by the
+user. The existing S4 checker's nonempty-finding requirement is a CCR for P4.
+
 ### S3 integration policy-v1.8
 
 The dataset contract's `scope.variant=MULTI` declares a source spanning variants;

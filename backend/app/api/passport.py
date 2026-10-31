@@ -1,12 +1,14 @@
 """Stored results and role-filtered evidence; buyer reads create no work."""
 from typing import Annotated
+from contextlib import closing
 
 from fastapi import APIRouter, HTTPException, Query, Response
 
 from app.api.contracts import EvidenceResponse, PassportMetadata, ProductPresentation, ProductResponse
 from app.api.dependencies import Actor, not_implemented
 from app.api import read
-from app.models import Citation, PassportField, PassportResponse, Role, PUBLIC_FIELDS
+from app import db
+from app.models import PassportResponse, Role, PUBLIC_FIELDS
 
 router = APIRouter()
 
@@ -44,29 +46,12 @@ def products(actor: Actor) -> list[ProductResponse]:
 
 @router.get("/products/{product_id}/passport", response_model=PassportResponse)
 def passport(product_id: str, actor: Actor) -> PassportResponse:
-    product = read.one("SELECT * FROM products WHERE id=?", (product_id,))
-    case = read.one("SELECT * FROM cases WHERE product_id=?", (product_id,))
-    results = read.rows("SELECT * FROM field_results WHERE case_id=? AND superseded_by IS NULL ORDER BY field_key", (case["id"],))
-    latest = read.rows("SELECT * FROM runs WHERE case_id=? ORDER BY case_revision DESC,created_at DESC LIMIT 1", (case["id"],))
-    fields = []
-    for result in results:
-        if result["field_key"] not in PUBLIC_FIELDS:
-            continue
-        passages, _ = read.evidence(str(result["citations_json"]), actor.role)
-        label = "Stale" if result["freshness"] == "STALE" else "Updating" if latest and latest[0]["status"] == "RUNNING" else "Conflict in source" if result["conflict_locus"] == "WITHIN_SOURCE" else {
-            "CONSISTENT": "Consistent", "CONFLICTING": "Conflicting", "SINGLE_SOURCE": "Single source",
-            "INSUFFICIENT": "Not verified", "UNCERTAIN": "Not verified", "NOT_APPLICABLE": "Not applicable",
-        }[str(result["verdict"])]
-        fields.append(PassportField(field_key=result["field_key"],label=label,public_text=result["public_text"],
-            verdict=result["verdict"],conflict_locus=result["conflict_locus"],freshness=result["freshness"],
-            review_state=result["review_state"],checked_at=result["confirmed_at"] or result["created_at"],
-            citations=[Citation(**{k: getattr(p,k) for k in Citation.model_fields}) for p in passages]))
+    with closing(db.connect()) as connection:
+        connection.execute("BEGIN")
+        result = read.passport_snapshot(connection, product_id, actor.role)
     if actor.role == Role.BUYER:
         read.passport_reads(increment=True)
-    return PassportResponse(product_id=product_id,dataset_origin=product["dataset_origin"],
-        last_checked_at=max((str(r["confirmed_at"] or r["created_at"]) for r in results),default=None),
-        run_status=latest[0]["status"] if latest else None,fields=fields,
-        disclaimer="Describes only the sources checked; it does not establish product origin or suitability.")
+    return result
 
 
 @router.get("/products/{product_id}/fields/{field_key}/evidence", response_model=EvidenceResponse)

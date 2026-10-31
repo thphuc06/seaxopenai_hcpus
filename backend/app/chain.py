@@ -85,4 +85,9 @@ def append(connection: sqlite3.Connection, result_id: str) -> ChainLink:
 def verify(case_id: str) -> ChainVerification:
     """Recompute stored links without changing any row, including missing links."""
     with closing(db.connect()) as connection:
-        return _verify(_rows(connection, case_id))
+        return verify_snapshot(connection, case_id)
+
+
+def verify_snapshot(connection: sqlite3.Connection, case_id: str) -> ChainVerification:
+    """Verify the chain inside a receipt/publication snapshot without opening a connection."""
+    return _verify(_rows(connection, case_id))

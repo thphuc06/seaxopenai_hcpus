@@ -10,10 +10,10 @@ from app.models import (
     Citation, ConflictLocus, DependsOn, EvidenceLevel, FieldDecision, Freshness,
     Gap, Readability, ReviewState, RuleStep, ScopeMatch, SourceKind, SourceStatus, Verdict,
 )
-from app.pipeline import compare
+from app.pipeline import compare, marketplace
 from app.pipeline.scope import listing_copies_reference
 
-POLICY_VERSION = "policy-v1.8"
+POLICY_VERSION = "policy-v2"
 
 
 def reviewed_decision(previous: FieldDecision, decision: str, override: dict[str, JsonValue] | None) -> FieldDecision:
@@ -142,22 +142,82 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
     step("R3", "FILTERED", f"{len(active) - len(scoped)} mismatched observations excluded")
     related = [o for o in scoped if o.field_key in {field_key, ""}
                or field_key == "key_ingredients" and o.field_key == "inci_list"]
-    usable = sorted([o for o in related if o.normalized and o.quote and o.passage_id
-                     and (bool(compare.members(o.normalized)) if field_key in {"skin_type", "key_ingredients"}
-                          else compare.scalar(o.normalized) not in (None, ""))
+    usable = sorted([o for o in related if compare.has_value(field_key, o.normalized) and o.quote and o.passage_id
                      and o.readability != Readability.UNREADABLE], key=lambda o: (o.source_id, o.passage_id))
     if any(o.readability == Readability.UNREADABLE for o in related):
         notes.append("A clearer photo of the label is needed for unreadable information.")
 
+    # Retailer evidence can add support, never introduce a seller conflict.
+    web_review: list[SourceObs] = []
+    ambiguous_web: set[str] = set()
+    for left, right in combinations(usable, 2):
+        if left.source_kind != SourceKind.WEB_PAGE or left.source_version_id != right.source_version_id:
+            continue
+        mismatch = not compare.agree(field_key, left.normalized, right.normalized)
+        if field_key == "key_ingredients" and left.field_key == right.field_key == "key_ingredients":
+            mismatch = False
+        elif {left.field_key, right.field_key} == {"key_ingredients", "inci_list"}:
+            highlight, inci = (left, right) if left.field_key == "key_ingredients" else (right, left)
+            mismatch = not compare.compatible(field_key, highlight.normalized, inci.normalized)
+        if mismatch:
+            ambiguous_web.add(left.source_version_id)
+    if ambiguous_web:
+        usable = [o for o in usable if o.source_version_id not in ambiguous_web]
+        notes.append("Retailer pages with multiple field values were excluded.")
+        step("R4w", "EXCLUDED", "Ambiguous retailer statements do not create findings")
+    listings = [o for o in usable if o.source_kind == SourceKind.LISTING]
+    web = [o for o in usable if o.source_kind == SourceKind.WEB_PAGE]
+    web_review = []
+    for page in web:
+        statements = [o for o in web if o.source_version_id == page.source_version_id]
+        if field_key == "key_ingredients":
+            statements = [o for o in statements if o.field_key == "inci_list"]
+            if not statements:
+                continue  # A missing positive highlight is not a negation (R6).
+        values = compare.source_values(field_key, [o.normalized for o in statements])
+        if any(not any(compare.compatible(field_key, listing.normalized, value) for value in values) for listing in listings):
+            web_review.append(page)
+    dropped_web = {o.source_version_id for o in web_review}
+    references = [o for o in usable if o.source_kind != SourceKind.LISTING]
+
+    def retailer_disagrees(page: SourceObs, other_version: str) -> bool:
+        left = [o for o in web if o.source_version_id == page.source_version_id]
+        right = [o for o in references if o.source_version_id == other_version]
+        if field_key == "key_ingredients":
+            left_inci = [o for o in left if o.field_key == "inci_list"]
+            right_inci = [o for o in right if o.field_key == "inci_list"]
+            if not left_inci and not right_inci:
+                return False  # Two partial highlight lists cannot negate each other.
+            if left_inci and not right_inci:
+                return any(not any(compare.compatible(field_key, claim.normalized, full.normalized) for full in left_inci) for claim in right)
+            if right_inci and not left_inci:
+                return any(not any(compare.compatible(field_key, claim.normalized, full.normalized) for full in right_inci) for claim in left)
+        return not any(compare.agree(field_key, a, b)
+                       for a in compare.source_values(field_key, [o.normalized for o in left])
+                       for b in compare.source_values(field_key, [o.normalized for o in right]))
+
+    for page in web:
+        other_versions = {o.source_version_id for o in references} - {page.source_version_id}
+        if any(retailer_disagrees(page, version) for version in other_versions):
+            dropped_web.add(page.source_version_id)
+    if dropped_web:
+        usable = [o for o in usable if o.source_version_id not in dropped_web]
+        notes.append("A retailer statement disagrees with the sources checked and was excluded from support.")
+        step("R9w", "EXCLUDED", "Retailer disagreement cannot create seller attribution")
+
     def finish(verdict: Verdict, selected: list[SourceObs], *, locus: ConflictLocus | None = None,
                reason: str = "", gap: Gap | None = None) -> FieldDecision:
+        if web_review and verdict not in {Verdict.CONSISTENT, Verdict.CONFLICTING, Verdict.INSUFFICIENT}:
+            verdict, locus, reason = Verdict.UNCERTAIN, None, "Retailer disagreement requires review"
         scope = ScopeMatch.UNKNOWN if any(o.scope_match == ScopeMatch.UNKNOWN for o in selected) else (
             ScopeMatch.AGENT if any(o.scope_match == ScopeMatch.AGENT for o in selected) else ScopeMatch.MATCH)
         review = ReviewState.NEEDS_REVIEW if (field_key.startswith("claim:") and verdict != Verdict.CONSISTENT) or verdict == Verdict.CONFLICTING or scope == ScopeMatch.AGENT or (
             scope == ScopeMatch.UNKNOWN and field_key in {"notification_number", "responsible_company"}) else ReviewState.AUTO_DRAFT
+        if web_review:
+            review = ReviewState.NEEDS_REVIEW
         citations = {(o.passage_id,o.quote): Citation(passage_id=o.passage_id, source_kind=o.source_kind,
                      source_version=o.source_version, locator=o.locator, excerpt=o.quote) for o in selected}
-        dependency_obs = list(selected)
+        dependency_obs = list(selected) + web_review
         if verdict == Verdict.INSUFFICIENT:
             required = {SourceKind.NOTIFICATION_DOC, SourceKind.REGISTRY_RECORD} if field_key in {"notification_number", "responsible_company"} else {
                 SourceKind.LISTING, SourceKind.BRAND_PAGE, SourceKind.PACKAGING_IMAGE}
@@ -191,6 +251,7 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
             public_text=text, notes=notes, explain=trail, gap=gap, needs_scope_resolution=scope == ScopeMatch.UNKNOWN)
 
     if field_key.startswith("claim:"):
+        scoped = [o for o in scoped if o.source_kind != SourceKind.WEB_PAGE]
         claims = [o for o in scoped if o.field_key == field_key and o.quote and o.passage_id and o.readability == Readability.READABLE]
         inci = [o for o in scoped if o.field_key == "inci_list" and o.quote and o.passage_id
                 and o.readability == Readability.READABLE and compare.members(o.normalized)]
@@ -317,6 +378,24 @@ def decide(field_key: str, observations: list[SourceObs], product: dict[str, Jso
                 selected = [replace(o,family=reference[0].family or source_id) if o.source_kind == SourceKind.LISTING else o for o in selected]
                 step("R7c","COPIED","Listing passages share one reference family")
                 break
+    full_text = product.get("passage_texts", {})
+    references = [o for o in selected if o.source_kind != SourceKind.LISTING]
+    texts = {source: sorted({
+        str(full_text.get(o.passage_id, o.quote)) if isinstance(full_text, dict) else o.quote
+        for o in references if o.source_id == source}) for source in sorted({o.source_id for o in references})}
+    web_ids = {o.source_id for o in references if o.source_kind == SourceKind.WEB_PAGE}
+    links = [(left, right) for left, right in combinations(texts, 2)
+             if (left in web_ids and listing_copies_reference(texts[left], texts[right], min_chars=5))
+             or (right in web_ids and listing_copies_reference(texts[right], texts[left], min_chars=5))]
+    for cluster in marketplace.cluster_links(list(texts), links):
+        members = [o for o in references if o.source_id in cluster.seller_ids]
+        if len(cluster.seller_ids) < 2 or not any(o.source_kind == SourceKind.WEB_PAGE for o in members):
+            continue
+        preferred = [o.family or o.source_id for o in members if o.source_kind != SourceKind.WEB_PAGE]
+        family = min(preferred or [o.family or o.source_id for o in members])
+        copied_families = {o.family or o.source_id for o in members if o.source_kind == SourceKind.WEB_PAGE}
+        selected = [replace(o, family=family) if (o.family or o.source_id) in copied_families else o for o in selected]
+        step("R7w", "COPIED", "Copied retailer passages share a reference family")
     families = {o.family or o.source_id for o in selected}
     step("R7", "COUNT", f"{len(families)} independent families support the claim")
     verdict = Verdict.CONSISTENT if len(families) >= 2 else Verdict.SINGLE_SOURCE
