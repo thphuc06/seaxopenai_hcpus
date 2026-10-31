@@ -215,3 +215,112 @@ When is the Manager called? Only if after rules a field is `UNCERTAIN` (scope un
   templates are the fallback.
 - It returns an answer with `url_citation`s, not page text: keep the code fetch + snapshot step, and never publish the
   model's answer. Searches and fetches are recorded like model calls and count against the budget.
+
+## As built (contest) — Phase 0, 31 Oct 2026, P2
+
+Measured at 10:08 ICT on the P2 workstation. Python 3.14.0; openai 3.42.0,
+openai-agents 0.24.0, Pydantic 2.14.2, Pillow 13.0.0, python-dotenv 1.2.4,
+pytest 9.2.0. P4's shared OCR setup requires Python 3.11/3.12; this workstation's
+Python 3.14 environment supports the smoke/core checks but has not installed OCR.
+
+The shared `backend/app/llm/messages.py` builder preserves ordered typed text/PNG
+parts, embeds images as data URLs and is used by the smoke. Source block wrapping
+belongs to the caller. `scripts/smoke.py` provides the current eight checks; this
+supersedes the older five-check outline above for Phase 0 delivery.
+
+| Check | Status | Check latency | Input / output / reasoning tokens | Estimated USD |
+| --- | --- | --- | --- | --- |
+| Text, reported gpt-6.1-sol | PASS | 4.686 s | 30 / 6 / 0 | 0.000120 |
+| Strict structured output | PASS | 3.629 s | 64 / 21 / 0 | 0.000338 |
+| PNG through shared builder | PASS | 1.730 s | 139 / 18 / 0 | 0.000458 |
+| Low effort, 16000 cap; tiny cap incomplete detection | PASS | 3.781 s | 77 / 21 / 16 | 0.000364 |
+| Agents SDK tool call + output_type | PASS | 7.082 s | 452 / 35 / 0 | 0.001254 |
+| text-embedding-3-small, 1536 dimensions | PASS | 3.178 s | 9 / 0 / 0 | 0.00000018 |
+| Hosted web search | SKIP | — | — | — |
+| Local record/replay, second request has no network call | PASS | 1.663 s | 63 / 21 / 0 | 0.000336 |
+
+Web was skipped in the original run because the local configuration has
+`WEB_SEARCH=off`; the supplemental checks below now establish API availability.
+The image/number used by this capability probe lives only in the
+smoke script, not application rules or dataset/gold. Replay check files are temporary
+and are not evaluation recordings. The production four-mode client is only a typed
+Phase-0 contract stub; Phase 1 implements its behaviour.
+
+Successful attempt 02 used 9 API requests and USD 0.00287018 estimated from returned
+usage and the dated standard-rate table in `backend/app/data/model_prices.json`.
+Reasoning tokens are part of output tokens and are not charged twice. Per-request
+median latency: text 2.436 s; structured 1.641 s; agent 1.899 s; embeddings 3.172 s.
+This is a small capability sample, not an end-to-end performance benchmark.
+
+Supplemental web verification at 10:17–10:18 ICT used the remaining authorization
+and the same attempt-02 spending ledger, without changing `backend/.env`:
+
+| Allowed domain | Status | Check latency | Input / output / reasoning tokens | Estimated USD |
+| --- | --- | --- | --- | --- |
+| cerave.com.vn | FAIL: WEB_SOURCES_MISSING | 6.057 s | 4632 / 55 / 37 | 0.029814 |
+| openai.com, one alternate-domain probe | PASS, 16 source URLs within domain/subdomains | 5.089 s | 8550 / 64 / 37 | 0.027740 |
+
+The empty brand-domain result does not establish its cause or guarantee future
+coverage. The alternate probe verifies hosted search, source metadata and domain
+validation for this account/model. All eight capability categories now have a
+successful observation, while the original SKIP and brand-domain FAIL remain in
+their reports. Attempt 02 now totals 11/15 API requests and USD 0.06042418/0.50
+estimated. Original and supplemental reports are retained separately as
+`p2-smoke-report-02.json`, `p2-smoke-web-02.json` and `p2-smoke-web-alt-02.json` in
+`backend/.venv/`; the ledger holds the cumulative total.
+
+Recommendation: keep application `WEB_SEARCH=off` through the current phase.
+`pipeline/web_sources.py::discover` is still the S4 interface stub and the fetch,
+identity, snapshot, citation and run-budget integration is not implemented yet.
+The capability smoke can enable web for its process only. Enable application web
+when the Phase-4 flow and its acceptance checks are ready; this is separate from
+the now-verified API capability. No shared configuration or contract was changed.
+
+An earlier attempt made 8 requests rejected with HTTP 401. It produced no usage
+measurements; its USD 0.377208 ledger value is a conservative reservation, not a
+confirmed charge. The user updated the local key and explicitly authorized a new
+15-request / USD 0.50 attempt. Both reports and spending ledgers are retained under
+the ignored `backend/.venv/` folder. The runner now stops the remaining checks after
+an authentication/permission failure. Network errors retain reservations. SDK retries
+are disabled; each agent call is metered by a hook before sending. No key is reported.
+
+Recommendation for P4 to adopt at S0 (no secret included):
+
+```dotenv
+MODEL_EXTRACT=gpt-6.1-sol
+MODEL_AGENT=gpt-6.1-sol
+EMBED_MODEL=text-embedding-3-small
+LLM_EFFORT_EXTRACT=low
+LLM_EFFORT_AGENT=medium
+LLM_MAX_OUTPUT_TOKENS=16000
+RUN_MAX_MODEL_CALLS=24
+RUN_DEADLINE_S=120
+```
+
+Use `output_type`; both it and the submit-tool alternative have offline provider-seam
+tests, and `output_type` also passed live. The SDK stringifies a StopAtTools result
+when output_type is absent, so the alternative returns JSON and validates it back
+into the strict result model. Default run cap arithmetic: 4 extraction + 4 possible
+retries + 1 canonicalization + 1 claims audit + 10 agent + 4 web/other = 24 calls.
+The 120-second deadline remains provisional until a real pipeline run is timed.
+Keep agent limits unchanged (10 model calls, 16 tools, 75 seconds).
+
+Budget now has a cached agent child that shares parent counters/deadline and cannot
+reset them when requested again. Both limits are checked before any increment.
+CCR P2→P4: `backend/tests/test_skeleton.py` and budget error vocabulary · need: align
+root stop-code names at Sync · why: current P4 assertions use MODEL_CALL_LIMIT,
+TOOL_CALL_LIMIT, RUN_DEADLINE while P2-0 lists MODEL_CALLS, TOOL_CALLS, DEADLINE ·
+snippet: choose one shared naming set; P2 preserves the current tested root names
+until the team decision. Child codes are AGENT_MODEL_CALLS, AGENT_TOOL_CALLS,
+AGENT_DEADLINE. No assertions or phase gates were changed by P2.
+
+Validation after merging P4 skeleton cd4ae69: 97 offline tests passed, 0 failed,
+0 skipped, 0 deselected, including the four repository guards. No server was started.
+Official references checked on the day: [model](https://developers.openai.com/api/docs/models/gpt-6.1-sol),
+[prices](https://developers.openai.com/api/docs/pricing),
+[structured output](https://developers.openai.com/api/docs/guides/structured-outputs),
+[vision](https://developers.openai.com/api/docs/guides/images-vision),
+[reasoning](https://developers.openai.com/api/docs/guides/reasoning),
+[web search](https://developers.openai.com/api/docs/guides/tools-web-search),
+[Agents SDK](https://openai.github.io/openai-agents-python/agents/),
+[usage](https://openai.github.io/openai-agents-python/usage/).
