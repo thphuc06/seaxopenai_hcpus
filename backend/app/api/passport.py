@@ -1,12 +1,25 @@
 """Stored results and role-filtered evidence; buyer reads create no work."""
-from fastapi import APIRouter, HTTPException
+from typing import Annotated
+
+from fastapi import APIRouter, HTTPException, Query, Response
 
 from app.api.contracts import EvidenceResponse, PassportMetadata, ProductPresentation, ProductResponse
-from app.api.dependencies import Actor
+from app.api.dependencies import Actor, not_implemented
 from app.api import read
 from app.models import Citation, PassportField, PassportResponse, Role, PUBLIC_FIELDS
 
 router = APIRouter()
+
+
+@router.get(
+    "/sources/{source_version_id}/image", response_class=Response, response_model=None,
+    responses={200: {"content": {
+        media: {"schema": {"type": "string", "format": "binary"}}
+        for media in ("image/png", "image/jpeg", "image/webp")
+    }}},
+)
+def source_image(source_version_id: str, as_role: Annotated[Role, Query()]) -> Response:
+    not_implemented()
 
 
 @router.get("/products", response_model=list[ProductResponse])

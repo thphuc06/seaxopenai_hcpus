@@ -1,6 +1,7 @@
 """Read-only observability and expert evidence routes."""
 from typing import Annotated, Literal
 from fastapi import APIRouter, Query
+from pydantic import JsonValue
 from app import chain, db
 from app.api import read, glassbox
 from app.api.contracts import EventCounts, MetricsResponse, ModelCallCounts
@@ -11,6 +12,11 @@ from app.models import Citation, DependsOn
 from app.retrieval import search as retrieval
 
 router = APIRouter()
+
+
+@router.get("/internal/eval/metrics", response_model=dict[str, JsonValue])
+def evaluation_metrics(actor: RunActor) -> dict[str, JsonValue]:
+    not_implemented()
 
 
 @router.get("/products/{product_id}/fields/{field_key}/explain", response_model=BuyerExplanation | ExpertExplanation)

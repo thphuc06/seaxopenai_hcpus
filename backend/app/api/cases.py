@@ -13,11 +13,22 @@ from app.api.contracts import (
     CaseHistoryResponse, EvidenceUploadRequest, ReviewQueueItem,
     ReviewRequest, ReviewResponse, ResultVersionResponse, EvidenceRequestResponse, EventLogItem,
 )
-from app.api.dependencies import EvidenceActor, ReviewerActor
+from app.api.dependencies import EvidenceActor, ReviewerActor, OperatorActor, RunActor, not_implemented
+from app.api.s4_contracts import WebAuditResponse
 from app.models import AdmitResult, EventEnvelope
 
 router = APIRouter()
 _uploads = Lock()
+
+
+@router.post("/cases/{case_id}/web-search", response_model=AdmitResult)
+def request_web_search(case_id: str, actor: OperatorActor) -> AdmitResult:
+    not_implemented()
+
+
+@router.get("/cases/{case_id}/web-search", response_model=WebAuditResponse)
+def web_search_audit(case_id: str, actor: RunActor) -> WebAuditResponse:
+    not_implemented()
 
 
 @router.get("/review/queue", response_model=list[ReviewQueueItem])
