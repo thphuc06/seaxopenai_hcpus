@@ -61,7 +61,8 @@ destination. Mode is explicit `--mode`, otherwise process `LLM_MODE`, otherwise
 `replay`; record/live are rejected. No server or provider network call is allowed.
 The evaluator uses a fresh temporary database and restores process settings.
 
-It writes `eval-latest.md`/`.json` plus timestamped immutable run artifacts. A
+  It writes `eval-latest.md`/`.json` plus timestamp-and-UUID immutable run artifacts,
+  created exclusively so repeated clock values cannot overwrite an earlier report. A
 `REPLAY_MISS` retains the attempted replay in the JSON, restarts the entire selected
 story in another fresh DB, and labels the report FALLBACK. Other errors do not
 silently select fallback. A fallback report does not prove successful replay.

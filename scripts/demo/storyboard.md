@@ -1,5 +1,44 @@
 # Product Truth Passport — running-app storyboard
 
+## Current web-enabled cut — requested16:21 ICT
+
+One real Web Search run follows the initial LIVE comparison. P4 keeps the original cut and first-run evidence. The web run found/stored2 new REAL snapshots, adding1 independent source family;2 other fetches returned403. Run PARTIAL is shown, not concealed. All post-search Passport/evidence/Why scenes are freshly recorded from revision2.
+
+| Timeline | Actual scene | Disclosure / evidence |
+|---|---|---|
+|0:00–0:05|Original REAL product before comparison|Original first-take footage|
+|0:05–0:13|Original LIVE bootstrap click/wait|Wait sped up with visible label|
+|0:13–0:17|Original stored result|WAITING_REVIEW shown|
+|0:17–0:22|Web Search API request and real wait|API trigger explicitly labelled; no fabricated UI button|
+|0:22–0:42|Query audit →403 skips →new snapshots →stored source text|4s query,5s blocked-page audit,5s snapshot metadata,6s source reading|
+|0:42–0:52|Updated Passport|Skin-type3 independent families; unresolved fields retained|
+|0:52–1:10|Evidence including fresh web passage|8s first quote then brand-source comparison; actual text/locator|
+|1:10–1:20|Why policy rules|Code counts source families and checks publication|
+|1:20–1:30|Web run trace|LIVE/PARTIAL/HTTP_STATUS_403; search/fetch/snapshot steps visible|
+
+Recorder: record_web_demo.py; source take web-first. Finalized16:27 ICT: timeline90.00s, encoded90.03s,H.264/AAC1280x720/30fps, silent. Full decode passes,0 assembly overlaps;45 sampled frames plus12 key frames inspected. File scripts/demo/out/live-p4-20261031/demo.mp4 now points to this web-enabled version; original cut remains under take-b375bf49. Post-web recording creates no extra event/job/run/model call. Human normal-speed playback/team sign-off remains unverified. No new app feature, budget increase, source edits, approval claims, public upload or commit/push. See docs/results/live-demo.md for runtime measurements.
+
+## First P4 LIVE cut — 31 October16:12 ICT (preserved)
+
+The user's current90-second LIVE instruction supersedes the historical160-second replay handoff below. P4 alone records/assembles. No synthetic revoke, public upload, sync-gate or commit/push. Preserve the previous storyboard as planning history.
+
+| Target time | Running-app scene | Callout and reading hold | Proof |
+|---|---|---|---|
+|0:00–0:10|REAL Foaming product before comparison|Sản phẩm REAL · Đối chiếu từng thông tin|Original captured product and unprocessed Passport|
+|0:10–0:26|Operator fires real bootstrap LIVE|Đang xử lý LIVE · Đoạn chờ được tua nhanh|Full wait retained in raw take; provider trace checked before use|
+|0:26–0:38|Buyer Passport|Kết quả riêng cho từng trường; missing evidence remains visible|Actual stored field results|
+|0:38–1:02|Skin-type evidence drawer|Hold first quote11s, then next passage|Stored quote/locator/source version; no text replacement|
+|1:02–1:16|Expert Why dialog|Luật đã áp dụng; hold decision trail7s before scrolling|Code decision trail from API|
+|1:16–1:30|Operator trace and model counter|Model trích xuất, code quyết định; stored reads|LIVE marker, token steps and unchanged model count across reads|
+
+As made16:20 ICT: timeline90.00s, encoded duration90.02s (AAC/container rounding),1280x720/H.264/AAC/30fps. The table above is the measured scene schedule; the LIVE section contains10s of original click/wait footage followed by6s of the stored WAITING_REVIEW result. Brand quote is held11s; the listing section then remains visible to1:02. Why focuses actual policy rules and publish gate. Trace shows token-bearing calls, followed by unchanged model-call counters.
+
+Final local file: `scripts/demo/out/live-p4-20261031/demo.mp4`. First cut `take-b375bf49/demo.mp4` and refined cut `take-b375bf49/refined/demo.mp4` remain separate. Original raw and recovered live-click video, first-run JSON and per-field evidence are retained. Decode of the complete final file passes;45 sampled frames across the full duration plus key-hold contact sheets were inspected. Normal-speed human playback review remains outstanding; no claim of team sign-off.
+
+Local isolated database and UUID takes live under `scripts/demo/out/live-p4-20261031`. P4 adapter: `record_live_demo.py`; P3's replay recorder remains intact. Web search is off; optional web/receipt/agent-effect scenes are absent because this take has not established them. OpenAI LIVE extracted from two stored REAL snapshots; code compared the extracted claims. See `docs/results/live-demo.md` for evidence/disclosure. `narration.json` remains `{}`.
+
+## Historical replay storyboard (preserved)
+
 Drafted 31 October 2026, P4 Phase 3. Planned duration **160 seconds**, with **20 seconds reserve** under the team's 3:00 brief. Silent: no voice, TTS or music; `narration.json` stays `{}`. This is a storyboard, not a recorded or team-reviewed video.
 
 Phase4 independent audit, 31 October 15:12 ICT, baseline `e0a8e3b` (includes sync-3): S3 in-process gate and UI source selectors now exist. The published S3 gate is evidence of behavior; this audit is source inspection, not a new browser rehearsal. Web/receipt scenes remain pending S4 integration and replay. Final recording readiness is deliberately not claimed before those checks.

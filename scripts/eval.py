@@ -15,6 +15,7 @@ import sys
 from tempfile import TemporaryDirectory
 from typing import Literal
 from unittest.mock import patch
+from uuid import uuid4
 
 from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field, JsonValue, model_validator
@@ -386,9 +387,13 @@ def write_report(report: EvaluationReport, directory: Path) -> None:
     payload = report.model_dump_json(indent=2)
     text = markdown(report)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    for stem in (f"eval-{stamp}", "eval-latest"):
-        (directory / f"{stem}.json").write_text(payload + "\n", encoding="utf-8")
-        (directory / f"{stem}.md").write_text(text, encoding="utf-8")
+    archive = f"eval-{stamp}-{uuid4().hex}"
+    # Windows clock resolution can repeat a timestamp across consecutive writes.
+    # Unique names plus exclusive creation preserve every earlier report.
+    for extension, content in (("json", payload + "\n"), ("md", text)):
+        with (directory / f"{archive}.{extension}").open("x", encoding="utf-8") as output:
+            output.write(content)
+        (directory / f"eval-latest.{extension}").write_text(content, encoding="utf-8")
 
 
 def b1_execution_failed(report: EvaluationReport) -> bool:
