@@ -53,9 +53,9 @@ export function BuyerPassport({ api, products, role = 'BUYER' }: { api: ApiClien
   const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
   const { data, error, loading } = usePoll(load, passportPollInterval);
   return <>
-    {error && <ErrorNotice error={error} />}
+    {error && <ErrorNotice error={error} plain />}
     {loading && <LoadingNotice />}
-    {buyError && <ErrorNotice error={buyError} />}
+    {buyError && <ErrorNotice error={buyError} plain />}
     {data && <section className="purchase-bar"><div><strong>Keep the evidence you saw</strong><p>Save this Passport as an evidence receipt.</p></div><button type="button" data-testid="buy-button" disabled={buying} onClick={() => void buy()}>{buying ? 'Saving…' : 'Buy · save receipt'}</button></section>}
     {data && <BuyerPassportView product={products.find((item) => item.id === productId)} passport={data} onEvidence={setEvidenceKey} onWhy={setWhyKey} />}
     {whyKey && <WhyDialog key={`${productId}:${whyKey}:${role}`} api={api} productId={productId} fieldKey={whyKey} role={role} onClose={() => setWhyKey(null)} />}

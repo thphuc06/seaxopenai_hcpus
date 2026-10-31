@@ -63,7 +63,7 @@ export function EvidenceDrawer({ api, productId, fieldKey, withinSource, onClose
   }, [api, productId, fieldKey, attempt]);
   return <Dialog title={`${FIELD_TITLES[fieldKey]} · Evidence`} onClose={onClose} wide>
     {!state.data && !state.error && <LoadingNotice />}
-    {state.error && <><ErrorNotice error={state.error} /><button type="button" onClick={() => setAttempt((value) => value + 1)}>Retry evidence</button></>}
+    {state.error && <><ErrorNotice error={state.error} plain={!allowPrivate} /><button type="button" onClick={() => setAttempt((value) => value + 1)}>Retry evidence</button></>}
     {state.data && <EvidenceContent evidence={state.data} withinSource={withinSource} allowPrivate={allowPrivate} />}
   </Dialog>;
 }

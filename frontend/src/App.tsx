@@ -47,8 +47,8 @@ export function App({ api, role, onRoleChange, useMock, sessionError }: AppProps
       </select></label>
     </div></div>
     <main id="main-content" className="page-container">
-      {sessionError && <ErrorNotice error={sessionError} />}
-      {products.error && <ErrorNotice error={products.error} technical={role === 'OPERATOR' || role === 'REVIEWER'} />}
+      {sessionError && <ErrorNotice error={sessionError} plain={role === 'BUYER' || role === 'SELLER'} />}
+      {products.error && <ErrorNotice error={products.error} technical={role === 'OPERATOR' || role === 'REVIEWER'} plain={role === 'BUYER' || role === 'SELLER'} />}
       <Routes>
         <Route path="/" element={<Operator api={api} role={role} buyerPath={buyerPath} productId={activeId} product={products.data?.find((product) => product.id === activeId)} />} />
         <Route path="/buyer/:productId" element={<BuyerPassport key={`${location.pathname}:${role}`} api={api} products={products.data ?? []} role={role} />} />

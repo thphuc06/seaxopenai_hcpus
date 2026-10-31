@@ -27,5 +27,5 @@ export function Receipt({ api, role }: { api: ApiClient; role: DemoRole }) {
   const { orderId = '' } = useParams();
   const load = useCallback((signal: AbortSignal) => api.getOrder(orderId, signal), [api, orderId]);
   const state = usePoll(load, 5_000);
-  return <>{!state.data && <h1>A record of what you saw.</h1>}{state.loading && <LoadingNotice />}{state.error && <ErrorNotice error={state.error} technical={role === 'OPERATOR' || role === 'REVIEWER'} />}{state.data && <ReceiptView receipt={state.data} role={role} />}</>;
+  return <>{!state.data && <h1>A record of what you saw.</h1>}{state.loading && <LoadingNotice />}{state.error && <ErrorNotice error={state.error} technical={role === 'OPERATOR' || role === 'REVIEWER'} plain={role === 'BUYER' || role === 'SELLER'} />}{state.data && <ReceiptView receipt={state.data} role={role} />}</>;
 }
