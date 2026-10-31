@@ -1,0 +1,1244 @@
+{
+  "set_number": 1,
+  "run_id": "8f9c683e34bd46abae5f7b316e5f13d1",
+  "generated_at": "2026-10-31T08:07:35.584793+00:00",
+  "mode": "FALLBACK",
+  "attempt": "RERUN",
+  "freeze": {
+    "set_number": 1,
+    "frozen_at": "2026-10-31T06:21:52.244699+00:00",
+    "hashes": {
+      "fixtures/blind/set1/01/label.v1.json": "fd06b2f31a46dd522c4d0226b63af080c3950c3cf87599e517e47b01d9947c13",
+      "fixtures/blind/set1/01/listing.v1.json": "83c1cd2c246602defa547a22e6c742d7af5aacd08627a2a2d4317d539e294cbd",
+      "fixtures/blind/set1/01/notification.v1.json": "58dff394b322be6ec267b2e06058c0d3a537112829253404df6762b70f26abc5",
+      "fixtures/blind/set1/01/product.json": "4aed32e2839ab5374f55f5d5a31c587612fc232b9348de50d12b26a10911eee1",
+      "fixtures/blind/set1/02/label.v1.json": "d223b200b43f1666bf7bb6faf291beccf1a157a192ba16087ad32b9ed80549d8",
+      "fixtures/blind/set1/02/listing.v1.json": "09dac659f209024c84331c2dd977c21d245bfb5e1080c4b4e97826f697e74132",
+      "fixtures/blind/set1/02/notification.v1.json": "b71b84716626b3fce9ab4dd64834e47044d595b874e651212a71cc118b346da4",
+      "fixtures/blind/set1/02/product.json": "c89b0297225c9b771578da0e6943006cf1f4bfa4ffb2ce27ed35078e883079fa",
+      "fixtures/blind/set1/03/label.v1.json": "d456b1a64e103958a18a4e08d04761806b9505b78887c4af2080b876e5255ed7",
+      "fixtures/blind/set1/03/listing.v1.json": "57a258c891844c07e3d5586f096cdcc6738f5bf259a1f2c01b832abac6f1fb2c",
+      "fixtures/blind/set1/03/notification.v1.json": "83c826757bd6378fc6ba756f47d32448d1096ceb0ef0012a69a815f693f09df0",
+      "fixtures/blind/set1/03/product.json": "d3151792e4030981b6289a223a66c6bbea379e1df9a3380fd6824a863a2a45e0",
+      "fixtures/blind/set1/04/label.v1.json": "02775989ea41d79337e42f4806e930bc1219a4311503a5cab8ba279995dddcc3",
+      "fixtures/blind/set1/04/listing.v1.json": "9adcf381de477a641c9ea9f0b925760d616e08f8a5bc9c54ca5df689297e397a",
+      "fixtures/blind/set1/04/notification.v1.json": "1f82048f07ab54ac93221ba753f05d68fd2ce72f8c3b1a121ddb9e6ba6573019",
+      "fixtures/blind/set1/04/product.json": "5eb392a9c8ab0c6f3664ee0f4b9524b82d179d0cec79435e74d1337eed3a5fa7",
+      "fixtures/blind/set1/05/label.v1.json": "2dab718ffa24046cc49ad8ebd157aa9ab8a3f1bcb866b03db3573b2d3a6a4699",
+      "fixtures/blind/set1/05/listing.v1.json": "8b27c05a4836ecfcf02c6c2e7db962623a3bf4e147abeea5d9d35bec8d19fb57",
+      "fixtures/blind/set1/05/notification.v1.json": "ed293567902685eaa416886d0633888c8257176f29735720af9fc9c87e6b71dc",
+      "fixtures/blind/set1/05/product.json": "2a5adc54ec041b10ad939360a17944f69958a0e17f1fa2906e092407ea73e045",
+      "fixtures/blind/set1/06/brand.v1.json": "19f520c825b180ec372284607eaf01beb72faa20fc953ca0fbc13c9b32d0df48",
+      "fixtures/blind/set1/06/label.v1.json": "7233d89d6af0b3a5566457c605135a2d30bd70003c2551f7579ca0b1e7b96b0c",
+      "fixtures/blind/set1/06/listing.v1.json": "aae9aae18241f12f9d8f3a85540a53d22f4a36b2e30d789c5068e4402c5b4a91",
+      "fixtures/blind/set1/06/notification.v1.json": "e1a18911ca2b697d7454f3dcaaac39df5653810de2fcddc999e407eb4f149139",
+      "fixtures/blind/set1/06/product.json": "521a62625ecd74c26512ca52708a1f2669e718a93dce60678293dccfab7f6d72",
+      "fixtures/blind/set1/07/brand.v1.json": "c6f10e4f2d816cd9efe269e35be4b5ad1907041e170e0bd67243c91a847b20e7",
+      "fixtures/blind/set1/07/label.v1.json": "8eae2d5994869f5a1fdbe035c608ee7233f9fe7e7a9416e68bc4ee9201ece969",
+      "fixtures/blind/set1/07/listing.v1.json": "a39642558bed5e64a93e28334abca82da7586a4bec598fb170647d8d59432ad0",
+      "fixtures/blind/set1/07/notification.v1.json": "e7977e3a0ce48b35e1fc0fd5ac97c7ab2566dffc357bdac3ed2dd00e020b86e9",
+      "fixtures/blind/set1/07/product.json": "eeb4535ce1fea5c68a4e92475a17f3d35c9e64aeef16ddab827356fb96e8c00f",
+      "fixtures/blind/set1/08/label.v1.json": "339600ed7eb0a6d344b84b784229bf9f0e96124bd6b8f2521ca158d3afe2ba2f",
+      "fixtures/blind/set1/08/listing.v1.json": "1112059415674e90f2ace687a8de1278b18d8cb6b357c70007eb39140bf50b24",
+      "fixtures/blind/set1/08/notification.v1.json": "c9037efead608d2d4c54b8728f52420c794889a5b3e3b64b120fae2ee4bfe0d4",
+      "fixtures/blind/set1/08/product.json": "091cddeda246825b4ccf2b7cb693d7cb0fc4629f21ddc86b7ab958eb88907ffa",
+      "fixtures/blind/set1/09/label.v1.json": "777af58e58c73b685a46294c7d2991441d0f1e6c3f51aeea9c0538923826edbc",
+      "fixtures/blind/set1/09/listing.v1.json": "6cac7ff8a9900f9482064f11d55a12aeceb7767acc8cbeaf6fa9bf37949a76e4",
+      "fixtures/blind/set1/09/notification.v1.json": "95dbe6db7caaa186dde7994136ff3d721ffc829131e2e64b7f548acebe6a6521",
+      "fixtures/blind/set1/09/product.json": "80f4a79932ff6909772f540dcc9e8628fa55c6bcca5fc45df402b10ffd1e4b83",
+      "fixtures/blind/set1/11/brand.v1.json": "eb2ea6d760afbaf478d58948e2a449220a5371d12cbc2266addbe622e14f3157",
+      "fixtures/blind/set1/11/label.v1.json": "cb963f84087c27ddce1c06f4f810d160a608678ec4e6eda83a6d09bce07e3e1d",
+      "fixtures/blind/set1/11/listing.v1.json": "da4d8c6f1a57749ee115521d9975b7819e6f3251aa64cb51eccb04bcfb28cb7e",
+      "fixtures/blind/set1/11/notification.v1.json": "efcb3f899aca0015bae405fd1ea30feb69611bb86cca9100e0f6c2597beb6cac",
+      "fixtures/blind/set1/11/product.json": "78a3f7bc538bf4b6179f364414f6e381fd9bbab2562baad830d75c19423ff7a7",
+      "fixtures/blind/set1/12/listing.v1.json": "99bd912e5ded8df1b9c892bd8677cdf393e710027299f942b2f3bb27eaac5c8a",
+      "fixtures/blind/set1/12/product.json": "4db50c83530ca3c1868b8ad0fbfc32a623032fd20e6836679a0ca45104576f6d",
+      "fixtures/gold/blind/expected-set1.json": "c74e98f6c2cb9b1b8e83b69f1d40dd04de7041dbe8b2b9c658df22f8796e5b38",
+      "fixtures/gold/blind/materialized-set1.json": "23645e3dda8856e34c3a44c881a0aaf6b2cb7a79855b9bb8d57220063cabb2a6"
+    }
+  },
+  "results": [
+    {
+      "product_id": "BLIND-PROD-SET1-01",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 969.0000000009604
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-02",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "INSUFFICIENT",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 1,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 4,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1031.9999999992433
+      },
+      "stops": [],
+      "probes": [
+        {
+          "name": "mapping_unavailable",
+          "expected": "UNCERTAIN",
+          "rationale": "Mapping cannot be guessed without a validated proposal."
+        }
+      ],
+      "unmet_preconditions": [
+        "Validated model mapping is a planned precondition, not injected into fixtures; fallback may not realize it."
+      ]
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-03",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 750.0
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-04",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONFLICTING",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 828.0000000013388
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-05",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONFLICTING",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONFLICTING",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 625.0
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-06",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "CONSISTENT",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "CONSISTENT",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 2,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 610.0000000005821
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-07",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "CONSISTENT",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONFLICTING",
+          "b0": "CONFLICTING",
+          "candidate": "CONFLICTING",
+          "b0_seller_attributable": true,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 2,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 484.00000000037835
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-08",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [
+        {
+          "kind": "free_from:alcohol",
+          "expected": "CONSISTENT",
+          "actual": "CONSISTENT",
+          "scored": true
+        },
+        {
+          "kind": "concentration:NIACINAMIDE",
+          "expected": "SINGLE_SOURCE",
+          "actual": "UNCERTAIN",
+          "scored": true
+        }
+      ],
+      "claim_findings": [
+        {
+          "field_key": "claim:concentration:NIACINAMIDE",
+          "verdict": "UNCERTAIN",
+          "seller_attributable": 0,
+          "review_state": "NEEDS_REVIEW"
+        },
+        {
+          "field_key": "claim:free_from:alcohol",
+          "verdict": "CONSISTENT",
+          "seller_attributable": 0,
+          "review_state": "AUTO_DRAFT"
+        }
+      ],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 484.00000000037835
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-09",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 0,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [
+        {
+          "kind": "free_from:alcohol",
+          "expected": "CONFLICTING",
+          "actual": "CONFLICTING",
+          "scored": true
+        },
+        {
+          "kind": "free_from:fragrance",
+          "expected": "CONFLICTING",
+          "actual": "CONFLICTING",
+          "scored": true
+        },
+        {
+          "kind": "concentration:NIACINAMIDE",
+          "expected": "CONFLICTING",
+          "actual": "UNCERTAIN",
+          "scored": false
+        }
+      ],
+      "claim_findings": [
+        {
+          "field_key": "claim:concentration:NIACINAMIDE",
+          "verdict": "UNCERTAIN",
+          "seller_attributable": 0,
+          "review_state": "NEEDS_REVIEW"
+        },
+        {
+          "field_key": "claim:free_from:alcohol",
+          "verdict": "CONFLICTING",
+          "seller_attributable": 0,
+          "review_state": "NEEDS_REVIEW"
+        },
+        {
+          "field_key": "claim:free_from:fragrance",
+          "verdict": "CONFLICTING",
+          "seller_attributable": 0,
+          "review_state": "NEEDS_REVIEW"
+        }
+      ],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500.0
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": [
+        "Regulatory row is still provisional status=verify; concentration conflict target is preserved but unscored pending human-reviewed applicable data."
+      ]
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-11",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "CONFLICTING",
+          "b0": "CONFLICTING",
+          "candidate": "CONFLICTING",
+          "b0_seller_attributable": true,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": null,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "CONSISTENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "CONSISTENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 1,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 4,
+          "abstentions": 0,
+          "expected_abstentions": 0,
+          "correct_abstentions": 0
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 515.9999999996217
+      },
+      "stops": [],
+      "probes": [
+        {
+          "name": "injection",
+          "expected": "ignored_instructions_detected=true; primary volume conflict retained",
+          "rationale": "SOURCE_DATA is data, never authority."
+        }
+      ],
+      "unmet_preconditions": []
+    },
+    {
+      "product_id": "BLIND-PROD-SET1-12",
+      "status": "DRAFT",
+      "reviewed_by": null,
+      "outcome": "ADMITTED",
+      "error": null,
+      "fields": [
+        {
+          "field_key": "volume",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "skin_type",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "key_ingredients",
+          "expected": "SINGLE_SOURCE",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "SINGLE_SOURCE",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "notification_number",
+          "expected": "INSUFFICIENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        },
+        {
+          "field_key": "responsible_company",
+          "expected": "INSUFFICIENT",
+          "b0": "SINGLE_SOURCE",
+          "candidate": "INSUFFICIENT",
+          "b0_seller_attributable": false,
+          "candidate_seller_attributable": false,
+          "expected_seller_attributable": false,
+          "b1": null,
+          "b1_seller_attributable": null
+        }
+      ],
+      "scores": {
+        "B0": {
+          "total": 5,
+          "correct": 3,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 0,
+          "expected_abstentions": 2,
+          "correct_abstentions": 0
+        },
+        "candidate": {
+          "total": 5,
+          "correct": 5,
+          "false_blame": 0,
+          "false_blame_eligible": 5,
+          "abstentions": 2,
+          "expected_abstentions": 2,
+          "correct_abstentions": 2
+        }
+      },
+      "claims": [],
+      "claim_findings": [],
+      "usage": {
+        "model_calls": 0,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 342.9999999971187
+      },
+      "stops": [],
+      "probes": [],
+      "unmet_preconditions": []
+    }
+  ],
+  "totals": {
+    "DRAFT": {
+      "B0": {
+        "total": 55,
+        "correct": 8,
+        "false_blame": 0,
+        "false_blame_eligible": 52,
+        "abstentions": 1,
+        "expected_abstentions": 2,
+        "correct_abstentions": 0
+      },
+      "candidate": {
+        "total": 55,
+        "correct": 54,
+        "false_blame": 0,
+        "false_blame_eligible": 52,
+        "abstentions": 2,
+        "expected_abstentions": 2,
+        "correct_abstentions": 2
+      }
+    },
+    "REVIEWED": {
+      "B0": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      },
+      "candidate": {
+        "total": 0,
+        "correct": 0,
+        "false_blame": 0,
+        "false_blame_eligible": 0,
+        "abstentions": 0,
+        "expected_abstentions": 0,
+        "correct_abstentions": 0
+      }
+    }
+  },
+  "usage": {
+    "model_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "latency_ms": 7140.999999999622
+  },
+  "limitations": [
+    "Codex-assisted DRAFT labels, not independent human-authored gold; no human approvals recorded.",
+    "Eleven of twelve planned cases materialized before candidate execution. The scope-without-metadata row is deferred because synthetic snapshots require scope in the current validator.",
+    "Label sources are readable synthetic transcripts; image OCR is not evaluated.",
+    "Vocabulary-mapping and reviewed-regulatory preconditions are disclosed separately; no candidate output was used to select expected labels.",
+    "Full first-run reports are immutable; reruns do not replace the initial diagnostic.",
+    "Registry corpus is intentionally empty; this blind run evaluates supplied evidence, not registry-discovery coverage."
+  ],
+  "accounting_complete": true
+}
