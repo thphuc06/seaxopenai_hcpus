@@ -188,6 +188,17 @@ independent human-authored evaluation; disclose that limitation.)
   URL.
 
 ## 7. When each part is generated
+
+**S0 files created 31 Oct 2026 (P4-0c):** `fixtures/synthetic/s1-gentle-cleanser/`
+contains `product.json`, `listing.v1.json`, `packaging_label.v1.json`,
+`notification_doc.v1.json`, `brand_ph.v1.json`. Product/case/listing IDs are
+`DEMO-PROD-S1`, `DEMO-CASE-S1`, `DEMO-LISTING-S1`; source and passage IDs are stored in
+the snapshots and must be read from data. Events 01–03/08 contain `payload.case_id`
+and `payload.product_id`. Any later `payload.snapshot` is relative to `fixtures/`.
+The label currently has a readable transcript; its PNG is planned for Phase 1.
+`fixtures/gold/dev/demo-story.json` holds DRAFT expectations after event 01 with
+per-field evidence/rationale, written before any pipeline run. Human review is pending.
+
 | Phase | Who / prompt | Output |
 |---|---|---|
 | 0 | P4-0c (P4 thread 2) | S1 (listing v1, label transcript, notification doc, PH page) + events 01, 02, 03, 08 + `check_fixtures.py` |

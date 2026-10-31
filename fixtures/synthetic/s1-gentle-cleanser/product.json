@@ -1,0 +1,17 @@
+{
+  "product_id": "DEMO-PROD-S1",
+  "name": "Gentle Niacinamide Cleanser",
+  "brand": "Lumivy Lab (fictional)",
+  "variant": "50ml",
+  "market": "VN",
+  "dataset_origin": "SYNTHETIC",
+  "case_id": "DEMO-CASE-S1",
+  "tenant_id": "demo-tenant",
+  "listing_id": "DEMO-LISTING-S1",
+  "web": {
+    "enabled": false,
+    "brand_domains": [],
+    "aliases": []
+  },
+  "note": "SYNTHETIC — sản phẩm hư cấu cho bootstrap, đối chiếu khác thị trường và thông tin chỉ có trên listing."
+}

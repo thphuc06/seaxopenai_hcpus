@@ -1,5 +1,10 @@
 # Development log — 31 Oct 2026
 
+- 10:04 ICT (T+0:04): P4-0c created the first S1 synthetic dataset, four events and
+  DRAFT bootstrap labels. Validator 9/9 files passed; 29 new tests passed; full suite
+  66 passed with two pytest temp-cleanup warnings. No pipeline run or model call.
+  P1 can load fixtures/synthetic/s1-gentle-cleanser after merging this delivery.
+
 - 09:49 ICT (T-0:11): user confirmed organizers permit coding now; started P4-0.
 - Prepared materials: docs, prompts, plan templates and tools under `_outside-repo/skills`
   existed before the event. Application implementation begins in this task.

@@ -1,0 +1,45 @@
+{
+  "source_id": "DEMO-SRC-S1-NOTIFICATION",
+  "kind": "NOTIFICATION_DOC",
+  "product_id": "DEMO-PROD-S1",
+  "version": 1,
+  "uri": "demo://s1/notification",
+  "captured_at": "2026-10-31T03:03:32Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PRIVATE",
+  "family": "regulator:demo-notification",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "50ml",
+    "market": "VN",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-DOC-01",
+      "locator": "page1#product",
+      "section": "record",
+      "text": "Hồ sơ minh họa: Gentle Niacinamide Cleanser, thị trường VN."
+    },
+    {
+      "id": "DEMO-PSG-S1-DOC-02",
+      "locator": "page1#number",
+      "section": "record",
+      "text": "Số tiếp nhận công bố trong kịch bản: DEMO-CBMP-00042."
+    },
+    {
+      "id": "DEMO-PSG-S1-DOC-03",
+      "locator": "page1#company",
+      "section": "record",
+      "text": "Tổ chức chịu trách nhiệm: CÔNG TY TNHH LUMIVY DEMO."
+    },
+    {
+      "id": "DEMO-PSG-S1-DOC-04",
+      "locator": "page1#issued",
+      "section": "record",
+      "text": "Ngày cấp trong kịch bản: 2026-10-31. Trạng thái hồ sơ: ACTIVE. Đây là hồ sơ SYNTHETIC."
+    }
+  ],
+  "note": "SYNTHETIC — nội dung hư cấu được tạo trong ngày thi."
+}

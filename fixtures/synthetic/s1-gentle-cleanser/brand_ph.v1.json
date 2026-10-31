@@ -1,0 +1,39 @@
+{
+  "source_id": "DEMO-SRC-S1-BRAND-PH",
+  "kind": "BRAND_PAGE",
+  "product_id": "DEMO-PROD-S1",
+  "version": 1,
+  "uri": "demo://s1/brand-ph",
+  "captured_at": "2026-10-31T03:03:32Z",
+  "dataset_origin": "SYNTHETIC",
+  "visibility": "PUBLIC",
+  "family": "brand:lumivy-demo",
+  "status": "ACTIVE",
+  "scope": {
+    "product": "DEMO-PROD-S1",
+    "variant": "100ml",
+    "market": "PH",
+    "version": "1"
+  },
+  "passages": [
+    {
+      "id": "DEMO-PSG-S1-PH-01",
+      "locator": "title",
+      "section": "overview",
+      "text": "Gentle Niacinamide Cleanser — 100 mL"
+    },
+    {
+      "id": "DEMO-PSG-S1-PH-02",
+      "locator": "specs#market",
+      "section": "specifications",
+      "text": "This catalogue entry describes the 100 mL variant for the Philippines market."
+    },
+    {
+      "id": "DEMO-PSG-S1-PH-03",
+      "locator": "description#skin",
+      "section": "description",
+      "text": "Skin types listed for this variant: oily and combination."
+    }
+  ],
+  "note": "SYNTHETIC — fictional English catalogue entry for a different market and size."
+}

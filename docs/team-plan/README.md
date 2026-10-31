@@ -191,6 +191,7 @@ until P2 smoke selects them; absent price data means `price unknown`. `GET /api/
 `models` (`extract`, `agent`, `cheap`, `embed`), `policy_version`, `phase`, `demo_run_delay_s`.
 `RuleStep.detail` is a string; trace detail is JSON. `ClaimFinding` currently has the `FieldDecision` shape.
 P4 also owns `backend/tests/test_skeleton.py` for these startup/config/schema contracts.
+P4 owns `backend/tests/test_fixtures.py` for the dataset validator and source/gold integrity checks.
 Pinned RapidOCR requires Python <3.13; the shared setup uses Python 3.11/3.12.
 
 | Sync | Route | Ghi chú cho P3 |
