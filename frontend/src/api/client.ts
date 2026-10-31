@@ -4,6 +4,7 @@ import type {
 } from '../types.ts';
 import type { CaseHistory, EvidenceUpload, ReviewQueueItem, ReviewRecord, ReviewSubmission, ReviewTask } from './reviewTypes.ts';
 import { matchingReviewEvidence } from './reviewEvidence.ts';
+import { explanation } from '../glassbox.ts';
 
 export interface ReviewErrorDetail { code?: string; current_revision?: number }
 
@@ -66,6 +67,7 @@ export function createApiClient({ getSession, transport = (path, init) => fetch(
   }
   const segment = encodeURIComponent;
   return {
+    getExplanation: async (id: string, field: FieldKey, signal?: AbortSignal) => explanation(await request<unknown>(`/products/${segment(id)}/fields/${segment(field)}/explain`, 'GET', undefined, signal)),
     getProducts: (signal?: AbortSignal) => request<Product[]>('/products', 'GET', undefined, signal),
     getPassport: (id: string, signal?: AbortSignal) => request<PassportResponse>(`/products/${segment(id)}/passport`, 'GET', undefined, signal),
     getEvidence: (id: string, field: FieldKey | `claim:${string}`, signal?: AbortSignal) => request<EvidenceResponse>(`/products/${segment(id)}/fields/${segment(field)}/evidence`, 'GET', undefined, signal),

@@ -29,6 +29,16 @@ export const mockTransport: Transport = async (path, init) => {
   if (path === '/api/internal/metrics') return respond({ events: { ADMITTED: 0, NOOP: 0, DUPLICATE: 0, REJECTED: 0 }, runs: 0, jobs: 0, model_calls: { live: 0, replayed: 0, avoided: 0 }, passport_reads: 0 });
   const parts = path.split('/').map(decodeURIComponent);
   if (parts[2] === 'products' && parts[3] === passport.product_id) {
+    if (parts.length === 7 && parts[4] === 'fields' && parts[6] === 'explain') {
+      const field = passport.fields.find((item) => item.field_key === parts[5]);
+      if (!field) return respond({ detail: 'Field unavailable' }, 404);
+      const expert = ['OPERATOR', 'REVIEWER'].includes(new Headers(init.headers).get('X-Demo-Role') ?? 'BUYER');
+      return respond({ summary: [field.public_text, 'This preview describes only the source passages shown.', 'Seller attribution is not provided in this preview.'], ...(expert ? { trail: [
+        { stage: 'trigger', title: 'UI preview', facts: ['SYNTHETIC · no live comparison'] },
+        { stage: 'sources', title: 'Stored citations', facts: field.citations.map((c) => `Version ${c.source_version} · ${c.passage_id} · ${c.excerpt}`) },
+        { stage: 'publication', title: 'Preview limitations', facts: ['Claims, rules, publish checks, chain and reviews are not recorded in this sample.'] },
+      ] } : {}) });
+    }
     if (parts.length === 5 && parts[4] === 'passport') return respond(toPassportResponse(passport));
     if (parts.length === 7 && parts[4] === 'fields' && parts[6] === 'evidence') {
       const field = passport.fields.find((item) => item.field_key === parts[5]);

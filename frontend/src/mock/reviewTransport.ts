@@ -1,6 +1,7 @@
 import rawPassport from './passport.json' with { type: 'json' };
 import rawPreview from './review.json' with { type: 'json' };
 import rawScenarios from './scenarios.json' with { type: 'json' };
+import glassbox from './glassbox.json' with { type: 'json' };
 import type { Transport } from '../api/client.ts';
 import type { CaseHistory, EvidenceUpload, ReviewRecord, ReviewResult, ReviewSubmission, ReviewTask } from '../api/reviewTypes.ts';
 import type { AdmitResult, EventCatalogItem, EvidenceResponse, PassportView, PassportViewField } from '../types.ts';
@@ -31,7 +32,7 @@ function uploadShape(value: unknown): value is EvidenceUpload {
 
 /** Browser-local preview state only. Never used by the API production build. */
 export function createReviewTransport({ preview = rawPreview as PreviewData, initial = rawPassport as PassportView,
-  base = createScenarioTransport({ scenarios: [...rawScenarios as PreviewScenario[], ...preview.scenarios] }), now = () => new Date().toISOString(),
+  base = createScenarioTransport({ scenarios: [...rawScenarios as PreviewScenario[], ...preview.scenarios, ...glassbox.scenarios as PreviewScenario[]] }), now = () => new Date().toISOString(),
 }: { preview?: PreviewData; initial?: PassportView; base?: Transport; now?: () => string } = {}): Transport {
   let revision = 1;
   let fields = structuredClone(initial.fields);
@@ -109,7 +110,12 @@ export function createReviewTransport({ preview = rawPreview as PreviewData, ini
         history.events.push({ ...result, received_at: now(), run_id: null });
       }
     }
-    if (path === '/api/internal/events/catalog' && init.method === 'GET') return Response.json([...(await response.json() as EventCatalogItem[]), ...preview.catalog]);
+    if (path === '/api/internal/events/catalog' && init.method === 'GET') return Response.json([...(await response.json() as EventCatalogItem[]), ...preview.catalog, ...glassbox.catalog]);
+    if (parts[2] === 'products' && parts[3] === initial.product_id && parts[6] === 'explain' && init.method === 'GET') {
+      const payload = await response.json() as { summary: string[]; trail?: { stage: string; title: string; facts: string[] }[] };
+      const field = fields.find((item) => item.field_key === parts[5]);
+      return Response.json({ ...payload, summary: [field?.public_text ?? 'No comparison recorded.', ...payload.summary.slice(1)] });
+    }
     if (parts[2] === 'products' && parts[3] === initial.product_id && parts[4] === 'passport' && init.method === 'GET') {
       const passport = await response.json() as PassportView;
       return Response.json({ ...passport, fields: fields.map((field) => ({ ...field, ...(field.field_key === preview.claim.source_field ? { claims_under_review: closed.has(preview.claim.field_key) ? 0 : 1 } : {}) })) });

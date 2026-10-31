@@ -567,6 +567,11 @@ export interface components {
             hidden_citations: {
                 [key: string]: number;
             };
+            /**
+             * Pending Claims
+             * @default 0
+             */
+            pending_claims: number;
         };
         /** PassportResponse */
         PassportResponse: {

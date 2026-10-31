@@ -13,6 +13,8 @@ import { PassportCard } from '../components/PassportCard.tsx';
 import { EvidenceDrawer } from '../components/EvidenceDrawer.tsx';
 import type { FieldKey } from '../types.ts';
 import { withPassportMetadata } from '../passportView.ts';
+import { WhyDialog } from '../components/WhyDialog.tsx';
+import { RunGlassbox } from '../components/RunGlassbox.tsx';
 
 const OUTCOMES = ['ADMITTED', 'NOOP', 'DUPLICATE', 'REJECTED'] as const;
 
@@ -41,6 +43,7 @@ export function TraceTable({ detail }: { detail: RunDetail }) {
       </table>
     </div>
     {detail.steps.length === 0 && <p className="empty-state">No trace steps have been recorded yet.</p>}
+    <RunGlassbox detail={detail} />
   </>;
 }
 
@@ -54,9 +57,11 @@ function LivePassport({ api, productId, product }: { api: ApiClient; productId: 
   const load = useCallback((signal: AbortSignal) => api.getPassport(productId, signal), [api, productId]);
   const passport = usePoll(load, 2_000);
   const [evidenceKey, setEvidenceKey] = useState<FieldKey | null>(null);
+  const [whyKey, setWhyKey] = useState<FieldKey | null>(null);
   return <section className="scenario-passport" aria-label="Live buyer passport">
     {passport.error && <ErrorNotice error={passport.error} technical />}{passport.loading && <LoadingNotice />}
-    {passport.data && <PassportCard passport={withPassportMetadata(passport.data, product?.presentation?.passport_metadata)} onEvidence={setEvidenceKey} />}
+    {passport.data && <PassportCard passport={withPassportMetadata(passport.data, product?.presentation?.passport_metadata)} onEvidence={setEvidenceKey} onWhy={setWhyKey} />}
+    {whyKey && <WhyDialog key={whyKey} api={api} productId={productId} fieldKey={whyKey} role="OPERATOR" onClose={() => setWhyKey(null)} />}
     {evidenceKey && <EvidenceDrawer key={evidenceKey} api={api} productId={productId} fieldKey={evidenceKey} withinSource={passport.data?.fields.find((field) => field.field_key === evidenceKey)?.conflict_locus === 'WITHIN_SOURCE'} onClose={() => setEvidenceKey(null)} />}
   </section>;
 }
