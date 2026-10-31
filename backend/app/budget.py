@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from collections.abc import Callable
 import math
 from time import monotonic
+from typing import NoReturn
 
 from app import config
 
@@ -51,6 +52,11 @@ class Budget:
             self._stop_reason = "RUN_DEADLINE"
         if self._stop_reason:
             raise BudgetExceeded(self._stop_reason)
+
+    def expire(self) -> NoReturn:
+        """Record a wall-clock deadline enforced at the provider boundary."""
+        self._stop_reason = self._stop_reason or "RUN_DEADLINE"
+        raise BudgetExceeded(self._stop_reason)
 
     def record_usage(self, *, input_tokens: int, output_tokens: int, reasoning_tokens: int) -> None:
         counts = {"input_tokens": input_tokens, "output_tokens": output_tokens, "reasoning_tokens": reasoning_tokens}

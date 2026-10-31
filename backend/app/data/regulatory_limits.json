@@ -1,0 +1,21 @@
+{
+  "_about": "Demo subset specified by DATASET-SPEC section 6: EU Regulation 1223/2009 Annex V via CosIng; confirm against ASEAN Annex VI. Values cross-checked against ASEAN Annex VI version 2023-1 on 2026-10-31. Current 2026 legal applicability and market/product conditions NOT VERIFIED; every entry remains verify before slide or regulatory use. These are preservative-use bounds, not unrestricted ingredient limits. P1 owns interpretation and verdicts.",
+  "sources": {
+    "eu": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32009R1223",
+    "asean": "https://asean.org/wp-content/uploads/2023/08/Annex-VI_Release_11-Aug-2023.pdf"
+  },
+  "checked_on": "2026-10-31",
+  "limits": [
+    {"inci": "Phenoxyethanol", "max_percent": 1.0, "status": "verify", "asean_entry": "29"},
+    {"inci": "Benzyl Alcohol", "max_percent": 1.0, "status": "verify", "asean_entry": "34"},
+    {"inci": "Methylparaben", "max_percent": 0.4, "status": "verify", "asean_entry": "12", "basis": "acid; single ester; mixtures 0.8%"},
+    {"inci": "Ethylparaben", "max_percent": 0.4, "status": "verify", "asean_entry": "12", "basis": "acid; single ester; mixtures 0.8%"},
+    {"inci": "Propylparaben", "max_percent": 0.14, "status": "verify", "asean_entry": "12a", "basis": "acid; sum with butylparaben; additional product restrictions"},
+    {"inci": "Butylparaben", "max_percent": 0.14, "status": "verify", "asean_entry": "12a", "basis": "acid; sum with propylparaben; additional product restrictions"},
+    {"inci": "Chlorphenesin", "max_percent": 0.3, "status": "verify", "asean_entry": "50"},
+    {"inci": "Sorbic Acid", "max_percent": 0.6, "status": "verify", "asean_entry": "4", "basis": "acid"},
+    {"inci": "Potassium Sorbate", "max_percent": 0.6, "status": "verify", "asean_entry": "4", "basis": "acid equivalent, not salt mass"},
+    {"inci": "Dehydroacetic Acid", "max_percent": 0.6, "status": "verify", "asean_entry": "13", "basis": "acid; excludes aerosol sprays"},
+    {"inci": "Sodium Dehydroacetate", "max_percent": 0.6, "status": "verify", "asean_entry": "13", "basis": "acid equivalent, not salt mass; excludes aerosol sprays"}
+  ]
+}
