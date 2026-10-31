@@ -12,6 +12,7 @@ from app.context import RunContext
 from app.llm.client import LLMError
 from app.models import PUBLIC_FIELDS, FieldDecision, Readability, ReviewState, ScopeMatch, SourceKind, SourceStatus
 from app.pipeline import claims_audit, extract, policy, publish
+from app.pipeline.scope import infer_scope
 from app.trace import TraceWriter
 
 Extractor = Callable[[str, RunContext], extract.Extraction]
@@ -25,22 +26,15 @@ class Job:
     trigger_event_id: str
 
 
-def source_scope(source: dict[str, JsonValue], product: dict[str, JsonValue]) -> tuple[ScopeMatch, str]:
-    scope = db.loads(str(source.get("scope_json") or "{}"))
-    if not isinstance(scope, dict):
-        return ScopeMatch.UNKNOWN, "Source scope is absent"
-    for source_key, product_key in (("product", "id"), ("variant", "variant"), ("market", "market"), ("version", "version")):
-        if scope.get(source_key) and product.get(product_key) and str(scope[source_key]) != str(product[product_key]):
-            return ScopeMatch.MISMATCH, f"Source {source_key} differs from case"
-    if all(scope.get(key) for key in ("product", "variant", "market")):
-        return ScopeMatch.MATCH, "Stored source scope matches case"
-    return ScopeMatch.UNKNOWN, "Source scope metadata is incomplete"
-
-
 def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], ctx: RunContext,
                   extractor: Extractor) -> list[policy.SourceObs]:
     sv_id = str(source["source_version_id"])
-    scope, reason = source_scope(source, product)
+    source = dict(source)
+    source["passages"] = store.passages(sv_id)
+    with db.transaction() as connection:
+        source["passage_scopes"] = [dict(row) for row in connection.execute("SELECT * FROM passage_scopes WHERE source_version_id=?",(sv_id,))]
+    inferred = infer_scope(source,product)
+    scope, reason = inferred.scope_match, inferred.reason
     ctx.trace.step("scope_check", input_refs=[sv_id], detail={"scope_match": scope.value, "reason": reason})
     passages = {str(p["id"]): p for p in store.passages(sv_id)}
     common = dict(source_id=str(source["id"]), source_version_id=sv_id, source_version=int(str(source["version"])),
@@ -66,7 +60,8 @@ def _observations(source: dict[str, JsonValue], product: dict[str, JsonValue], c
         ):
             ctx.trace.step("extract", detail={"reason": "INVALID_LOCATOR"})
             continue
-        observations.append(policy.SourceObs(**common,field_key=claim.field_key,passage_id=claim.passage_id,
+        placed = dict(common,scope_match=inferred.for_passage(claim.passage_id).scope_match)
+        observations.append(policy.SourceObs(**placed,field_key=claim.field_key,passage_id=claim.passage_id,
             locator=str(passage["locator"]),quote=quote,normalized=claim.normalized,
             readability=claim.readability,mapped_by=claim.mapped_by))
     return observations
@@ -87,7 +82,7 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
         product.update(case_id=case["id"], tenant_id=case["tenant_id"], web=db.loads(product.get("web_json") or "{}"))
         connection.execute("INSERT INTO runs(id,case_id,case_revision,trigger_event_id,status,policy_version,llm_mode,budget_json,started_at,created_at,model,prompt_version) "
                            "VALUES(?,?,?,?,'RUNNING',?,?,?,?,?,?,?)", (run_id,job.case_id,job.target_revision,job.trigger_event_id,
-                           policy.POLICY_VERSION,mode,db.dumps(budget.usage()),now,now,
+                           policy.POLICY_VERSION,"LIVE" if mode == "record" else mode.upper(),db.dumps(budget.usage()),now,now,
                            "FALLBACK" if mode == "fallback" else config.settings.model_extract,extract.PROMPT_VERSION))
         connection.execute("UPDATE jobs SET run_id=? WHERE id=?", (run_id,job.id))
         connection.execute("UPDATE events SET run_id=? WHERE id=?", (run_id,job.trigger_event_id))
@@ -95,9 +90,12 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                         "AND superseded_by IS NULL AND freshness='STALE' ORDER BY field_key", (job.case_id,))]
     trace = TraceWriter(run_id)
     ctx = RunContext(run_id,job.case_id,str(case["tenant_id"]),job.target_revision,product,mode,budget,trace)
-    trace.step("pin_revision",detail={"case_revision": job.target_revision,"mode": "LIVE" if mode == "record" else mode.upper(),"policy_version": policy.POLICY_VERSION})
+    with db.transaction() as connection:
+        event = connection.execute("SELECT payload_json,received_at,type FROM events WHERE id=?", (job.trigger_event_id,)).fetchone()
     if stale_fields:
-        trace.step("stale:mark",detail={"fields": stale_fields})
+        trace.step("stale:mark",detail={"event_id":job.trigger_event_id,"fields": stale_fields,"model_calls":0,
+                                       "admitted_at": event["received_at"] if event else now})
+    trace.step("pin_revision",detail={"case_revision": job.target_revision,"mode": "LIVE" if mode == "record" else mode.upper(),"policy_version": policy.POLICY_VERSION})
     status, stop_reason, error = "FAILED", None, None
     observations: list[policy.SourceObs] = []
     decisions: list[FieldDecision] = []
@@ -118,7 +116,15 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                     stop_reason, error = failure.code, type(failure).__name__
                     trace.step("run:stop",detail={"stop_reason": stop_reason},error=error)
                     break
+            product["passage_texts"] = {str(p["id"]):str(p["text"]) for version in {o.source_version_id for o in observations} for p in store.passages(version)}
+            no_claims_model_error = error is not None and not any(o.normalized for o in observations)
             for field in PUBLIC_FIELDS:
+                if event and event["type"] == "SOURCE_REVOKED" and field not in stale_fields:
+                    continue
+                if no_claims_model_error:
+                    decisions.append(policy.model_error_decision(field))
+                    trace.step("policy:"+field,detail={"reason":"MODEL_ERROR","verdict":"INSUFFICIENT"})
+                    continue
                 if stop_reason and not any(o.normalized and (o.field_key == field or
                     field == "key_ingredients" and o.field_key == "inci_list") for o in observations):
                     # A failed optional step must not turn unassessed fields into missing evidence.
@@ -134,12 +140,13 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                 except LLMError as failure:
                     stop_reason, error = failure.code, type(failure).__name__
             run_ref: dict[str, JsonValue] = {"id": run_id, "case_revision": job.target_revision}
+            retained = publish.confirm_unchanged(run_id,job.case_id,stale_fields+[d.field_key for d in decisions]) if event and event["type"] == "SOURCE_REVOKED" else []
             for decision in decisions:
                 if publish.gate(decision, run_ref, case):
                     published += 1
-            status = "FAILED" if not published else "PARTIAL" if stop_reason else "WAITING_REVIEW" if any(
-                d.review_state == ReviewState.NEEDS_REVIEW for d in decisions
-            ) else "WAITING_EVIDENCE" if any(d.gap for d in decisions) else "COMPLETED"
+            status = "PARTIAL" if stop_reason and (error is None or no_claims_model_error) else "FAILED" if not published and decisions else "PARTIAL" if stop_reason else "WAITING_REVIEW" if any(
+                d.review_state == ReviewState.NEEDS_REVIEW for d in decisions+retained
+            ) else "WAITING_EVIDENCE" if any(d.gap for d in decisions+retained) else "COMPLETED"
     except (ValueError, RuntimeError, sqlite3.Error) as failure:
         # Record only the exception class; external errors may contain source or key material.
         error = type(failure).__name__
