@@ -1,11 +1,49 @@
 """S1 persisted execution counts and the in-memory buyer read counter."""
-from fastapi import APIRouter
+from typing import Annotated, Literal
+
+from fastapi import APIRouter, Query
 
 from app.api import read
 from app.api.contracts import EventCounts, MetricsResponse, ModelCallCounts
-from app.api.dependencies import OperatorActor
+from app.api.dependencies import Actor, OperatorActor, RunActor, not_implemented
+from app.api.glassbox_contracts import (
+    BuyerExplanation, ChainResponse, ExpertExplanation, GraphResponse,
+    ObservabilityResponse, OtelResponse, SearchResponse,
+)
 
 router = APIRouter()
+
+
+@router.get("/products/{product_id}/fields/{field_key}/explain",
+            response_model=BuyerExplanation | ExpertExplanation)
+def explain(product_id: str, field_key: str, actor: Actor) -> BuyerExplanation | ExpertExplanation:
+    not_implemented()
+
+
+@router.get("/internal/observability", response_model=ObservabilityResponse)
+def observability(actor: RunActor) -> ObservabilityResponse:
+    not_implemented()
+
+
+@router.get("/cases/{case_id}/chain", response_model=ChainResponse)
+def chain(case_id: str, actor: RunActor) -> ChainResponse:
+    not_implemented()
+
+
+@router.get("/cases/{case_id}/graph", response_model=GraphResponse)
+def graph(case_id: str, actor: RunActor) -> GraphResponse:
+    not_implemented()
+
+
+@router.get("/cases/{case_id}/search", response_model=SearchResponse)
+def search(case_id: str, actor: RunActor, q: Annotated[str, Query(min_length=1)],
+           mode: Literal["auto", "bm25", "hybrid"] = "auto") -> SearchResponse:
+    not_implemented()
+
+
+@router.get("/internal/runs/{run_id}/otel", response_model=OtelResponse)
+def otel(run_id: str, actor: RunActor) -> OtelResponse:
+    not_implemented()
 
 
 @router.get("/internal/metrics", response_model=MetricsResponse)
