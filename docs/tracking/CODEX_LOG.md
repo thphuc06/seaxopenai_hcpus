@@ -2,6 +2,7 @@
 
 | time | lane | task | files | accepted/edited/rejected | human change | test |
 |---|---|---|---|---|---|---|
+| 12:05 ICT (T+2:05) | P4 | local merge p4-b2 e6ef732 | auxiliary captures/tests/gold/docs; preserved Local and auxiliary plans; tracking | accepted | exact SHA requested; local commit only; retain DRAFT and all work; defer CCR fixes | focused 167 pass; phase1 776 pass/1 WAITING fail/43 skip/+2 subtests; phase2 acceptance 23 pass/20 WAITING fail/14 skip; fixtures 53/53; sync1 17/17; no prior passing-node regression |
 | 12:01 ICT (T+2:01) | P4 | Phase 2 Stage B: B0/eval/S2 harness and three read-only reviews | baseline.py; eval.py; sync_check.py; two P4 test modules; results/specs/ExecPlan | edited | user verified contract-2 and authorized continuation; preserve DRAFT; no sync-gate | focused 110 passed; phase1 747 passed/44 skipped/+2 subtests; phase2 757 passed/16 owner-WAITING failed/18 skipped/+2 subtests; guards pass; fixtures 37/37; 0 errors/deselected |
 | 11:44–11:51 ICT | P4 | sync-gate 2 contract + three read-only reviews | P4 plan, tracking, P1/P2 scoped merges | accepted | explicit early mini-sync; Stage B separate | final phase1 679 passed/44 skipped/+2 subtests; 0 failed/errors/deselected; guards 4; fixtures 37; sync1 17; no regression |
 | 11:40 ICT | P4 | Stage A saved kickoff receipts | .agent/plans/P4.md | accepted | no shared contract change; prior concurrent notes preserved | initial 638 pass/2 Node failures/44 skip/+2 subtests, exact 2 rerun pass on Node24; guards 4; S2 diagnostic 22 pass/17 fail/18 skip |

@@ -1,5 +1,26 @@
 # Development log — 31 Oct 2026
 
+## Local integration of p4-b2 (12:05 ICT, T+2:05)
+
+User authorized exact local merge e6ef7320f8b0195466e24afd744572cd98e69c92 into p4.
+Saved current B0/eval work first as 55492b3d0baceb03a3f7c0ffe6620ba1ea933789.
+Only conflict was additive ExecPlan content; retained both sections verbatim and
+the complete shared history. Added eight REAL captures, four products/events,
+capture helper/tests and DRAFT real/blind review tables. Incoming content is
+unchanged from its branch; synthetic gold and Local implementation are unchanged.
+
+Focused offline checks: 167 passed, guards included. Fixtures 53/53, S1 path17/17.
+Phase1 combined: 776 passed, 1 failed, 43 skipped, 2 passing subtests. The failure
+is previously skipped AC-01, now UNCERTAIN due missing REAL scope inference.
+Phase2 acceptance: 23 passed, 20 failed, 14 skipped; sixteen existing owner failures
+plus four formerly skipped REAL nodes now fail on scope. Zero errors/deselections.
+JUnit comparison retained every previously passing node in both comparisons.
+
+Commit the requested local merge with these known owner dependencies recorded;
+this is not a passing full S2 gate. Carry scope, R3 ingredient/concentration and
+HTML cleaner CCRs without resolving them here. All gold remains DRAFT. No push,
+tag, sync-gate, server, live call, new capture or Phase3 implementation.
+
 ## P4 Phase 2 Stage B — local implementation (12:00 ICT, T+2:00)
 
 User authorized continuation after verifying contract-2/2811f3b was already in clean
