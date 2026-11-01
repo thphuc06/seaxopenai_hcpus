@@ -28,6 +28,7 @@ Three independent read-only reviews found and prompted fixes for lost cached map
 - Browser: production build + real FastAPI responses in a fresh FALLBACK DB;12 GETs,0 HTTP errors,0 JavaScript errors, unchanged DB,0 provider calls. Source events01 and11 ran only in that temporary DB. Screens: [Buyer Why](screens/backlog-20261101/buyer-why.png), [Reviewer provenance](screens/backlog-20261101/reviewer-provenance.png), [Observe scorecard](screens/backlog-20261101/scorecard.png). These do not claim a complete provider replay or an agent-caused verdict change.
 - Fresh offline evaluation: [source archive](backlog-eval-20261101.json), [scorecard](metrics.json). Candidate61/65 under DRAFT labels, FALLBACK,0 provider calls;0 human-reviewed fields. Do not present this as reviewed quality. The report exposes missing preconditions/diagnostic limitations; no gold was edited.
 - Replay diagnosis rerun after changes:01 completes,05 waits for evidence,06 becomes PARTIAL at extract-v1/REPLAY_MISS before policy. The missing provider output cannot be repaired by inventing evidence or switching replay to fallback. Ignored diagnostic artifacts retain DB/report under `frontend/node_modules/.cache/backlog-replay-dc98c69ab8`.
+- Hosted38e785b found one additional startup-independent OCR lookup bug on a clean Linux DB. Fresh-storage and reviewer byte-invariance regressions failed before the repair; the fix uses SQLite mode=ro and returns no cached boxes without creating a DB/schema or changing journal mode, while a corrupt-DB regression still raises. All50 OCR/skeleton/guard checks now pass locally. Hosted validation of the repair is tracked on PR20; the earlier full local receipt alone did not detect this difference.
 
 ## Remaining work requiring separate evidence or decisions
 
@@ -36,6 +37,7 @@ Three independent read-only reviews found and prompted fixes for lost cached map
 3. **Legacy history:** old unchained databases need a deliberate archive/migration or authorized reset. No silent rehash that implies historical integrity; no Local reset.
 4. **Optional extensions:** provider hybrid retrieval/quality measurements and OCR image overlays. Context-bound helpers and stored OCR boxes exist; the ordinary expert GET remains read-only BM25, and evidence UI currently shows transcript excerpts.
 5. **Release:** review/merge the PR and validate deployment against its real database. This task does not deploy or claim hosted runtime validation.
+6. **Development dependencies:** fresh npm audit still reports3 moderate advisories (0 high/critical) through openapi-typescript7.13.0 → Redocly1.34.22 → minimatch5.1.9. [The advisory](https://github.com/advisories/GHSA-g3hv-75wg-m249) lists11.0.1 as patched, but its named export is incompatible with Redocly's callable CommonJS import. Latest generator remains7.13.0; no forced override or downgrade applied. Use a compatible upstream update or a separately validated generator migration; this is not a clean audit claim.
 
 ## Reproduce the scorecard
 

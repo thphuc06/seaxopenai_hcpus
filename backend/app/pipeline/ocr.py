@@ -93,9 +93,14 @@ def boxes_for(sv_id: str, excerpt: str) -> list[Box]:
     """Read only: return boxes for a contiguous normalized quote, never fuzzy matches."""
     clean = lambda text: " ".join(unicodedata.normalize("NFC", text).split())
     quote = clean(excerpt)
-    if not quote:
+    if not quote or not config.settings.db_path.exists():
         return []
-    with closing(db.connect()) as connection:
+    uri = config.settings.db_path.resolve().as_uri() + "?mode=ro"
+    with closing(sqlite3.connect(uri, uri=True)) as connection:
+        connection.row_factory = sqlite3.Row
+        # Before startup there is no OCR cache; a read must not initialize it.
+        if not connection.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='ocr_lines'").fetchone():
+            return []
         lines = [Box.model_validate(dict(row)) for row in connection.execute(
             "SELECT text,x0,y0,x1,y1,conf,w,h FROM ocr_lines WHERE source_version_id=? ORDER BY idx", (sv_id,))]
     text = " ".join(clean(line.text) for line in lines)

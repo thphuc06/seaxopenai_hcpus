@@ -1,6 +1,8 @@
 import base64
+from contextlib import closing
 from io import BytesIO
 from pathlib import Path
+import sqlite3
 
 import pytest
 from PIL import Image
@@ -10,6 +12,36 @@ from app import config, db, store
 from app.main import create_app
 from app.pipeline import ocr
 from p1_helpers import CoreDB, core_db
+
+
+@pytest.mark.parametrize("storage", ["absent", "empty", "unrelated", "zero_byte"])
+def test_boxes_before_initialization_do_not_create_schema(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, storage: str) -> None:
+    path = tmp_path / "fresh.sqlite"
+    monkeypatch.setattr(config.settings, "db_path", path)
+    if storage != "absent":
+        if storage == "zero_byte":
+            path.touch()
+        with closing(sqlite3.connect(path, isolation_level=None)) as connection:
+            if storage == "unrelated":
+                connection.execute("CREATE TABLE unrelated(value TEXT)")
+                connection.execute("INSERT INTO unrelated VALUES('retained')")
+            before = list(connection.iterdump())
+        before_bytes = path.read_bytes()
+    assert ocr.boxes_for("another-source", "A different excerpt") == []
+    if storage == "absent":
+        assert not path.exists()
+    else:
+        assert path.read_bytes() == before_bytes
+        with closing(sqlite3.connect(path)) as connection:
+            assert list(connection.iterdump()) == before
+
+
+def test_boxes_do_not_hide_corrupt_database(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    path = tmp_path / "corrupt.sqlite"
+    path.write_bytes(b"invalid database contents")
+    monkeypatch.setattr(config.settings, "db_path", path)
+    with pytest.raises(sqlite3.DatabaseError):
+        ocr.boxes_for("another-source", "Some text")
 
 
 def image_bytes() -> bytes:

@@ -44,4 +44,4 @@ Current repository audit:1November2026. Historical gate results remain in [HANDO
 | Shared admission constants | P1/P4 | Closed S1 | P1 consumes config.PRODUCER_EVENT_TYPES and NON_MATERIAL_FIELDS |
 | Reset/record/replay identity | P1/P2 | Implemented S2 | Content-bound source/passage identity delivered; full provider stage recording remains separate from offline replay tests. |
 | Budget exhausted before first result | P1 | Closed S2 | Zero-result budget/deadline exhaustion is PARTIAL; retained tests and cap variants pass. |
-| Frontend dependency audit | P3/P4 | Observed S1 | npm ci reports 3 moderate advisories; no forced upgrade or pin change in gate |
+| Frontend dependency audit | P3/P4 | Open; rechecked1Nov | 3 moderate/0 high/critical in dev generator chain openapi-typescript7.13.0 → Redocly1.34.22 → minimatch5.1.9; GHSA-g3hv-75wg-m249 fix11.0.1 changes CommonJS API. Latest generator unchanged; await compatible upstream fix or tested migration, no forced override/downgrade. See backlog report. |
