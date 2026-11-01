@@ -16,6 +16,8 @@ concurrency:
 
 env:
   LLM_MODE: fallback
+  # Offline budget tests need a model in the checked-in price book; no provider call.
+  MODEL_AGENT: gpt-6.1-sol
   WORKER_INLINE: '1'
   OCR_ENABLED: '0'
   WEB_SEARCH: 'off'

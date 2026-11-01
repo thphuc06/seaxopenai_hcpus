@@ -18,7 +18,13 @@ export function ObserveView({ data, readAt }: { data: ObservabilityResponse; rea
   </div></>;
 }
 export function Scorecard({ data, readAt }: { data: ScorecardResponse | null; readAt?: string }) {
-  return <section className="phase4-panel"><h2>Offline scorecard</h2><p>Source: /api/internal/eval/metrics{readAt && <> · retrieved {formatTime(readAt)}</>}</p>{!data ? <p>Not computed yet</p> : <><p>computed {data.computed_at ? formatTime(data.computed_at) : 'Date not recorded'} · {data.status}</p><Counts title="Evaluation metrics" values={data.metrics} /></>}</section>;
+  return <section className="phase4-panel"><h2>Offline scorecard</h2><p>Source: /api/internal/eval/metrics{readAt && <> · retrieved {formatTime(readAt)}</>}</p>{!data ? <p>Not computed yet</p> : <>
+    <p>computed {data.computed_at ? formatTime(data.computed_at) : 'Date not recorded'} · {data.status}</p>
+    <p>Execution: {data.provenance?.mode ?? 'Mode not recorded'}{data.provenance?.requested_mode && <> · requested {data.provenance.requested_mode}</>}</p>
+    {data.provenance?.fallback_reason && <p role="status">Fallback reason: {data.provenance.fallback_reason}</p>}
+    {data.provenance && <><p>Models: {data.provenance.models.join(', ') || 'None recorded'} · Prompts: {data.provenance.prompt_versions.join(', ') || 'None recorded'} · Policies: {data.provenance.policy_versions.join(', ') || 'None recorded'}</p>
+      <ul aria-label="Evaluation limitations">{data.provenance.limitations.map((limit, index) => <li key={index}>{limit}</li>)}</ul></>}
+    <Counts title="Evaluation metrics" values={data.metrics} /></>}</section>;
 }
 function ExpertObserve({ api }: { api: ApiClient }) {
   const load = useCallback(async (signal: AbortSignal) => ({ value: await api.getObservability(signal), readAt: new Date().toISOString() }), [api]);

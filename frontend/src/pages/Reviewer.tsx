@@ -62,6 +62,7 @@ function ReviewCase({ api, task, onReload, onPendingChange }: { api: ApiClient; 
   const result = task.result;
   return <article className="review-case" aria-label="Selected review case">
     <header><p className="eyebrow">{result.field_key.startsWith('claim:') ? 'Claim finding' : 'Field finding'} · Revision {task.case_revision}</p><h2>{reviewFindingTitle(result.field_key)}</h2>
+      <p><span className="plain-badge" data-testid="badge-origin">{task.dataset_origin ?? 'Origin not recorded'}</span> <span className="plain-badge" data-testid="badge-mode">{task.llm_mode ?? 'Mode not recorded'}</span></p>
       {result.field_key.startsWith('claim:') && <p>Claim reference: <code>{result.field_key}</code></p>}
       <dl className="review-facts"><div><dt>Verdict</dt><dd>{result.verdict}</dd></div><div><dt>Conflict locus</dt><dd>{result.conflict_locus ?? 'None'}</dd></div><div><dt>Seller attribution</dt><dd>{task.seller_attributable === undefined ? 'Not supplied' : task.seller_attributable ? 'Yes' : 'No'}</dd></div><div><dt>Review state</dt><dd>{result.review_state}</dd></div><div><dt>Case revision</dt><dd>{task.case_revision}</dd></div></dl>
       <p>Review reason: {task.reason_code}</p>

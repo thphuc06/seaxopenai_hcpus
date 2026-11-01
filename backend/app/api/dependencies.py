@@ -1,6 +1,6 @@
 """Demo identity comes from request headers, never event/model arguments."""
 from dataclasses import dataclass
-from typing import Annotated, NoReturn
+from typing import Annotated
 
 from fastapi import Depends, Header, HTTPException
 
@@ -62,7 +62,3 @@ def evidence_actor(actor: Actor) -> RequestActor:
 
 ReviewerActor = Annotated[RequestActor, Depends(reviewer_actor)]
 EvidenceActor = Annotated[RequestActor, Depends(evidence_actor)]
-
-
-def not_implemented() -> NoReturn:
-    raise HTTPException(status_code=501, detail="Endpoint implementation pending")

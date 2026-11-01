@@ -6,6 +6,7 @@ from app.events.admit import admit
 from app.pipeline import policy, publish
 from app import chain, db
 from p1_helpers import CoreDB, core_db
+import pytest
 
 
 def test_explain_projects_public_and_expert_views_without_writes(core_db: CoreDB) -> None:
@@ -42,3 +43,25 @@ def test_observability_counts_noop_and_publication(core_db: CoreDB) -> None:
         assert response.json()["publish_passed"] == 1
         assert response.json()["verdicts"] == {"SINGLE_SOURCE":1}
         assert core_db.dump() == before
+
+
+@pytest.mark.parametrize("visibility", ["PUBLIC", "PRIVATE"])
+def test_buyer_why_explains_stored_finding_and_available_evidence(core_db: CoreDB, visibility: str) -> None:
+    obs = core_db.source(visibility=visibility, text="Net contents: 83 ml.")
+    assert publish.gate(policy.decide("volume", [obs], {}, [], []), core_db.run(), {"id": core_db.case_id})
+    with TestClient(create_app()) as client:
+        url = f"/api/products/{core_db.product_id}/fields/volume/explain"
+        body = client.get(url, headers={"X-Demo-Role": "BUYER", "X-Demo-Actor": "reader"}).json()
+        assert len(body["summaries"]) in {2, 3}
+        assert body["public_text"] in body["summaries"]
+        assert "one independent source" in " ".join(body["summaries"])
+        if visibility == "PUBLIC":
+            assert body["citations"][0]["excerpt"] == obs.quote
+        else:
+            assert body["citations"] == []
+            assert "reviewers" in " ".join(body["summaries"])
+            assert obs.quote not in str(body)
+        with db.transaction() as connection:
+            connection.execute("UPDATE field_results SET freshness='STALE' WHERE case_id=?", (core_db.case_id,))
+        stale = client.get(url, headers={"X-Demo-Role": "BUYER", "X-Demo-Actor": "reader"}).json()
+        assert "needs to be checked again" in " ".join(stale["summaries"])

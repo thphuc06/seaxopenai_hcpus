@@ -106,11 +106,12 @@ export function createApiClient({ getSession, transport = (path, init) => fetch(
         if (!result) throw new ApiError('/review/queue', 0, 'The queued result is not present in case history. Reload the queue.');
         let evidence: EvidenceResponse | null = null;
         let evidenceError: Error | null = null;
-        // S2 history lacks product_id. Resolve only exact stored citations; never infer a case from a name.
+        // Older queues lack product_id; retain the exact-citation join for those servers.
         if (result.citations.length) {
           try {
-            products ??= request<Product[]>('/products', 'GET', undefined, signal);
-            for (const product of await products) {
+            if (!item.product_id) products ??= request<Product[]>('/products', 'GET', undefined, signal);
+            const candidates = item.product_id ? [{ id: item.product_id }] : await products!;
+            for (const product of candidates) {
               let candidate: EvidenceResponse;
               try { candidate = await request<EvidenceResponse>(`/products/${segment(product.id)}/fields/${segment(result.field_key)}/evidence`, 'GET', undefined, signal); }
               catch (error) {
@@ -123,7 +124,9 @@ export function createApiClient({ getSession, transport = (path, init) => fetch(
             }
           } catch (error) { evidenceError = optionalEvidenceError(error, signal); }
         }
-        return { id: item.id, case_id: item.case_id, case_revision: item.case_revision, result, reason_code: item.reason_code, evidence, evidence_error: evidenceError };
+        return { id: item.id, case_id: item.case_id, case_revision: item.case_revision, result, reason_code: item.reason_code, evidence, evidence_error: evidenceError,
+          dataset_origin: item.dataset_origin, llm_mode: item.llm_mode,
+          ...(item.seller_attributable == null ? {} : { seller_attributable: item.seller_attributable }) };
       }));
     },
     getCaseHistory: (id: string, signal?: AbortSignal) => request<CaseHistory>(`/cases/${segment(id)}/history`, 'GET', undefined, signal),

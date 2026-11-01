@@ -32,6 +32,8 @@ export function withPassportMetadata(passport: PassportView, metadata?: Passport
     fields: passport.fields.map((field) => ({
       ...field,
       hidden_citations: metadata.hidden_citations[field.field_key] ?? field.hidden_citations,
+      ...(field.field_key === 'key_ingredients' && metadata.pending_claims !== undefined
+        ? { claims_under_review: metadata.pending_claims } : {}),
     })),
   };
 }

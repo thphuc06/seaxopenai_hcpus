@@ -1,5 +1,7 @@
 # 04 — Data model, enums, vocabulary
 
+Post-contest1November: the existing `ocr_lines` table is now populated by versioned upload snapshots or optional image indexing. Stored upload JSON includes `ocr_lines` and `ocr_engine`; both, the transcript and image bytes are bound into the source-version hash. No table/column migration or change to the five public fields was made. Legacy unchained field-result history is not repaired implicitly.
+
 SQLite. All IDs are strings (`case_…`, `src_…`, `sv_…`, `psg_…`, `clm_…`, `res_…`, `run_…`). Timestamps are ISO-8601 UTC.
 
 ## Fields checked (demo)

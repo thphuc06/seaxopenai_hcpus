@@ -1,5 +1,5 @@
 import type { components } from './schema.d.ts';
-import type { EvidenceResponse } from '../types.ts';
+import type { EvidenceResponse, DatasetOrigin, ExecutionMode } from '../types.ts';
 
 type Schema = components['schemas'];
 // Wire DTOs generated from the merged contract-2 OpenAPI.
@@ -22,4 +22,6 @@ export interface ReviewTask {
   evidence: EvidenceResponse | null;
   evidence_error?: Error | null;
   seller_attributable?: boolean;
+  dataset_origin?: DatasetOrigin | null;
+  llm_mode?: ExecutionMode | null;
 }

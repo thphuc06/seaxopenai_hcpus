@@ -1,5 +1,18 @@
 # 05 — Contracts (code against these)
 
+## Post-contest implementation — 1 November 2026
+
+The following supersedes the historical stub notes below; phase gates and five-field policy are unchanged.
+
+- `GET /sources/{sv}/image` now returns validated PNG/JPEG/WebP bytes from evidence storage. Required `as_role` remains the demo query identity. PRIVATE permits only REVIEWER/OPERATOR (403 otherwise); missing/non-image/unavailable paths return404; absent/invalid role422. Resolved paths must stay within FIXTURES_DIR; bounded reads, decoded format checks, no-store/nosniff headers. No OCR/model/write occurs on GET.
+- `POST /cases/{case_id}/evidence` decodes IMAGE content, validates declared format, and when OCR_ENABLED stores a local OCR transcript and boxes in the immutable upload snapshot before admission/hash. Invalid image422; a local engine failure503 with a generic message and no event. Missing/disabled OCR remains an explicit empty transcript. Repeat idempotency keys do not rerun OCR.
+- `GET /internal/eval/metrics` reads validated `docs/results/metrics.json` only. Missing file returns `{available:false}`; invalid/unreadable report503. Only REVIEWER/OPERATOR. `scripts/eval.py` and `scripts/metrics.py` produce it offline; app never reads gold or starts evaluation. Version1 report contains mode/requested_mode/fallback_reason, DRAFT/REVIEWED metrics, source hash, model/prompt/policy versions and limitations. UI retains execution provenance.
+- `GET /internal/runs/{run_id}/otel` returns deterministic OTLP/JSON from stored run/trace rows, REVIEWER/OPERATOR only; unknown run404. One run span with child step spans, hexadecimal identifiers, decimal-string nanosecond timestamps and integer enum values. No prompts, citations, raw error text, arbitrary detail or input/output refs are exported. There is no collector push or automatic SDK export.
+- ReviewQueueItem adds nullable, defaulted `product_id`, `dataset_origin`, `llm_mode` and `seller_attributable`. Origin belongs to the product; mode belongs to the result's confirming/producing run, never an unrelated latest run. Older consumers remain compatible. Frontend uses explicit product identity for evidence, with its exact-citation fallback retained for older queues.
+- BuyerExplanation retains its schema. Three summary fragments describe the stored finding, its comparison/freshness and visible evidence; public citations are now rendered in Why. Backend remains responsible for decisions. `pending_claims` now annotates only the key-ingredients display row.
+
+OCR box rendering on images is not added to EvidencePassage in this task; its text/citation contract remains unchanged. `boxes_for` is a stored, read-only helper for a future visual overlay.
+
 S4 integration: web audit GET projects the six declared WebAuditResult fields
 from stored query-envelope decisions, omits internal outcome receipts, and retains
 legacy flat-list reads. No DTO/route/ACL change. Receipt `changed` includes

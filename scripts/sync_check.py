@@ -410,7 +410,7 @@ def phase_three_probe(database: Path, case_id: str) -> PhaseThreeProbe:
         if run is None:
             raise CheckFailure("phase3 run absent")
         steps = [(row["step"], json.loads(row["detail"] or "{}")) for row in connection.execute(
-            "SELECT step,detail FROM trace_steps WHERE run_id=?", (run["id"],))]
+            "SELECT step,detail FROM trace_steps WHERE run_id=? AND actor='code' AND error IS NULL", (run["id"],))]
         validations = [scope_validation(connection, row) for row in connection.execute(
             "SELECT * FROM trace_steps WHERE run_id=? AND step='scope:validate' AND actor='code' AND error IS NULL",
             (run["id"],)) if row["detail"]]

@@ -57,6 +57,14 @@ class Candidate:
     surface: str
 
 
+class LearningStopped(RuntimeError):
+    """An optional learning failure with already usable cached mappings retained."""
+    def __init__(self, reason: str, observations: list[SourceObs]) -> None:
+        super().__init__(reason)
+        self.reason = reason
+        self.observations = observations
+
+
 def _candidates(ctx: RunContext, observations: list[SourceObs]) -> list[Candidate]:
     result: list[Candidate] = []
     grounded = grounded_observations(ctx, observations)
@@ -143,7 +151,7 @@ def _apply(observations: list[SourceObs], candidates: list[Candidate], reference
     return result
 
 
-def learn_all(ctx: RunContext, observations: list[SourceObs]) -> list[SourceObs]:
+def learn_all(ctx: RunContext, observations: list[SourceObs], *, propagate_errors: bool = False) -> list[SourceObs]:
     """Call once before public-field policy; reuse cached mappings in every mode."""
     candidates = _candidates(ctx, observations)
     references = _references(ctx, observations)
@@ -183,4 +191,7 @@ def learn_all(ctx: RunContext, observations: list[SourceObs]) -> list[SourceObs]
     except (client.LLMError, BudgetExceeded) as failure:
         ctx.trace.step("canon:learn", detail={"stop_reason": failure.reason if isinstance(failure, BudgetExceeded) else failure.code,
             "retained_observations": len(observations)})
+        if propagate_errors:
+            reason = failure.reason if isinstance(failure, BudgetExceeded) else failure.code
+            raise LearningStopped(reason, _apply(observations, candidates, references)) from failure
     return _apply(observations, candidates, references)

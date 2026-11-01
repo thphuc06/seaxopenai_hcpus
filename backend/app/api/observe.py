@@ -3,9 +3,9 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Query
 from pydantic import JsonValue
 from app import chain, db
-from app.api import read, glassbox
+from app.api import read, glassbox, scorecard, otel as otel_export
 from app.api.contracts import EventCounts, MetricsResponse
-from app.api.dependencies import Actor, OperatorActor, RunActor, not_implemented
+from app.api.dependencies import Actor, OperatorActor, RunActor
 from app.api.glassbox_contracts import (BuyerExplanation, ExpertExplanation, ChainResponse,
     GraphResponse, GraphNode, GraphEdge, ObservabilityResponse, OtelResponse, SearchResponse)
 from app.models import Citation, DependsOn
@@ -16,7 +16,7 @@ router = APIRouter()
 
 @router.get("/internal/eval/metrics", response_model=dict[str, JsonValue])
 def evaluation_metrics(actor: RunActor) -> dict[str, JsonValue]:
-    not_implemented()
+    return scorecard.stored_metrics()
 
 
 @router.get("/products/{product_id}/fields/{field_key}/explain", response_model=BuyerExplanation | ExpertExplanation)
@@ -68,7 +68,7 @@ def case_search(case_id: str, actor: RunActor, q: Annotated[str, Query(min_lengt
 
 @router.get("/internal/runs/{run_id}/otel", response_model=OtelResponse)
 def otel(run_id: str, actor: RunActor) -> OtelResponse:
-    not_implemented()
+    return otel_export.export_run(run_id)
 
 
 @router.get("/internal/metrics", response_model=MetricsResponse)

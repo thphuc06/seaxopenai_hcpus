@@ -33,6 +33,17 @@ test('pending display rows are rejected by the wire projection', () => {
   pending.fields[0].verdict = null;
   assert.throws(() => toPassportResponse(pending), /pending display row/);
 });
+
+test('pending claims come from metadata and only annotate the ingredients row', () => {
+  for (const count of [0, 1, 7]) {
+    const passport = structuredClone(preview);
+    const before = structuredClone(passport);
+    const result = withPassportMetadata(passport, { llm_mode: 'REPLAY', hidden_citations: {}, pending_claims: count });
+    assert.equal(result.fields.find((field) => field.field_key === 'key_ingredients').claims_under_review, count);
+    assert.ok(result.fields.filter((field) => field.field_key !== 'key_ingredients').every((field) => field.claims_under_review === undefined));
+    assert.deepEqual(passport, before);
+  }
+});
 test('separate metadata preserves mode and hidden count in the buyer view', async () => {
   const api = createApiClient({ getSession: () => sessionFor('BUYER'), transport: mockTransport });
   const [product] = await api.getProducts();
