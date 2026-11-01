@@ -1,11 +1,16 @@
 # Integration issues
 
+Current repository audit:1November2026, source `sync-5` plus P3 screenshot handoff. Historical gate results remain in [HANDOFF](HANDOFF.md); see the [repository closeout](../results/repository-closeout-20261101.md) for new verification. User confirmed the team has submitted; this list tracks repository work only.
+
 | Item | Owner | State | Next action |
 |---|---|---|---|
-| S4 runtime behind contract-4 | P1/P2 | WAITING implementation integration | Receipt/marketplace/web audit are501; five retained phase4 acceptance targets and actual sync4 cannot pass until owner workflows land. P4 checker is implemented; no gate claimed. |
-| R3 captured notification header | P2 | New Phase4 CCR | Source-scoped fallback reads company but omits notification_number at listing specs#25. Add source-noted header-family mapping with unrelated-number tests; preserve missing-document abstention and DRAFT labels. See p4-phase4-readiness report. |
-| R4 enumerated free-from negation | P2 | New Phase4 CCR | Outer-negation check rejects an entire list because unrecognized soap/color negations remain after known phrases are stripped. Add independent-clause positive/negative variants; do not change gold or let model decide verdict. |
-| P4 recording selector/E2E handoff | P3 | Pending S4 delivery | review-reason/review-decision absent; S4 web/receipt controls and e2e.py absent in contract-4. Storyboard records exact pending scene dependencies. |
+| CI offline model configuration | P4; current user-authorized closeout | Closed98fe48b | Explicit existing MODEL_AGENT price-book key gives1671 passing local tests +2 subtests. Both hosted push/PR runs pass backend, frontend and image checks; links in dated closeout. No assertion or gate change. |
+| Whole-story replay / agent demonstration | P1/P2/P4 | Open accepted sync-5 limitation | Replay gate stopped at06-evidence-added (18 PASS/1 FAIL); later checks not reached. Missing R1/S2 and agent-effect screenshot scenes remain disclosed. Diagnose before any separately authorized append-only recording pass; do not change gold or label a partial run complete. |
+| Remaining API placeholders | P1/P4 | Deferred scope | Source-image GET, internal eval metrics GET and run OTel GET still return501 in passport.py/observe.py. CLI evaluation and existing trace views are separate implemented paths. No complete-API claim. |
+| S4 runtime behind contract-4 | P1/P2 | Closed sync-4/sync-5 | Receipts, marketplace and web audit implementations integrated; see sync-4 HANDOFF and current acceptance/wire tests. Remaining501 routes are listed separately above. |
+| R3 captured notification header | P2 | Closed sync-4 | Source-scoped extraction correction integrated; actual sync4 R3 path passes, documented in HANDOFF. DRAFT labels unchanged. |
+| R4 enumerated free-from negation | P2 | Closed sync-4 | General negation correction integrated; actual sync4 R4 path passes, documented in HANDOFF. Gold unchanged. |
+| P4 recording selector/E2E handoff | P3 | Implementation delivered | scripts/e2e.py, review controls and S4 UI are present. Full populated provider-replay browser journey is still unverified; screenshots and isolated browser checks are narrower evidence. |
 | R5 review-section contamination | P4 | Corrected capture-v2 | Mint v1 preserved in docs/results/capture-archive; new v2 excludes reviews by general DOM rule. Three REAL peers retained; multi-size/formula scope still requires owner validation. |
 | S3 validated anchor evidence in stored trace | P4/P2 | Closed sync-3 | Adapter consumes actual accepted target/anchor refs and validates current code run, placement version and unique stored anchor. Raw proposals cannot pass; provider whole-story replay remains separate. |
 | S3 owner integration | P1/P2/P3/P4 | Closed sync-3 | All lanes integrated, unchanged catalogue/anchor acceptance passes, actual fallback sync3 29/29. MULTI contract repair is policy-v1.8. |
@@ -16,11 +21,11 @@
 | Blind case10 metadata omission | P4 | Deferred materialization | Planned synthetic snapshot omits scope, while current validator requires it. No validator relaxation or fabricated origin/scope; original case table stays intact. |
 | S2 integration regressions and claims passage scope | P1/P2, user-authorized P4 correction | Closed S2 | Source-noted family normalization, preserved gift exclusion trace, version-bound claims scope; focused99 and full phase2 1059 pass. |
 | Fresh readable image upload grounding | P1/P2 | Open limitation | Add a code-validated stored transcript path; prepared-transcript vision tests do not establish fresh upload support. |
-| Buyer pending-claim count metadata | P1/P3 | Should follow-up | Wire backend pending_claims to the buyer count; no raw claim details for buyers. |
+| Buyer pending-claim count metadata | P3 | Should follow-up | Backend passport.py supplies pending_claims and generated schema includes it; frontend consumption remains absent. Wire only the count, never raw claim details for buyers. |
 | Canon runtime hook and paid pass1 | P1/P2 | Should follow-up | Helper/CLI delivered; hook and capped provider execution remain unverified. |
 | REAL source scope inference | P1/P2 | Implemented S2 | Primary-size/identity/market inference delivered; AC-01 passes with integrated generic extraction/family fixes, source fixtures unchanged. |
 | R3 ingredient/concentration projection | P4/P1/P2 + human decision | Open P4-2b CCR | Both sources list the ingredient; only brand states 2%. Preserve AC-04 and DRAFT label until the shared field-versus-claim decision is made. See docs/results/p4-2b-review.md. |
-| Shared HTML cleaning helper | P2 | Open P4-2b handoff | Reuse scripts.capture_page.clean_html(html, *, section_end_markers=SECTION_END_MARKERS); P2 retains fetch, ACL, Budget and trace responsibility. No runtime integration in the local merge task. |
+| Shared HTML cleaning helper | P2 | Implemented sync-4 | pipeline/web_sources.py imports and calls scripts.capture_page.clean_html with configured section_end_markers; fetch, ACL, Budget and trace remain in P2's flow. |
 | S2 replay mode storage | P1/P2 | Implemented S2 | Persisted provenance is uppercase; gateway execution mode remains lowercase. Retained offline record/replay assertion is unchanged. |
 | S2 diagnostic story | P1/P2 | Integrated S2 | Lifecycle/review/vision/audit/retry delivered; integrated sync_check2 reaches all 26 checks. Historical contract-2 failures remain in the original plan/report. |
 | B0/candidate preliminary report | P4 human | DRAFT only | Updated report61/65 vs16/65; full CLI retains event09 phase3 admission error and event12 unmet registry condition. First8 checkpoint diagnostic exits0 at40/40 vs8/40. No gold changed to match output. |
