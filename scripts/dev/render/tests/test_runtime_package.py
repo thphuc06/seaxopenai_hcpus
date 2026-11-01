@@ -45,7 +45,7 @@ def test_runtime_imports_without_source_checkout(tmp_path: Path, web: str) -> No
     app_root = tmp_path / "app"
     probe = tmp_path / "probe.py"
     probe.write_text(
-        "import sys\nfrom pathlib import Path\n"
+        "import sys\nimport json\nfrom pathlib import Path\n"
         "root = Path(sys.argv[1])\n"
         "sys.path[:0] = [str(root), str(root / 'backend')]\n"
         "from scripts.dev.render.server import create_hosted_app\n"
@@ -57,7 +57,11 @@ def test_runtime_imports_without_source_checkout(tmp_path: Path, web: str) -> No
         "(dist / 'index.html').write_text('<p>Packaged preview</p>', encoding='utf-8')\n"
         "with TestClient(create_hosted_app(dist)) as client:\n"
         "    assert client.get('/api/health').json()['llm_mode'] == 'fallback'\n"
-        "    assert client.get('/').status_code == 200\n",
+        "    assert client.get('/').status_code == 200\n"
+        "    response = client.get('/api/internal/eval/metrics', headers={'X-Demo-Role': 'REVIEWER', 'X-Demo-Actor': 'package-check'})\n"
+        "    assert response.status_code == 200 and response.json().get('available') is True, response.text\n"
+        "    expected = json.loads((root / 'docs/results/metrics.json').read_text(encoding='utf-8'))\n"
+        "    assert response.json() == expected\n",
         encoding="utf-8",
     )
     env = {**os.environ, "LLM_MODE": "fallback", "OPENAI_API_KEY": "", "WORKER_INLINE": "1",

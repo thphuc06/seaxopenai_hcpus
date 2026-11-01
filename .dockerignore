@@ -4,7 +4,10 @@
 .codex
 .agent
 _outside-repo
-docs
+docs/**
+!docs/results/
+docs/results/**
+!docs/results/metrics.json
 **/.env
 **/.env.*
 **/.venv

@@ -26,6 +26,8 @@ RUN pip install --no-cache-dir -r requirements.txt && pip check
 COPY backend/app ./app
 COPY backend/tests/PHASE ./tests/PHASE
 COPY fixtures /app/fixtures
+# Only the cached aggregate report is needed; evaluation labels remain excluded.
+COPY docs/results/metrics.json /app/docs/results/metrics.json
 COPY scripts/dev/render /app/scripts/dev/render
 COPY scripts/capture_page.py /app/scripts/capture_page.py
 COPY --from=frontend /build/frontend/dist /app/frontend/dist
