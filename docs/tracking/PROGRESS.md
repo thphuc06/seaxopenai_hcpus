@@ -23,4 +23,6 @@
 
 ## Post-contest repository maintenance
 
+1November19:35 ICT: actual runtime backlog repaired on codex/backlog-completion after explicit all-lane user request. Final Phase5 suite1699+2 subtests, Node99/build, fallback story36 and isolated API browser12GET/0errors pass. Three reviewer findings fixed/rechecked. See [backlog report](../results/backlog-completion-20261101.md); paid replay, human gold and legacy rollout remain separate. No shared reset, provider spend, gate or historical fixture change.
+
 1November2026: user requested a P1–P4 repository closeout after confirming submission. See [dated report](../results/repository-closeout-20261101.md). New checks and documentation do not revise the31October gate receipts or the submitted artifact; PHASE remains5.

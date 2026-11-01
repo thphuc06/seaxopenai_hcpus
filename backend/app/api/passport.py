@@ -5,9 +5,9 @@ from contextlib import closing
 from fastapi import APIRouter, HTTPException, Query, Response
 
 from app.api.contracts import EvidenceResponse, PassportMetadata, ProductPresentation, ProductResponse
-from app.api.dependencies import Actor, not_implemented
+from app.api.dependencies import Actor
 from app.api import read
-from app import db
+from app import db, source_images
 from app.models import PassportResponse, Role, PUBLIC_FIELDS
 
 router = APIRouter()
@@ -21,7 +21,16 @@ router = APIRouter()
     }}},
 )
 def source_image(source_version_id: str, as_role: Annotated[Role, Query()]) -> Response:
-    not_implemented()
+    source = read.one("SELECT v.raw_path,s.kind,s.visibility FROM source_versions v JOIN sources s ON s.id=v.source_id WHERE v.id=?", (source_version_id,))
+    if source["visibility"] != "PUBLIC" and as_role not in {Role.REVIEWER, Role.OPERATOR}:
+        raise HTTPException(403, "Image access requires an expert role")
+    if source["kind"] != "PACKAGING_IMAGE" or not source["raw_path"]:
+        raise HTTPException(404, "Source image not available")
+    try:
+        data, media, _, _ = source_images.read_image(str(source["raw_path"]))
+    except (OSError, ValueError) as error:
+        raise HTTPException(404, "Source image not available") from error
+    return Response(data, media_type=media, headers={"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"})
 
 
 @router.get("/products", response_model=list[ProductResponse])

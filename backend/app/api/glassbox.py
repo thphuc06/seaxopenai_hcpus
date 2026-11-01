@@ -11,6 +11,29 @@ from app.models import DependsOn, PUBLIC_FIELDS, Role, RuleStep
 from app.trace import duplicate_events
 
 
+def buyer_summary(result: dict[str, db.JSON], *, visible: bool, hidden: int) -> list[str]:
+    """Describe a stored decision; never recompute a verdict or expose its internals."""
+    details = {
+        "CONSISTENT": "The checked independent sources agree on this information.",
+        "SINGLE_SOURCE": "This finding has support from one independent source.",
+        "INSUFFICIENT": "There is not enough usable evidence to compare this information.",
+        "UNCERTAIN": "The available evidence does not support a clear comparison.",
+        "NOT_APPLICABLE": "This field does not apply to the item being compared.",
+    }
+    conflicts = {
+        "WITHIN_SOURCE": "The same source contains conflicting statements; this is not attributed to the seller.",
+        "ACROSS_SOURCES": "The checked sources disagree with one another.",
+        "LISTING_VS_SOURCE": "The listing differs from the supporting source information.",
+    }
+    reason = details.get(str(result["verdict"]), conflicts.get(str(result["conflict_locus"]), "The stored comparison needs review."))
+    if result["freshness"] == "STALE":
+        reason = "Supporting evidence changed, so this finding needs to be checked again."
+    evidence = "Open the quoted passages below to see the information used in this comparison." if visible else "No supporting passage is available in this view."
+    if hidden:
+        evidence = "Some supporting documents are visible only to reviewers."
+    return [str(result["public_text"]), reason, evidence]
+
+
 def explain(product_id: str, field_key: str, role: Role) -> BuyerExplanation | ExpertExplanation:
     expert = role in {Role.REVIEWER, Role.OPERATOR}
     if not expert and field_key not in PUBLIC_FIELDS:
@@ -20,7 +43,7 @@ def explain(product_id: str, field_key: str, role: Role) -> BuyerExplanation | E
     if not expert:
         citations, hidden = read.evidence(str(result["citations_json"]), Role.BUYER)
         return BuyerExplanation(product_id=product_id, field_key=field_key, public_text=str(result["public_text"]),
-            summaries=["This finding uses the stored sources shown below."], citations=citations, hidden_citations=hidden)
+            summaries=buyer_summary(result, visible=bool(citations), hidden=hidden), citations=citations, hidden_citations=hidden)
     run = read.one("SELECT * FROM runs WHERE id=?", (result["run_id"],))
     sources: list[ExplainSource] = []
     claims: list[ExplainClaim] = []

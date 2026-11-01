@@ -1,0 +1,66 @@
+{
+  "available": true,
+  "format_version": 1,
+  "generated_at": "2026-11-01T12:30:07.922152+00:00",
+  "evaluated_at": "2026-11-01T12:29:26.969668+00:00",
+  "source_sha256": "283e3e9a759175699bcedcba9c65b64113bc3e10969926ee27cef0366dbdfd49",
+  "mode": "fallback",
+  "requested_mode": "fallback",
+  "fallback_reason": null,
+  "gold_status": "DRAFT",
+  "models": [
+    "FALLBACK"
+  ],
+  "prompt_versions": [
+    "claims-v2-passage-scope",
+    "extract-v1"
+  ],
+  "policy_versions": [
+    "policy-v2.1"
+  ],
+  "metrics_by_gold_status": {
+    "DRAFT": {
+      "fields": 65,
+      "missing_predictions": 0,
+      "accuracy": 0.9384615384615385,
+      "macro_f1": 0.776555023923445,
+      "conflict_precision": 1.0,
+      "conflict_recall": 1.0,
+      "seller_false_blame_rate": 0.0,
+      "seller_attribution_scored": 57,
+      "abstention_rate": 0.12307692307692308,
+      "coverage": 0.8769230769230769,
+      "selective_accuracy": 1.0
+    },
+    "REVIEWED": {
+      "fields": 0,
+      "missing_predictions": 0,
+      "accuracy": null,
+      "macro_f1": null,
+      "conflict_precision": null,
+      "conflict_recall": null,
+      "seller_false_blame_rate": null,
+      "seller_attribution_scored": 0,
+      "abstention_rate": null,
+      "coverage": null,
+      "selective_accuracy": null
+    }
+  },
+  "model_calls": 0,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "limitations": [
+    "DRAFT scores are exploratory diagnostics, not human-reviewed accuracy.",
+    "B0 uses candidate-stored claims; upstream scope/extraction filtering is shared, not an independent extraction baseline.",
+    "B0 adds zero model calls. Usage is counted once per newly observed candidate run; NOOP/DUPLICATE do not reuse prior usage.",
+    "Literal expected labels are scored; preconditions and alternative gold scenarios are not inferred from candidate output.",
+    "Only five public fields are scored; expert claim findings and isolated image scenarios have separate acceptance tests.",
+    "False-blame attribution is unscored for expected conflicts without an explicit attribution invariant.",
+    "B1 is an unpublished single-call diagnostic over source passages, with separate usage. NOT_RUN/errors/caps are unscored, never zero-accuracy claims.",
+    "Candidate-only metrics; missing predictions count as incorrect and remain separate from abstentions.",
+    "Macro F1 averages labels present in expected or predicted values; zero denominators are null.",
+    "Only explicitly non-attributable labels with a recorded candidate attribution enter the false-blame denominator.",
+    "Citation validity, event freshness, provider costs and metamorphic execution are not measured by this scorecard.",
+    "Previous replay attempts are excluded from fallback scores; inspect the source eval archive for their errors and usage."
+  ]
+}

@@ -11,7 +11,10 @@ export type ReceiptResponse = Omit<OrderDetailResponse, 'diff'> & { diff: Receip
 export type WebAuditResponse = Schema['WebAuditResponse'];
 export type ScorecardWire = paths['/api/internal/eval/metrics']['get']['responses'][200]['content']['application/json'];
 // Presentation of numeric report entries; the wire contract preserves arbitrary JSON reports.
-export interface ScorecardResponse { computed_at: string | null; status: string; metrics: Record<string, number | null> }
+export interface ScorecardResponse {
+  computed_at: string | null; status: string; metrics: Record<string, number | null>;
+  provenance?: { mode: string; requested_mode?: string; fallback_reason?: string; models: string[]; prompt_versions: string[]; policy_versions: string[]; limitations: string[] };
+}
 
 const record = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === 'object' && !Array.isArray(value);
 const strings = (value: Record<string, unknown>, keys: string[]) => keys.every((key) => typeof value[key] === 'string');
@@ -74,9 +77,24 @@ function numericEntries(value: Record<string, unknown>, prefix = ''): [string, n
 export function readScorecard(value: unknown): ScorecardResponse | null {
   if (!record(value)) throw new Error('The scorecard response does not match the supported contract.');
   if (value.available === false) return null;
-  const reportValues = Object.fromEntries(Object.entries(value).filter(([key]) => !['available', 'computed_at', 'generated_at', 'status', 'gold_status'].includes(key)));
+  const reportValues = Object.fromEntries(Object.entries(value).filter(([key]) => !['available', 'computed_at', 'generated_at', 'status', 'gold_status', 'format_version', 'evaluated_at', 'source_sha256', 'mode', 'requested_mode', 'fallback_reason', 'models', 'prompt_versions', 'policy_versions', 'limitations'].includes(key)));
   const metrics = numericEntries(record(value.metrics) ? value.metrics : record(value.totals) ? value.totals : reportValues);
   const date = typeof value.generated_at === 'string' ? value.generated_at : typeof value.computed_at === 'string' ? value.computed_at : null;
   if (!metrics.length && !date && value.available !== true) throw new Error('The scorecard response does not match the supported contract.');
-  return { computed_at: date, status: typeof value.gold_status === 'string' ? value.gold_status : typeof value.status === 'string' ? value.status : 'Status not recorded', metrics: Object.fromEntries(metrics) };
+  let provenance: ScorecardResponse['provenance'];
+  if (value.mode !== undefined) {
+    if (!oneOf(value.mode, ['fallback', 'replay', 'FALLBACK', 'REPLAY'])
+      || (value.requested_mode !== undefined && !oneOf(value.requested_mode, ['fallback', 'replay', 'FALLBACK', 'REPLAY']))
+      || (value.fallback_reason != null && typeof value.fallback_reason !== 'string')) throw new Error('The scorecard execution mode could not be read.');
+    const list = (key: string): string[] => {
+      if (value[key] === undefined) return [];
+      if (!Array.isArray(value[key]) || !value[key].every((item) => typeof item === 'string')) throw new Error('The scorecard provenance could not be read.');
+      return value[key];
+    };
+    provenance = { mode: String(value.mode).toUpperCase(),
+      ...(typeof value.requested_mode === 'string' ? { requested_mode: value.requested_mode.toUpperCase() } : {}),
+      ...(typeof value.fallback_reason === 'string' ? { fallback_reason: value.fallback_reason } : {}),
+      models: list('models'), prompt_versions: list('prompt_versions'), policy_versions: list('policy_versions'), limitations: list('limitations') };
+  }
+  return { computed_at: date, status: typeof value.gold_status === 'string' ? value.gold_status : typeof value.status === 'string' ? value.status : 'Status not recorded', metrics: Object.fromEntries(metrics), ...(provenance ? { provenance } : {}) };
 }

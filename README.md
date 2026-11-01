@@ -4,7 +4,7 @@ Cosmetics listings combine facts from several sources, sometimes for different v
 
 ## Repository status — 1 November 2026
 
-The team reports that the contest entry has been submitted. This checkout includes `sync-5`; subsequent work is repository maintenance, not a replacement submission. See the [P1–P4 closeout](docs/results/repository-closeout-20261101.md) for current checks, role deliverables and remaining work. The checked-in test phase is **5**. The `freeze` tag records an accepted scope checkpoint, not complete provider replay coverage.
+The team reports that the contest entry has been submitted. This checkout includes `sync-5`; subsequent work is repository maintenance, not a replacement submission. See the [P1–P4 closeout](docs/results/repository-closeout-20261101.md) for the earlier setup/handoff and the [backlog repair](docs/results/backlog-completion-20261101.md) for implemented image/OCR, review and observability fixes with current checks. The checked-in test phase is **5**. The `freeze` tag records an accepted scope checkpoint, not complete provider replay coverage.
 
 Browse the [replay screenshots and their evidence boundaries](docs/results/screens/README.md). The [current issue list](docs/tracking/ISSUES.md) distinguishes implemented features from retained limitations; historical contest plans are not a current completion checklist.
 

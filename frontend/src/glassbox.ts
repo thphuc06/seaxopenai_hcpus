@@ -1,8 +1,9 @@
-import type { TraceStep, ExplanationResponse } from './types.ts';
+import type { TraceStep, ExplanationResponse, EvidenceResponse } from './types.ts';
 
 // UI projection; wire models are generated from contract-3.
 export interface Explanation {
   summary: string[];
+  evidence?: EvidenceResponse;
   trail?: { stage: string; title: string; facts: string[] }[];
 }
 export function explanation(value: unknown): Explanation {
@@ -16,7 +17,8 @@ export function explanation(value: unknown): Explanation {
 export function projectExplanation(value: ExplanationResponse): Explanation {
   if (value.audience === 'BUYER') {
     if (!Array.isArray(value.summaries) || !value.summaries.every((s) => typeof s === 'string') || typeof value.public_text !== 'string') throw new Error('The public explanation could not be read.');
-    return { summary: value.summaries.length ? value.summaries : [value.public_text] };
+    const evidence = value.citations === undefined ? undefined : buyerEvidence(value);
+    return { summary: value.summaries.length ? value.summaries : [value.public_text], ...(evidence ? { evidence } : {}) };
   }
   if (!('sources' in value) || !Array.isArray(value.sources) || !Array.isArray(value.claims) || !Array.isArray(value.rules) || !Array.isArray(value.publish_checks) || !Array.isArray(value.reviews)) throw new Error('The expert explanation could not be read.');
   return { summary: [], trail: [
@@ -28,6 +30,13 @@ export function projectExplanation(value: ExplanationResponse): Explanation {
     { stage: 'chain', title: 'Chain head', facts: [value.chain_head?.slice(0, 12) ?? 'Not recorded'] },
     { stage: 'reviews', title: 'Reviews', facts: value.reviews.map((r) => `${r.decision} · ${r.created_at} · ${r.reason}`) },
   ] };
+}
+
+function buyerEvidence(value: Extract<ExplanationResponse, { audience: 'BUYER' }>): EvidenceResponse {
+  if (!Array.isArray(value.citations) || !Number.isInteger(value.hidden_citations) || value.hidden_citations < 0
+    || !value.citations.every((c) => c && ['passage_id', 'source_kind', 'locator', 'excerpt', 'text', 'source_label', 'captured_at'].every((key) => typeof object(c)[key] === 'string')
+      && Number.isInteger(c.source_version) && ['PUBLIC', 'PRIVATE'].includes(c.visibility))) throw new Error('The supporting passages could not be read.');
+  return { citations: value.citations, hidden_citations: value.hidden_citations };
 }
 export function object(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};

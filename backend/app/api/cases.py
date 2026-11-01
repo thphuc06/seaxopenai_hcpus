@@ -4,10 +4,10 @@ import binascii
 import hashlib
 from threading import Lock
 from fastapi import APIRouter, HTTPException, BackgroundTasks
-from app import config, db
+from app import config, db, source_images
 from app.api.events import dispatch
 from app.api import read
-from app.pipeline import publish, policy
+from app.pipeline import publish, policy, ocr
 
 from app.api.contracts import (
     CaseHistoryResponse, EvidenceUploadRequest, ReviewQueueItem,
@@ -73,9 +73,12 @@ def web_search_audit(case_id: str, actor: RunActor) -> WebAuditResponse:
 @router.get("/review/queue", response_model=list[ReviewQueueItem])
 def review_queue(actor: ReviewerActor) -> list[ReviewQueueItem]:
     return [ReviewQueueItem.model_validate(row) for row in read.rows(
-        "SELECT t.id,t.case_id,t.field_key,t.result_id,c.revision AS case_revision,t.reason_code,r.verdict "
+        "SELECT t.id,t.case_id,t.field_key,t.result_id,c.revision AS case_revision,t.reason_code,r.verdict, "
+        "c.product_id,p.dataset_origin,UPPER(COALESCE(confirmed.llm_mode,produced.llm_mode)) AS llm_mode,r.seller_attributable "
         "FROM review_tasks t JOIN field_results r ON r.id=t.result_id JOIN cases c ON c.id=t.case_id "
+        "JOIN products p ON p.id=c.product_id "
         "LEFT JOIN runs confirmed ON confirmed.id=r.confirmed_run_id "
+        "LEFT JOIN runs produced ON produced.id=r.run_id "
         "WHERE t.status='OPEN' AND r.superseded_by IS NULL AND COALESCE(confirmed.case_revision,r.case_revision)=c.revision")]
 
 
@@ -136,14 +139,24 @@ def _upload_evidence(case_id: str, request: EvidenceUploadRequest, actor: Eviden
     directory.mkdir(parents=True,exist_ok=True)
     path = directory / (identity+".json")
     text = request.content.text if request.content.kind == "TEXT" else ""
+    boxes: list[ocr.Box] = []
     if request.content.kind == "IMAGE":
         try:
             image = base64.b64decode(request.content.data_base64,validate=True)
         except (ValueError,binascii.Error) as error:
             raise HTTPException(422,"Invalid image encoding") from error
-        png = request.content.media_type == "image/png"
-        if not image.startswith(b"\x89PNG\r\n\x1a\n" if png else b"\xff\xd8\xff") or len(image) > 10_000_000:
-            raise HTTPException(422,"Invalid image format or size")
+        try:
+            media, _, _ = source_images.validate_image(image)
+            if media != request.content.media_type:
+                raise ValueError("Image media type mismatch")
+        except ValueError as error:
+            raise HTTPException(422, "Invalid image format or size") from error
+        try:
+            boxes = ocr.transcribe(image)
+        except (OSError, ValueError, RuntimeError) as error:
+            raise HTTPException(503, "Image text processing is unavailable; please retry") from error
+        text = "\n".join(box.text for box in boxes)
+        png = media == "image/png"
         path.with_suffix(".png" if png else ".jpg").write_bytes(image)
     snapshot = {"source_id":"upload_"+identity,"product_id":case["product_id"],"version":1,
         "kind":"PACKAGING_IMAGE" if request.content.kind == "IMAGE" else "SELLER_UPLOAD",
@@ -151,6 +164,10 @@ def _upload_evidence(case_id: str, request: EvidenceUploadRequest, actor: Eviden
         "dataset_origin":case["dataset_origin"],"captured_at":db.now_iso(),"note":"Uploaded image awaiting extraction",
         "scope":{"product":case["product_id"],"variant":case["variant"],"market":case["market"]},
         "passages":[{"locator":"upload:1","section":"upload","text":text}]}
+    if request.content.kind == "IMAGE":
+        snapshot["ocr_lines"] = [box.model_dump(mode="json") for box in boxes]
+        snapshot["ocr_engine"] = ocr.OCR_VERSION if config.settings.ocr_enabled else "DISABLED"
+        snapshot["note"] = "Local OCR transcript" if boxes else "No readable OCR transcript available"
     path.write_text(db.dumps(snapshot),encoding="utf-8")
     event = EventEnvelope(event_id="upload_event_"+identity,idempotency_key=key,type="EVIDENCE_ADDED",
         schema_version="1",producer="seller-portal",resource={"kind":"SOURCE","id":snapshot["source_id"],"version":1},

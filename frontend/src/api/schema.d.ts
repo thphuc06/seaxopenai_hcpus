@@ -1193,6 +1193,13 @@ export interface components {
             /** Reason Code */
             reason_code: string;
             verdict: components["schemas"]["Verdict"];
+            /** Product Id */
+            product_id?: string | null;
+            dataset_origin?: components["schemas"]["DatasetOrigin"] | null;
+            /** Llm Mode */
+            llm_mode?: ("LIVE" | "REPLAY" | "FALLBACK") | null;
+            /** Seller Attributable */
+            seller_attributable?: boolean | null;
         };
         /** ReviewRequest */
         ReviewRequest: {

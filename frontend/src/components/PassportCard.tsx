@@ -28,7 +28,7 @@ export function FieldRow({ fieldKey, field, runStatus, index, onEvidence, onWhy 
     <div className="field-content">
       <div className="field-heading"><h3>{FIELD_TITLES[fieldKey]}</h3><StatusBadge field={field} runStatus={runStatus} /></div>
       <p className="field-description">{field.public_text}</p>
-      {fieldKey === 'key_ingredients' && (field.claims_under_review ?? 0) > 0 && <p className="claim-count">{field.claims_under_review} claims under review</p>}
+      {fieldKey === 'key_ingredients' && (field.claims_under_review ?? 0) > 0 && <p className="claim-count">{field.claims_under_review} {field.claims_under_review === 1 ? 'claim' : 'claims'} under review</p>}
       <div className="field-footer">
         <span className="field-time">{formatTime(field.checked_at)}</span>
         <div className="field-actions">

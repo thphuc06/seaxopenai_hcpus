@@ -82,6 +82,12 @@ def ingest(connection: sqlite3.Connection, snapshot: dict[str, db.JSON], *, case
         passage_id = "psg_" + hashlib.sha256((sv_id + ":" + str(index)).encode("utf-8")).hexdigest()
         connection.execute("INSERT INTO passages VALUES(?,?,?,?,?)", (passage_id, sv_id, passage["locator"], passage.get("section"), passage["text"]))
         connection.execute("INSERT INTO passages_fts VALUES(?,?,?)", (passage["text"], passage_id, sv_id))
+    if snapshot.get("ocr_lines"):
+        from app.pipeline.ocr import Box, persist_lines
+        lines = snapshot["ocr_lines"]
+        if snapshot["kind"] != "PACKAGING_IMAGE" or not isinstance(lines, list):
+            raise ValueError("OCR lines require an image snapshot")
+        persist_lines(connection, sv_id, [Box.model_validate(line) for line in lines])
     return SourceVersionRef(sv_id, source_id, version)
 
 

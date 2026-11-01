@@ -166,6 +166,10 @@ class ReviewQueueItem(ContractModel):
     case_revision: int
     reason_code: str
     verdict: Verdict
+    product_id: str | None = None
+    dataset_origin: DatasetOrigin | None = None
+    llm_mode: Literal["LIVE", "REPLAY", "FALLBACK"] | None = None
+    seller_attributable: bool | None = None
 
 
 class ResultVersionResponse(PassportField):

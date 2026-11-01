@@ -11,7 +11,7 @@ from app.budget import Budget, BudgetExceeded
 from app.context import RunContext
 from app.llm.client import LLMError
 from app.models import PUBLIC_FIELDS, FieldDecision, Readability, ReviewState, ScopeMatch, SourceKind, SourceStatus
-from app.pipeline import claims_audit, compare, extract, gaps, normalize, policy, publish, web_sources
+from app.pipeline import canon, claims_audit, compare, extract, gaps, normalize, policy, publish, web_sources
 from app.agent import scope_resolution
 from app.pipeline.scope import ScopeDecision, infer_scope, volume_claim_scope
 from app.trace import TraceWriter
@@ -178,6 +178,12 @@ def run(job: Job, *, extractor: Extractor | None = None) -> str:
                     stop_reason, error = failure.code, type(failure).__name__
                     trace.step("run:stop",detail={"stop_reason": stop_reason},error=error)
                     break
+            if not stop_reason:
+                try:
+                    observations = canon.learn_all(ctx, observations, propagate_errors=True)
+                except canon.LearningStopped as failure:
+                    observations, stop_reason = failure.observations, failure.reason
+                    trace.step("run:stop", detail={"stop_reason": stop_reason, "stage": "canon:learn"})
             product["passage_texts"] = {str(p["id"]):str(p["text"]) for version in {o.source_version_id for o in observations} for p in store.passages(version)}
             no_claims_model_error = error is not None and not any(o.normalized for o in observations)
             for field in PUBLIC_FIELDS:
