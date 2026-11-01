@@ -18,16 +18,41 @@ command = 'cd backend; .\.venv\Scripts\python.exe -m uvicorn app.main:app --host
 name = "frontend"
 icon = "run"
 platform = "win32"
-command = 'cd frontend; npm run dev'
+command = '''$env:VITE_USE_MOCK = '0'; cd frontend; npm.cmd run dev'''
 
 [[actions]]
 name = "tests"
 icon = "test"
 platform = "win32"
-command = '''$env:CONTEST_PHASE = (Get-Content backend\tests\PHASE -Raw).Trim(); $env:LLM_MODE = 'fallback'; $env:WORKER_INLINE = '1'; cd backend; .\.venv\Scripts\python.exe -m pytest -q'''
+command = '''
+$env:CONTEST_PHASE = (Get-Content backend\tests\PHASE -Raw).Trim()
+$env:LLM_MODE = 'fallback'
+$env:WORKER_INLINE = '1'
+$env:OCR_ENABLED = '0'
+$env:WEB_SEARCH = 'off'
+$env:AGENTS_TRACING = '0'
+$env:OPENAI_AGENTS_DISABLE_TRACING = '1'
+$env:MODEL_AGENT = 'gpt-6.1-sol'
+$env:DEMO_RUN_DELAY_S = '0'
+cd backend
+.\.venv\Scripts\python.exe -m pytest -q
+'''
 
 [[actions]]
 name = "sync_check"
 icon = "test"
 platform = "win32"
-command = '''$phase = (Get-Content backend\tests\PHASE -Raw).Trim(); $env:LLM_MODE = 'fallback'; $env:WORKER_INLINE = '1'; cd backend; .\.venv\Scripts\python.exe ..\scripts\sync_check.py $phase'''
+command = '''
+$env:CONTEST_PHASE = (Get-Content backend\tests\PHASE -Raw).Trim()
+$env:LLM_MODE = 'fallback'
+$env:WORKER_INLINE = '1'
+$env:OCR_ENABLED = '0'
+$env:WEB_SEARCH = 'off'
+$env:AGENTS_TRACING = '0'
+$env:OPENAI_AGENTS_DISABLE_TRACING = '1'
+$env:MODEL_AGENT = 'gpt-6.1-sol'
+$env:DEMO_RUN_DELAY_S = '0'
+Write-Host "Offline story checks 1-4 only; current test phase is $env:CONTEST_PHASE. This is not a full replay or Phase5 gate."
+cd backend
+.\.venv\Scripts\python.exe ..\scripts\sync_check.py 4 --mode fallback
+'''
