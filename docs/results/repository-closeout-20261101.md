@@ -54,7 +54,7 @@ CI tại [commit6f6e7ea](https://github.com/thphuc06/seaxopenai_hcpus/actions/ru
 | Fixtures |101 checked;0 failed. |
 | Local sync_check Action |36 PASS,0 FAIL/SKIP ở FALLBACK, DB tạm; story1–4, CONTEST_PHASE vẫn5. Không chứng minh provider replay hoặc live web discovery. |
 | Dependency/setup |Cả venv đang dùng và venv mới `pip check` PASS; replay startup/read smoke PASS như mô tả ở P1. |
-| Hosted GitHub CI sau sửa |Chưa chạy trước push; không suy ra PASS từ local. |
+| Hosted GitHub CI sau sửa |Commit98fe48b: cả [PR run](https://github.com/thphuc06/seaxopenai_hcpus/actions/runs/41302925307) và [push run](https://github.com/thphuc06/seaxopenai_hcpus/actions/runs/41302921327) SUCCESS; Backend/contracts, Frontend/build và Render image đều SUCCESS. Đây là build/check image trên CI, không phải redeploy dịch vụ. |
 
 Lệnh kiểm full từ `backend/` sau khi đặt biến môi trường offline trong README, thêm `DEMO_RUN_DELAY_S=0`:
 
@@ -75,3 +75,5 @@ Full suite local dùng Python3.12.13; CI dùng Python3.11/Ubuntu. Các kết qu�
 Các giới hạn này là backlog công khai, không phải các tính năng đã hoàn tất. [ISSUES](../tracking/ISSUES.md) giữ owner và lịch sử; [HANDOFF sync-5](../tracking/HANDOFF.md) giữ nguyên phạm vi đã được chấp nhận. Việc bảo trì lần này kết thúc khi cấu hình CI, setup, tài liệu và bàn giao repo đã được kiểm chứng; không tuyên bố toàn bộ backlog hoặc full replay đã hoàn thành.
 
 Self-review: ba reviewer chỉ đọc đã kiểm rules/privacy, contracts/setup và overfitting/evidence. Đã sửa lệnh tạo usage report để luôn truyền `--output` tới tên mới, tránh ghi đè báo cáo thi. Sau lượt kiểm cuối không còn finding P0/P1/P2 trong phạm vi thay đổi. PR giữ ranh giới giữa kết quả offline mới, artifact cũ và giới hạn provider.
+
+Bàn giao: commit98fe48b đã push lên `origin/p3`, SHA remote khớp, [PR19](https://github.com/thphuc06/seaxopenai_hcpus/pull/19) đã cập nhật đúng phạm vi mới và không có merge conflict tại thời điểm kiểm tra. P4 vẫn sở hữu bước tích hợp vào main. Các commit bổ sung receipt sau đó chỉ cập nhật tài liệu; xem GitHub checks của HEAD để biết trạng thái riêng của chúng.

@@ -4,7 +4,7 @@ Current repository audit:1November2026, source `sync-5` plus P3 screenshot hando
 
 | Item | Owner | State | Next action |
 |---|---|---|---|
-| CI offline model configuration | P4; current user-authorized closeout | Fixed locally; hosted run pending push | Prior GitHub JUnit confirms the sole failure matches the local empty-model reproduction. Explicit existing MODEL_AGENT price-book key gives1671 passing local tests +2 subtests; no assertion or gate change. See dated closeout for hosted follow-up. |
+| CI offline model configuration | P4; current user-authorized closeout | Closed98fe48b | Explicit existing MODEL_AGENT price-book key gives1671 passing local tests +2 subtests. Both hosted push/PR runs pass backend, frontend and image checks; links in dated closeout. No assertion or gate change. |
 | Whole-story replay / agent demonstration | P1/P2/P4 | Open accepted sync-5 limitation | Replay gate stopped at06-evidence-added (18 PASS/1 FAIL); later checks not reached. Missing R1/S2 and agent-effect screenshot scenes remain disclosed. Diagnose before any separately authorized append-only recording pass; do not change gold or label a partial run complete. |
 | Remaining API placeholders | P1/P4 | Deferred scope | Source-image GET, internal eval metrics GET and run OTel GET still return501 in passport.py/observe.py. CLI evaluation and existing trace views are separate implemented paths. No complete-API claim. |
 | S4 runtime behind contract-4 | P1/P2 | Closed sync-4/sync-5 | Receipts, marketplace and web audit implementations integrated; see sync-4 HANDOFF and current acceptance/wire tests. Remaining501 routes are listed separately above. |
