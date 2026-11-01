@@ -2,6 +2,8 @@
 
 The user requested actual bugs/backlog to be fixed across P1–P4, after the earlier repository closeout. Work starts from721a721 on `codex/backlog-completion`. Five public fields, policy-v2.1, PHASE5, original fixtures/gold/replay and shared Local data remain intact.
 
+Delivery: implementation commit `a6e66bd` pushed in [PR20](https://github.com/thphuc06/seaxopenai_hcpus/pull/20), based on PR19's closeout. Current-head hosted checks are attached to that PR. This report does not imply a merge or deployment.
+
 ## Implemented
 
 | Area | Before | Delivered |
